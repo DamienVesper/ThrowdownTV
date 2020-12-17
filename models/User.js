@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     stream_key: {
         type: String,
-        default: cryptoRandomString({length: 20, type: 'alphanumeric'}) 
+        default: cryptoRandomString({ length: 20, type: 'alphanumeric' })
     },
     stream_title: {
         type: String,

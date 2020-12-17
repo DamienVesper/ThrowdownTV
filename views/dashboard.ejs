@@ -1,21 +1,25 @@
 <%- include('./partials/header'); %>
-<div style="margin: 15px;">
-    <span style="font-size: 25px; color: white;">Welcome </span>
-    <span style="font-size: 25px; color: lime;"><%= user.username %></span>
-</div>
-<div style="margin: 15px;">
-    <a href="/<%= user.username %>" class="btn btn-secondary">Livestream Page</a>
-</div>
-<div style="margin: 15px;">
-    <form>
-        <div class="form-group">
-            <label for="streamtitle">Stream Title</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ex. My Podcast...">
-            <small id="emailHelp" class="form-text text-muted">Enter the title of your stream that will be displayed on your livestream page.</small>
+    <%- include('./partials/messages'); %>
+        <div style="margin: 15px;">
+            <span style="font-size: 25px; color: white;">Welcome </span>
+            <span style="font-size: 25px; color: lime;">
+                <%= user.username %>
+            </span>
         </div>
-        <button type="submit" class="btn btn-primary">Apply Changes</button>
-    </form>
-</div>
-<div style="margin: 15px;">
-    <a href="/users/logout" style="color: red;" class="btn btn-secondary">Logout</a>
-</div>
+        <div style="margin: 15px;">
+            <a href="/<%= user.username %>" class="btn btn-secondary">Livestream Page</a>
+        </div>
+        <div style="margin: 15px;">
+            <form action="/dashboard" method="POST">
+                <div class="form-group">
+                    <label for="streamtitle">Stream Title</label>
+                    <input type="streamtitle" class="form-control" id="streamtitle" placeholder="<%= streamtitle %>">
+                    <small id="emailHelp" class="form-text text-muted">Enter the title of your stream that will be
+                        displayed on your livestream page.</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Apply Changes</button>
+            </form>
+        </div>
+        <div style="margin: 15px;">
+            <a href="/users/logout" style="color: red;" class="btn btn-secondary">Logout</a>
+        </div>

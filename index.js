@@ -69,7 +69,8 @@ app.get('/:username', (req, res)=> {
             //res.send(req.params.username + " Exists") 
             res.render('streamer', {
                 user: user.username,
-                streamkey: user.stream_key
+                streamkey: user.stream_key,
+                streamtitle: user.stream_title
             })
         } else {
             res.send(req.params.username + " Does not exist")

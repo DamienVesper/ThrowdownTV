@@ -76,11 +76,11 @@ router.post('/register', (req, res) => {
                             newUser
                                 .save()
                                 .then(user => {
-                                req.flash(
-                                    'success_msg',
-                                    'You are now registered, Check your email for a confirmation link.'
-                                );
-                                res.redirect('/users/login');
+                                    req.flash(
+                                        'success_msg',
+                                        'You are now registered, Check your email for a confirmation link.'
+                                    );
+                                    res.redirect('/users/login');
                                 })
                                 .catch(err => console.log(err));
                             });
