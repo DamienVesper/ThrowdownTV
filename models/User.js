@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: cryptoRandomString({length: 20, type: 'alphanumeric'}) 
     },
+    stream_title: {
+        type: String,
+        default: "My cool stream :)"
+    },
     date: {
         type: Date,
         default: Date.now

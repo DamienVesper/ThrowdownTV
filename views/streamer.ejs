@@ -1,31 +1,44 @@
 <head>
     <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
 </head>
-<h1 class="mt-4">Throwdown TV</h1>
+<%- include('./partials/header'); %>
 <p class="lead mb-3"><%= user %></p>
-<a href="/users/logout" class="btn btn-secondary">Logout</a>
-
 <body>
-    <div
-    <video
-        id="my-video"
-        class="video-js"
-        controls
-        preload="auto"
-        width="640"
-        height="264"
-        poster="MY_VIDEO_POSTER.jpg"
-        data-setup="{}"
-    >
-        <source src="https://eu02.throwdown.tv/live/<%= streamkey %>/index.m3u8" type="application/x-mpegURL" />
-        <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a
-        web browser that
-        <a href="https://videojs.com/html5-video-support/" target="_blank"
-            >supports HTML5 video</a
-        >
-        </p>
-    </video>
-
+    <div class="container">
+        <div class="row">
+            <div class="ccol-12 col-md-8">
+                <video
+                    id="player"
+                    class="video-js vjs-big-play-centered"
+                    controls
+                    preload="auto"
+                    fluid="true"
+                    width="1280"
+                    height="720"
+                    poster="thumbnail.png"
+                    errorDisplay: false
+                    autoplay="true"
+                    data-setup="{}"
+                >
+                    <source src="https://eu02.throwdown.tv/live/<%= streamkey %>/index.m3u8" type="application/x-mpegURL" />
+                    <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                    >
+                    </p>
+                </video>
+                <div style="margin-top: 4px;">
+                    <p style="color: white; font-size: 30px;" class="lead mb-3">Test Stream</p>
+                    <p style="color: white; font-size: 15px;" class="lead mb-3"><%= user %></p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+              Chat
+            </div>
+          </div>
+        </div>
+    </div>
     <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 </body>
