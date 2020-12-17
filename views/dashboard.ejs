@@ -1,3 +1,9 @@
+<head>
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+</head>
 <%- include('./partials/header'); %>
     <%- include('./partials/messages'); %>
         <div style="margin: 15px;">
@@ -19,6 +25,51 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Apply Changes</button>
             </form>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Encoder Information
+                    </button>
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div id="accordion">
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div style="color: white; font-size: 25px;" class="card-body">
+                                RTMP Ingest Servers:
+                            </div>
+                            <div class="card-body">
+                                US 01: rtmp://us01.throwdown.tv/live
+                            </div>
+                            <div class="card-body">
+                                EU 01: rtmp://eu01.throwdown.tv/live
+                            </div>
+                            <div class="card-body">
+                                EU 02: rtmp://eu02.throwdown.tv/live
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div style="color: white; font-size: 25px;" class="card-body">
+                        Stream Key
+                    </div>
+                    <div class="card-body" style="color: lime;">
+                        <%= streamkey %>
+                    </div>
+                    <div class="card-body" style="color: red;">
+                        Do NOT share this key with anyone. You can reset it if it ever gets compromised
+                    </div>
+                    <div>
+                        <form action="/dashboard/streamkey" method="POST">
+                            <button type="submit" class="btn btn-primary">Reset Stream Key</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <div style="margin: 15px;">
             <a href="/users/logout" style="color: red;" class="btn btn-secondary">Logout</a>
