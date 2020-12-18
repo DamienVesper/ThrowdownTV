@@ -15,7 +15,8 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
       streamtitle: useraccount.stream_title,
       streamkey: useraccount.stream_key,
       streamdescription: useraccount.stream_description,
-      streamavatar: useraccount.avatar_url
+      streamavatar: useraccount.avatar_url,
+      donationlink: useraccount.donation_link
     })
   })
 );
