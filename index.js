@@ -77,7 +77,8 @@ app.get('/:username', (req, res)=> {
                 streamkey: user.stream_key,
                 streamtitle: user.stream_title,
                 streamdescription: user.stream_description,
-                avatarurl: user.avatar_url
+                avatarurl: user.avatar_url,
+                donationlink: user.donation_link
             })
         } else {
             res.send(req.params.username + " Does not exist")
