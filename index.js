@@ -17,7 +17,7 @@ const port = config.port
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
-    secure: true,
+    secure: false,
     auth: {
          user: 'throwdowntvofficial@gmail.com',
          pass: config.smtp_password,
@@ -33,7 +33,7 @@ transporter.sendMail(message, (error, info) => {
     if (error) {
         return console.log(error);
     }
-    console.log('Message sent: %s', info.messageId);
+    console.log('Message sent: ', info.messageId);
 });
 
 // Passport

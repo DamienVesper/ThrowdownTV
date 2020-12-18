@@ -8,8 +8,8 @@ const config = require('../config.json')
 // Email
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
     auth: {
          user: 'throwdowntvofficial@gmail.com',
          pass: config.smtp_password,
