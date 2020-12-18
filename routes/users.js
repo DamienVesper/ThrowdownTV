@@ -7,7 +7,6 @@ const email = require('emailjs');
 // Email
 var server  = email.server.connect({
     user:    "no-reply@throwdown.tv", 
-    password: "", 
     host:    "127.0.0.1", 
     ssl:     false
 }); 
