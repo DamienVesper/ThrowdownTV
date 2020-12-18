@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    donation_link: {
+        type: String,
+        default: "https://streamelements.com"
+    },
     date: {
         type: Date,
         default: Date.now

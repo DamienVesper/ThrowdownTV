@@ -8,8 +8,8 @@ const config = require('../config.json')
 // Email
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: {
          user: 'throwdowntvofficial@gmail.com',
          pass: config.smtp_password,
@@ -97,7 +97,7 @@ router.post('/register', (req, res) => {
                                     );
                                     User.findOne({ email: email }).then(useraccount => {
                                         let message = {
-                                            from: "throwdowntvofficial@gmail.com",
+                                            from: "Throwdown TV",
                                             to: useraccount.email,
                                             subject: "Please verify your email address to use at Throwdown TV",
                                             text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + useraccount.email_verification_key,
@@ -125,7 +125,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res, next) => {
     const username = req.body.username
     User.findOne({ username: username }).then(user => {
-        if (user.verification_status) {
+        if (user.verification_status = true) {
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',

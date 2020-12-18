@@ -7,34 +7,12 @@ const flash = require('connect-flash');
 const config = require('./config.json')
 const User = require('./models/User');
 const session = require('express-session')
-const nodemailer = require('nodemailer');
+//const nodemailer = require('nodemailer');
 const fs = require('fs')
 const http = require('http');
 const https = require('https');
 const app = express()
 const port = config.port
-
-let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: false,
-    auth: {
-         user: 'throwdowntvofficial@gmail.com',
-         pass: config.smtp_password,
-    }
-});
-let message = {
-    from: "throwdowntvofficial@gmail.com",
-    to: "rajeevkapoorofficial@gmail.com",
-    subject: "Test",
-    text: "Test"
-};
-transporter.sendMail(message, (error, info) => {
-    if (error) {
-        return console.log(error);
-    }
-    console.log('Message sent: ', info.messageId);
-});
 
 // Passport
 require('./config/passport')(passport);

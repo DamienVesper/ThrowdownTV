@@ -36,24 +36,34 @@ router.post('/dashboard', (req, res) => {
   const streamtitle = req.body.streamtitle
   const streamdescription = req.body.streamdescription
   const streamavatar = req.body.streamavatar
+  const donationlink = req.body.donationlink
 
   if (streamtitle.length > 3){
     if (streamtitle.length <= 61){
       if (streamdescription.length > 1) {
         if (streamdescription.length <= 4000) {
           if (streamavatar.startsWith("http://")||streamavatar.startsWith("https://")) {
-            User.findOne({ username: req.user.username }, (err, user) => {
-              user.stream_title = streamtitle;
-              user.stream_description = streamdescription;
-              user.avatar_url = streamavatar
-              user.save(function(err, user) {
-                req.flash(
-                  'success_msg',
-                  'Changes succesfully updated.'
-                );
-                res.redirect('/dashboard');
-              })
-            });
+            if (donationlink.length > 0) {
+              User.findOne({ username: req.user.username }, (err, user) => {
+                user.stream_title = streamtitle;
+                user.stream_description = streamdescription;
+                user.avatar_url = streamavatar
+                user.donation_link = donationlink
+                user.save(function(err, user) {
+                  req.flash(
+                    'success_msg',
+                    'Changes succesfully updated.'
+                  );
+                  res.redirect('/dashboard');
+                })
+              });
+            } else {
+              req.flash(
+                'error_msg',
+                'Donation link cannot be empty.'
+              );
+              res.redirect('/dashboard');
+            }
           } else {
             req.flash(
               'error_msg',
@@ -67,7 +77,7 @@ router.post('/dashboard', (req, res) => {
             'Stream description must not be longer than 4000 Characters.'
           );
           res.redirect('/dashboard');
-        }
+        } 
       } else {
         req.flash(
           'error_msg',
