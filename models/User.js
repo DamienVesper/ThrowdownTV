@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     stream_key: {
         type: String,
-        default: cryptoRandomString({ length: 20, type: 'alphanumeric' })
+        default: cryptoRandomString({ length: 50, type: 'alphanumeric' })
     },
     stream_title: {
         type: String,
@@ -29,6 +29,14 @@ const UserSchema = new mongoose.Schema({
     avatar_url: {
         type: String,
         default: "https://cdn.discordapp.com/attachments/736368923590525039/789419292214820894/defaulltpfp.png"
+    },
+    email_verification_key: {
+        type: String,
+        default: cryptoRandomString({ length: 30, type: 'alphanumeric' })
+    },
+    verification_status: {
+        type: Boolean,
+        default: false
     },
     date: {
         type: Date,

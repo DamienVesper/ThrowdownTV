@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const email = require('emailjs');
+
+// Email
+var server  = email.server.connect({
+    user:    "no-reply@throwdown.tv", 
+    password: "", 
+    host:    "127.0.0.1", 
+    ssl:     false
+}); 
+
 // Load User Model
 const User = require('../models/User');
 const { forwardAuthenticated } = require('../config/auth');
@@ -68,11 +78,13 @@ router.post('/register', (req, res) => {
                             username,
                             email,
                             password,
+                            email_verification_key
                         }); 
                         bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
                             if (err) throw err;
                             newUser.password = hash;
+                            newUser.email_verification_key = cryptoRandomString({ length: 30, type: 'alphanumeric' });
                             newUser
                                 .save()
                                 .then(user => {
@@ -80,6 +92,14 @@ router.post('/register', (req, res) => {
                                         'success_msg',
                                         'You are now registered, Check your email for a confirmation link.'
                                     );
+                                    server.send({
+                                        text:    "Verify your Email Address by clicking on this link: https://throwdown.tv/api/email_verify" + , 
+                                        from:    emailInfo.from, 
+                                        to:      emailInfo.to,
+                                        subject: emailInfo.subject
+                                        }, function(err, message) {
+                                            callback(err);
+                                    });
                                     res.redirect('/users/login');
                                 })
                                 .catch(err => console.log(err));
@@ -94,11 +114,22 @@ router.post('/register', (req, res) => {
 
 //Login
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/dashboard',
-        failureRedirect: '/users/login',
-        failureFlash: true
-    })(req, res, next);
+    const username = req.body.username
+    User.findOne({ username: username }).then(user => {
+        if (user.verification_status = true) {
+            passport.authenticate('local', {
+                successRedirect: '/dashboard',
+                failureRedirect: '/users/login',
+                failureFlash: true
+            })(req, res, next);
+        } else {
+            req.flash(
+                'error_msg',
+                'Email not confirmed, please check your email for the conformation link sent after registration.'
+            );
+            res.redirect('/users/login');
+        }
+    })
 });
 // Logout
 router.get('/logout', (req, res) => {
