@@ -67,19 +67,13 @@
                 player.on('error', function() {
                     player.src({
                         type: 'application/x-mpegURL',
-                        src: 'https://eu02.throwdown.tv/live/<%= streamkey %>/index.m3u8'
+                        src: 'https://us01.throwdown.tv/live/<%= streamkey %>/index.m3u8'
                     });
                     player.on('error', function() {
                         player.src({
-                            type: 'application/x-mpegURL',
-                            src: 'https://us02.throwdown.tv/live/<%= streamkey %>/index.m3u8'
+                            type: 'video/mp4',
+                            src: 'throwdown.mp4'
                         });
-                        player.on('error', function() {
-                            player.src({
-                                type: 'video/mp4',
-                                src: 'throwdown.mp4'
-                            });
-                        })
                     })
                 })
             })
