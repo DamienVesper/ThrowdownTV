@@ -10,14 +10,25 @@ router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) =>
   User.findOne({ username: req.user.username }).then(useraccount => {
-    res.render('dashboard', {
-      user: req.user,
-      streamtitle: useraccount.stream_title,
-      streamkey: useraccount.stream_key,
-      streamdescription: useraccount.stream_description,
-      streamavatar: useraccount.avatar_url,
-      donationlink: useraccount.donation_link
-    })
+    if (useraccount.can_stream) {
+      res.render('dashboard', {
+        user: req.user,
+        streamtitle: useraccount.stream_title,
+        streamkey: useraccount.stream_key,
+        streamdescription: useraccount.stream_description,
+        streamavatar: useraccount.avatar_url,
+        donationlink: useraccount.donation_link
+      })
+    } else {
+      res.render('dashboard', {
+        user: req.user,
+        streamtitle: useraccount.stream_title,
+        streamkey: "You do not have permission to stream",
+        streamdescription: useraccount.stream_description,
+        streamavatar: useraccount.avatar_url,
+        donationlink: useraccount.donation_link
+      })
+    }  
   })
 );
 
