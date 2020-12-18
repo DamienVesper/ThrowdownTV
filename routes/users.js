@@ -125,7 +125,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res, next) => {
     const username = req.body.username
     User.findOne({ username: username }).then(user => {
-        if (user.verification_status = true) {
+        if (user.verification_status) {
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',
