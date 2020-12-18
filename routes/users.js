@@ -88,7 +88,6 @@ router.post('/register', (req, res) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
                             if (err) throw err;
                             newUser.password = hash;
-                            newUser.email_verification_key = cryptoRandomString({ length: 30, type: 'alphanumeric' });
                             newUser
                                 .save()
                                 .then(user => {
@@ -96,19 +95,21 @@ router.post('/register', (req, res) => {
                                         'success_msg',
                                         'You are now registered, Check your email for a confirmation link.'
                                     );
-                                    let message = {
-                                        from: "no-reply@throwdown.tv",
-                                        to: newUser.email,
-                                        subject: "Please verify your email address to use at Throwdown TV",
-                                        text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + newUser.email_verification_key,
-                                    };
-                                    transporter.sendMail(message, (error, info) => {
-                                        if (error) {
-                                            return console.log(error);
-                                        }
-                                        console.log('Message sent: %s', info.messageId);
+                                    User.findOne({ email: email }).then(useraccount => {
+                                        let message = {
+                                            from: "no-reply@throwdown.tv",
+                                            to: useraccount.email,
+                                            subject: "Please verify your email address to use at Throwdown TV",
+                                            text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + useraccount.email_verification_key,
+                                        };
+                                        transporter.sendMail(message, (error, info) => {
+                                            if (error) {
+                                                return console.log(error);
+                                            }
+                                            console.log('Message sent: %s', info.messageId);
+                                        });
+                                        res.redirect('/users/login');
                                     });
-                                    res.redirect('/users/login');
                                 })
                                 .catch(err => console.log(err));
                             });
