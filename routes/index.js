@@ -10,7 +10,7 @@ router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) =>
   User.findOne({ username: req.user.username }).then(useraccount => {
-    if (useraccount.can_stream = true) {
+    if (useraccount.can_stream) {
       res.render('dashboard', {
         user: req.user,
         streamtitle: useraccount.stream_title,
