@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const config = require('./config.json')
 const User = require('./models/User');
 const session = require('express-session')
+const nodemailer = require('nodemailer');
 const fs = require('fs')
 const http = require('http');
 const https = require('https');
