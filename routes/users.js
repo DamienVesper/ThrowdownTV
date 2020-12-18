@@ -2,14 +2,19 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const email = require('emailjs');
+const nodemailer = require('nodemailer');
 
 // Email
-var server  = email.server.connect({
-    user:    "no-reply@throwdown.tv", 
-    host:    "127.0.0.1", 
-    ssl:     false
-}); 
+let transporter = nodemailer.createTransport({
+    host: 'localhost',
+    port: 465,
+    secure: false,
+    auth: {
+         user: 'no-reply@throwdown.tv',
+         pass: 'pass',
+    }
+});
+
 
 // Load User Model
 const User = require('../models/User');
@@ -91,13 +96,17 @@ router.post('/register', (req, res) => {
                                         'success_msg',
                                         'You are now registered, Check your email for a confirmation link.'
                                     );
-                                    server.send({
-                                        text:    "Verify your Email Address by clicking on this link: https://throwdown.tv/api/email_verify" + newUser.email_verification_key, 
-                                        from:    emailInfo.from, 
-                                        to:      emailInfo.to,
-                                        subject: emailInfo.subject
-                                        }, function(err, message) {
-                                            callback(err);
+                                    let message = {
+                                        from: "no-reply@throwdown.tv",
+                                        to: newUser.email,
+                                        subject: "Please verify your email address to use at Throwdown TV",
+                                        text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + newUser.email_verification_key,
+                                    };
+                                    transporter.sendMail(message, (error, info) => {
+                                        if (error) {
+                                            return console.log(error);
+                                        }
+                                        console.log('Message sent: %s', info.messageId);
                                     });
                                     res.redirect('/users/login');
                                 })
