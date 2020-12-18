@@ -3,15 +3,16 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+const config = require('./config.json')
 
 // Email
 let transporter = nodemailer.createTransport({
-    host: 'localhost',
+    host: 'smtp.gmail.com',
     port: 465,
-    secure: false,
+    secure: true,
     auth: {
-         user: 'no-reply@throwdown.tv',
-         pass: 'pass',
+         user: 'throwdowntvofficial@gmail.com',
+         pass: config.smtp_password,
     }
 });
 
@@ -96,7 +97,7 @@ router.post('/register', (req, res) => {
                                     );
                                     User.findOne({ email: email }).then(useraccount => {
                                         let message = {
-                                            from: "no-reply@throwdown.tv",
+                                            from: "throwdowntvofficial@gmail.com",
                                             to: useraccount.email,
                                             subject: "Please verify your email address to use at Throwdown TV",
                                             text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + useraccount.email_verification_key,
