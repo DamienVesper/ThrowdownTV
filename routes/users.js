@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+const isAlphanumeric = require('is-alphanumeric');
 const config = require('../config.json')
 
 // Email
