@@ -46,6 +46,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    banned: {
+        type: Boolean,
+        default: false
+    },
     date: {
         type: Date,
         default: Date.now

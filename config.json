@@ -1,4 +1,5 @@
 {
     "port":"80",
-    "smtp_password":"p69Nr5P8KlsI"
+    "smtp_password":"p69Nr5P8KlsI",
+    "isPublic": false
 }
