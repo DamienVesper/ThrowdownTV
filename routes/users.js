@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
-const config = require('./config.json')
+const config = require('../config.json')
 
 // Email
 let transporter = nodemailer.createTransport({
