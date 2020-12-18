@@ -8,7 +8,8 @@ const config = require('./config.json')
 const User = require('./models/User');
 const session = require('express-session')
 const fs = require('fs')
-const https = require('https')
+const http = require('http');
+const https = require('https');
 const app = express()
 const port = config.port
 
@@ -89,7 +90,8 @@ var ssl_options = {
     cert: fs.readFileSync( './ssl/cert.pem' )
 }
 
+var httpServer = http.createServer(app)
+var httpsServer = https.createServer(ssl_options, app);
 
-https.createServer(ssl_options, app).listen(port, function(){
-    console.log("Throwdown TV server listening on port " + port);
-});
+httpServer.listen(80);
+httpsServer.listen(443);
