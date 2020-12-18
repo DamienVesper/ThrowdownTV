@@ -23,7 +23,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
 
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
-    user.stream_key = cryptoRandomString({ length: 20, type: 'alphanumeric' });
+    user.stream_key = cryptoRandomString({ length: 50, type: 'alphanumeric' });
     user.save(function(err, user) {
       req.flash(
         'success_msg',
