@@ -41,8 +41,10 @@
                             </div>
                         </div>
                     </div>
-                    <button href="<%= donationlink %>" class="btn btn-primary">Donate</button>
-                    <div style="margin-top: 4px;">
+                    <form action="<%= donationlink %>">
+                        <button type="submit" class="btn btn-primary">Donate</button>
+                    </form>
+                    <div style="margin-top: 15px;">
                         <p style="color: white; font-size: 15px;" class="lead mb-3">
                             <%= streamdescription %>
                         </p>
