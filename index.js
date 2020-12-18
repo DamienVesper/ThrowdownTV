@@ -7,6 +7,8 @@ const flash = require('connect-flash');
 const config = require('./config.json')
 const User = require('./models/User');
 const session = require('express-session')
+const fs = require('fs')
+const https = require('https')
 const app = express()
 const port = config.port
 
@@ -81,6 +83,13 @@ app.get('/:username', (req, res)=> {
     });
 })
 
-app.listen(port, () => {
-    console.log(`Throwdown TV listening at http://localhost:${port}`)
-})
+//SSL
+var ssl_options = {
+    key: fs.readFileSync( './ssl/key.pem' ),
+    cert: fs.readFileSync( './ssl/cert.pem' )
+}
+
+
+https.createServer(ssl_options, app).listen(port, function(){
+    console.log("Throwdown TV server listening on port " + port);
+});
