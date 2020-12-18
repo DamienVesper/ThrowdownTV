@@ -13,10 +13,13 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
     res.render('dashboard', {
       user: req.user,
       streamtitle: useraccount.stream_title,
-      streamkey: useraccount.stream_key
+      streamkey: useraccount.stream_key,
+      streamdescription: useraccount.stream_description,
+      streamavatar: useraccount.avatar_url
     })
   })
 );
+
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
     user.stream_key = cryptoRandomString({ length: 20, type: 'alphanumeric' });
@@ -31,20 +34,47 @@ router.post('/dashboard/streamkey', (req, res) => {
 })
 router.post('/dashboard', (req, res) => {
   const streamtitle = req.body.streamtitle
+  const streamdescription = req.body.streamdescription
+  const streamavatar = req.body.streamavatar
 
   if (streamtitle.length > 3){
     if (streamtitle.length <= 61){
-      // Check if stream has been updated
-      User.findOne({ username: req.user.username }, (err, user) => {
-        user.stream_title = streamtitle;
-        user.save(function(err, user) {
+      if (streamdescription.length > 1) {
+        if (streamdescription.length <= 4000) {
+          if (streamavatar.startsWith("http://")||streamavatar.startsWith("https://")) {
+            User.findOne({ username: req.user.username }, (err, user) => {
+              user.stream_title = streamtitle;
+              user.stream_description = streamdescription;
+              user.avatar_url = streamavatar
+              user.save(function(err, user) {
+                req.flash(
+                  'success_msg',
+                  'Changes succesfully updated.'
+                );
+                res.redirect('/dashboard');
+              })
+            });
+          } else {
+            req.flash(
+              'error_msg',
+              'Stream avatar must be a valid image URL.'
+            );
+            res.redirect('/dashboard');
+          }
+        } else {
           req.flash(
-            'success_msg',
-            'Changes succesfully updated.'
+            'error_msg',
+            'Stream description must not be longer than 4000 Characters.'
           );
           res.redirect('/dashboard');
-        })
-      });
+        }
+      } else {
+        req.flash(
+          'error_msg',
+          'Stream description must be longer than 1 Characters.'
+        );
+        res.redirect('/dashboard');
+      }
     } else {
       req.flash(
         'error_msg',

@@ -22,6 +22,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "My cool stream :)"
     },
+    stream_description: {
+        type: String,
+        default: "Description of my cool stream :)"
+    },
+    avatar_url: {
+        type: String,
+        default: "https://cdn.discordapp.com/attachments/736368923590525039/789419292214820894/defaulltpfp.png"
+    },
     date: {
         type: Date,
         default: Date.now

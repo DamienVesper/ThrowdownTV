@@ -62,15 +62,18 @@ app.use(function(req, res, next) {
 //Routes
 app.use('/', require('./routes/index'))
 app.use('/users', require('./routes/users'))
+app.use('/api', require('./routes/api'))
+app.use('/cdn', require('./routes/cdn'))
 
 app.get('/:username', (req, res)=> {
     User.findOne({ username: req.params.username }).then(user => {
         if (user) {
-            //res.send(req.params.username + " Exists") 
             res.render('streamer', {
                 user: user.username,
                 streamkey: user.stream_key,
-                streamtitle: user.stream_title
+                streamtitle: user.stream_title,
+                streamdescription: user.stream_description,
+                avatarurl: user.avatar_url
             })
         } else {
             res.send(req.params.username + " Does not exist")
