@@ -82,7 +82,6 @@ router.post('/register', (req, res) => {
                             username,
                             email,
                             password,
-                            email_verification_key
                         }); 
                         bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
