@@ -1,4 +1,4 @@
-dbPassword = 'mongodb+srv://throwdown:'+ encodeURIComponent('9mM3kMZraRsEd7SgH') + '@127.0.0.1/throwdown?retryWrites=true';
+dbPassword = 'mongodb+srv://admin:'+ encodeURIComponent('jy258On88UvIiOyu') + '@throwdowntv.php4l.mongodb.net/throwdown?retryWrites=true&w=majority';
 
 module.exports = {
     mongoURI: dbPassword
