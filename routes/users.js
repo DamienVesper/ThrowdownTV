@@ -93,7 +93,7 @@ router.post('/register', (req, res) => {
                                         'You are now registered, Check your email for a confirmation link.'
                                     );
                                     server.send({
-                                        text:    "Verify your Email Address by clicking on this link: https://throwdown.tv/api/email_verify" + , 
+                                        text:    "Verify your Email Address by clicking on this link: https://throwdown.tv/api/email_verify" + newUser.email_verification_key, 
                                         from:    emailInfo.from, 
                                         to:      emailInfo.to,
                                         subject: emailInfo.subject
