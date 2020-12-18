@@ -6,7 +6,11 @@ const User = require('../models/User');
 router.get('/streamkey/:streamkey', (req, res) =>
     User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
         if (useraccount) {
-            res.send("true")
+            if (useraccount.can_stream) {
+                res.send("true")
+            } else {
+                res.send("false")
+            }
         } else {
             res.send("false")
         }
