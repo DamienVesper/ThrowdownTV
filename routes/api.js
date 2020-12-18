@@ -8,12 +8,12 @@ router.get('/streamkey/:streamkey', (req, res) =>
     User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
         if (useraccount) {
             if (useraccount.can_stream || config.isPublic) {
-                res.send("true")
+                res.json({canstream: true})
             } else {
-                res.send("false")
+                res.json({canstream: false})
             }
         } else {
-            res.send("false")
+            res.json({canstream: false})
         }
     })
 );
