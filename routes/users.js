@@ -85,11 +85,9 @@ router.post('/register', (req, res) => {
                     } else {
                         const newUser = new User({
                             username,
-                            channelurl,
                             email,
                             password
                         }); 
-                        newUser.channelurl = username.toLowerCase();
                         bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
                             if (err) throw err;
@@ -102,6 +100,8 @@ router.post('/register', (req, res) => {
                                         'You are now registered, Check your email for a confirmation link.'
                                     );
                                     User.findOne({ email: email }).then(useraccount => {
+                                        useraccount.channelurl = username.toLowerCase();
+                                        useraccount.save();
                                         let message = {
                                             from: "Throwdown TV",
                                             to: useraccount.email,
