@@ -9,11 +9,14 @@ router.get('/streamkey/:streamkey', (req, res) =>
         if (useraccount) {
             if (useraccount.can_stream || config.isPublic) {
                 res.json({canstream: true})
+                console.log("Approved Stream Key " + req.params.streamkey)
             } else {
                 res.json({canstream: false})
+                console.log("Denied Stream Key " + req.params.streamkey)
             }
         } else {
             res.json({canstream: false})
+            console.log("Denied Stream Key " + req.params.streamkey)
         }
     })
 );
