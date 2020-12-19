@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 const isAlphanumeric = require('is-alphanumeric');
+const cryptoRandomString = require('crypto-random-string');
 const config = require('../config.json')
 
 // Email
