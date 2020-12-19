@@ -31,6 +31,7 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 //Register Handle
 router.post('/register', (req, res) => {
     const {username, email, password, password2} = req.body
+    const channelurl = username.toLowerCase();
     let errors = [];
 
     //check required fields
@@ -86,7 +87,8 @@ router.post('/register', (req, res) => {
                         const newUser = new User({
                             username,
                             email,
-                            password
+                            password,
+                            channelurl
                         }); 
                         bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -100,8 +102,6 @@ router.post('/register', (req, res) => {
                                         'You are now registered, Check your email for a confirmation link.'
                                     );
                                     User.findOne({ email: email }).then(useraccount => {
-                                        useraccount.channelurl = username.toLowerCase();
-                                        useraccount.save();
                                         let message = {
                                             from: "Throwdown TV",
                                             to: useraccount.email,
