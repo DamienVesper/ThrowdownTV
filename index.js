@@ -70,7 +70,7 @@ app.use('/api', require('./routes/api'))
 app.use('/cdn', require('./routes/cdn'))
 
 app.get('/:channelurl', (req, res)=> {
-    User.findOne({ channelurl: req.params.channelurl }).then(user => {
+    User.findOne({ channelurl: req.params.channelurl.toLowerCase() }).then(user => {
         if (user) {
             res.render('streamer', {
                 user: user.username,
