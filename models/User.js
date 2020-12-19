@@ -50,6 +50,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    token: {
+        type: String,
+        default: cryptoRandomString({ length: 100, type: 'alphanumeric' })
+    },
     date: {
         type: Date,
         default: Date.now
