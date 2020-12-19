@@ -20,7 +20,6 @@ router.get('/streamkey/:streamkey', (req, res) =>
         }
     })
 );
-<<<<<<< Updated upstream
 router.get('/chat/:username/:token', (req, res) =>
     User.findOne({ username: req.params.username }).then(useraccount => {
         if (useraccount) {
@@ -34,10 +33,6 @@ router.get('/chat/:username/:token', (req, res) =>
         }
     })
 );
-=======
-
-// Email verify
->>>>>>> Stashed changes
 router.get('/email_verify/:emailverificationkey', (req, res) =>
     User.findOne({ email_verification_key: req.params.emailverificationkey }).then(useraccount => {
         if (useraccount) {
