@@ -6,6 +6,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    channelurl: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true

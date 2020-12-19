@@ -85,9 +85,11 @@ router.post('/register', (req, res) => {
                     } else {
                         const newUser = new User({
                             username,
+                            channelurl,
                             email,
                             password
                         }); 
+                        newUser.channelurl = username.toLowerCase();
                         bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
                             if (err) throw err;
