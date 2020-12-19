@@ -13,6 +13,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
     if (useraccount.can_stream) {
       res.render('dashboard', {
         user: req.user,
+        channelurl: useraccount.channelurl,
         streamtitle: useraccount.stream_title,
         streamkey: useraccount.stream_key,
         streamdescription: useraccount.stream_description,
@@ -22,6 +23,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
     } else {
       res.render('dashboard', {
         user: req.user,
+        channelurl: useraccount.channelurl,
         streamtitle: useraccount.stream_title,
         streamkey: "You do not have permission to stream",
         streamdescription: useraccount.stream_description,
