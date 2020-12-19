@@ -20,8 +20,8 @@ router.get('/streamkey/:streamkey', (req, res) =>
         }
     })
 );
-router.get('/chat/:username/:token', (req, res) =>
-    User.findOne({ username: req.params.username }).then(useraccount => {
+router.get('/chat/:channelurl/:token', (req, res) =>
+    User.findOne({ channelurl: req.params.channelurl }).then(useraccount => {
         if (useraccount) {
             if (useraccount.token = req.params.token) {
                 res.json({canstream: true})

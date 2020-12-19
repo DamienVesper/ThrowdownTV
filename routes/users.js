@@ -132,6 +132,8 @@ router.post('/login', (req, res, next) => {
     const username = req.body.username
     User.findOne({ username: username }).then(user => {
         if (user.verification_status) {
+            user.token = cryptoRandomString({ length: 100, type: 'alphanumeric' })
+            user.save();
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',
