@@ -11,6 +11,8 @@
   "dependencies": {
     "@videojs/http-streaming": "^2.4.0",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "crypto-random-string": "^3.3.0",
     "ejs": "^3.1.5",
@@ -25,6 +27,7 @@
     "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "socket.io": "^3.0.4",
     "videojs": "^1.0.0"
   }
 }

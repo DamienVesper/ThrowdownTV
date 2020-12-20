@@ -7,15 +7,26 @@ const flash = require('connect-flash');
 const config = require('./config.json')
 const User = require('./models/User');
 const session = require('express-session')
-//const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 const fs = require('fs')
 const http = require('http');
 const https = require('https');
+var io = require('socket.io')(http);
 const app = express()
 const port = config.port
 
 // Passport
 require('./config/passport')(passport);
+
+// Emit message on connection
+
+io.on('connection', function(socket) {
+    console.log("we got a new viewer")
+    socket.on('viewer', function(data) {
+        console.log(data)
+        //socket.emit('update viewcount', { data: 'we have a viewer', username: "test"})
+    });
+});
 
 //DB
 const db = require('./config/keys').mongoURI;
@@ -78,7 +89,8 @@ app.get('/:channelurl', (req, res)=> {
                 streamtitle: user.stream_title,
                 streamdescription: user.stream_description,
                 avatarurl: user.avatar_url,
-                donationlink: user.donation_link
+                donationlink: user.donation_link,
+                liveviewers: 0
             })
         } else {
             res.send(req.params.username + " Does not exist")

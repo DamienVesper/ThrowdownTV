@@ -58,6 +58,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: cryptoRandomString({ length: 100, type: 'alphanumeric' })
     },
+    live_viewers: {
+        default: 0
+    },
     date: {
         type: Date,
         default: Date.now
