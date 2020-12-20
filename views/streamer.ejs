@@ -66,15 +66,6 @@
         <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
         <script src='/js/socket.io.js'></script>
         <script>
-            var socket = io();
-            
-            socket.emit('viewer', {data: 'newviewer', username: '<%= user %>'});
-
-            socket.on('update viewcount', function(data) {
-                console.log(data)
-                //document.getElementById("liveviewers").innerHTML=`<p style="color: darkorange;">${data}</p>`;
-            });
-
             var player = videojs("player", {autoplay: true});
             document.getElementById("livestatus").innerHTML=`<p style="color: yellow;">PLEASE WAIT</p>`;
             player.on('error', function(){
