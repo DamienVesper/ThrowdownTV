@@ -7,6 +7,9 @@ const cryptoRandomString = require('crypto-random-string');
 // Welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 
+// TOS
+router.get('/tos', forwardAuthenticated, (req, res) => res.render('tos'));
+
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) =>
   User.findOne({ username: req.user.username }).then(useraccount => {
