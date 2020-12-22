@@ -71,8 +71,8 @@ app.use('/users', require('./routes/users'))
 app.use('/api', require('./routes/api'))
 app.use('/cdn', require('./routes/cdn'))
 
-app.get('/:channelurl', (req, res)=> {
-    User.findOne({ channelurl: req.params.channelurl.toLowerCase() }).then(user => {
+app.get('/:username', (req, res)=> {
+    User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
         if (user) {
             axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: {username: 'admin', password: 'loltdtv2021'}})
                 .then(function (response) {
@@ -87,13 +87,9 @@ app.get('/:channelurl', (req, res)=> {
                                 } else {
                                     renderStream("test", "offline", "video/mp4")
                                 }
-                            }).catch(function(error){
-                                console.log(error)
-                            });
+                            }).catch(function(error){console.log(error)});
                     }
-                }).catch(function(error){
-                    console.log(error)
-                });
+                }).catch(function(error){console.log(error)});
         } else {
             res.send(req.params.username + " Does not exist")
         }

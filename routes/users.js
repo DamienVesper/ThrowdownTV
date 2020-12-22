@@ -5,6 +5,8 @@ const passport = require('passport');
 const nodemailer = require('nodemailer');
 const isAlphanumeric = require('is-alphanumeric');
 const cryptoRandomString = require('crypto-random-string');
+const validator = require("email-validator");
+const emailExistence = require("email-existence")
 const config = require('../config.json')
 
 // Email
@@ -31,14 +33,24 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 
 //Register Handle
 router.post('/register', (req, res) => {
-    const {username, email, password, password2} = req.body
-    const channelurl = username.toLowerCase();
+    const {email, password, password2} = req.body
+    const username = req.body.username.toLowerCase();
     let errors = [];
 
     //check required fields
     if(!username || !email || !password || !password2) {
         errors.push({msg: "Please fill in all fields"})
     }
+    //Check email validity
+    if (!validator.validate(email)) {
+        errors.push({msg: "Invalid email format"})
+    }
+    //Check if email exists
+    emailExistence.check(email, function(error, response){
+        if (error) {
+            errors.push({msg: "Invalid email address"})
+        }
+    });
     //Check if passwords match
     if(password !== password2) {
         errors.push({msg: "Passwords do not match"})
@@ -89,7 +101,6 @@ router.post('/register', (req, res) => {
                             username,
                             email,
                             password,
-                            channelurl
                         }); 
                         bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -100,7 +111,7 @@ router.post('/register', (req, res) => {
                                 .then(user => {
                                     req.flash(
                                         'success_msg',
-                                        'You are now registered, Check your email for a confirmation link.'
+                                        'You are now registered, Check your email for a confirmation link. If you are unable to verify your account, please contact us on discord.'
                                     );
                                     User.findOne({ email: email }).then(useraccount => {
                                         let message = {
@@ -130,7 +141,7 @@ router.post('/register', (req, res) => {
 
 //Login
 router.post('/login', (req, res, next) => {
-    const username = req.body.username
+    const username = req.body.username.toLowerCase();
     User.findOne({ username: username }).then(user => {
         if (user.verification_status) {
             user.token = cryptoRandomString({ length: 100, type: 'alphanumeric' })

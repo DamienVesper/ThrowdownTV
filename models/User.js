@@ -6,10 +6,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    channelurl: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true
@@ -54,9 +50,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    token: {
-        type: String,
-        default: cryptoRandomString({ length: 100, type: 'alphanumeric' })
+    following: {
+        type: Array,
+    },
+    followers: {
+        type: Array,
     },
     live_viewers: {
         default: 0
