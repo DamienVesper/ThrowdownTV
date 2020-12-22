@@ -1,4 +1,9 @@
 var player = videojs("player", {autoplay: true});
+
+const socket = io();
+
+socket.on('load')
+
 document.getElementById("livestatus").innerHTML=`<p style="color: yellow;">PLEASE WAIT</p>`;
 player.on('error', function(){
     document.getElementById("livestatus").innerHTML=`<p style="color: lime;">ONLINE</p>`;
