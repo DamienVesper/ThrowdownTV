@@ -20,12 +20,8 @@ require('./config/passport')(passport);
 
 // Emit message on connection
 
-io.on('connection', function(socket) {
-    console.log("we got a new viewer")
-    socket.on('viewer', function(data) {
-        console.log(data)
-        //socket.emit('update viewcount', { data: 'we have a viewer', username: "test"})
-    });
+io.on('connection', socket => {
+    console.log("New Socket Connection")
 });
 
 //DB

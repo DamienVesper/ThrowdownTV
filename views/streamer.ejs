@@ -66,30 +66,6 @@
         </div>
         </div>
         <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
-        <script src='/js/socket.io.js'></script>
-        <script>
-            var player = videojs("player", {autoplay: true});
-            document.getElementById("livestatus").innerHTML=`<p style="color: yellow;">PLEASE WAIT</p>`;
-            player.on('error', function(){
-                document.getElementById("livestatus").innerHTML=`<p style="color: lime;">ONLINE</p>`;
-                player.src({
-                    type: 'application/x-mpegURL',
-                    src: 'https://eu01.throwdown.tv/live/<%= streamkey %>/index.m3u8'
-                });
-                player.on('error', function() {
-                    document.getElementById("livestatus").innerHTML=`<p style="color: lime;">ONLINE</p>`;
-                    player.src({
-                        type: 'application/x-mpegURL',
-                        src: 'https://us01.throwdown.tv/live/<%= streamkey %>/index.m3u8'
-                    });
-                    player.on('error', function() {
-                        document.getElementById("livestatus").innerHTML=`<p style="color: red;">OFFLINE</p>`;
-                        player.src({
-                            type: 'video/mp4',
-                            src: 'throwdown.mp4'
-                        });
-                    })
-                })
-            })
-        </script>
+        <script src="/socketi.io/socket.io.js"></script>
+        <script src="/js/main.js"></script>
     </body>
