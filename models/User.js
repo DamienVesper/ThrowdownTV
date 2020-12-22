@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema({
     },
     donation_link: {
         type: String,
-        default: "https://streamelements.com"
+        default: "/streams/donate"
     },
     can_stream: {
         type: Boolean,

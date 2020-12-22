@@ -143,9 +143,14 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res, next) => {
     const username = req.body.username.toLowerCase();
     User.findOne({ username: username }).then(user => {
+        if (!user) {
+            req.flash(
+                'error_msg',
+                'User does not exist.'
+            );
+            res.redirect('/users/login');
+        }
         if (user.verification_status) {
-            user.token = cryptoRandomString({ length: 100, type: 'alphanumeric' })
-            user.save();
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',

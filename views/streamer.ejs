@@ -34,15 +34,21 @@
                                 <h3 style="color: white; font-size: 25px;" class="lead mb-3">
                                     <%= streamtitle %>
                                 </h3>
-                                <p id="username_field" style="color: lime; font-size: 15px;" class="lead mb-3">
-                                    <%= user %>
-                                </p>
+                                <div class="row">
+                                    <p id="username_field" style="color: lime; font-size: 15px; margin-right: 10px;" class="lead mb-3"><%= user %> </p>
+                                    <p id="followers" style="color: rgb(255, 0, 179); font-size: 15px;" class="lead mb-3"> Followers: <span style="color: yellow;"><%= followercount %></span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <form action="<%= donationlink %>">
-                        <button type="submit" class="btn btn-primary">Donate</button>
-                    </form>
+                    <div class="row">
+                        <form  style="margin: 10px;" action="/follow/<%= user %>">
+                            <button id="follow_button" type="submit" class="btn btn-success">Follow</button>
+                        </form>
+                        <form style="margin: 10px;" action="<%= donationlink %>">
+                            <button type="submit" class="btn btn-primary">Donate</button>
+                        </form>
+                    </div>
                     <div style="margin-top: 15px;">
                         <p style="color: white; font-size: 15px;" class="lead mb-3">
                             <%= streamdescription %>

@@ -3,6 +3,7 @@ const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const User = require('../models/User');
 const cryptoRandomString = require('crypto-random-string');
+const axios = require('axios');
 
 // Welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
@@ -10,35 +11,10 @@ router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 // TOS
 router.get('/tos', forwardAuthenticated, (req, res) => res.render('tos'));
 
-// Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) =>
-  User.findOne({ username: req.user.username }).then(useraccount => {
-    if (useraccount.can_stream) {
-      res.render('dashboard', {
-        user: req.user,
-        streamtitle: useraccount.stream_title,
-        streamkey: useraccount.stream_key,
-        streamdescription: useraccount.stream_description,
-        streamavatar: useraccount.avatar_url,
-        donationlink: useraccount.donation_link
-      })
-    } else {
-      res.render('dashboard', {
-        user: req.user,
-        streamtitle: useraccount.stream_title,
-        streamkey: "You do not have permission to stream",
-        streamdescription: useraccount.stream_description,
-        streamavatar: useraccount.avatar_url,
-        donationlink: useraccount.donation_link
-      })
-    }  
-  })
-);
-
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
     user.stream_key = cryptoRandomString({ length: 50, type: 'alphanumeric' });
-    user.save(function(err, user) {
+    user.save(function (err, user) {
       req.flash(
         'success_msg',
         'Stream Key succesfully reset.'
@@ -53,18 +29,18 @@ router.post('/dashboard', (req, res) => {
   const streamavatar = req.body.streamavatar
   const donationlink = req.body.donationlink
 
-  if (streamtitle.length > 3){
-    if (streamtitle.length <= 61){
+  if (streamtitle.length > 3) {
+    if (streamtitle.length <= 61) {
       if (streamdescription.length > 1) {
         if (streamdescription.length <= 4000) {
-          if (streamavatar.startsWith("http://")||streamavatar.startsWith("https://")) {
+          if (streamavatar.startsWith("http://") || streamavatar.startsWith("https://")) {
             if (donationlink.length > 0) {
               User.findOne({ username: req.user.username }, (err, user) => {
                 user.stream_title = streamtitle;
                 user.stream_description = streamdescription;
                 user.avatar_url = streamavatar
                 user.donation_link = donationlink
-                user.save(function(err, user) {
+                user.save(function (err, user) {
                   req.flash(
                     'success_msg',
                     'Changes succesfully updated.'
@@ -92,7 +68,7 @@ router.post('/dashboard', (req, res) => {
             'Stream description must not be longer than 4000 Characters.'
           );
           res.redirect('/dashboard');
-        } 
+        }
       } else {
         req.flash(
           'error_msg',
@@ -114,5 +90,106 @@ router.post('/dashboard', (req, res) => {
     );
     res.redirect('/dashboard');
   }
+})
+
+// Default donation link ;)
+router.get('/streams/donate', (req, res) => {
+  res.send("This user has not set up their donation link yet :(")
+})
+
+// Dashboard
+router.get('/dashboard', ensureAuthenticated, (req, res) =>
+  User.findOne({ username: req.user.username }).then(useraccount => {
+    if (useraccount.can_stream) {
+      res.render('dashboard', {
+        user: req.user,
+        streamtitle: useraccount.stream_title,
+        streamkey: useraccount.stream_key,
+        streamdescription: useraccount.stream_description,
+        streamavatar: useraccount.avatar_url,
+        donationlink: useraccount.donation_link
+      })
+    } else {
+      res.render('dashboard', {
+        user: req.user,
+        streamtitle: useraccount.stream_title,
+        streamkey: "You do not have permission to stream",
+        streamdescription: useraccount.stream_description,
+        streamavatar: useraccount.avatar_url,
+        donationlink: useraccount.donation_link
+      })
+    }
+  })
+);
+
+//Follow streamer
+router.get('/follow/:username', ensureAuthenticated, (req, res) => {
+  res.send('WIP')
+  //WIP
+  /**
+  User.findOne({ username: req.params.username }).then(followaccount => {
+    followaccount.followers.push(req.user.username)
+    followaccount.save()
+
+    User.findOne({ username: req.user.username }).then(followeraccount => {
+      followeraccount.following.push(req.params.username)
+      followeraccount.save();
+      req.flash(
+        'success_msg',
+        'Successfully followed '+req.params.username+'.'
+      );
+      res.redirect('/'+req.params.username);
+    })
+  })
+  */
+})
+
+// Streamer
+router.get('/:username', (req, res) => {
+  User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
+    if (user) {
+      axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+        .then(function (response) {
+          if (response.status = 200) {
+            renderStream("eu01", user.stream_key, "application/x-mpegURL")
+          } else {
+            axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+              .then(function (response) {
+                console.log(response)
+                if (response.status = 200) {
+                  renderStream("us01", user.stream_key, "application/x-mpegURL")
+                } else {
+                  renderStream("test", "offline", "video/mp4")
+                }
+              }).catch(function (error) { console.log(error) });
+          }
+        }).catch(function (error) { console.log(error) });
+    } else {
+      res.send(req.params.username + " Does not exist")
+    }
+    //Render Stream Function
+    function renderStream(liveserver, streamkey, streamformat) {
+      res.render('streamer', {
+        user: user.username,
+        streamplayer:
+          `<video id="player" class="video-js vjs-big-play-centered" controls preload="auto" fluid="true"
+                  width="1280" height="720" poster="thumbnail.png" autoplay data-setup="{}">
+                  <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
+                      type="${streamformat}" />
+                  <p class="vjs-no-js">
+                      To view this video please enable JavaScript, and consider upgrading to a
+                      web browser that
+                      <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                  </p>
+              </video>`,
+        streamtitle: user.stream_title,
+        followercount: user.followers.length,
+        streamdescription: user.stream_description,
+        avatarurl: user.avatar_url,
+        donationlink: user.donation_link,
+        liveviewers: 0
+      })
+    }
+  });
 })
 module.exports = router;

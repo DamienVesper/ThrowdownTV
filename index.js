@@ -69,54 +69,6 @@ app.use(function(req, res, next) {
 app.use('/', require('./routes/index'))
 app.use('/users', require('./routes/users'))
 app.use('/api', require('./routes/api'))
-app.use('/cdn', require('./routes/cdn'))
-
-app.get('/:username', (req, res)=> {
-    User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
-        if (user) {
-            axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: {username: 'admin', password: 'loltdtv2021'}})
-                .then(function (response) {
-                    if (response.status = 200) {
-                        renderStream("eu01", user.stream_key, "application/x-mpegURL")
-                    } else {
-                        axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: {username: 'admin', password: 'loltdtv2021'}})
-                            .then(function (response) {
-                                console.log(response)
-                                if (response.status = 200) {
-                                    renderStream("us01", user.stream_key, "application/x-mpegURL")
-                                } else {
-                                    renderStream("test", "offline", "video/mp4")
-                                }
-                            }).catch(function(error){console.log(error)});
-                    }
-                }).catch(function(error){console.log(error)});
-        } else {
-            res.send(req.params.username + " Does not exist")
-        }
-        //Render Stream Function
-        function renderStream(liveserver, streamkey, streamformat) {
-            res.render('streamer', {
-                user: user.username,
-                streamplayer: 
-                `<video id="player" class="video-js vjs-big-play-centered" controls preload="auto" fluid="true"
-                    width="1280" height="720" poster="thumbnail.png" autoplay data-setup="{}">
-                    <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
-                        type="${streamformat}" />
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>`,
-                streamtitle: user.stream_title,
-                streamdescription: user.stream_description,
-                avatarurl: user.avatar_url,
-                donationlink: user.donation_link,
-                liveviewers: 0
-            })
-        }
-    });
-})
 
 //SSL
 var ssl_options = {

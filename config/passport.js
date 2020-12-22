@@ -9,7 +9,7 @@ module.exports = function(passport) {
         new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
             // Match user
             User.findOne({
-                username: username
+                username: username.toLowerCase()
             }).then(user => {
                 if (!user) {
                     return done(null, false, { message: 'Invalid Credentials' });
