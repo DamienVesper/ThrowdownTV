@@ -7,12 +7,9 @@ const flash = require('connect-flash');
 const config = require('./config.json')
 const User = require('./models/User');
 const session = require('express-session')
-const bodyParser = require('body-parser');
 const fs = require('fs')
 const http = require('http');
 const https = require('https');
-const axios = require('axios');
-const socketio = require('socket.io');
 const app = express()
 const port = config.port
 
@@ -78,23 +75,6 @@ var ssl_options = {
 
 var httpServer = http.createServer(app)
 var httpsServer = https.createServer(ssl_options, app);
-
-// Emit message on connection
-const io = socketio(httpsServer);
-
-io.on('connection', socket => {
-    console.log("New Socket Connection")
-
-    socket.on('load', function (username) {
-        User.findOne({ username: username}).then(user => {
-            io.emit('load', user.stream_key);
-        }); 
-    })
-
-    socket.on('disconnect', () => {
-        console.log("Socket Disconnected")
-    })
-});
 
 httpServer.listen(80);
 httpsServer.listen(443);

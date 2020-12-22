@@ -122,53 +122,123 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
   })
 );
 
-//Follow streamer
-router.get('/follow/:username', ensureAuthenticated, (req, res) => {
-  res.send('WIP')
-  //WIP
-  /**
+//Unfollow user
+router.get('/unfollow/:username', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.params.username }).then(followaccount => {
-    followaccount.followers.push(req.user.username)
-    followaccount.save()
-
-    User.findOne({ username: req.user.username }).then(followeraccount => {
-      followeraccount.following.push(req.params.username)
-      followeraccount.save();
-      req.flash(
-        'success_msg',
-        'Successfully followed '+req.params.username+'.'
-      );
-      res.redirect('/'+req.params.username);
+    User.findOne({followers: req.user.username, username: req.params.username}).then(isFollowing => {
+      if (!isFollowing) {
+        req.flash(
+          'error_msg',
+          'Not following '+req.params.username+'.'
+        );
+        res.redirect('/'+req.params.username);
+      } else {
+        followaccount.followers.pull(req.user.username)
+        followaccount.save()
+        User.findOne({ username: req.user.username }).then(followeraccount => {
+          followeraccount.following.pull(req.params.username)
+          followeraccount.save();
+          req.flash(
+            'success_msg',
+            'Successfully unfollowed '+req.params.username+'.'
+          );
+          res.redirect('/'+req.params.username);
+        })  
+      }
     })
   })
-  */
+})
+
+//Follow user
+router.get('/follow/:username', ensureAuthenticated, (req, res) => {
+  User.findOne({username: req.user.username}).then(myaccount => {
+    console.log("My acc: "+myaccount.username)
+    User.findOne({ username: req.params.username.toLowerCase() }).then(followaccount => {
+      User.findOne({followers: myaccount.username, username: followaccount.username}).then(isFollowing => {
+        console.log("Follow acc: "+followaccount.username)
+        if (myaccount.username == followaccount.username){
+          req.flash(
+            'error_msg',
+            "You can't follow yourself"
+          );
+          res.redirect('/'+req.params.username);
+        } else {
+          if (isFollowing) { 
+            req.flash(
+              'error_msg',
+              'Already following '+req.params.username+'.'
+            );
+            res.redirect('/'+req.params.username);
+          } else {
+            followaccount.followers.push(req.user.username)
+            followaccount.save()
+            User.findOne({ username: req.user.username }).then(followeraccount => {
+              followeraccount.following.push(req.params.username)
+              followeraccount.save();
+              req.flash(
+                'success_msg',
+                'Successfully followed '+req.params.username+'.'
+              );
+              res.redirect('/'+req.params.username);
+            })  
+          }
+        }
+      })
+    })
+  })
 })
 
 // Streamer
 router.get('/:username', (req, res) => {
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
-      axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+      if (req.isAuthenticated()) {
+        User.findOne({followers: req.user.username, username: req.params.username.toLowerCase()}).then(status => {
+          var followbutton = "Follow";
+          var followoption = "follow";
+          if (status) {
+            followbutton = "Unfollow"
+            followoption = "unfollow"
+          }
+          axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+          .then(function (response) {
+            if (response.status = 200) {
+              renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase())
+            } else {
+              axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+                .then(function (response) {
+                  if (response.status = 200) {
+                    renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase())
+                  } else {
+                    renderStream("test", "offline", "video/mp4", followbutton, followoption, req.params.username.toLowerCase())
+                  }
+                }).catch(function (error) { console.log(error) });
+            }
+          }).catch(function (error) { console.log(error) });
+        })
+      } else {
+        axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
         .then(function (response) {
           if (response.status = 200) {
-            renderStream("eu01", user.stream_key, "application/x-mpegURL")
+            renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase())
           } else {
             axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
               .then(function (response) {
-                console.log(response)
                 if (response.status = 200) {
-                  renderStream("us01", user.stream_key, "application/x-mpegURL")
+                  renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase())
                 } else {
-                  renderStream("test", "offline", "video/mp4")
+                  renderStream("test", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase())
                 }
               }).catch(function (error) { console.log(error) });
           }
         }).catch(function (error) { console.log(error) });
+      }
+      
     } else {
-      res.send(req.params.username + " Does not exist")
+      res.send("404: Username " + req.params.username.toLowerCase() + " Does not exist")
     }
     //Render Stream Function
-    function renderStream(liveserver, streamkey, streamformat) {
+    function renderStream(liveserver, streamkey, streamformat, follow_button, follow_option, username) {
       res.render('streamer', {
         user: user.username,
         streamplayer:
@@ -183,12 +253,16 @@ router.get('/:username', (req, res) => {
                   </p>
               </video>`,
         streamtitle: user.stream_title,
+        followbutton: 
+        `<form  style="margin: 10px;" action="/${follow_option}/${username}">
+          <button id="follow_button" type="submit" class="btn btn-success">${follow_button}</button>
+        </form>`,
         followercount: user.followers.length,
         streamdescription: user.stream_description,
         avatarurl: user.avatar_url,
         donationlink: user.donation_link,
         liveviewers: 0
-      })
+      })   
     }
   });
 })

@@ -42,9 +42,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <form  style="margin: 10px;" action="/follow/<%= user %>">
-                            <button id="follow_button" type="submit" class="btn btn-success">Follow</button>
-                        </form>
+                        <%- followbutton %>
                         <form style="margin: 10px;" action="<%= donationlink %>">
                             <button type="submit" class="btn btn-primary">Donate</button>
                         </form>
