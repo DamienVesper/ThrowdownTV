@@ -11,18 +11,13 @@ const bodyParser = require('body-parser');
 const fs = require('fs')
 const http = require('http');
 const https = require('https');
-var io = require('socket.io')(http);
+const axios = require('axios');
+const socketio = require('socket.io');
 const app = express()
 const port = config.port
 
 // Passport
 require('./config/passport')(passport);
-
-// Emit message on connection
-
-io.on('connection', socket => {
-    console.log("New Socket Connection")
-});
 
 //DB
 const db = require('./config/keys').mongoURI;
@@ -79,17 +74,51 @@ app.use('/cdn', require('./routes/cdn'))
 app.get('/:channelurl', (req, res)=> {
     User.findOne({ channelurl: req.params.channelurl.toLowerCase() }).then(user => {
         if (user) {
+            axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: {username: 'admin', password: 'loltdtv2021'}})
+                .then(function (response) {
+                    console.log(response)
+                    if (response.status = 200) {
+                        renderStream("eu01", user.stream_key, "application/x-mpegURL")
+                    } else {
+                        axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: {username: 'admin', password: 'loltdtv2021'}})
+                            .then(function (response) {
+                                console.log(response)
+                                if (response.status = 200) {
+                                    renderStream("us01", user.stream_key, "application/x-mpegURL")
+                                } else {
+                                    renderStream("test", "offline", "video/mp4")
+                                }
+                            }).catch(function(error){
+                                console.log(error)
+                            });
+                    }
+                }).catch(function(error){
+                    console.log(error)
+                });
+        } else {
+            res.send(req.params.username + " Does not exist")
+        }
+        //Render Stream Function
+        function renderStream(liveserver, streamkey, streamformat) {
             res.render('streamer', {
                 user: user.username,
-                streamkey: user.stream_key,
+                streamplayer: 
+                `<video id="player" class="video-js vjs-big-play-centered" controls preload="auto" fluid="true"
+                    width="1280" height="720" poster="thumbnail.png" autoplay data-setup="{}">
+                    <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
+                        type="${streamformat}" />
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                    </p>
+                </video>`,
                 streamtitle: user.stream_title,
                 streamdescription: user.stream_description,
                 avatarurl: user.avatar_url,
                 donationlink: user.donation_link,
                 liveviewers: 0
             })
-        } else {
-            res.send(req.params.username + " Does not exist")
         }
     });
 })
@@ -102,6 +131,23 @@ var ssl_options = {
 
 var httpServer = http.createServer(app)
 var httpsServer = https.createServer(ssl_options, app);
+
+// Emit message on connection
+const io = socketio(httpsServer);
+
+io.on('connection', socket => {
+    console.log("New Socket Connection")
+
+    socket.on('load', function (username) {
+        User.findOne({ username: username}).then(user => {
+            io.emit('load', user.stream_key);
+        }); 
+    })
+
+    socket.on('disconnect', () => {
+        console.log("Socket Disconnected")
+    })
+});
 
 httpServer.listen(80);
 httpsServer.listen(443);
