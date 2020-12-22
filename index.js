@@ -76,7 +76,6 @@ app.get('/:channelurl', (req, res)=> {
         if (user) {
             axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: {username: 'admin', password: 'loltdtv2021'}})
                 .then(function (response) {
-                    console.log(response)
                     if (response.status = 200) {
                         renderStream("eu01", user.stream_key, "application/x-mpegURL")
                     } else {
