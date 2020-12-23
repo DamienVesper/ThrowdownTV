@@ -208,7 +208,7 @@ router.get('/:username', (req, res) => {
                     if (response.data.isLive) {
                       renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
                     } else {
-                      renderStream("test", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
+                      renderStream("test", "offline", "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
                     }
                 })
               }
@@ -225,7 +225,7 @@ router.get('/:username', (req, res) => {
                   if (response.data.isLive) {
                     renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
                   } else {
-                    renderStream("test", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
+                    renderStream("test", "offline", "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
                   }            
                 })
             }            
@@ -255,12 +255,11 @@ router.get('/:username', (req, res) => {
         </form>`,
         livestatus: `<p style="color: ${livestatus_color};">${livestatus_text}</p>`,
         streamtitle: user.stream_title,
-        streamviewers: stream_viewers,
         followercount: user.followers.length,
         streamdescription: user.stream_description,
         avatarurl: user.avatar_url,
         donationlink: user.donation_link,
-        liveviewers: 0
+        liveviewers: stream_viewers
       })   
     }
   });
