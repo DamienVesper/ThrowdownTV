@@ -201,25 +201,23 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key + '/index.m3u8', { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               console.log(response.status)
-              if (response) {
+              if (response.status = 200) {
                 renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+              } else {
+                renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
               }
-            }).catch(function (error) {
-              console.log(error.response.status)
-              renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
             });
         })
       } else {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key + '/index.m3u8', { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             console.log(response.status)
-            if (response) {
+            if (response.status = 200) {
               renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
-            }
-          }).catch(function (error) {
-            console.log(error.response.status)
-            renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
-          });
+            } else {
+              renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+            }            
+          })
       } 
     } else {
       res.send("404: Username " + req.params.username.toLowerCase() + " Does not exist")
