@@ -9,7 +9,7 @@ const axios = require('axios');
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 
 // TOS
-router.get('/tos', forwardAuthenticated, (req, res) => res.render('tos'));
+router.get('/tos', (req, res) => res.render('tos'));
 
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
