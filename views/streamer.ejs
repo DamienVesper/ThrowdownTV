@@ -63,4 +63,14 @@
         </div>
         </div>
         <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+        <script>
+            var player = videojs("player", {autoplay: true});
+            player.on('error', function() {
+                document.getElementById("livestatus").innerHTML=`<p style="color: red;">OFFLINE</p>`;
+                player.src({
+                    type: 'video/mp4',
+                    src: 'throwdown.mp4'
+                });
+            }) 
+        </script>
     </body>

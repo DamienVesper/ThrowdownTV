@@ -203,7 +203,7 @@ router.get('/:username', (req, res) => {
               if (response.status = 200) {
                 renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
               } else {
-                renderStream("eu01", "offline", "video/mp4", followbutton, followoption, req.params.username.toLowerCase(), "OFFLINE", "red")
+                renderStream("eu01", "offline", "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "OFFLINE", "red")
               }
             }).catch(function (error) {
               if (error.response.status = 404) {
@@ -212,11 +212,11 @@ router.get('/:username', (req, res) => {
                     if (response.status = 200) {
                       renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
                     } else {
-                      renderStream("eu01", "offline", "video/mp4", followbutton, followoption, req.params.username.toLowerCase(), "OFFLINE", "red")
+                      renderStream("eu01", "offline", "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "OFFLINE", "red")
                     }
                   }).catch(function (error) {
                     if (error.response.status = 404) {
-                      renderStream("eu01", "offline", "video/mp4", followbutton, followoption, req.params.username.toLowerCase(), "OFFLINE", "red")
+                      renderStream("eu01", "offline", "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "OFFLINE", "red")
                     } 
                   });
               } 
@@ -228,7 +228,7 @@ router.get('/:username', (req, res) => {
             if (response.status = 200) {
               renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
             } else {
-              renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
+              renderStream("eu01", "offline", "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
             }
           }).catch(function (error) {
             if (error.response.status = 404) {
@@ -237,11 +237,11 @@ router.get('/:username', (req, res) => {
                   if (response.status = 200) {
                     renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
                   } else {
-                    renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
+                    renderStream("eu01", "offline", "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
                   }
                 }).catch(function (error) {
                   if (error.response.status = 404) {
-                    renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
+                    renderStream("eu01", "offline", "application/x-mpegURL, "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
                   } 
                 });
             } 
@@ -259,8 +259,6 @@ router.get('/:username', (req, res) => {
                   width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup="{}">
                   <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
                       type="${streamformat}" />
-                  <source src="throwdown.mp4"
-                      type="video/mp4" />
                   <p class="vjs-no-js">
                       To view this video please enable JavaScript, and consider upgrading to a
                       web browser that
