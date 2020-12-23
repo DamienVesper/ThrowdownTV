@@ -241,7 +241,7 @@ router.get('/:username', (req, res) => {
                   }
                 }).catch(function (error) {
                   if (error.response.status = 404) {
-                    renderStream("eu01", "offline", "application/x-mpegURL, "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
+                    renderStream("eu01", "offline", "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
                   } 
                 });
             } 
