@@ -200,22 +200,34 @@ router.get('/:username', (req, res) => {
           }
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
-              console.log(response.data.isLive)
               if (response.status = 200) {
                 renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
               } else {
-                renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+                axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+                  .then(function (response) {
+                    if (response.data.isLive) {
+                      renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+                    } else {
+                      renderStream("test", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "PLEASE WAIT", "yellow")
+                    }
+                })
               }
             });
         })
       } else {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
-            console.log(response.data.isLive)
-            if (response.status = 200) {
+            if (response.data.isLive) {
               renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
             } else {
-              renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+              axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
+                .then(function (response) {
+                  if (response.data.isLive) {
+                    renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+                  } else {
+                    renderStream("test", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "PLEASE WAIT", "yellow")
+                  }            
+                })
             }            
           })
       } 
