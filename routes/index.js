@@ -226,22 +226,22 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key + '/index.m3u8', { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.status = 200) {
-              renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase())
+              renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
             } else {
-              renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase())
+              renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
             }
           }).catch(function (error) {
             if (error.response.status = 404) {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key + '/index.m3u8', { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.status = 200) {
-                    renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase())
+                    renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
                   } else {
-                    renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase())
+                    renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
                   }
                 }).catch(function (error) {
                   if (error.response.status = 404) {
-                    renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase())
+                    renderStream("eu01", "offline", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red")
                   } 
                 });
             } 
@@ -251,12 +251,12 @@ router.get('/:username', (req, res) => {
       res.send("404: Username " + req.params.username.toLowerCase() + " Does not exist")
     }
     //Render Stream Function
-    function renderStream(liveserver, streamkey, streamformat, follow_button, follow_option, username) {
+    function renderStream(liveserver, streamkey, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color) {
       res.render('streamer', {
         user: user.username,
         streamplayer:
           `<video id="player" class="video-js vjs-big-play-centered" controls preload="auto" fluid="true"
-                  width="1280" height="720" poster="thumbnail.png" autoplay data-setup="{}">
+                  width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup="{}">
                   <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
                       type="${streamformat}" />
                   <source src="throwdown.mp4"
@@ -267,11 +267,12 @@ router.get('/:username', (req, res) => {
                       <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                   </p>
               </video>`,
-        streamtitle: user.stream_title,
         followbutton: 
         `<form  style="margin: 10px;" action="/${follow_option}/${username}">
           <button id="follow_button" type="submit" class="btn btn-success">${follow_button}</button>
         </form>`,
+        livestatus: `<p style="color: ${livestatus_color};">${livestatus_text}</p>`,
+        streamtitle: user.stream_title,
         followercount: user.followers.length,
         streamdescription: user.stream_description,
         avatarurl: user.avatar_url,
