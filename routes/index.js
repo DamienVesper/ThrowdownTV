@@ -200,7 +200,9 @@ router.get('/:username', (req, res) => {
           }
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key + '/index.m3u8', { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
-              renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+              if (response.status != 404) {
+                renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+              }
             }).catch(function (error) {
               renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
             });
@@ -208,7 +210,9 @@ router.get('/:username', (req, res) => {
       } else {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key + '/index.m3u8', { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
-            renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+            if (response.status != 404) {
+              renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+            }
           }).catch(function (error) {
             renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
           });
