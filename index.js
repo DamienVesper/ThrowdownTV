@@ -60,7 +60,6 @@ app.use(function(req, res, next) {
     res.locals.error = req.flash('error');
     next();
 });
-  
 
 //Routes
 app.use('/', require('./routes/index'))
