@@ -201,14 +201,14 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.status = 200) {
-                renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+                renderStream("eu01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime")
+                      renderStream("us01", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
                     } else {
-                      renderStream("test", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "PLEASE WAIT", "yellow")
+                      renderStream("test", user.stream_key, "application/x-mpegURL", followbutton, followoption, req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
                     }
                 })
               }
@@ -218,14 +218,14 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.data.isLive) {
-              renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+              renderStream("eu01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
             } else {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.data.isLive) {
-                    renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime")
+                    renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
                   } else {
-                    renderStream("test", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "PLEASE WAIT", "yellow")
+                    renderStream("test", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
                   }            
                 })
             }            
@@ -235,7 +235,7 @@ router.get('/:username', (req, res) => {
       res.send("404: Username " + req.params.username.toLowerCase() + " Does not exist")
     }
     //Render Stream Function
-    function renderStream(liveserver, streamkey, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color) {
+    function renderStream(liveserver, streamkey, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers) {
       res.render('streamer', {
         user: user.username,
         streamplayer:
@@ -255,6 +255,7 @@ router.get('/:username', (req, res) => {
         </form>`,
         livestatus: `<p style="color: ${livestatus_color};">${livestatus_text}</p>`,
         streamtitle: user.stream_title,
+        streamviewers: stream_viewers,
         followercount: user.followers.length,
         streamdescription: user.stream_description,
         avatarurl: user.avatar_url,
