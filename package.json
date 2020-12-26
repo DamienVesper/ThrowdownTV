@@ -30,6 +30,9 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "socket.io": "^3.0.4",
-    "videojs": "^1.0.0"
+    "video.js": "^7.10.2",
+    "videojs": "^1.0.0",
+    "videojs-contrib-hls": "^5.15.0",
+    "videojs-playlist": "^4.3.1"
   }
 }
