@@ -27,7 +27,16 @@
                         <div style="display: inline-block;" id="liveviewers"><p style="color: darkorange;"><%= liveviewers %></p></div>
                         <div style="display: inline-block;"><p style="color: darkorange;">Viewers</p></div>
                     </div>
-                    <%- streamplayer %>
+                    <video id="player" class="video-js vjs-big-play-centered" controls preload="auto" fluid="true"
+                        width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup="{}">
+                        <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
+                            type="${streamformat}" />
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a
+                            web browser that
+                            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                    </video>
                     <div style="margin-top: 4px;">
                         <div class="row px-3"> <img src="<%= avatarurl %>" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
                             <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
@@ -63,7 +72,9 @@
         </div>
         </div>
         <script src="js/video.min.js"></script>
+        <%- streamplayer %>
         <script>
+            document.getElementById('hide').innerHTML = "";
             var player = videojs("player", {autoplay: true});
             player.on('error', function() {
                 document.getElementById("livestatus").innerHTML=`<p style="color: red;">OFFLINE</p>`;

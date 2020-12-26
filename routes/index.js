@@ -225,7 +225,7 @@ router.get('/:username', (req, res) => {
                   if (response.data.isLive) {
                     renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
                   } else {
-                    renderStream("test", "offline", "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "PLEASE WAIT", "yellow", response.data.viewers)
+                    renderStream("us01", user.stream_key, "application/x-mpegURL", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers)
                   }            
                 })
             }            
@@ -235,20 +235,48 @@ router.get('/:username', (req, res) => {
       res.send("404: Username " + req.params.username.toLowerCase() + " Does not exist")
     }
     //Render Stream Function
+
+    
+    function renderOfflineStream(follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers) {
+      res.render('streamer', {
+        user: user.username,
+        streamplayer:
+          `
+          <script id="hide">
+              var player = videojs("player", {autoplay: true});
+              player.src({
+                      type: 'application/x-mpegURL',
+                      src: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8'
+              });
+          </script>
+          `,
+        followbutton: 
+        `<form  style="margin: 10px;" action="/${follow_option}/${username}">
+          <button id="follow_button" type="submit" class="btn btn-success">${follow_button}</button>
+        </form>`,
+        livestatus: `<p style="color: ${livestatus_color};">${livestatus_text}</p>`,
+        streamtitle: user.stream_title,
+        followercount: user.followers.length,
+        streamdescription: user.stream_description,
+        avatarurl: user.avatar_url,
+        donationlink: user.donation_link,
+        liveviewers: stream_viewers
+      })   
+    }
+
     function renderStream(liveserver, streamkey, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers) {
       res.render('streamer', {
         user: user.username,
         streamplayer:
-          `<video id="player" class="video-js vjs-big-play-centered" controls preload="auto" fluid="true"
-                  width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup="{}">
-                  <source src="https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8"
-                      type="${streamformat}" />
-                  <p class="vjs-no-js">
-                      To view this video please enable JavaScript, and consider upgrading to a
-                      web browser that
-                      <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                  </p>
-              </video>`,
+          `
+          <script id="hide">
+              var player = videojs("player", {autoplay: true});
+              player.src({
+                      type: '${streamformat}',
+                      src: 'https://${liveserver}.throwdown.tv/live/${streamkey}/index.m3u8'
+              });
+          </script>
+          `,
         followbutton: 
         `<form  style="margin: 10px;" action="/${follow_option}/${username}">
           <button id="follow_button" type="submit" class="btn btn-success">${follow_button}</button>
