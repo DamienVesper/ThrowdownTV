@@ -20,6 +20,7 @@ router.get('/streamkey/:streamkey', (req, res) =>
         }
     })
 );
+// Email verification check
 router.get('/email_verify/:emailverificationkey', (req, res) =>
     User.findOne({ email_verification_key: req.params.emailverificationkey }).then(useraccount => {
         if (useraccount) {
@@ -45,6 +46,16 @@ router.get('/email_verify/:emailverificationkey', (req, res) =>
                 'Invalid Verification Token.'
             );
             res.redirect('/users/login');
+        }
+    })
+);
+// Streamkey Check
+router.get('/chat/:username', (req, res) =>
+    User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
+        if (useraccount) {
+            res.json({chatserver: true})
+        } else {
+            res.json({chatserver: false})
         }
     })
 );
