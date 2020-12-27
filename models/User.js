@@ -59,6 +59,10 @@ const UserSchema = new mongoose.Schema({
     live_viewers: {
         default: 0
     },
+    chat_token: {
+        type: String,
+        default: cryptoRandomString({ length: 150, type: 'alphanumeric' })
+    },
     date: {
         type: Date,
         default: Date.now
