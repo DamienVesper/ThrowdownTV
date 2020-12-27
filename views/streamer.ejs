@@ -75,7 +75,7 @@
         <script src="js/plugins/videojs-chromecast.min.js"></script>
         <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
         <script id="erasable">
-            var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'],}, function() {
+            var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
                 this.src({
                     src: '<%= streamlink %>',
                     type: '<%= streamformat %>'
