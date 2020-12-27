@@ -33,6 +33,7 @@
     "video.js": "^7.10.2",
     "videojs": "^1.0.0",
     "videojs-contrib-hls": "^5.15.0",
+    "videojs-errors": "^4.3.2",
     "videojs-playlist": "^4.3.1"
   }
 }
