@@ -190,8 +190,6 @@ router.get('/follow/:username', ensureAuthenticated, (req, res) => {
 router.get('/:username', (req, res) => {
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
-      user.chat_token = cryptoRandomString({ length: 150, type: 'alphanumeric' })
-      user.save();
       if (req.isAuthenticated()) {
         User.findOne({followers: req.user.username, username: req.params.username.toLowerCase()}).then(status => {
           var followbutton = "Follow";
