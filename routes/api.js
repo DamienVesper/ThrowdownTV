@@ -7,16 +7,16 @@ const config = require('../config.json')
 router.get('/streamkey/:streamkey', (req, res) =>
     User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
         if (useraccount) {
-            if (useraccount.can_stream || config.isPublic) {
+            if ((useraccount.can_stream || config.isPublic) && !useraccount.banned ) {
                 res.json({canstream: true})
-                console.log("Approved Stream Key " + req.params.streamkey)
+                //console.log("Approved Stream Key " + req.params.streamkey)
             } else {
                 res.json({canstream: false})
-                console.log("Denied Stream Key " + req.params.streamkey)
+                //console.log("Denied Stream Key " + req.params.streamkey)
             }
         } else {
             res.json({canstream: false})
-            console.log("Denied Stream Key " + req.params.streamkey)
+            //console.log("Denied Stream Key " + req.params.streamkey)
         }
     })
 );

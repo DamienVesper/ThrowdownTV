@@ -11,6 +11,9 @@ router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 // TOS
 router.get('/tos', (req, res) => res.render('tos'));
 
+//Test banned
+router.get('/banned', (req, res) => res.render('banned'));
+
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
     user.stream_key = cryptoRandomString({ length: 50, type: 'alphanumeric' });
@@ -100,6 +103,7 @@ router.get('/streams/donate', (req, res) => {
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) =>
   User.findOne({ username: req.user.username }).then(useraccount => {
+    if (useraccount.banned) return res.render('banned');
     if (useraccount.can_stream) {
       res.render('dashboard', {
         user: req.user,
@@ -190,6 +194,7 @@ router.get('/follow/:username', ensureAuthenticated, (req, res) => {
 router.get('/:username', (req, res) => {
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
+      if (user.banned) return res.render('banned');
       if (req.isAuthenticated()) {
         User.findOne({followers: req.user.username, username: req.params.username.toLowerCase()}).then(status => {
           var followbutton = "Follow";
