@@ -39,7 +39,6 @@
                     <div style="display: block;">
                         <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
                             width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            
-                            <source src="<%= streamlink %>" type="<%= streamformat %>">
                             <p class="vjs-no-js">
                                 To view this video please enable JavaScript, and consider upgrading to a
                                 web browser that
@@ -84,6 +83,10 @@
         
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
+                this.src({
+                    src: "<%= streamlink %>",
+                    type: '<%= streamformat %>'
+                })
                 this.on('error', function(event) {
                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                     this.src({
