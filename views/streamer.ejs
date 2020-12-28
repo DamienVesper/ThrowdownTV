@@ -36,9 +36,7 @@
                     </div>
                     <div style="display: block;">
                         <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
-                            width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>
-                            <source src="<%= streamlink %>" type="video/x-flv">
-                            <p class="vjs-no-js">
+                            width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            <p class="vjs-no-js">
                                 To view this video please enable JavaScript, and consider upgrading to a
                                 web browser that
                                 <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -82,6 +80,10 @@
         
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
+                this.src({
+                    src: '<%= streamlink %>',
+                    type: '<%= streamformat %>'
+                })
                 this.on('error', function(event) {
                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                     this.src({
@@ -106,6 +108,7 @@
         <script>
             setInterval(function() {
                 document.getElementById('liveviewers').text = `<%= liveviewers %>`;
+                console.log("Updated Live Viewers")
             }, 20000)
         </script>
     </body>
