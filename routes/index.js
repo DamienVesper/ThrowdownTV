@@ -203,12 +203,12 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.data.isLive) {
-                renderStream("wss://eu01.throwdown.tv/live/" + user.stream_key + ".flv", "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                renderStream(btoa("wss://eu01.throwdown.tv/live/" + user.stream_key + ".flv"), "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("wss://us01.throwdown.tv/live/" + user.stream_key + ".flv", "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                      renderStream(btoa("wss://us01.throwdown.tv/live/" + user.stream_key + ".flv"), "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
                     } else {
                       renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
                     }
@@ -220,14 +220,14 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.data.isLive) {
-              renderStream("wss://eu01.throwdown.tv/live/" + user.stream_key + ".flv", "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+              renderStream(btoa("wss://eu01.throwdown.tv/live/" + user.stream_key + ".flv"), "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
             } else {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.data.isLive) {
-                    renderStream("wss://us01.throwdown.tv/live/" + user.stream_key + ".flv", "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                    renderStream(btoa("wss://us01.throwdown.tv/live/" + user.stream_key + ".flv"), "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
                   } else {
-                    renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
+                    renderStream(btoa("throwdown.mp4"), "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
                   }            
                 })
             }            

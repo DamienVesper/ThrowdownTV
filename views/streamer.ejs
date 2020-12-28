@@ -81,7 +81,7 @@
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
                 this.src({
-                    src: '<%= streamlink %>',
+                    src: atob("<%= streamlink %>"),
                     type: '<%= streamformat %>'
                 })
                 this.on('error', function(event) {
