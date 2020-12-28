@@ -108,6 +108,9 @@
             document.getElementById('erasable').innerHTML = "";
         </script>
         <script>
+            $(document).ready(function(){
+                $('#player').bind('contextmenu',function() { return false; });
+            });
             setInterval(function() {
                 document.getElementById('liveviewers').text = `<%= liveviewers %>`;
                 console.log("Updated Live Viewers")
