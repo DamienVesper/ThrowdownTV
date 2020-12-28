@@ -112,5 +112,11 @@
             });
             document.getElementById('erasable').innerHTML = "";
         </script>
-        
+        <script>
+            while (document.getElementById('livestatus').textContent = "ONLINE") {
+                setInterval(function() {
+                    document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;"><%= liveviewers %></p>`;
+                }, 20000)
+            }
+        </script>
     </body>
