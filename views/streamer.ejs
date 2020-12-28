@@ -1,5 +1,13 @@
 <head>
     <%- include('./partials/adheaders'); %>
+    <script src="js/video.min.js"></script>
+    <script src="js/nuevo.min.js"></script>
+    <script src="js/flv.min.js"></script>
+    <script src="js/videojs-flvjs.min.js"></script>
+    <script src="js/plugins/videojs-chromecast.min.js"></script>
+    <script src="js/videojs_5.vast.vpaid.min.js"></script>
+    <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
+    <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
 </head>
 <%- include('./partials/header'); %>
 <%- include('./partials/messages'); %>
@@ -13,7 +21,6 @@
     }
 </style>
 <div style="margin: 50px;">
-
 </div>
     <body>
         <div class="container">
@@ -29,7 +36,7 @@
                     <div style="display: block;">
                         <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
                             width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>
-                            <source src="<%= streamlink %>" type="<%= streamformat %>">
+                            <source src="<%= streamlink %>" type="video/x-flv">
                             <p class="vjs-no-js">
                                 To view this video please enable JavaScript, and consider upgrading to a
                                 web browser that
@@ -71,23 +78,9 @@
             </div>
         </div>
         </div>
-        <script src="js/video.min.js"></script>
-        <script src="js/nuevo.min.js"></script>
-        <script src="js/flv.min.js"></script>
-        <script src="js/videojs-flvjs.min.js"></script>
-        <script src="js/plugins/videojs-chromecast.min.js"></script>
-        <script src="js/videojs_5.vast.vpaid.min.js"></script>
-        <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
-        <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
+        
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
-                this.tech_.on('retryplaylist', function(event) {
-                    document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
-                    this.src({
-                        src: 'throwdown.mp4',
-                        type: 'video/mp4'
-                    })
-                })
                 this.on('error', function(event) {
                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                     this.src({
@@ -109,5 +102,11 @@
             });
             document.getElementById('erasable').innerHTML = "";
         </script>
-        
+        <script>
+            while (document.getElementById('livestatus').textContent = "ONLINE") {
+                setInterval(function() {
+                    //document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;"><%= liveviewers %></p>`;
+                }, 20000)
+            }
+        </script>
     </body>
