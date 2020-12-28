@@ -28,7 +28,6 @@
     <body>
         <div class="container">
             <div class="row">
-                
                 <div class="ccol-12 col-md-8">
                     <div>
                         <div style="display: inline-block;" id="livestatus"><%- livestatus %></div>
@@ -37,16 +36,14 @@
                         <div style="display: inline-block;"><p style="color: darkorange;">Viewers</p></div>
                     </div>
                     <div style="display: block;">
-                        <canvas>
-                            <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
-                                width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            
-                                <p class="vjs-no-js">
-                                    To view this video please enable JavaScript, and consider upgrading to a
-                                    web browser that
-                                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                                </p>
-                            </video>
-                        </canvas>
+                        <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
+                            width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a
+                                web browser that
+                                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
                     </div>
                     <div style="margin-top: 4px;">
                         <div class="row px-3"> <img src="<%= avatarurl %>" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
