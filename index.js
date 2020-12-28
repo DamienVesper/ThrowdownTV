@@ -11,7 +11,6 @@ const fs = require('fs')
 const http = require('http');
 const https = require('https');
 const app = express()
-const port = config.port
 
 // Passport
 require('./config/passport')(passport);
