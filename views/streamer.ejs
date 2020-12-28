@@ -114,7 +114,9 @@
         </script>
         <script>
             do {
-                document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;"><%= liveviewers %></p>`;
+                setTimeout(function() {
+                    document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;"><%= liveviewers %></p>`;
+                }, 20000)
             } 
             while (document.getElementById('livestatus').textContent = "ONLINE");
         </script>
