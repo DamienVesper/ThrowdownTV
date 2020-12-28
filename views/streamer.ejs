@@ -6,6 +6,7 @@
     <script src="js/videojs-flvjs.min.js"></script>
     <script src="js/plugins/videojs-chromecast.min.js"></script>
     <script src="js/videojs_5.vast.vpaid.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
     <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
 </head>
@@ -101,5 +102,10 @@
                 settingsButton: false,
             });
             document.getElementById('erasable').innerHTML = "";
+        </script>
+        <script>
+            setInterval(function() {
+                document.getElementById('liveviewers').text = `<%= liveviewers %>`;
+            }, 20000)
         </script>
     </body>
