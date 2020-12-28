@@ -82,8 +82,10 @@
         
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
+                fetchVideo('<%= streamlink %>"').then(function(blob) {
+                    changeVideoSource(blob, document.getElementById('player'))
+                })
                 this.src({
-                    src: "<%= streamlink %>",
                     type: '<%= streamformat %>'
                 })
                 this.on('error', function(event) {
@@ -107,15 +109,17 @@
                 contextMenu: false,
                 timetooltip: false,
             });
+            function changeVideoSource(blob, videoElement) {
+                var blobUrl = URL.createObjectURL(blob);
+                console.log(`Changing video source to blob URL "${blobUrl}"`)
+                videoElement.src = blobUrl;
+                videoElement.play();
+            }
+            function fetchVideo(url) {
+                return fetch(url).then(function(response) {        
+                    return response.blob();
+                });
+            }
             document.getElementById('erasable').innerHTML = "";
-        </script>
-        <script>
-            $(document).ready(function(){
-                $('#player').bind('contextmenu',function() { return false; });
-            });
-            setInterval(function() {
-                document.getElementById('liveviewers').text = `<%= liveviewers %>`;
-                console.log("Updated Live Viewers")
-            }, 20000)
         </script>
     </body>
