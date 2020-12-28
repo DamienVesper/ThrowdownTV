@@ -11,9 +11,6 @@ router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 // TOS
 router.get('/tos', (req, res) => res.render('tos'));
 
-//Test banned
-router.get('/banned', (req, res) => res.render('banned'));
-
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
     user.stream_key = cryptoRandomString({ length: 50, type: 'alphanumeric' });
