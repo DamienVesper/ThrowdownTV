@@ -98,7 +98,7 @@ router.get('/streams/donate', (req, res) => {
 })
 
 // Following
-router.get('/dashboard', ensureAuthenticated, (req, res) =>  {
+router.get('/following', ensureAuthenticated, (req, res) =>  {
   User.findOne({ username: req.user.username }).then(useraccount => {
     res.render('following', {
       following: useraccount.following,
