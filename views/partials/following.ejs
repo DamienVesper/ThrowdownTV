@@ -4,7 +4,7 @@
             <% following.forEach(function(following) { %>
                 <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style="max-width: 60px; max-height: 60px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
                     <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                        <div class="row" style="margin: auto; width: 50%;">
+                        <div class="row" style="width: 50%;">
                             <h3 style="color: lime; font-size: 25px;" class="lead mb-3">
                                 <%= following %>
                                 <button id="follow_button" type="submit" onclick="window.location.href='/<%= following %>'" class="btn btn-success">Go to Channel</button>
