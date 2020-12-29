@@ -203,7 +203,6 @@ router.get('/:username', (req, res) => {
     if (user) {
       if (user.banned) return res.render('banned');
       if (req.isAuthenticated()) {
-        console.log(req.user.username)
         User.findOne({username: req.params.username.toLowerCase()}).then(status => {
           if (status.followers.includes(req.user.username)) {
             makeUnfollow();
@@ -211,7 +210,6 @@ router.get('/:username', (req, res) => {
           function makeUnfollow() {
             followbutton = "Unfollow";
           }
-          console.log(followbutton)
           //renderStream("https://cdn.throwdown.tv/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", 0, user.chat_token)
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
