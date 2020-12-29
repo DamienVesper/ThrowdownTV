@@ -24,7 +24,7 @@ router.get('/streamkey/:streamkey', (req, res) =>
 router.get('/email_verify/:emailverificationkey', (req, res) =>
     User.findOne({ email_verification_key: req.params.emailverificationkey }).then(useraccount => {
         if (useraccount) {
-            if (useraccount.verification_status === true) {
+            if (useraccount.verification_status) {
                 req.flash(
                     'error_msg',
                     'Email Already Verified.'
