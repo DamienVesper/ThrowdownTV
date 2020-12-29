@@ -10,6 +10,7 @@ const session = require('express-session')
 const fs = require('fs')
 const http = require('http');
 const https = require('https');
+const favicon = require('serve-favicon');
 const app = express()
 
 // Passport
@@ -48,6 +49,9 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Favicon
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // Connect flash
 app.use(flash());
