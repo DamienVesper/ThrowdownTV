@@ -97,8 +97,18 @@ router.get('/streams/donate', (req, res) => {
   res.send("This user has not set up their donation link yet :(")
 })
 
+// Following
+router.get('/dashboard', ensureAuthenticated, (req, res) =>  {
+  User.findOne({ username: req.user.username }).then(useraccount => {
+    res.render('following', {
+      following: useraccount.following,
+      avatarurl: 'https://cdn.throwdown.tv/avatar/'+useraccount.username
+    })
+  })
+})
+
 // Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) =>
+router.get('/dashboard', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }).then(useraccount => {
     if (useraccount.banned) return res.render('banned');
     if (useraccount.can_stream) {
@@ -121,7 +131,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
       })
     }
   })
-);
+});
 
 //Unfollow user
 router.get('/unfollow/:username', ensureAuthenticated, (req, res) => {
@@ -204,12 +214,12 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.data.isLive) {
-                renderStream("https://cdn.throwdown.tv/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("https://cdn.throwdown.tv/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
                     } else {
                       renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
                     }
@@ -222,12 +232,12 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.data.isLive) {
-              renderStream("https://cdn.throwdown.tv/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
             } else {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.data.isLive) {
-                    renderStream("https://cdn.throwdown.tv/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
                   } else {
                     renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
                   }            
