@@ -86,7 +86,7 @@
                     .then(function (response){
                         document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
                     })
-            }, 20000)
+            }, 11000)
         </script>
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
