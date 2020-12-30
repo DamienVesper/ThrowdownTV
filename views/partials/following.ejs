@@ -34,8 +34,8 @@
                         <script>
                             axios.get('https://cdn.throwdown.tv/api/stream_info/<%= following %>')
                                 .then(function (response){
-                                        document.getElementById("stream_info_title_<%= following %>").innerHTML = `<a style="color: white; font-size: 40px;">${response.data.streamtitle}</a>` 
-                                        document.getElementById("stream_info_description_<%= following %>").innerHTML = `<a style="color: white; font-size: 40px;">${response.data.streamdescription}</a>` 
+                                        document.getElementById("stream_info_title_<%= following %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
+                                        document.getElementById("stream_info_description_<%= following %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
                                 })
                         </script>
                     </div>
