@@ -32,12 +32,6 @@
                         <div id="stream_info_title_<%= onlinestreamer %>"></div>
                         <div id="stream_info_description_<%= onlinestreamer %>"></div>
                         <script>
-                            axios.get('https://cdn.throwdown.tv/api/streams/<%= onlinestreamer %>')
-                                .then(function (response){
-                                    if (!response.data.isLive) {
-                                        document.getElementById("ul_<%= onlinestreamer %>").innerHTML = `<div></div>` 
-                                    }
-                                })
                             axios.get('https://cdn.throwdown.tv/api/stream_info/<%= onlinestreamer %>')
                                 .then(function (response){
                                     document.getElementById("stream_info_title_<%= onlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
@@ -49,6 +43,14 @@
             <% }) %>
         </ul>
     </div>
+    <script>
+        axios.get('https://cdn.throwdown.tv/api/streams/<%= onlinestreamer %>')
+            .then(function (response){
+                if (!response.data.isLive) {
+                    document.getElementById("ul_<%= onlinestreamer %>").innerHTML = `<div></div>` 
+                }
+            })
+    </script>
 <% } else { %>
     <div class="row show">
         Nobody is live right now...
