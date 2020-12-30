@@ -1,13 +1,26 @@
+<head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+</head>
 <% if(following !='' ){ %>
     <div class="row show">
         <ul>
             <% following.forEach(function(following) { %>
-                <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style="max-width: 60px; max-height: 60px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
+                <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style="max-width: 100px; max-height: 100px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
                     <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
                         <div class="row" style="width: 50%;">
                             <h3 style="color: lime; font-size: 25px;" class="lead mb-3">
-                                <%= following %>
+                                <%= following %> <span id="live_status" style="color: red;">OFFLINE</span>
                                 <button id="follow_button" type="submit" onclick="window.location.href='/<%= following %>'" class="btn btn-success">Go to Channel</button>
+                                <script>
+                                    axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                                        .then(function (response){
+                                            if (response.isLive) {
+                                                document.getElementById("live_status").textContent = "ONLINE" 
+                                                document.getElementById("live_status").style = "color: lime;" 
+                                            }
+                                        })
+                                </script>
                             </h3>
                         </div>
                     </div>
