@@ -4,9 +4,9 @@
 </head>
 <% if(offlinestreamer !='' ){ %>
     <div class="row show">
-        <ul id="ul_offline_<%= offlinestreamer %>">
+        <ul>
             <% offlinestreamer.forEach(function(offlinestreamer) { %>
-                <div class="row">
+                <div id="ul_offline_<%= offlinestreamer %>" class="row">
                     <div class="column">
                         <div onclick="window.location='/<%= offlinestreamer %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= offlinestreamer %>" style="max-width: 300px; max-height: 300px;">
                             <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= offlinestreamer %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
