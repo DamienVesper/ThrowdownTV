@@ -228,13 +228,12 @@ router.get('/:username', (req, res) => {
   let followbutton = "Follow";
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
-      let vipstatus = `<p class="lead mb-3" style="color: cyan; font-size: 15px; margin-right: 4px;">[VIP]</p>`
-      let staffstatus = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
+      let badge = ``
       if (user.banned) return res.render('banned');
-      if (!user.isStaff) {
-        badge = " "
-      } else if (!user.isVip) {
-        badge = " "
+      if (user.isStaff && user.isVip) {
+        badge = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
+      } else if (user.isVip && !user.isStaff) {
+        badge = `<p class="lead mb-3" style="color: cyan; font-size: 15px; margin-right: 4px;">[VIP]</p>`
       }
       
       if (req.isAuthenticated()) {
