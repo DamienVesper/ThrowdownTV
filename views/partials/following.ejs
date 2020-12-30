@@ -6,22 +6,38 @@
     <div class="row show">
         <ul>
             <% following.forEach(function(following) { %>
-                <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style="max-width: 100px; max-height: 100px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
-                    <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                        <div class="row" style="width: 50%;">
-                            <h3 style="color: lime; font-size: 25px;" class="lead mb-3">
-                                <%= following %> <div id="live_statu_<%= following %>"><span style="color: red;">OFFLINE</span></div>
-                                <button id="follow_button" type="submit" onclick="window.location.href='/<%= following %>'" class="btn btn-success">Go to Channel</button>
-                                <script>
-                                    axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
-                                        .then(function (response){
-                                            if (response.data.isLive) {
-                                                document.getElementById("live_statu_<%= following %>").innerHTML = `<span style="color: lime;">ONLINE</span>` 
-                                            }
-                                        })
-                                </script>
-                            </h3>
+                <div class="row">
+                    <div class="column">
+                        <div onclick="window.location='/<%= following %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= following %>" style="max-width: 300px; max-height: 300px;">
+                            <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
+                                <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
+                                    <div class="row" style="width: 50%;">
+                                        <h3 style="color: lime; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
+                                            <%= following %> <div id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                            <script>
+                                                axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                                                    .then(function (response){
+                                                        if (response.data.isLive) {
+                                                            document.getElementById("live_status_<%= following %>").innerHTML = `<span style="color: lime;">ONLINE</span>` 
+                                                        }
+                                                    })
+                                            </script>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="column">
+                        <div id="stream_info_title_<%= following %>"></div>
+                        <div id="stream_info_description_<%= following %>"></div>
+                        <script>
+                            axios.get('https://cdn.throwdown.tv/api/stream_info/<%= following %>')
+                                .then(function (response){
+                                        document.getElementById("stream_info_title_<%= following %>").innerHTML = `<a style="color: white; font-size: 40px;">${response.data.streamtitle}</a>` 
+                                        document.getElementById("stream_info_description_<%= following %>").innerHTML = `<a style="color: white; font-size: 40px;">${response.data.streamdescription}</a>` 
+                                })
+                        </script>
                     </div>
                 </div>
             <% }) %>
