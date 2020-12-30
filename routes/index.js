@@ -107,6 +107,7 @@ router.get('/browse', async (req, res) =>  {
 
     res.render('browse', {
       onlinestreamer: streamers,
+      offlinestreamer: streamers
     })
   })
 })

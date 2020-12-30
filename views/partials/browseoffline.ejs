@@ -4,7 +4,7 @@
 </head>
 <% if(offlinestreamer !='' ){ %>
     <div class="row show">
-        <ul>
+        <ul id="ul_<%= offlinestreamer %>">
             <% offlinestreamer.forEach(function(offlinestreamer) { %>
                 <div class="row">
                     <div class="column">
@@ -43,6 +43,14 @@
             <% }) %>
         </ul>
     </div>
+    <script>
+        axios.get('https://cdn.throwdown.tv/api/streams/<%= onlinestreamer %>')
+            .then(function (response){
+                if (!response.data.isLive) {
+                    document.getElementById("ul_<%= onlinestreamer %>").innerHTML = `<div></div>` 
+                }
+            })
+    </script>
 <% } else { %>
     <div class="row show">
         Looks like something broke...
