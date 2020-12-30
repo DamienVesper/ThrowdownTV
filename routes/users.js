@@ -61,7 +61,7 @@ router.post('/register', (req, res) => {
     if(username.length < 4) {
         errors.push({msg: "Username should be at least 4 characters"})
     }
-    if(username = Array.isArray(bannedUsernames)){
+    if(bannedUsernames.includes(username)){
         errors.push({msg: "Prohibited Username"})
     }
     // Check Password Length
