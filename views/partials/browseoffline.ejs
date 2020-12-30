@@ -14,14 +14,6 @@
                                     <div class="row" style="width: 50%;">
                                         <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
                                             <%= offlinestreamer %> <div id="live_status_<%= offlinestreamer %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
-                                            <script>
-                                                axios.get('https://cdn.throwdown.tv/api/streams/<%= offlinestreamer %>')
-                                                    .then(function (response){
-                                                        if (response.data.isLive) {
-                                                            document.getElementById("live_status_<%= offlinestreamer %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-top: 0px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
-                                                        }
-                                                    })
-                                            </script>
                                         </h3>
                                     </div>
                                 </div>
