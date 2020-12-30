@@ -28,6 +28,7 @@ router.post('/dashboard', (req, res) => {
   const streamdescription = req.body.streamdescription
   const streamavatar = req.body.streamavatar
   const donationlink = req.body.donationlink
+  const discordid = req.body.discordid
 
   if (streamtitle.length > 3) {
     if (streamtitle.length <= 61) {
@@ -35,19 +36,28 @@ router.post('/dashboard', (req, res) => {
         if (streamdescription.length <= 4000) {
           if (streamavatar.startsWith("http://") || streamavatar.startsWith("https://")) {
             if (donationlink.length > 0) {
-              User.findOne({ username: req.user.username }, (err, user) => {
-                user.stream_title = streamtitle;
-                user.stream_description = streamdescription;
-                user.avatar_url = streamavatar
-                user.donation_link = donationlink
-                user.save(function (err, user) {
-                  req.flash(
-                    'success_msg',
-                    'Changes succesfully updated.'
-                  );
-                  res.redirect('/dashboard');
-                })
-              });
+              if (discordid.length > 0) {
+                User.findOne({ username: req.user.username }, (err, user) => {
+                  user.stream_title = streamtitle;
+                  user.stream_description = streamdescription;
+                  user.avatar_url = streamavatar;
+                  user.donation_link = donationlink;
+                  user.discordID = discordid;
+                  user.save(function (err, user) {
+                    req.flash(
+                      'success_msg',
+                      'Changes succesfully updated.'
+                    );
+                    res.redirect('/dashboard');
+                  })
+                });
+              } else {
+                req.flash(
+                  'error_msg',
+                  'Discord ID link cannot be empty. if you do not have a discord account, please type something random in the text box.'
+                );
+                res.redirect('/dashboard');
+              }
             } else {
               req.flash(
                 'error_msg',
@@ -132,7 +142,8 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
         streamkey: useraccount.stream_key,
         streamdescription: useraccount.stream_description,
         streamavatar: useraccount.avatar_url,
-        donationlink: useraccount.donation_link
+        donationlink: useraccount.donation_link,
+        discordid: useraccount.discordID
       })
     } else {
       res.render('dashboard', {
@@ -141,7 +152,8 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
         streamkey: "You do not have permission to stream",
         streamdescription: useraccount.stream_description,
         streamavatar: useraccount.avatar_url,
-        donationlink: useraccount.donation_link
+        donationlink: useraccount.donation_link,
+        discordid: useraccount.discordID
       })
     }
   })
@@ -216,7 +228,15 @@ router.get('/:username', (req, res) => {
   let followbutton = "Follow";
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
+      let vipstatus = `<span style="color: cyan;">VIP</span>`
+      let staffstatus = `<span style="color: red;">STAFF</span>`
       if (user.banned) return res.render('banned');
+      if (!user.isVip) {
+        vipstatus = " "
+      }
+      if (!user.isStaff) {
+        staffstatus = " "
+      }
       if (req.isAuthenticated()) {
         User.findOne({username: req.params.username.toLowerCase()}).then(status => {
           if (status.followers.includes(req.user.username)) {
@@ -229,14 +249,14 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.data.isLive) {
-                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
                     } else {
-                      renderStream("throwdown.mp4", "video/mp4", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
+                      renderStream("throwdown.mp4", "video/mp4", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, staffstatus, vipstatus)
                     }
                 })
               }
@@ -247,14 +267,14 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.data.isLive) {
-              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
             } else {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.data.isLive) {
-                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
                   } else {
-                    renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
+                    renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, staffstatus, vipstatus)
                   }            
                 })
             }            
@@ -264,7 +284,7 @@ router.get('/:username', (req, res) => {
       res.send("Error: 404 - Not Found")
     }
     //Render Stream Function
-    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token) {
+    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token, staff_status, staff_viewers) {
       res.render('streamer', {
         user: user.username,
         streamlink: streamname,
@@ -280,7 +300,9 @@ router.get('/:username', (req, res) => {
         avatarurl: user.avatar_url,
         donationlink: user.donation_link,
         chattoken: chat_token,
-        liveviewers: stream_viewers
+        liveviewers: stream_viewers,
+        vipstatus: vip_status,
+        staffstatus: staff_status
       })   
     }
   });

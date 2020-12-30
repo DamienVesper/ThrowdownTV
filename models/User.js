@@ -62,6 +62,18 @@ const UserSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    discordID: {
+        type: String,
+        default: "YOUR_DISCORD_ID_HERE"
+    },
+    isVip: {
+        type: Boolean,
+        default: false
+    },
+    isStaff: {
+        type: Boolean,
+        default: false
     }
 });
 
