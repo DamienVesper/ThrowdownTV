@@ -28,9 +28,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column">
-                        <div style="margin-right: 5px;" id="stream_info_title_<%= following %>"></div>
-                        <div style="margin-right: 5px;" id="stream_info_description_<%= following %>"></div>
+                    <div class="column" style="margin-right: 5px; margin-left: 10px;">
+                        <div id="stream_info_title_<%= following %>"></div>
+                        <div id="stream_info_description_<%= following %>"></div>
                         <script>
                             axios.get('https://cdn.throwdown.tv/api/stream_info/<%= following %>')
                                 .then(function (response){
