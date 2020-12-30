@@ -228,14 +228,13 @@ router.get('/:username', (req, res) => {
   let followbutton = "Follow";
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
-      let vipstatus = `[VIP]`
-      let staffstatus = `[STAFF]`
+      let vipstatus = `<p class="lead mb-3" style="color: cyan; font-size: 15px; margin-right: 4px;">[VIP]</p>`
+      let staffstatus = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
       if (user.banned) return res.render('banned');
       if (!user.isStaff) {
-        staffstatus = " "
-      }
-      if (!user.isVip) {
-        vipstatus = " "
+        badge = " "
+      } else if (!user.isVip) {
+        badge = " "
       }
       
       if (req.isAuthenticated()) {
@@ -250,14 +249,14 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.data.isLive) {
-                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
+                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
+                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
                     } else {
-                      renderStream("throwdown.mp4", "video/mp4", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, staffstatus, vipstatus)
+                      renderStream("throwdown.mp4", "video/mp4", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, badge)
                     }
                 })
               }
@@ -268,14 +267,14 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.data.isLive) {
-              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
+              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
             } else {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.data.isLive) {
-                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, staffstatus, vipstatus)
+                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
                   } else {
-                    renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, staffstatus, vipstatus)
+                    renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, badge)
                   }            
                 })
             }            
@@ -285,7 +284,7 @@ router.get('/:username', (req, res) => {
       res.send("Error: 404 - Not Found")
     }
     //Render Stream Function
-    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token, staff_status, vip_status) {
+    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token, badge) {
       res.render('streamer', {
         user: user.username,
         streamlink: streamname,
@@ -302,8 +301,7 @@ router.get('/:username', (req, res) => {
         donationlink: user.donation_link,
         chattoken: chat_token,
         liveviewers: stream_viewers,
-        staffstatus: vip_status,
-        vipstatus: staff_status,
+        badge: badge
       })   
     }
   });
