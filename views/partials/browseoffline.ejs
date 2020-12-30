@@ -5,7 +5,7 @@
 <% if(offlinestreamer !='' ){ %>
     <div class="row show">
         <ul>
-            <% following.forEach(function(offlinestreamer) { %>
+            <% offlinestreamer.forEach(function(offlinestreamer) { %>
                 <div class="row">
                     <div class="column">
                         <div onclick="window.location='/<%= offlinestreamer %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= offlinestreamer %>" style="max-width: 300px; max-height: 300px;">

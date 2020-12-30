@@ -103,30 +103,28 @@ router.get('/browse', (req, res) =>  {
   let offlineStreamers = []
   User.collection.find().toArray(function(err, data) {
     data.forEach(user => {
-      console.log("USERNAME: "+user.username)
-      if (isOnline(user.username)) {
-        onlineStreamers.push(user.username)
-        console.log(user.username+ " is online")
+      if (checkIfLive(user.username)) {
+        onlineStreamers.push(user.username) 
       } else {
         offlineStreamers.push(user.username)
       }
-    }, err => {
-      console.log(err)
+      function checkIfLive(username) {
+        const response = axios.get('https://cdn.throwdown.tv/api/streams/' + username).then(function (response) {
+          if (response.data.isLive) {
+            return true;
+          } else {
+            return false
+          }
+        })
+      }
+      
     })
-    console.log("ONLINE: "+onlineStreamers)
-    console.log("OFFLINE: "+offlineStreamers)
+    console.log(onlineStreamers)
+    console.log(offlineStreamers)
     res.render('browse', {
       onlinestreamer: onlineStreamers,
       offlinestreamer: offlineStreamers
     })
-    async function isOnline(username) {
-      const response = await axios.get('https://cdn.throwdown.tv/api/streams/' + username)
-      if (response.data.isLive) {
-        return true;
-      } else {
-        return false;
-      }
-    }
   })
 })
 
