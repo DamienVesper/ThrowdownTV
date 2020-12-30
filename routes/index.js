@@ -284,7 +284,7 @@ router.get('/:username', (req, res) => {
       res.send("Error: 404 - Not Found")
     }
     //Render Stream Function
-    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token, staff_status, staff_viewers) {
+    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token, staff_status, vip_status) {
       res.render('streamer', {
         user: user.username,
         streamlink: streamname,
