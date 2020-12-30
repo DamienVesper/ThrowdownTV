@@ -46,7 +46,7 @@
     <script>
         axios.get('https://cdn.throwdown.tv/api/streams/<%= onlinestreamer %>')
             .then(function (response){
-                if (response.data.isLive === false) {
+                if (!response.data.isLive) {
                     document.getElementById("ul_<%= onlinestreamer %>").innerHTML = `<div></div>` 
                 }
             })
