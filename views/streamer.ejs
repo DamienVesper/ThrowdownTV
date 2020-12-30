@@ -80,14 +80,6 @@
             </div>
         </div>
         </div>
-        <script>
-            setInterval(function(){
-                axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
-                    .then(function (response){
-                        document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
-                    })
-            }, 11000)
-        </script>
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
                 this.src({
@@ -103,10 +95,23 @@
                 })
             });
             setInterval(function(){
-                player.src({
-                    src: "<%= streamlink %>",
-                    type: '<%= streamformat %>'
-                })
+                axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
+                    .then(function (response){
+                        document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
+                        if(response.data.isLive) {
+                            document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                            player.src({
+                                src: "<%= streamlink %>",
+                                type: '<%= streamformat %>'
+                            })
+                        } else {
+                            document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                            player.src({
+                                src: 'throwdown.mp4',
+                                type: 'video/mp4'
+                            })
+                        }
+                    })
             }, 11000)
             player.play();
             player.chromecast()
