@@ -94,12 +94,6 @@
                     })
                 })
             });
-            setInterval(function(){
-                axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
-                    .then(function (response){
-                        document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
-                    })
-            }, 11000)
             player.play();
             player.chromecast()
             player.nuevo({ 
