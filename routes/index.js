@@ -228,15 +228,16 @@ router.get('/:username', (req, res) => {
   let followbutton = "Follow";
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
-      let vipstatus = `<span style="color: cyan;">VIP</span>`
-      let staffstatus = `<span style="color: red;">STAFF</span>`
+      let vipstatus = `[VIP]`
+      let staffstatus = `[STAFF]`
       if (user.banned) return res.render('banned');
-      if (!user.isVip) {
-        vipstatus = " "
-      }
       if (!user.isStaff) {
         staffstatus = " "
       }
+      if (!user.isVip) {
+        vipstatus = " "
+      }
+      
       if (req.isAuthenticated()) {
         User.findOne({username: req.params.username.toLowerCase()}).then(status => {
           if (status.followers.includes(req.user.username)) {
