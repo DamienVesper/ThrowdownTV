@@ -234,6 +234,8 @@ router.get('/:username', (req, res) => {
         badge = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
       } else if (user.isVip && !user.isStaff) {
         badge = `<p class="lead mb-3" style="color: cyan; font-size: 15px; margin-right: 4px;">[VIP]</p>`
+      } else if (user.isStaff && !user.isVip) {
+        badge = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
       }
       
       if (req.isAuthenticated()) {
