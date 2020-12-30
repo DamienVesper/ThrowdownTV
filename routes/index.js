@@ -98,32 +98,15 @@ router.get('/streams/donate', (req, res) => {
 })
 
 // Browsing
-router.get('/browse', (req, res) =>  {
-  let onlineStreamers = []
-  let offlineStreamers = []
+router.get('/browse', async (req, res) =>  {
+  let streamers = []
   User.collection.find().toArray(function(err, data) {
     data.forEach(user => {
-      if (checkIfLive(user.username)) {
-        onlineStreamers.push(user.username) 
-      } else {
-        offlineStreamers.push(user.username)
-      }
-      function checkIfLive(username) {
-        var result = false
-        const response = axios.get('https://cdn.throwdown.tv/api/streams/' + username).then(function (response) {
-          if (response.data.isLive) {
-            result = true;
-          }
-        })
-        return result;
-      }
-      
+      streamers.push(user.username)
     })
-    console.log(onlineStreamers)
-    console.log(offlineStreamers)
+
     res.render('browse', {
-      onlinestreamer: onlineStreamers,
-      offlinestreamer: offlineStreamers
+      onlinestreamer: streamers,
     })
   })
 })

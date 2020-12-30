@@ -4,7 +4,7 @@
 </head>
 <% if(onlinestreamer !='' ){ %>
     <div class="row show">
-        <ul>
+        <ul id="ul_<%= onlinestreamer %>">
             <% onlinestreamer.forEach(function(onlinestreamer) { %>
                 <div class="row">
                     <div class="column">
@@ -32,10 +32,16 @@
                         <div id="stream_info_title_<%= onlinestreamer %>"></div>
                         <div id="stream_info_description_<%= onlinestreamer %>"></div>
                         <script>
+                            axios.get('https://cdn.throwdown.tv/api/streams/<%= onlinestreamer %>')
+                                .then(function (response){
+                                    if (response.data.isLive) {
+                                        document.getElementById("ul_<%= onlinestreamer %>").innerHTML = `` 
+                                    }
+                                })
                             axios.get('https://cdn.throwdown.tv/api/stream_info/<%= onlinestreamer %>')
                                 .then(function (response){
-                                        document.getElementById("stream_info_title_<%= onlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
-                                        document.getElementById("stream_info_description_<%= onlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
+                                    document.getElementById("stream_info_title_<%= onlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
+                                    document.getElementById("stream_info_description_<%= onlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
                                 })
                         </script>
                     </div>
