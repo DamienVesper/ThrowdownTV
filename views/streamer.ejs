@@ -102,6 +102,12 @@
                     })
                 })
             });
+            setInterval(function(){
+                player.src({
+                    src: "<%= streamlink %>",
+                    type: '<%= streamformat %>'
+                })
+            }, 11000)
             player.play();
             player.chromecast()
             player.nuevo({ 
@@ -115,6 +121,5 @@
                 contextMenu: false,
                 timetooltip: false,
             });
-            document.getElementById('erasable').innerHTML = "";
         </script>
     </body>
