@@ -97,6 +97,39 @@ router.get('/streams/donate', (req, res) => {
   res.send("This user has not set up their donation link yet :(")
 })
 
+// Browsing
+router.get('/browse', (req, res) =>  {
+  let onlineStreamers = []
+  let offlineStreamers = []
+  User.collection.find().toArray(function(err, data) {
+    data.forEach(user => {
+      console.log("USERNAME: "+user.username)
+      if (isOnline(user.username)) {
+        onlineStreamers.push(user.username)
+        console.log(user.username+ " is online")
+      } else {
+        offlineStreamers.push(user.username)
+      }
+    }, err => {
+      console.log(err)
+    })
+    console.log("ONLINE: "+onlineStreamers)
+    console.log("OFFLINE: "+offlineStreamers)
+    res.render('browse', {
+      onlinestreamer: onlineStreamers,
+      offlinestreamer: offlineStreamers
+    })
+    async function isOnline(username) {
+      const response = await axios.get('https://cdn.throwdown.tv/api/streams/' + username)
+      if (response.data.isLive) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  })
+})
+
 // Following
 router.get('/following', ensureAuthenticated, (req, res) =>  {
   User.findOne({ username: req.user.username }).then(useraccount => {
@@ -246,7 +279,7 @@ router.get('/:username', (req, res) => {
           })
       } 
     } else {
-      res.send("404: Username " + req.params.username.toLowerCase() + " Does not exist")
+      res.send("Error: 404 - Not Found")
     }
     //Render Stream Function
     function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token) {
