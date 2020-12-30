@@ -84,7 +84,7 @@
             setInterval(function(){
                 axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
                     .then(function (response){
-                        document.getElementById('erasable').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
+                        document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
                     })
             }, 20000)
         </script>
