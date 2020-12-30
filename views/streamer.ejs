@@ -8,7 +8,8 @@
     <script src="js/videojs_5.vast.vpaid.min.js"></script>
     <script src="videojs-dash.min.js"></script>
     <script src="dash.all.min.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
     <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
 </head>
@@ -79,7 +80,14 @@
             </div>
         </div>
         </div>
-        
+        <script>
+            setInterval(function(){
+                axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                    .then(function (response){
+                        document.getElementById('erasable').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
+                    })
+            }, 20000)
+        </script>
         <script id="erasable">
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
                 this.src({
