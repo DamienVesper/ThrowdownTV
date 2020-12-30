@@ -198,29 +198,30 @@ router.get('/follow/:username', ensureAuthenticated, (req, res) => {
 
 // Streamer
 router.get('/:username', (req, res) => {
+  let followbutton = "Follow";
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
       if (user.banned) return res.render('banned');
       if (req.isAuthenticated()) {
-        User.findOne({followers: req.user.username, username: req.params.username.toLowerCase()}).then(status => {
-          var followbutton = "Follow";
-          var followoption = "follow";
-          if (status) {
-            followbutton = "Unfollow"
-            followoption = "unfollow"
+        User.findOne({username: req.params.username.toLowerCase()}).then(status => {
+          if (status.followers.includes(req.user.username)) {
+            makeUnfollow();
+          }
+          function makeUnfollow() {
+            followbutton = "Unfollow";
           }
           //renderStream("https://cdn.throwdown.tv/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", 0, user.chat_token)
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.data.isLive) {
-                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followoption, req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
+                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token)
                     } else {
-                      renderStream("throwdown.mp4", "video/mp4", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
+                      renderStream("throwdown.mp4", "video/mp4", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers)
                     }
                 })
               }
