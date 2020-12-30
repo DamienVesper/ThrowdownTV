@@ -18,7 +18,7 @@
                                                 axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
                                                     .then(function (response){
                                                         if (response.data.isLive) {
-                                                            document.getElementById("live_status_<%= following %>").innerHTML = `<span font-size: 10px; margin-top: 0px; style="color: lime;">ONLINE</span>` 
+                                                            document.getElementById("live_status_<%= following %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span>` 
                                                         }
                                                     })
                                             </script>
