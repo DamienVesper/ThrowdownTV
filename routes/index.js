@@ -302,8 +302,8 @@ router.get('/:username', (req, res) => {
         donationlink: user.donation_link,
         chattoken: chat_token,
         liveviewers: stream_viewers,
-        staffstatus: staff_status,
-        vipstatus: vip_status,
+        staffstatus: vip_status,
+        vipstatus: staff_status,
       })   
     }
   });
