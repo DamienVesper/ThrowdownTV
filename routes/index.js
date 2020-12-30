@@ -109,13 +109,13 @@ router.get('/browse', (req, res) =>  {
         offlineStreamers.push(user.username)
       }
       function checkIfLive(username) {
+        var result = false
         const response = axios.get('https://cdn.throwdown.tv/api/streams/' + username).then(function (response) {
           if (response.data.isLive) {
-            return true;
-          } else {
-            return false
+            result = true;
           }
         })
+        return result;
       }
       
     })
