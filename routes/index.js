@@ -231,9 +231,9 @@ router.get('/:username', (req, res) => {
       let vipstatus = `[VIP]`
       let staffstatus = `[STAFF]`
       if (user.banned) return res.render('banned');
-      //if (!user.isStaff) {
-      //  staffstatus = " "
-      //}
+      if (!user.isStaff) {
+        staffstatus = " "
+      }
       if (!user.isVip) {
         vipstatus = " "
       }
@@ -302,8 +302,8 @@ router.get('/:username', (req, res) => {
         donationlink: user.donation_link,
         chattoken: chat_token,
         liveviewers: stream_viewers,
+        staffstatus: staff_status,
         vipstatus: vip_status,
-        staffstatus: staff_status
       })   
     }
   });
