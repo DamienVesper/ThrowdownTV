@@ -82,7 +82,7 @@
         </div>
         <script>
             setInterval(function(){
-                axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
                     .then(function (response){
                         document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
                     })
