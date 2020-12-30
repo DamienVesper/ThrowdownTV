@@ -19,7 +19,7 @@
                 <script>
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
                         .then(function (response){
-                            if (response.isLive) {
+                            if (response.data.isLive) {
                                 console.log("<%= following %> is live")
                                 document.getElementById("live_status").innerHTML = `<span style="color: lime;">ONLINE</span>` 
                             }
