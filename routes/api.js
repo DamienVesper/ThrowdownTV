@@ -49,14 +49,4 @@ router.get('/email_verify/:emailverificationkey', (req, res) =>
         }
     })
 );
-// Streamkey Check
-router.get('/chat/:username', (req, res) =>
-    User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
-        if (useraccount) {
-            res.json({chatserver: true})
-        } else {
-            res.json({chatserver: false})
-        }
-    })
-);
 module.exports = router;

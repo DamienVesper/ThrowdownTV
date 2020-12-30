@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const cryptoRandomString = require('crypto-random-string');
+const uniqueString = require('unique-string');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     stream_key: {
         type: String,
-        default: cryptoRandomString({ length: 50, type: 'alphanumeric' })
+        default: uniqueString()
     },
     stream_title: {
         type: String,
@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     },
     email_verification_key: {
         type: String,
-        default: cryptoRandomString({ length: 30, type: 'alphanumeric' })
+        default: uniqueString()
     },
     verification_status: {
         type: Boolean,

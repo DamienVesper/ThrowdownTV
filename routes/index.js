@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const User = require('../models/User');
-const cryptoRandomString = require('crypto-random-string');
+const uniqueString = require('unique-string');
 const axios = require('axios');
 
 // Welcome Page
@@ -13,7 +13,7 @@ router.get('/tos', (req, res) => res.render('tos'));
 
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
-    user.stream_key = cryptoRandomString({ length: 50, type: 'alphanumeric' });
+    user.stream_key = uniqueString();
     user.save(function (err, user) {
       req.flash(
         'success_msg',
