@@ -10,14 +10,13 @@
                     <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
                         <div class="row" style="width: 50%;">
                             <h3 style="color: lime; font-size: 25px;" class="lead mb-3">
-                                <%= following %> <div id="live_status"><span style="color: red;">OFFLINE</span></div>
+                                <%= following %> <div id="live_statu_<%= following %>"><span style="color: red;">OFFLINE</span></div>
                                 <button id="follow_button" type="submit" onclick="window.location.href='/<%= following %>'" class="btn btn-success">Go to Channel</button>
                                 <script>
                                     axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
                                         .then(function (response){
                                             if (response.data.isLive) {
-                                                console.log("<%= following %> is live")
-                                                document.getElementById("live_status").innerHTML = `<span style="color: lime;">ONLINE</span>` 
+                                                document.getElementById("live_statu_<%= following %>").innerHTML = `<span style="color: lime;">ONLINE</span>` 
                                             }
                                         })
                                 </script>
