@@ -231,9 +231,7 @@ router.get('/:username', (req, res) => {
       let vipstatus = `[VIP]`
       let staffstatus = `[STAFF]`
       if (user.banned) return res.render('banned');
-      if (!user.isStaff) {
-        staffstatus = " "
-      }
+      
       if (!user.isVip) {
         vipstatus = " "
       }
