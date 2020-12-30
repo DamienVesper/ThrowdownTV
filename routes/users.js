@@ -37,6 +37,8 @@ router.post('/register', (req, res) => {
     const username = req.body.username.toLowerCase();
     let errors = [];
 
+    let bannedUsernames = ['users','dashboard','register','login','tos','browse','logout','follow','unfollow','following','streams']
+
     //check required fields
     if(!username || !email || !password || !password2) {
         errors.push({msg: "Please fill in all fields"})
@@ -58,6 +60,9 @@ router.post('/register', (req, res) => {
     // Check Username Length
     if(username.length < 4) {
         errors.push({msg: "Username should be at least 4 characters"})
+    }
+    if(username = Array.isArray(bannedUsernames)){
+        errors.push({msg: "Prohibited Username"})
     }
     // Check Password Length
     if(password.length < 6) {
