@@ -84,6 +84,18 @@
         </div>
         </div>
         <script id="erasable">
+            var alreadyLive = false
+            axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
+                .then(function (response){
+                    document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
+                    if (response.data.isLive === true) {
+                        if (alreadyLive === false) {
+                            alreadyLive = true
+                        }
+                    } else {
+                        alreadyLive = false
+                    }
+                })
             var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
                 this.src({
                     src: "<%= streamlink %>",
@@ -99,20 +111,24 @@
                 setInterval(function(){
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
                         .then(function (response){
-                            document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
-                            if (!response.data.isLive) {
-                                if (!(document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`)) {
+                            if (response.data.isLive === false) {
+                                if (alreadyLive === true) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
-                                    if (document.getElementById("player").getElementsByTagName("source").src != 'throwdown.mp4'){
-                                        window.location.reload()
-                                    }
+                                    alreadyLive = false;
+                                    this.src({
+                                        src: 'throwdown.webm',
+                                        type: 'video/webm'
+                                    })
                                 }
-                            }
-                            if (response.data.isLive) {
-                                if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
+                            } else {
+                                if (alreadyLive === false) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                                    alreadyLive = true;
                                     setTimeout(function(){
-                                        window.location.reload()
+                                        this.src({
+                                            src: "<%= streamlink %>",
+                                            type: '<%= streamformat %>'
+                                        })
                                     }, 3500)
                                 }
                             }
