@@ -16,7 +16,7 @@
                             <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
                                 <div class="row" style="width: 50%;">
                                     <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
-                                        <%= streamers %> <div id="live_status_<%= streamers %>" style="word-wrap: unset;"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                        <%= streamers %> <div class="row" id="live_status_<%= streamers %>" style="word-wrap: unset;"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
                                         <script>
                                             axios.get('https://cdn.throwdown.tv/api/streams/<%= streamers %>')
                                                 .then(function (response){
