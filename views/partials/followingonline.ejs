@@ -6,7 +6,7 @@
     <div class="row show">
         <ul>
             <% following.forEach(function(following) { %>
-                <div class="row">
+                <div id="ul_following_<%= following %>" class="row">
                     <div class="column">
                         <div onclick="window.location='/<%= following %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= following %>" style="max-width: 300px; max-height: 300px;">
                             <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
@@ -40,6 +40,14 @@
                         </script>
                     </div>
                 </div>
+                <script>
+                    axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                        .then(function (response){
+                            if (!response.data.isLive) {
+                                document.getElementById("ul_following_<%= following %>").innerHTML = `<div></div>` 
+                            }
+                        })
+                </script>
             <% }) %>
         </ul>
     </div>
