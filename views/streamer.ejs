@@ -127,6 +127,9 @@
                                     }, 2000)
                                 }
                             }
+                            if (response.data.banned === true) {
+                                window.location.reload(true);
+                            }
                         })
                 }, 10000)
             });
