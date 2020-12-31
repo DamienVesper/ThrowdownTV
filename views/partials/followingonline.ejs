@@ -9,26 +9,26 @@
                 <div id="ul_following_<%= following %>" class="row">
                     <div class="column">
                         <div onclick="window.location='/<%= following %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= following %>" style="max-width: 300px; max-height: 300px;">
-                            <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
-                                <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                                    <div class="row" style="width: 50%;">
-                                        <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
-                                            <%= following %> <div id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
-                                            <script>
-                                                axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
-                                                    .then(function (response){
-                                                        if (response.data.isLive) {
-                                                            document.getElementById("live_status_<%= following %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-top: 0px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
-                                                        }
-                                                    })
-                                            </script>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="column" style="margin-right: 5px; margin-left: 10px;">
+                        <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= following %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
+                            <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
+                                <div class="row" style="width: 50%;">
+                                    <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
+                                        <%= following %> <div id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                        <script>
+                                            axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                                                .then(function (response){
+                                                    if (response.data.isLive) {
+                                                        document.getElementById("live_status_<%= following %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-top: 0px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
+                                                    }
+                                                })
+                                        </script>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
                         <div id="stream_info_title_<%= following %>"></div>
                         <div id="stream_info_description_<%= following %>"></div>
                         <script>
