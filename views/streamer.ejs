@@ -104,7 +104,7 @@
                                 if (!(document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`)) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                                     if (document.getElementById("player").getElementsByTagName("source").src != 'throwdown.mp4'){
-                                        document.getElementById('player').src({
+                                        player.src({
                                             src: 'throwdown.webm',
                                             type: 'video/webm'
                                         })
@@ -115,7 +115,7 @@
                                 if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
                                     setTimeout(function(){
-                                        document.getElementById('player').src({
+                                        player.src({
                                             src: "<%= streamlink %>",
                                             type: '<%= streamformat %>'
                                         })
@@ -125,6 +125,18 @@
                         })
                 }, 10000)
             });
+            function changeToOffline(){
+                player.src({
+                    src: "<%= streamlink %>",
+                    type: '<%= streamformat %>'
+                })
+            }
+            function changeToOnline(){
+                player.src({
+                    src: 'throwdown.webm',
+                    type: 'video/webm'
+                })
+            }
             player.play();
             player.chromecast()
             player.nuevo({ 
