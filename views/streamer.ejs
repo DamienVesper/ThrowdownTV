@@ -112,13 +112,13 @@
                         }
                         if (response.data.isLive) {
                             if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
-                                document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
                                 setTimeout(function(){
-                                    player.src({
-                                        src: "<%= streamlink %>",
-                                        type: '<%= streamformat %>'
-                                    })
+                                    document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
                                 }, 2500)
+                                player.src({
+                                    src: "<%= streamlink %>",
+                                    type: '<%= streamformat %>'
+                                })
                             }
                         }
                     })
