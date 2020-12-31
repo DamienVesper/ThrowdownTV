@@ -120,7 +120,7 @@
             }, 10000)
             function playLiveStream() {
                 setTimeout(function(){
-                    this.src({
+                    player.src({
                         src: "<%= streamlink %>",
                         type: '<%= streamformat %>'
                     })
