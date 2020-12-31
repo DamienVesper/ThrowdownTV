@@ -112,14 +112,20 @@
                         }
                         if (response.data.isLive) {
                             if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
-                                setTimeout(function(){
-                                    document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
-                                }, 3500)
-                                location.reload();
+                                document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                                playLiveStream();
                             }
                         }
                     })
             }, 10000)
+            function playLiveStream() {
+                setTimeout(function(){
+                    this.src({
+                        src: "<%= streamlink %>",
+                        type: '<%= streamformat %>'
+                    })
+                }, 3500)
+            }
             player.play();
             player.chromecast()
             player.nuevo({ 
