@@ -102,12 +102,14 @@
                     .then(function (response){
                         document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
                         if (!response.data.isLive) {
-                            document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
-                            if (document.getElementById("player").getElementsByTagName("source").src != 'throwdown.mp4'){
-                                player.src({
-                                    src: 'throwdown.webm',
-                                    type: 'video/webm'
-                                })
+                            if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">OFFLINE</p>`)) {
+                                document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                                if (document.getElementById("player").getElementsByTagName("source").src != 'throwdown.mp4'){
+                                    player.src({
+                                        src: 'throwdown.webm',
+                                        type: 'video/webm'
+                                    })
+                                }
                             }
                         }
                         if (response.data.isLive) {
@@ -120,6 +122,22 @@
                                     })
                                 }, 3500)
                                 player.play()
+                            }
+                        }
+                    })
+            }, 10000)
+            setInterval(function(){
+                axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
+                    .then(function (response){
+                        if (response.data.isLive) {
+                            if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
+                                document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                                setTimeout(function(){
+                                    player.src({
+                                        src: "<%= streamlink %>",
+                                        type: '<%= streamformat %>'
+                                    })
+                                }, 3500)
                             }
                         }
                     })
