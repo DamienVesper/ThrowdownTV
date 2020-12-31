@@ -155,7 +155,7 @@ router.post('/login', (req, res, next) => {
             );
             res.redirect('/users/login');
         }
-        if (user.verification_status) {
+        if (user.verification_status === true) {
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',
