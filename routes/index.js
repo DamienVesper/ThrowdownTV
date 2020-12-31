@@ -133,7 +133,7 @@ router.get('/following', ensureAuthenticated, (req, res) =>  {
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }).then(useraccount => {
-    if (useraccount.banned) return res.render('banned');
+    if (useraccount.banned) return res.render('banned', {banreason: "Reason: "+useraccount.banreason});
     if (useraccount.can_stream) {
       res.render('dashboard', {
         user: req.user,
@@ -228,7 +228,7 @@ router.get('/:username', (req, res) => {
   User.findOne({ username: req.params.username.toLowerCase() }).then(user => {
     if (user) {
       let badge = ``
-      if (user.banned) return res.render('banned');
+      if (user.banned) return res.render('banned', {banreason: "Ya done goofed buddy..."});
       if (user.isStaff && user.isVip) {
         badge = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
       } else if (user.isVip && !user.isStaff) {
