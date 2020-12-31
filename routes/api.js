@@ -24,14 +24,14 @@ router.get('/streamkey/:streamkey', (req, res) =>
 router.get('/email_verify/:emailverificationkey', (req, res) =>
     User.findOne({ email_verification_key: req.params.emailverificationkey }).then(useraccount => {
         if (useraccount) {
-            if (useraccount.verification_status) {
+            if (useraccount.verification_status = "true") {
                 req.flash(
                     'error_msg',
                     'Email Already Verified.'
                 );
                 res.redirect('/users/login');
             } else {
-                useraccount.verification_status = true;
+                useraccount.verification_status = "true";
                 useraccount.save(function(err, user) {
                     req.flash(
                         'success_msg',
