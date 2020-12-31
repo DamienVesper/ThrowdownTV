@@ -16,17 +16,16 @@
                             <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
                                 <div class="row" style="width: 50%;">
                                     <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
-                                        <%= following %> 
+                                        <%= following %> <div style="margin: 0px;" id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                        <script>
+                                            axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
+                                                .then(function (response){
+                                                    if (response.data.isLive) {
+                                                        document.getElementById("live_status_<%= following %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-right: 5px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
+                                                    }
+                                                })
+                                        </script>
                                     </h3>
-                                    <div style="margin: 0px;" id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
-                                    <script>
-                                        axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
-                                            .then(function (response){
-                                                if (response.data.isLive) {
-                                                    document.getElementById("live_status_<%= following %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-right: 5px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
-                                                }
-                                            })
-                                    </script>
                                 </div>
                             </div>
                         </div>
