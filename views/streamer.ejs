@@ -104,7 +104,7 @@
                                 if (!(document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`)) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                                     if (document.getElementById("player").getElementsByTagName("source").src != 'throwdown.mp4'){
-                                        changeToOffline()
+                                        window.location.reload()
                                     }
                                 }
                             }
@@ -112,25 +112,13 @@
                                 if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
                                     setTimeout(function(){
-                                        changeToOnline()
+                                        window.location.reload()
                                     }, 3500)
                                 }
                             }
                         })
                 }, 10000)
             });
-            function changeToOffline(){
-                player.src({
-                    src: "<%= streamlink %>",
-                    type: '<%= streamformat %>'
-                })
-            }
-            function changeToOnline(){
-                player.src({
-                    src: 'throwdown.webm',
-                    type: 'video/webm'
-                })
-            }
             player.play();
             player.chromecast()
             player.nuevo({ 
