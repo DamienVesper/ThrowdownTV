@@ -114,11 +114,8 @@
                             if (!(document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`)) {
                                 setTimeout(function(){
                                     document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
-                                }, 4000)
-                                player.src({
-                                    src: "<%= streamlink %>",
-                                    type: 'video/x-flv'
-                                })
+                                }, 3500)
+                                location.reload();
                             }
                         }
                     })
