@@ -115,20 +115,14 @@
                                 if (alreadyLive === true) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                                     alreadyLive = false;
-                                    this.src({
-                                        src: 'throwdown.webm',
-                                        type: 'video/webm'
-                                    })
+                                    window.location.reload(true);
                                 }
                             } else {
                                 if (alreadyLive === false) {
                                     document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
                                     alreadyLive = true;
                                     setTimeout(function(){
-                                        this.src({
-                                            src: "<%= streamlink %>",
-                                            type: '<%= streamformat %>'
-                                        })
+                                        window.location.reload(true);
                                     }, 3500)
                                 }
                             }
