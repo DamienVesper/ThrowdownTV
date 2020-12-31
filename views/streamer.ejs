@@ -92,8 +92,8 @@
                 this.on('error', function(event) {
                     document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                     this.src({
-                        src: 'throwdown.mp4',
-                        type: 'video/mp4'
+                        src: 'throwdown.webm',
+                        type: 'video/webm'
                     })
                 })
             });
@@ -105,8 +105,8 @@
                             document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
                             if (document.getElementById("player").getElementsByTagName("source").src != 'throwdown.mp4'){
                                 player.src({
-                                    src: 'throwdown.mp4',
-                                    type: 'video/mp4'
+                                    src: 'throwdown.webm',
+                                    type: 'video/webm'
                                 })
                             }
                         }
