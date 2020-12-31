@@ -50,6 +50,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    banreason: {
+        type: String,
+        default: "TOS Violation"
+    },
     following: {
         type: Array,
     },
