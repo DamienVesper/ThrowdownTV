@@ -34,7 +34,7 @@ router.post('/dashboard', (req, res) => {
     if (streamtitle.length <= 61) {
       if (streamdescription.length > 1) {
         if (streamdescription.length <= 4000) {
-          if (streamavatar.startsWith("http://") || streamavatar.startsWith("https://")) {
+          if ((streamavatar.startsWith("http://") || streamavatar.startsWith("https://")) && (streamavatar.endsWith(".png") || streamavatar.endsWith(".jpg"))) {
             if (donationlink.length > 0) {
               if (discordid.length > 0) {
                 User.findOne({ username: req.user.username }, (err, user) => {
