@@ -43,7 +43,7 @@
                 <script>
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
                         .then(function (response){
-                            if (!response.data.isLive) {
+                            if (response.data.isLive) {
                                 document.getElementById("ul_following_offline_<%= following %>").innerHTML = `<div></div>` 
                             }
                         })
