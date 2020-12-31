@@ -2,42 +2,42 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
-<% if(offlinestreamer !='' ){ %>
+<% if(streamers !='' ){ %>
     <div class="row show">
         <ul>
-            <% offlinestreamer.forEach(function(offlinestreamer) { %>
-                <div id="ul_offline_<%= offlinestreamer %>" class="row">
+            <% streamers.forEach(function(streamers) { %>
+                <div id="ul_offline_<%= streamers %>" class="row">
                     <div class="column">
-                        <div onclick="window.location='/<%= offlinestreamer %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= offlinestreamer %>" style="max-width: 300px; max-height: 300px;">
+                        <div onclick="window.location='/<%= streamers %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= streamers %>" style="max-width: 300px; max-height: 300px;">
                         </div>
                     </div>
                     <div class="column" style="margin-right: 5px; margin-left: 10px;">
-                        <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= offlinestreamer %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
+                        <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= streamers %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
                             <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
                                 <div class="row" style="width: 50%;">
                                     <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
-                                        <%= offlinestreamer %> <div id="live_status_<%= offlinestreamer %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                        <%= streamers %> <div id="live_status_<%= streamers %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
                                     </h3>
                                 </div>
                             </div>
                         </div>
-                        <div id="stream_info_title_<%= offlinestreamer %>"></div>
-                        <div id="stream_info_description_<%= offlinestreamer %>"></div>
+                        <div id="stream_info_title_<%= streamers %>"></div>
+                        <div id="stream_info_description_<%= streamers %>"></div>
                         <script>
-                            axios.get('https://cdn.throwdown.tv/api/stream_info/<%= offlinestreamer %>')
+                            axios.get('https://cdn.throwdown.tv/api/stream_info/<%= streamers %>')
                                 .then(function (response){
-                                        document.getElementById("stream_info_title_<%= offlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
-                                        document.getElementById("stream_info_description_<%= offlinestreamer %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
+                                        document.getElementById("stream_info_title_<%= streamers %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
+                                        document.getElementById("stream_info_description_<%= streamers %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
                                 })
                         </script>
                     </div>
                 </div>
                 <script>
-                    axios.get('https://cdn.throwdown.tv/api/streams/<%= offlinestreamer %>')
+                    axios.get('https://cdn.throwdown.tv/api/streams/<%= streamers %>')
                         .then(function (response){
                             if (response.data.isLive) {
                                 console.log("Offline Streamer isLive status "+response.data.isLive)
-                                document.getElementById("ul_offline_<%= offlinestreamer %>").innerHTML = `<div></div>` 
+                                document.getElementById("ul_offline_<%= streamers %>").innerHTML = `<div></div>` 
                             }
                         })
                 </script>
