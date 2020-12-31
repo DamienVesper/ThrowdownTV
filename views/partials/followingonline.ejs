@@ -18,7 +18,7 @@
                                     <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
                                         <%= following %> 
                                     </h3>
-                                    <div style="margin-left: 20px;" class="row" id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                    <div style="margin: 0px;" class="row" id="live_status_<%= following %>"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
                                     <script>
                                         axios.get('https://cdn.throwdown.tv/api/streams/<%= following %>')
                                             .then(function (response){
