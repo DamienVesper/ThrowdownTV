@@ -35,8 +35,8 @@ const UserSchema = new mongoose.Schema({
         default: uniqueString()
     },
     verification_status: {
-        type: String,
-        default: "false"
+        type: Boolean,
+        default: false
     },
     donation_link: {
         type: String,
