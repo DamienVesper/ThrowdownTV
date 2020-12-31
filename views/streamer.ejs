@@ -103,6 +103,17 @@
                         document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
                         if (!response.data.isLive) {
                             document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                            player.src({
+                                src: 'throwdown.mp4',
+                                type: 'video/mp4'
+                            })
+                        }
+                        if (response.data.isLive) {
+                            document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                            player.src({
+                                src: "<%= streamlink %>",
+                                type: '<%= streamformat %>'
+                            })
                         }
                     })
             }, 11000)
