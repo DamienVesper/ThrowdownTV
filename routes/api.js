@@ -23,30 +23,28 @@ router.get('/streamkey/:streamkey', (req, res) =>
 // Email verification check
 router.get('/email_verify/:emailverificationkey', (req, res) =>
     User.findOne({ email_verification_key: req.params.emailverificationkey }).then(useraccount => {
-        if (useraccount) {
-            if (useraccount.verification_status) {
-                req.flash(
-                    'error_msg',
-                    'Email Already Verified.'
-                );
-                res.redirect('/users/login');
-            } else {
-                useraccount.verification_status = true;
-                useraccount.save(function(err, user) {
-                    req.flash(
-                        'success_msg',
-                        'Email Successfully Verified.'
-                    );
-                    res.redirect('/users/login');
-                })
-            }
-        } else {
+        if (useraccount.verification_status) {
             req.flash(
                 'error_msg',
-                'Invalid Verification Token.'
+                'Email Already Verified.'
             );
             res.redirect('/users/login');
+        } else {
+            useraccount.verification_status = true;
+            useraccount.save(function(err, user) {
+                req.flash(
+                    'success_msg',
+                    'Email Successfully Verified.'
+                );
+                res.redirect('/users/login');
+            })
         }
+    }).catch(err => {
+        req.flash(
+            'error_msg',
+            'UNKNOWN ERROR.'
+        );
+        res.redirect('/users/login');
     })
 );
 module.exports = router;
