@@ -14,14 +14,14 @@
                     <div class="column" style="margin-right: 5px; margin-left: 10px;">
                         <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= streamers %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
                             <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                                <div class="row" style="width: 50%;">
+                                <div class="row" style="width: 50%; margin-left: 20px;">
                                     <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
                                         <%= streamers %> <div class="row" id="live_status_<%= streamers %>" style="word-wrap: unset;"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
                                         <script>
                                             axios.get('https://cdn.throwdown.tv/api/streams/<%= streamers %>')
                                                 .then(function (response){
                                                     if (response.data.isLive) {
-                                                        document.getElementById("live_status_<%= streamers %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-top: 0px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
+                                                        document.getElementById("live_status_<%= streamers %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-right: 5px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
                                                     }
                                                 })
                                         </script>
