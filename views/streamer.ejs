@@ -2,11 +2,10 @@
     <%- include('./partials/adheaders'); %>
     <script src="js/video.min.js"></script>
     <script src="js/nuevo.min.js"></script>
-    <script src="js/flv.min.js"></script>
-    <script src="js/videojs-flvjs.min.js"></script>
     <script src="js/plugins/videojs-chromecast.min.js"></script>
     <script src="js/videojs_5.vast.vpaid.min.js"></script>
     <script src="videojs-dash.min.js"></script>
+    <script src="dash.all.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
@@ -95,38 +94,17 @@
                         alreadyLive = false
                     }
                 })
-            var video = document.querySelector('#player');
-            if (Hls.isSupported()) {
-                var hls = new Hls();
-                hls.loadSource('<%= streamlink %>');
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED,function() {
-                    video.play();
-                });
-            }
-            plyr.setup(video);
-            setInterval(function(){
-            axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
-                .then(function (response){
-                    document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
-                    if (response.data.isLive === false) {
-                        if (alreadyLive === true) {
-                            document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
-                            alreadyLive = false;
-                            window.location.reload(true);
-                        }
-                    } else {
-                        if (alreadyLive === false) {
-                            document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
-                            alreadyLive = true;
-                            setTimeout(function(){
-                                window.location.reload(true);
-                            }, 2000)
-                        }
-                    }
-                    if (response.data.banned === true) {
-                        window.location.reload(true);
-                    }
+            var player = videojs("player", {autoplay: true, errorDisplay: false}, function() {
+                this.src({
+                    src: "<%= streamlink %>",
+                    type: '<%= streamformat %>'
+                })
+                this.on('error', function(event) {
+                    document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                    this.src({
+                        src: 'throwdown.webm',
+                        type: 'video/webm'
+                    })
                 })
                 setInterval(function(){
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
