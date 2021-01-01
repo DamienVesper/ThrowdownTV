@@ -4,9 +4,9 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 const isAlphanumeric = require('is-alphanumeric');
-const cryptoRandomString = require('crypto-random-string');
 const validator = require("email-validator");
 const emailExistence = require("email-existence")
+const uniqueString = require('unique-string');
 const config = require('../config.json')
 
 // Email
@@ -156,6 +156,8 @@ router.post('/login', (req, res, next) => {
             res.redirect('/users/login');
         }
         if (user.verification_status === true) {
+            user.chat_key = uniqueString()+uniqueString()
+            user.save();
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',
