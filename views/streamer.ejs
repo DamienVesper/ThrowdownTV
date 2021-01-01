@@ -2,7 +2,6 @@
     <%- include('./partials/adheaders'); %>
     <script src="js/video.min.js"></script>
     <script src="js/nuevo.min.js"></script>
-    <script src="js/plugins/videojs-chromecast.min.js"></script>
     <script src="js/videojs_5.vast.vpaid.min.js"></script>
     <script src="js/flv.min.js"></script>
     <script src="js/videojs-flv.min.js"></script>
@@ -94,7 +93,7 @@
                         alreadyLive = false
                     }
                 })
-            var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false}}}, function() {
+            var player = videojs("player", {autoplay: true, errorDisplay: false, flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false}}}, function() {
                 this.src({
                     src: "<%= streamlink %>",
                     type: '<%= streamformat %>'
@@ -132,7 +131,6 @@
                 }, 10000)
             });
             player.play();
-            player.chromecast()
             player.nuevo({ 
                 retryNumber: 2, 
                 retryVideo: 'throwdown.webm',
