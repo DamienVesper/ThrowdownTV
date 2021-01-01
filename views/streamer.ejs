@@ -96,7 +96,7 @@
                         alreadyLive = false
                     }
                 })
-            var player = videojs("player", {autoplay: true, errorDisplay: false, techOrder: ['html5', 'flvjs'], flvjs: {mediaDataSource: {isLive: true, cors: true, withCredentials: false,}}}, function() {
+            var player = videojs("player", {autoplay: true, errorDisplay: false}, function() {
                 this.src({
                     src: "<%= streamlink %>",
                     type: '<%= streamformat %>'
