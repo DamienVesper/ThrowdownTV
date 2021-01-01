@@ -256,7 +256,7 @@ router.get('/:username', (req, res) => {
                     if (response.data.isLive) {
                       renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
                     } else {
-                      renderStream("throwdown.mp4", "video/mp4", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, user.chat_token, badge)
+                      renderStream("throwdown.webm", "video/webm", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, user.chat_token, badge)
                     }
                 })
               }
