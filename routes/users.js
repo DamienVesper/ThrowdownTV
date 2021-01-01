@@ -156,7 +156,7 @@ router.post('/login', (req, res, next) => {
             res.redirect('/users/login');
         }
         if (user.verification_status === true) {
-            user.chat_token = uniqueString()+uniqueString()
+            user.chat_key = uniqueString()+uniqueString()
             user.save();
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
