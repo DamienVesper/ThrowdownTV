@@ -7,6 +7,10 @@
     <script src="videojs-dash.min.js"></script>
     <script src="dash.all.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<<<<<<< HEAD
+=======
+    <script src="https://cdn.jsdelivr.net/hls.js/latest/hls.js"></script>
+>>>>>>> parent of 8198f7c... Update streamer.ejs
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
     <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
@@ -94,6 +98,7 @@
                         alreadyLive = false
                     }
                 })
+<<<<<<< HEAD
             var player = videojs("player", {autoplay: true, errorDisplay: false}, function() {
                 this.src({
                     src: "<%= streamlink %>",
@@ -105,6 +110,40 @@
                         src: 'throwdown.webm',
                         type: 'video/webm'
                     })
+=======
+            var video = document.querySelector('#player');
+            if (Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource('<%= streamlink %>');
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                    video.play();
+                });
+            }
+            plyr.setup(video);
+            setInterval(function(){
+            axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
+                .then(function (response){
+                    document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
+                    if (response.data.isLive === false) {
+                        if (alreadyLive === true) {
+                            document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                            alreadyLive = false;
+                            window.location.reload(true);
+                        }
+                    } else {
+                        if (alreadyLive === false) {
+                            document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                            alreadyLive = true;
+                            setTimeout(function(){
+                                window.location.reload(true);
+                            }, 2000)
+                        }
+                    }
+                    if (response.data.banned === true) {
+                        window.location.reload(true);
+                    }
+>>>>>>> parent of 8198f7c... Update streamer.ejs
                 })
                 setInterval(function(){
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
