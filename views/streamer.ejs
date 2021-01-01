@@ -1,10 +1,15 @@
 <head>
     <%- include('./partials/adheaders'); %>
-    <link rel="stylesheet" href="https://cdn.plyr.io/1.8.2/plyr.css">
-    <script src="https://cdn.plyr.io/1.8.2/plyr.js"></script>
+    <script src="js/video.min.js"></script>
+    <script src="js/nuevo.min.js"></script>
+    <script src="js/plugins/videojs-chromecast.min.js"></script>
+    <script src="js/videojs_5.vast.vpaid.min.js"></script>
+    <script src="videojs-dash.min.js"></script>
+    <script src="dash.all.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/hls.js/latest/hls.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
+    <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
 </head>
 <%- include('./partials/header'); %>
 <%- include('./partials/messages'); %>
@@ -33,7 +38,14 @@
                         <div style="display: inline-block;"><p style="color: yellow;"><%= followercount %></p></div>
                     </div>
                     <div style="display: block;">
-                        <video preload="none" id="player" autoplay controls crossorigin></video>
+                        <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
+                            width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a
+                                web browser that
+                                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
                     </div>
                     <div style="margin-top: 4px;">
                         <div class="row px-3"> <img src="<%= avatarurl %>" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
@@ -82,39 +94,55 @@
                         alreadyLive = false
                     }
                 })
-            var video = document.querySelector('#player');
-            if (Hls.isSupported()) {
-                var hls = new Hls();
-                hls.loadSource('<%= streamlink %>');
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED,function() {
-                    video.play();
-                });
-            }
-            plyr.setup(video);
-            setInterval(function(){
-            axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
-                .then(function (response){
-                    document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
-                    if (response.data.isLive === false) {
-                        if (alreadyLive === true) {
-                            document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
-                            alreadyLive = false;
-                            window.location.reload(true);
-                        }
-                    } else {
-                        if (alreadyLive === false) {
-                            document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
-                            alreadyLive = true;
-                            setTimeout(function(){
-                                window.location.reload(true);
-                            }, 2000)
-                        }
-                    }
-                    if (response.data.banned === true) {
-                        window.location.reload(true);
-                    }
+            var player = videojs("player", {autoplay: true, errorDisplay: false}, function() {
+                this.src({
+                    src: "<%= streamlink %>",
+                    type: '<%= streamformat %>'
                 })
-            }, 10000)
+                this.on('error', function(event) {
+                    document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                    this.src({
+                        src: 'throwdown.webm',
+                        type: 'video/webm'
+                    })
+                })
+                setInterval(function(){
+                    axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
+                        .then(function (response){
+                            document.getElementById('liveviewers').innerHTML = `<p style="color: darkorange;">${response.data.viewers}</p>`;
+                            if (response.data.isLive === false) {
+                                if (alreadyLive === true) {
+                                    document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
+                                    alreadyLive = false;
+                                    window.location.reload(true);
+                                }
+                            } else {
+                                if (alreadyLive === false) {
+                                    document.getElementById('livestatus').innerHTML = `<p style="color: lime;">ONLINE</p>`
+                                    alreadyLive = true;
+                                    setTimeout(function(){
+                                        window.location.reload(true);
+                                    }, 2000)
+                                }
+                            }
+                            if (response.data.banned === true) {
+                                window.location.reload(true);
+                            }
+                        })
+                }, 10000)
+            });
+            player.play();
+            player.chromecast()
+            player.nuevo({ 
+                retryNumber: 2, 
+                retryVideo: 'throwdown.webm',
+                rateMenu: false,
+                shareMenu: false,
+                zoomMenu: false,
+                rewindButton: false,
+                settingsButton: false,
+                contextMenu: false,
+                timetooltip: false,
+            });
         </script>
     </body>
