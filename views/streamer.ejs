@@ -5,12 +5,7 @@
     <script src="js/plugins/videojs-chromecast.min.js"></script>
     <script src="js/videojs_5.vast.vpaid.min.js"></script>
     <script src="videojs-dash.min.js"></script>
-    <script src="dash.all.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<<<<<<< HEAD
-=======
-    <script src="https://cdn.jsdelivr.net/hls.js/latest/hls.js"></script>
->>>>>>> parent of 8198f7c... Update streamer.ejs
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <link href="js/skins/treso/videojs.min.css" rel="stylesheet">
     <link href="css/videojs.vast.vpaid.min.css" rel="stylesheet">
@@ -98,19 +93,6 @@
                         alreadyLive = false
                     }
                 })
-<<<<<<< HEAD
-            var player = videojs("player", {autoplay: true, errorDisplay: false}, function() {
-                this.src({
-                    src: "<%= streamlink %>",
-                    type: '<%= streamformat %>'
-                })
-                this.on('error', function(event) {
-                    document.getElementById('livestatus').innerHTML = `<p style="color: red;">OFFLINE</p>`
-                    this.src({
-                        src: 'throwdown.webm',
-                        type: 'video/webm'
-                    })
-=======
             var video = document.querySelector('#player');
             if (Hls.isSupported()) {
                 var hls = new Hls();
@@ -143,7 +125,6 @@
                     if (response.data.banned === true) {
                         window.location.reload(true);
                     }
->>>>>>> parent of 8198f7c... Update streamer.ejs
                 })
                 setInterval(function(){
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= user %>')
