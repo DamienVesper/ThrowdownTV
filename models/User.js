@@ -82,6 +82,15 @@ const UserSchema = new mongoose.Schema({
     isStaff: {
         type: Boolean,
         default: false
+    },
+    moderators: {
+        type: Array
+    },
+    ips: {
+        type: Array
+    },
+    banlist: {
+        type: Array
     }
 });
 
