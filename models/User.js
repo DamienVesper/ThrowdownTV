@@ -91,7 +91,11 @@ const UserSchema = new mongoose.Schema({
     },
     banlist: {
         type: Array
+    },
+    banned_words: {
+        type: Array
     }
+
 });
 
 const User = mongoose.model('User', UserSchema);
