@@ -249,14 +249,14 @@ router.get('/:username', (req, res) => {
           axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
             .then(function (response) {
               if (response.data.isLive) {
-                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
+                renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_key, badge)
               } else {
                 axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                   .then(function (response) {
                     if (response.data.isLive) {
-                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
+                      renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_key, badge)
                     } else {
-                      renderStream("throwdown.webm", "video/webm", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, user.chat_token, badge)
+                      renderStream("throwdown.webm", "video/webm", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, user.chat_key, badge)
                     }
                 })
               }
@@ -267,14 +267,14 @@ router.get('/:username', (req, res) => {
         axios.get('http://eu01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
           .then(function (response) {
             if (response.data.isLive) {
-              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
+              renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_key, badge)
             } else {
               axios.get('http://us01.throwdown.tv/api/streams/live/' + user.stream_key, { auth: { username: 'admin', password: 'loltdtv2021' } })
                 .then(function (response) {
                   if (response.data.isLive) {
-                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_token, badge)
+                    renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, user.chat_key, badge)
                   } else {
-                    renderStream("throwdown.webm", "video/webm", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, user.chat_token, badge)
+                    renderStream("throwdown.webm", "video/webm", "Follow", "follow", req.params.username.toLowerCase(), "OFFLINE", "red", response.data.viewers, user.chat_key, badge)
                   }            
                 })
             }            
@@ -284,7 +284,7 @@ router.get('/:username', (req, res) => {
       res.send("Error: 404 - Not Found")
     }
     //Render Stream Function
-    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_token, badge) {
+    function renderStream(streamname, streamformat, follow_button, follow_option, username, livestatus_text, livestatus_color, stream_viewers, chat_key, badge) {
       res.render('streamer', {
         user: user.username,
         streamlink: streamname,
@@ -301,7 +301,8 @@ router.get('/:username', (req, res) => {
         donationlink: user.donation_link,
         chattoken: chat_token,
         liveviewers: stream_viewers,
-        badge: badge
+        badge: badge,
+        chatkey: chat_key
       })   
     }
   });
