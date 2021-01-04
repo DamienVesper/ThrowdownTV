@@ -299,7 +299,6 @@ router.get('/:username', (req, res) => {
         streamdescription: user.stream_description,
         avatarurl: user.avatar_url,
         donationlink: user.donation_link,
-        chattoken: chat_token,
         liveviewers: stream_viewers,
         badge: badge,
         chatkey: chat_key
