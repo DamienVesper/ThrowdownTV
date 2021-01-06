@@ -26,7 +26,7 @@
     <body>
         <div class="container" style="display: block;">
             <div class="row" style="display: block;"></div>
-                <div class="ccol-12 col-md-8" style="display: inline-block; overflow: hidden;">
+                <div class="col-12 col-md-8" style="overflow: hidden;">
                     <div>
                         <div style="display: inline-block;" id="livestatus"><%- livestatus %></div>
                         <div style="display: inline-block;">---</div>
@@ -74,7 +74,7 @@
                     </div>
                     <%- include('./partials/googlead'); %>
                 </div>
-                <div class="col-6 col-md-4" style="color: white; display: inline-block; overflow: hidden;">
+                <div class="col-6 col-md-4" style="color: white; overflow: hidden;">
                     <div style="height: 550px; background: rgba(0, 0, 0, 0.25);">
                         <a style="color: white; margin-bottom: 5px; text-align: center;"><%= user %>'s chat</a>
                         <iframe style="width:100%; height: 100%; overflow: hidden;" src="https://chat.throwdown.tv:8443/getchat/<%= user %>/<%= chatkey %>" frameborder="0"></iframe>
