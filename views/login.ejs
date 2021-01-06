@@ -7,7 +7,7 @@
     <div class="card card-body" style="background-color: rgb(211, 245, 255);">
       <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i> Login</h1>
       <%- include('./partials/messages'); %>
-        <form action="/users/login" method="POST">
+        <form id="loginform" action="/users/login" method="POST">
           <div class="form-group">
             <label for="email">Username</label>
             <input type="username" id="username" name="username" class="form-control" placeholder="Enter Username" />
@@ -26,3 +26,12 @@
   </div>
 </div>
 <%- include('./partials/googlead'); %>
+<script>
+  document.querySelector("#loginform").addEventListener("submit", (function(event) { 
+    var hcaptchaVal = document.querySelector('[name="h-captcha"]').value;
+    if (hcaptchaVal === "") {
+      event.preventDefault();
+      alert("Please complete the Captcha");
+    }
+  });
+</script>

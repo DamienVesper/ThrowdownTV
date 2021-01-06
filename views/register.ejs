@@ -7,7 +7,7 @@
     <div class="card card-body" style="background-color: rgb(211, 245, 255);">
       <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i> Register </h1>
       <%- include('./partials/messages'); %>
-        <form action="/users/register" method="POST">
+        <form id="registerform" action="/users/register" method="POST">
           <div class="form-group">
             <label for="name">Username</label>
             <input type="username" id="username" name="username" class="form-control" placeholder="Enter Username"
@@ -38,3 +38,12 @@
   </div>
 </div>
 <%- include('./partials/googlead'); %>
+<script>
+  document.querySelector("#registerform").addEventListener("submit", (function(event) { 
+    var hcaptchaVal = document.querySelector('[name="h-captcha"]').value;
+    if (hcaptchaVal === "") {
+      event.preventDefault();
+      alert("Please complete the Captcha");
+    }
+  });
+</script>
