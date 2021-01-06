@@ -25,62 +25,60 @@
 </div>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="row">
-                    <div class="ccol-12 col-md-8" style="display: inline-block; overflow: hidden;">
-                        <div>
-                            <div style="display: inline-block;" id="livestatus"><%- livestatus %></div>
-                            <div style="display: inline-block;">---</div>
-                            <div style="display: inline-block;" id="liveviewers"><p style="color: darkorange;"><%= liveviewers %></p></div>
-                            <div style="display: inline-block;"><p style="color: darkorange;">Viewers</p></div>
-                            <div style="display: inline-block;">---</div>
-                            <div style="display: inline-block;"><p style="color: rgb(255, 0, 179);">Followers: </p></div>
-                            <div style="display: inline-block;"><p style="color: yellow;"><%= followercount %></p></div>
-                        </div>
-                        <div style="display: block;">
-                            <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
-                                width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            
-                                <p class="vjs-no-js">
-                                    To view this video please enable JavaScript, and consider upgrading to a
-                                    web browser that
-                                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                                </p>
-                            </video>
-                        </div>
-                        <div style="margin-top: 4px;">
-                            <div class="row px-3"> <img src="<%= avatarurl %>" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
-                                <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                                    <div class="row">
-                                        <h3 style="color: white; font-size: 25px;" class="lead mb-3">
-                                            <%= streamtitle %>
-                                        </h3>
-                                    </div>
-                                    <div class="row">
-                                        <p id="username_field" style="color: lime; font-size: 15px; margin-right: 4px;" class="lead mb-3"><%= user %></p>
-                                        <%- badge %>
-                                    </div>
+            <div class="row" style="display: none;">
+                <div class="ccol-12 col-md-8" style="display: inline-block; overflow: hidden;">
+                    <div>
+                        <div style="display: inline-block;" id="livestatus"><%- livestatus %></div>
+                        <div style="display: inline-block;">---</div>
+                        <div style="display: inline-block;" id="liveviewers"><p style="color: darkorange;"><%= liveviewers %></p></div>
+                        <div style="display: inline-block;"><p style="color: darkorange;">Viewers</p></div>
+                        <div style="display: inline-block;">---</div>
+                        <div style="display: inline-block;"><p style="color: rgb(255, 0, 179);">Followers: </p></div>
+                        <div style="display: inline-block;"><p style="color: yellow;"><%= followercount %></p></div>
+                    </div>
+                    <div style="display: block;">
+                        <video id="player" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" fluid="true"
+                            width="1280" height="720" poster="thumbnail.png" autoplay=true data-setup='{"plugins": {"vastClient": {"adTagUrl": "", "adsCancelTimeout": 5000, "adsEnabled": true}}}'>                            
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a
+                                web browser that
+                                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
+                    </div>
+                    <div style="margin-top: 4px;">
+                        <div class="row px-3"> <img src="<%= avatarurl %>" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
+                            <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
+                                <div class="row">
+                                    <h3 style="color: white; font-size: 25px;" class="lead mb-3">
+                                        <%= streamtitle %>
+                                    </h3>
+                                </div>
+                                <div class="row">
+                                    <p id="username_field" style="color: lime; font-size: 15px; margin-right: 4px;" class="lead mb-3"><%= user %></p>
+                                    <%- badge %>
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-left: 5px;" class="row">
-                            <%- followbutton %>
-                            <form style="margin: 10px;" action="<%= donationlink %>">
-                                <button type="submit" class="btn btn-primary">Donate</button>
-                            </form>
-                        </div>
-                        <div style="margin-top: 15px; margin-left: 5px; margin-right: 5px;">
-                            <p style="color: white; font-size: 15px;" class="lead mb-3">
-                                <%= streamdescription %>
-                            </p>
-                        </div>
-                        <%- include('./partials/googlead'); %>
                     </div>
-                    <div class="col-6 col-md-4" style="color: white; display: block; overflow: hidden;">
-                        <div style="height: 550px; background: rgba(0, 0, 0, 0.25);">
-                            <a style="color: white; margin-bottom: 5px; text-align: center;"><%= user %>'s chat</a>
-                            <iframe style="width:100%; height: 100%; overflow: hidden;" src="https://chat.throwdown.tv:8443/getchat/<%= user %>/<%= chatkey %>" frameborder="0"></iframe>
-                        </div> 
+                    <div style="margin-left: 5px;" class="row">
+                        <%- followbutton %>
+                        <form style="margin: 10px;" action="<%= donationlink %>">
+                            <button type="submit" class="btn btn-primary">Donate</button>
+                        </form>
                     </div>
+                    <div style="margin-top: 15px; margin-left: 5px; margin-right: 5px;">
+                        <p style="color: white; font-size: 15px;" class="lead mb-3">
+                            <%= streamdescription %>
+                        </p>
+                    </div>
+                    <%- include('./partials/googlead'); %>
+                </div>
+                <div class="col-6 col-md-4" style="color: white; display: block; overflow: hidden;">
+                    <div style="height: 550px; background: rgba(0, 0, 0, 0.25);">
+                        <a style="color: white; margin-bottom: 5px; text-align: center;"><%= user %>'s chat</a>
+                        <iframe style="width:100%; height: 100%; overflow: hidden;" src="https://chat.throwdown.tv:8443/getchat/<%= user %>/<%= chatkey %>" frameborder="0"></iframe>
+                    </div> 
                 </div>
             </div>
         </div>
