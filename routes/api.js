@@ -23,7 +23,8 @@ router.get('/streamkey/:streamkey', (req, res) =>
 // Email verification check
 router.get('/email_verify/:emailverificationkey', async (req, res) => {
     let useraccount = await User.findOne({email_verification_key: req.params.emailverificationkey});
-        if(useraccount.verification_status === true) {
+    if (useraccount) {
+        if(useraccount.verification_status) {
             req.flash(
                 'error_msg',
                 'Email Already Verified.'
@@ -39,6 +40,12 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
                 res.redirect('/users/login');
             })
         }
-    
+    } else {
+        req.flash(
+            'error_msg',
+            'Invalid Email Verification Key.'
+        );
+        res.redirect('/users/login');
+    }
 });
 module.exports = router;
