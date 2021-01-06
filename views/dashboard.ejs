@@ -111,6 +111,30 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div>
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                Widgets
+                            </button>
+                        </h5>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="accordion">
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div style="color: black; font-size: 25px; font-weight: bold;" class="card-body">
+                                        Chat Widget:
+                                    </div>
+                                    <div class="card-body">
+                                        https://chat.throwdown.tv:8443/getchat/<%= user.username %>/demo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                
+                </div>
         </div>
         <div style="margin: 15px;">
             <a href="/users/logout" style="color: red;" class="btn btn-secondary">Logout</a>
