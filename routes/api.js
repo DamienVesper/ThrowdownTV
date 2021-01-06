@@ -31,17 +31,14 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
             res.redirect('/users/login');
         } else {
             useraccount.verification_status = true;
-            useraccount.save(function(err, user) {
+            useraccount.save(async function(err, user) {
                 req.flash(
                     'success_msg',
                     'Email Successfully Verified.'
                 );
                 res.redirect('/users/login');
             })
-
-
-        res.redirect('/users/login');
-    }
+        }
     
 });
 module.exports = router;
