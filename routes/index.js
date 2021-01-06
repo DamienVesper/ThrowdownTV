@@ -245,7 +245,7 @@ router.get('/:username', (req, res) => {
           function makeUnfollow() {
             followbutton = "Unfollow";
           }
-          axios.get('http://cdn.throwdown.tv/api/streams/live/' + user.username)
+          axios.get('http://cdn.throwdown.tv/api/streams/' + user.username)
             .then(function (response) {
               if (response.data.isLive) {
                 renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", followbutton, followbutton.toLowerCase(), req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, req.user.chat_key, badge)
@@ -255,7 +255,7 @@ router.get('/:username', (req, res) => {
             });
         })
       } else {
-        axios.get('http://cdn.throwdown.tv/api/streams/live/' + user.username)
+        axios.get('http://cdn.throwdown.tv/api/streams/' + user.username)
           .then(function (response) {
             if (response.data.isLive) {
               renderStream("https://cdn.throwdown.tv/stream/" + user.username, "video/x-flv", "Follow", "follow", req.params.username.toLowerCase(), "ONLINE", "lime", response.data.viewers, "demo", badge)
