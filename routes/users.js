@@ -29,7 +29,7 @@ const { forwardAuthenticated } = require('../config/auth');
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
 // Register Page
-router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
+router.get('/register', forwardAuthenticated, (req, res) => {res.render('register'));
 
 //Register Handle
 router.post('/register', (req, res) => {
@@ -77,7 +77,7 @@ router.post('/register', (req, res) => {
             username,
             email,
             password,
-            password2
+            password2,
         })
     } else {
         User.findOne({ email: email }).then(user => {
@@ -88,7 +88,7 @@ router.post('/register', (req, res) => {
                     username,
                     email,
                     password,
-                    password2
+                    password2,
                 });
             } else {
                 User.findOne({ username: username }).then(user => {
@@ -99,7 +99,7 @@ router.post('/register', (req, res) => {
                             username,
                             email,
                             password,
-                            password2
+                            password2,
                         });
                     } else {
                         const newUser = new User({

@@ -28,7 +28,6 @@
             <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password"
               value="<%= typeof password2 != 'undefined' ? password2 : '' %>" />
           </div>
-          <div class="h-captcha" data-sitekey="2b594bd6-3fe7-4444-bd4e-b80a8baef956"></div>
           <button type="submit" class="btn btn-primary btn-block">
             Register
           </button>
@@ -38,12 +37,3 @@
   </div>
 </div>
 <%- include('./partials/googlead'); %>
-<script>
-  document.querySelector("#registerform").addEventListener("submit", (function(event) { 
-    var hcaptchaVal = document.querySelector('[name="h-captcha"]').value;
-    if (hcaptchaVal === "") {
-      event.preventDefault();
-      alert("Please complete the Captcha");
-    }
-  }));
-</script>
