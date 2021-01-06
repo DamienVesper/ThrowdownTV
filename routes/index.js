@@ -31,7 +31,7 @@ router.post('/dashboard', (req, res) => {
   const discordid = req.body.discordid
 
   if (streamtitle.length > 3) {
-    if (streamtitle.length <= 61) {
+    if (streamtitle.length <= 120) {
       if (streamdescription.length > 1) {
         if (streamdescription.length <= 4000) {
           if ((streamavatar.startsWith("http://") || streamavatar.startsWith("https://")) && (streamavatar.endsWith(".png") || streamavatar.endsWith(".jpg"))) {
