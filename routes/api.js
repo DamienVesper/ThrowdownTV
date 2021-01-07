@@ -33,18 +33,14 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
                 );
                 res.redirect('/users/login');
             } else {
-                if (useraccount) {
-                    useraccount.verification_status = true;
-                    useraccount.save(async function(err, user) {
-                        req.flash(
-                            'success_msg',
-                            'Email Successfully Verified.'
-                        );
-                        res.redirect('/users/login');
-                    })
-                } else {
-                    res.send('404')
-                }
+                useraccount.verification_status = true;
+                useraccount.save(async function(err, user) {
+                    req.flash(
+                        'success_msg',
+                        'Email Successfully Verified.'
+                    );
+                    res.redirect('/users/login');
+                })
             }
         });
 });
