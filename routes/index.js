@@ -230,11 +230,11 @@ router.get('/:username', (req, res) => {
       let badge = ``
       if (user.banned) return res.render('banned', {banreason: "Ya done goofed buddy..."});
       if (user.isStaff && user.isVip) {
-        badge = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
+        badge = `<img src="https://chat.throwdown.tv:8443/img/staff" alt="[THROWDOWN STAFF]" title="Throwdown Verified Staff" width="20" height="20">`
       } else if (user.isVip && !user.isStaff) {
-        badge = `<p class="lead mb-3" style="color: cyan; font-size: 15px; margin-right: 4px;">[VIP]</p>`
+        badge = `<img src="https://chat.throwdown.tv:8443/img/vip" alt="[VIP]" title="VIP" width="20" height="20">`
       } else if (user.isStaff && !user.isVip) {
-        badge = `<p class="lead mb-3" style="color: red; font-size: 15px; margin-right: 4px;">[STAFF]</p>`
+        badge = `<img src="https://chat.throwdown.tv:8443/img/staff" alt="[THROWDOWN STAFF]" title="Throwdown Verified Staff" width="20" height="20">`
       }
       
       if (req.isAuthenticated()) {
