@@ -32,15 +32,14 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
                 );
                 res.redirect('/users/login');
             } else {
-                User.findOneAndUpdate({email_verification_key: req.params.emailverificationkey}, {$set: {verification_status: true}}, {upsert: false}, function(err,doc) {
-                    if (err) {res.send("Error")}
-                    else {
-                        req.flash(
-                            'success_msg',
-                            'Email Successfully Verified.'
-                        );
-                        res.redirect('/users/login');
-                    }
+                User.findOne({email_verification_key: req.params.emailverificationkey}).then(useraccount => {
+                    useraccount.verification_status = true
+                    useraccount.save()
+                    req.flash(
+                        'success_msg',
+                        'Email Successfully Verified.'
+                    );
+                    res.redirect('/users/login');
                 })
             }
         });
