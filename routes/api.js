@@ -32,9 +32,9 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
                 );
                 res.redirect('/users/login');
             } else {
-                User.findOne({email_verification_key: req.params.emailverificationkey}).then(useraccount => {
-                    useraccount.verification_status = true
-                    useraccount.save()
+                User.findOne({email_verification_key: req.params.emailverificationkey}).then(async useraccount => {
+                    await useraccount.verification_status === true
+                    await useraccount.save()
                     req.flash(
                         'success_msg',
                         'Email Successfully Verified.'
