@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const config = require('../config.json')
+const axios = require('axios')
 
 // Streamkey Check
 router.get('/streamkey/:streamkey', (req, res) =>
