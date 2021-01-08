@@ -34,7 +34,7 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
             } else {
                 const filter = {email_verification_key: req.params.emailverificationkey}
                 const update = {verification_status: true}
-                await User.findOneAndUpdate(filter, update)
+                User.findOneAndUpdate(filter, update)
                 req.flash(
                     'success_msg',
                     'Email Successfully Verified.'
