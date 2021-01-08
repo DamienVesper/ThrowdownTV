@@ -6,7 +6,7 @@
     <div class="row show">
         <ul>
             <% following.forEach(function(following) { %>
-                <div id="ul_following_offline_<%= following %>" class="row" style="margin-bottom: 6px;">
+                <div id="ul_following_offline_<%= following %>" class="row" style="margin-bottom: 6px; overflow-wrap: break-word; word-wrap: break-word;  word-break: break-word; -ms-hyphens: auto; -moz-hyphens: auto; -webkit-hyphens: auto; hyphens: auto;">
                     <div class="column">
                         <div onclick="window.location='/<%= following %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= following %>" style="max-width: 300px; max-height: 300px;">
                         </div>
