@@ -8,7 +8,7 @@ const axios = require('axios');
 // Welcome Page
 router.get('/', (req, res) => {
   if (req.isAuthenticated()) {
-    res.render('browse')
+    res.redirect('/browse')
   } else {
     res.render('welcome')
   }
