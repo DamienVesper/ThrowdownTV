@@ -6,7 +6,13 @@ const uniqueString = require('unique-string');
 const axios = require('axios');
 
 // Welcome Page
-router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
+router.get('/', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render('browse')
+  } else {
+    res.render('welcome')
+  }
+});
 
 // TOS
 router.get('/tos', (req, res) => res.render('tos'));
