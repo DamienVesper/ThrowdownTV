@@ -11,12 +11,15 @@ const config = require('../config.json')
 
 // Email
 let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    host: 'localhost',
+    port: 25,
+    secure: false,
     auth: {
-         user: 'throwdowntvofficial@gmail.com',
+         user: 'no-reply@throwdown.tv',
          pass: config.smtp_password,
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 
@@ -120,7 +123,7 @@ router.post('/register', (req, res) => {
                                     );
                                     User.findOne({ email: email }).then(useraccount => {
                                         let message = {
-                                            from: "Throwdown TV",
+                                            from: "Throwdown TV <no-reply@throwdown.tv>",
                                             to: useraccount.email,
                                             subject: "Please verify your email address to use at Throwdown TV",
                                             text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + useraccount.email_verification_key,
