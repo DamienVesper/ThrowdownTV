@@ -23,8 +23,8 @@ router.get('/streamkey/:streamkey', (req, res) =>
 );
 // Email verification check
 router.get('/email_verify/:emailverificationkey', async (req, res) => {
-    axios.get('http://cdn.throwdown.tv/api/streams/' + req.params.emailverificationkey)
-        .then(function (response) {
+    await axios.get('http://cdn.throwdown.tv/api/streams/' + req.params.emailverificationkey)
+        .then(async function (response) {
             if (response.data.verification_status) {
                 req.flash(
                     'error_msg',
@@ -34,7 +34,7 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
             } else {
                 const filter = {email_verification_key: req.params.emailverificationkey}
                 const update = {verification_status: true}
-                User.findOneAndUpdate(filter, update, {new: true}, (err, doc) => {
+                await User.findOneAndUpdate(filter, update, {new: true}, (err, doc) => {
                     if (!err) {
                         req.flash(
                             'success_msg',
