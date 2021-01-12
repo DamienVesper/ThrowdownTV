@@ -158,6 +158,7 @@ router.post('/login', (req, res, next) => {
             );
             res.redirect('/users/login');
         }
+        if(!user.ips.includes(req.ip)) user.ips.push(req.ip);
         if (user.verification_status === true) {
             user.chat_key = uniqueString()+uniqueString()
             user.save();
