@@ -139,7 +139,9 @@ router.get('/following', ensureAuthenticated, (req, res) =>  {
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }).then(useraccount => {
-    if(!useraccount.ips.includes(req.ip)) useraccount.ips.push(req.ip);
+    if(!useraccount.ips.includes(req.ip)) {useraccount.ips.push(req.ip);
+    useraccount.save()
+    }
     if (useraccount.banned) return res.render('banned', {banreason: 'Reason: "'+useraccount.banreason+'"'});
     if (useraccount.can_stream) {
       res.render('dashboard', {
