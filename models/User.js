@@ -34,14 +34,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "https://cdn.discordapp.com/attachments/736368923590525039/789419292214820894/defaulltpfp.png"
     },
-    email_verification_key: {
-        type: String,
-        default: uniqueString()
-    },
-    verification_status: {
-        type: Boolean,
-        default: false
-    },
     donation_link: {
         type: String,
         default: "/streams/donate"

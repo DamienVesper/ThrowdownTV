@@ -7,6 +7,7 @@ const isAlphanumeric = require('is-alphanumeric');
 const validator = require("email-validator");
 const emailExistence = require("email-existence")
 const uniqueString = require('unique-string');
+const jwt = require("jsonwebtoken")
 const config = require('../config.json')
 
 // Email
@@ -105,6 +106,26 @@ router.post('/register', (req, res) => {
                             password2,
                         });
                     } else {
+                        //JWT
+                        const token = jwt.sign({username, email, password}, config.jwtToken, {expiresIn: '24h'})
+                        req.flash(
+                            'success_msg',
+                            'You are now registered, Check your email for a confirmation link. If you are unable to verify your account, please contact us on discord.'
+                        );
+                        let message = {
+                            from: "Throwdown TV <no-reply@throwdown.tv>",
+                            to: useraccount.email,
+                            subject: "Please verify your email address to use at Throwdown TV",
+                            text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + token,
+                        };
+                        transporter.sendMail(message, (error, info) => {
+                            if (error) {
+                                return console.log(error);
+                            }
+                            console.log('Message sent: %s', info.messageId);
+                        });
+                        res.redirect('/users/login');
+                        /**
                         const newUser = new User({
                             username,
                             email,
@@ -139,7 +160,7 @@ router.post('/register', (req, res) => {
                                 })
                                 .catch(err => console.log(err));
                             });
-                        });
+                        })*/
                     }
                 });
             }
@@ -154,27 +175,18 @@ router.post('/login', (req, res, next) => {
         if (!user) {
             req.flash(
                 'error_msg',
-                'User does not exist.'
+                'User does not exist or has not been activated.'
             );
             res.redirect('/users/login');
-        }
-        if(!user.ips.includes(req.ip)){ user.ips.push(req.ip)
-        user.save()
-        };
-        if (user.verification_status === true) {
-            user.chat_key = uniqueString()+uniqueString()
-            user.save();
+        } else {
+            if(!user.ips.includes(req.ip)){ user.ips.push(req.ip)
+                user.save()
+            };
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',
                 failureFlash: true
             })(req, res, next);
-        } else {
-            req.flash(
-                'error_msg',
-                'Email not confirmed, please check your email for the conformation link sent after registration.'
-            );
-            res.redirect('/users/login');
         }
     })
 });

@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken')
 const router = express.Router();
 const User = require('../models/User');
 const config = require('../config.json')
@@ -23,6 +24,42 @@ router.get('/streamkey/:streamkey', (req, res) =>
 );
 // Email verification check
 router.get('/email_verify/:emailverificationkey', async (req, res) => {
+    const token = req.params.emailverificationkey;
+    if (token) {
+        jwt.verify(token, config.jwtToken, function(err, decodedToken) {
+            if (err) {
+                req.flash(
+                    'error_msg',
+                    'Incorrect or Expired Activiation Link'
+                );
+                res.redirect('/users/login');
+            } else {
+                const {username, email, password} = decodedToken;
+                const newUser = new User({
+                    username,
+                    email,
+                    password,
+                }); 
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    if (err) throw err;
+                    newUser.password = hash;
+                    newUser
+                        .save()
+                        .then(user => {
+                            req.flash(
+                                'success_msg',
+                                'Successfully confirmed email, you may now login!'
+                            );
+                            res.redirect('/users/login');
+                        })
+                        .catch(err => console.log(err));
+                    });
+                })
+            }
+        })
+    }
+    /**
     await axios.get('http://cdn.throwdown.tv/api/streams/' + req.params.emailverificationkey)
         .then(async function (response) {
             if (response.data.verification_status) {
@@ -51,5 +88,6 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
                 })
             }
         });
+    */
 });
 module.exports = router;
