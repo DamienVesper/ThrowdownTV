@@ -4,6 +4,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const User = require('../models/User');
 const uniqueString = require('unique-string');
 const axios = require('axios');
+const config = require('../config.json')
 
 // Welcome Page
 router.get('/', (req, res) => {
