@@ -35,10 +35,14 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 // Register Page
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
+// Recover Page
+router.get('/recover', forwardAuthenticated, (req, res) => res.render('recover'));
+
 //Register Handle
 router.post('/register', (req, res) => {
-    const {email, password, password2} = req.body
+    const {password, password2} = req.body
     const username = req.body.username.toLowerCase();
+    const email = req.body.email.toLowerCase();
     let errors = [];
 
     let bannedUsernames = ['users','dashboard','register','login','tos','browse','logout','follow','unfollow','following','streams','demo']
@@ -167,7 +171,10 @@ router.post('/register', (req, res) => {
         });
     }
 })
-
+// New Password
+router.get('/newpassword/:resetlink', (req, res) => {
+    const reset_link = req.params.resetlink
+});
 //Login
 router.post('/login', (req, res, next) => {
     const username = req.body.username.toLowerCase();
@@ -189,6 +196,130 @@ router.post('/login', (req, res, next) => {
             })(req, res, next);
         }
     })
+});
+// Recover
+router.post('/recover', (req, res, next) => {
+    const email = req.body.email.toLowerCase();
+    User.findOne({ email: email }).then(user => {
+        if (!user) {
+            req.flash(
+                'error_msg',
+                'User with this email does not exist.'
+            );
+            res.redirect('/users/recover');
+        } else {
+            const token = jwt.sign({_id: user._id}, config.jwtToken_resetpassword, {expiresIn: '24h'})
+            user.updateOne({reset_link: token}, (err, success) => {
+                if (err) {
+                    req.flash(
+                        'error_msg',
+                        'Unknown Error'
+                    );
+                    res.redirect('/users/recover');
+                } else {
+                    let message = {
+                        from: "Throwdown TV <no-reply@throwdown.tv>",
+                        to: useraccount.email,
+                        subject: "Request to Reset your Password at Throwdown TV",
+                        text: "Please click the following link to reset your password. If this was not you, please ignore this email. https://throwdown.tv/api/password_reset/" + token,
+                    };
+                    transporter.sendMail(message, (error, info) => {
+                        if (error) {
+                            return console.log(error);
+                        }
+                        console.log('Message sent: %s', info.messageId);
+                    });
+                    req.flash(
+                        'success_msg',
+                        'Password Reset link sent, please check your email! Link expires in 24 hours.'
+                    );
+                    res.redirect('/users/login');
+                }
+            })
+        }
+    })
+});
+// Reset password
+router.post('newpassword/:resetlink', (req, res) => {
+    const reset_link = req.params.resetlink
+    const password = req.body.password
+    const password2 = req.body.password2
+
+    let errors = [];
+
+    if(password.length < 6) {
+        errors.push({msg: "Password should be at least 6 characters"})
+    }
+    if (password !== password2) {
+        errors.push({msg: "Passwords do not match"})
+    }
+    if(errors.length > 0) {
+        res.render('register', {
+            errors
+        })
+    } else {
+        User.findOne({ reset_link: reset_link }).then(useraccount => {
+            if (useraccount) {
+                jwt.verify(reset_link, config.jwtToken_resetpassword, function(error, decodedData) {
+                    if (error) {
+                        req.flash(
+                            'error_msg',
+                            'Incorrect or Expired Password Reset Link'
+                        );
+                        res.redirect('/users/login');
+                    } else {
+                        User.findOne({reset_link}, (err, user) => {
+                            if (err || !user) {
+                                req.flash(
+                                    'error_msg',
+                                    'User with this token does not exist.'
+                                );
+                                res.redirect('/users/login');
+                            } else {
+                                bcrypt.genSalt(10, (err, salt) => {
+                                    bcrypt.hash(password, salt, (err, hash) => {
+                                    if (err) throw err;
+                                    user.updateOne({password: hash}, (err, success) => {
+                                        if (err) {
+                                            req.flash(
+                                                'error_msg',
+                                                'Database Error'
+                                            );
+                                            res.redirect('/users/login');
+                                        } else {
+                                            let message = {
+                                                from: "Throwdown TV <no-reply@throwdown.tv>",
+                                                to: useraccount.email,
+                                                subject: "Password Update Notification",
+                                                text: "This email is to inform you that your password has been updated.",
+                                            };
+                                            transporter.sendMail(message, (error, info) => {
+                                                if (error) {
+                                                    return console.log(error);
+                                                }
+                                                console.log('Message sent: %s', info.messageId);
+                                            });
+                                            req.flash(
+                                                'success_msg',
+                                                'Successfully changed password, you may now login!'
+                                            );
+                                            res.redirect('/users/login');
+                                        }
+                                    })
+                                })
+                            }               
+                        })
+                    }
+                })
+            } else {
+                req.flash(
+                    'error_msg',
+                    'Database Error'
+                );
+                res.redirect('/users/login');
+            }
+        })
+    }
 });
 // Logout
 router.get('/logout', (req, res) => {

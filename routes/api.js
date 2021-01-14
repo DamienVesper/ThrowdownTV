@@ -91,4 +91,39 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
         });
     */
 });
+// Reset Link
+router.get('reset_link/:resetlink', (req, res) => {
+    const reset_link = req.params.resetlink
+    User.findOne({ reset_link: reset_link }).then(useraccount => {
+        if (useraccount) {
+            jwt.verify(reset_link, config.jwtToken_resetpassword, function(error, decodedData) {
+                if (error) {
+                    req.flash(
+                        'error_msg',
+                        'Incorrect or Expired Password Reset Link'
+                    );
+                    res.redirect('/users/login');
+                } else {
+                    User.findOne({reset_link}, (err, user) => {
+                        if (err || !user) {
+                            req.flash(
+                                'error_msg',
+                                'User with this token does not exist.'
+                            );
+                            res.redirect('/users/login');
+                        } else {
+                            res.redirect('/users/newpassword/'+reset_link)
+                        }               
+                    })
+                }
+            })
+        } else {
+            req.flash(
+                'error_msg',
+                'Database Error'
+            );
+            res.redirect('/users/login');
+        }
+    })
+});
 module.exports = router;

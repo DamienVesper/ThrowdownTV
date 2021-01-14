@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    reset_link: {
+        type: String,
+        default: ''
+    },
     stream_key: {
         type: String,
         default: uniqueString()
