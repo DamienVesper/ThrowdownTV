@@ -1,6 +1,6 @@
 {
     "smtp_password":"Dankmeme2000",
-    "isPublic": false,
+    "isPublic": true,
     "jwtToken": "lolnicepasswordxd1231238888",
     "jwtToken_resetpassword": "whyresetpasswordnowlol1607"
 }
