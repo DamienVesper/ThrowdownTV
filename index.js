@@ -79,5 +79,15 @@ var ssl_options = {
 var httpServer = http.createServer(app)
 var httpsServer = https.createServer(ssl_options, app);
 
-httpServer.listen(80);
-httpsServer.listen(443);
+var cf = require('node_cloudflare');
+cf.load(function (error, fs_error)
+{
+	if (fs_error)
+	{
+		throw new Error(fs_error);
+	}
+    httpServer.listen(80);
+    httpsServer.listen(443);
+    console.log('Cloudflare Server running.');
+});
+
