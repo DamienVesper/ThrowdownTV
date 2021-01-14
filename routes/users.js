@@ -10,6 +10,8 @@ const uniqueString = require('unique-string');
 const jwt = require("jsonwebtoken")
 const config = require('../config.json')
 
+let cf = require('node_cloudflare')
+
 // Email
 let transporter = nodemailer.createTransport({
     host: 'localhost',
@@ -186,6 +188,11 @@ router.post('/login', (req, res, next) => {
             );
             res.redirect('/users/login');
         } else {
+            var ip_address = (req.connection.remoteAddress ? req.connection.remoteAddress : req.remoteAddress);
+            if(!user.ips.includes(ip_address)){
+                user.ips.push(ip_address);
+                user.save()
+            }
             passport.authenticate('local', {
                 successRedirect: '/dashboard',
                 failureRedirect: '/users/login',

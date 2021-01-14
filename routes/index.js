@@ -5,6 +5,7 @@ const User = require('../models/User');
 const uniqueString = require('unique-string');
 const axios = require('axios');
 const config = require('../config.json')
+var cf = require('node_cloudflare');
 
 // Welcome Page
 router.get('/', (req, res) => {
@@ -20,7 +21,17 @@ router.get('/tos', (req, res) => res.render('tos'));
 
 router.post('/dashboard/streamkey', (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
-    user.stream_key = uniqueString();
+    function makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+     }
+
+    user.stream_key = makeid(32);
     user.save(function (err, user) {
       req.flash(
         'success_msg',
@@ -140,6 +151,11 @@ router.get('/following', ensureAuthenticated, (req, res) =>  {
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }).then(useraccount => {
+    var ip_address = (req.connection.remoteAddress ? req.connection.remoteAddress : req.remoteAddress);
+    if(!useraccount.ips.includes(ip_address)){
+      useraccount.ips.push(ip_address);
+      useraccount.save()
+    }
     if (useraccount.banned) return res.render('banned', {banreason: 'Reason: "'+useraccount.banreason+'"'});
     if (useraccount.can_stream || config.isPublic) {
       res.render('dashboard', {
