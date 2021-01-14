@@ -112,8 +112,10 @@ router.get('/reset_link/:resetlink', (req, res) => {
                             );
                             res.redirect('/users/login');
                         } else {
-                            res.redirect('/users/newpassword/'+reset_link)
                             console.log("Password reset initialized")
+                            res.render('newpassword', {
+                                resetlink: reset_link
+                            })
                         }               
                     })
                 }
