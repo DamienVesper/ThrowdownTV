@@ -219,7 +219,7 @@ router.post('/recover', (req, res, next) => {
                 } else {
                     let message = {
                         from: "Throwdown TV <no-reply@throwdown.tv>",
-                        to: useraccount.email,
+                        to: user.email,
                         subject: "Request to Reset your Password at Throwdown TV",
                         text: "Please click the following link to reset your password. If this was not you, please ignore this email. https://throwdown.tv/api/password_reset/" + token,
                     };
