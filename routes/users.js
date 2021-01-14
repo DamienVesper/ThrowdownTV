@@ -108,13 +108,9 @@ router.post('/register', (req, res) => {
                     } else {
                         //JWT
                         const token = jwt.sign({username, email, password}, config.jwtToken, {expiresIn: '24h'})
-                        req.flash(
-                            'success_msg',
-                            'You are now registered, Check your email for a confirmation link. If you are unable to verify your account, please contact us on discord.'
-                        );
                         let message = {
                             from: "Throwdown TV <no-reply@throwdown.tv>",
-                            to: useraccount.email,
+                            to: email,
                             subject: "Please verify your email address to use at Throwdown TV",
                             text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + token,
                         };
@@ -124,6 +120,10 @@ router.post('/register', (req, res) => {
                             }
                             console.log('Message sent: %s', info.messageId);
                         });
+                        req.flash(
+                            'success_msg',
+                            'You are now registered, Check your email for a confirmation link. If you are unable to verify your account, please contact us on discord.'
+                        );
                         res.redirect('/users/login');
                         /**
                         const newUser = new User({
