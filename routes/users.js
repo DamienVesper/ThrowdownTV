@@ -239,6 +239,21 @@ router.post('/recover', (req, res, next) => {
         }
     })
 });
+router.get('/newpassword/:resetlink', (req, res) => {
+    User.findOne({ reset_link: req.params.resetlink }).then(useraccount => {
+        if (useraccount) {
+            res.render('newpassword', {
+                resetlink: req.params.resetlink
+            })
+        } else {
+            req.flash(
+                'error_msg',
+                'Reset Link does not exist.'
+            );
+            res.redirect('/users/login');
+        }
+    })
+})
 // Reset password
 router.post('/newpassword/:resetlink', (req, res) => {
     const reset_link = req.params.resetlink
