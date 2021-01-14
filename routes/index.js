@@ -143,7 +143,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
     useraccount.save()
     }
     if (useraccount.banned) return res.render('banned', {banreason: 'Reason: "'+useraccount.banreason+'"'});
-    if (useraccount.can_stream) {
+    if (useraccount.can_stream && config.isPublic) {
       res.render('dashboard', {
         user: req.user,
         streamtitle: useraccount.stream_title,
