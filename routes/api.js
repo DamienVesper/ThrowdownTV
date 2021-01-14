@@ -92,7 +92,7 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
     */
 });
 // Reset Link
-router.get('reset_link/:resetlink', (req, res) => {
+router.get('/reset_link/:resetlink', (req, res) => {
     const reset_link = req.params.resetlink
     User.findOne({ reset_link: reset_link }).then(useraccount => {
         if (useraccount) {

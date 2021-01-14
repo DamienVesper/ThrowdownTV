@@ -240,7 +240,7 @@ router.post('/recover', (req, res, next) => {
     })
 });
 // Reset password
-router.post('newpassword/:resetlink', (req, res) => {
+router.post('/newpassword/:resetlink', (req, res) => {
     const reset_link = req.params.resetlink
     const password = req.body.password
     const password2 = req.body.password2
