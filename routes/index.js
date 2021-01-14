@@ -4,6 +4,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const User = require('../models/User');
 const uniqueString = require('unique-string');
 const axios = require('axios');
+const config = require('../config.json')
 
 // Welcome Page
 router.get('/', (req, res) => {
@@ -140,7 +141,7 @@ router.get('/following', ensureAuthenticated, (req, res) =>  {
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }).then(useraccount => {
     if (useraccount.banned) return res.render('banned', {banreason: 'Reason: "'+useraccount.banreason+'"'});
-    if (useraccount.can_stream) {
+    if (useraccount.can_stream || config.isPublic) {
       res.render('dashboard', {
         user: req.user,
         streamtitle: useraccount.stream_title,
