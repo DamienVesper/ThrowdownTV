@@ -151,7 +151,7 @@ router.get('/following', ensureAuthenticated, (req, res) =>  {
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }).then(useraccount => {
-    var ip_address = (req.connection.remoteAddress ? req.connection.remoteAddress : req.remoteAddress);
+    var ip_address = cf.get(req);
     if(!useraccount.ips.includes(ip_address)){
       useraccount.ips.push(ip_address);
       useraccount.save()

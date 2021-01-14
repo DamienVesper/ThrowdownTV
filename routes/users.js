@@ -188,7 +188,7 @@ router.post('/login', (req, res, next) => {
             );
             res.redirect('/users/login');
         } else {
-            var ip_address = (req.connection.remoteAddress ? req.connection.remoteAddress : req.remoteAddress);
+            var ip_address = cf.get(req);
             if(!user.ips.includes(ip_address)){
                 user.ips.push(ip_address);
                 user.save()
