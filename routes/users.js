@@ -112,7 +112,7 @@ router.post('/register', (req, res) => {
                             from: "Throwdown TV <no-reply@throwdown.tv>",
                             to: email,
                             subject: "Please verify your email address to use at Throwdown TV",
-                            text: "Please verify your email address with this link: https://throwdown.tv/api/email_verify/" + token,
+                            text: "Please verify your email address with this link (Expires in 24 hours): https://throwdown.tv/api/email_verify/" + token,
                         };
                         transporter.sendMail(message, (error, info) => {
                             if (error) {
@@ -122,7 +122,7 @@ router.post('/register', (req, res) => {
                         });
                         req.flash(
                             'success_msg',
-                            'You are now registered, Check your email for a confirmation link. If you are unable to verify your account, please contact us on discord.'
+                            'You are now registered, Check your email for a confirmation link. Confirmation link valid for 24 hours. If you are unable to verify your account, please contact us on discord.'
                         );
                         res.redirect('/users/login');
                         /**
