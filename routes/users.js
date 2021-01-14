@@ -278,36 +278,37 @@ router.post('newpassword/:resetlink', (req, res) => {
                             } else {
                                 bcrypt.genSalt(10, (err, salt) => {
                                     bcrypt.hash(password, salt, (err, hash) => {
-                                    if (err) throw err;
-                                    user.updateOne({password: hash}, (err, success) => {
-                                        if (err) {
-                                            req.flash(
-                                                'error_msg',
-                                                'Database Error'
-                                            );
-                                            res.redirect('/users/login');
-                                        } else {
-                                            let message = {
-                                                from: "Throwdown TV <no-reply@throwdown.tv>",
-                                                to: useraccount.email,
-                                                subject: "Password Update Notification",
-                                                text: "This email is to inform you that your password has been updated.",
-                                            };
-                                            transporter.sendMail(message, (error, info) => {
-                                                if (error) {
-                                                    return console.log(error);
-                                                }
-                                                console.log('Message sent: %s', info.messageId);
-                                            });
-                                            req.flash(
-                                                'success_msg',
-                                                'Successfully changed password, you may now login!'
-                                            );
-                                            res.redirect('/users/login');
-                                        }
+                                        if (err) throw err;
+                                        user.updateOne({password: hash}, (err, success) => {
+                                            if (err) {
+                                                req.flash(
+                                                    'error_msg',
+                                                    'Database Error'
+                                                );
+                                                res.redirect('/users/login');
+                                            } else {
+                                                let message = {
+                                                    from: "Throwdown TV <no-reply@throwdown.tv>",
+                                                    to: useraccount.email,
+                                                    subject: "Password Update Notification",
+                                                    text: "This email is to inform you that your password has been updated.",
+                                                };
+                                                transporter.sendMail(message, (error, info) => {
+                                                    if (error) {
+                                                        return console.log(error);
+                                                    }
+                                                    console.log('Message sent: %s', info.messageId);
+                                                });
+                                                req.flash(
+                                                    'success_msg',
+                                                    'Successfully changed password, you may now login!'
+                                                );
+                                                res.redirect('/users/login');
+                                            }
+                                        })
                                     })
-                                })
-                            }               
+                                })  
+                            }           
                         })
                     }
                 })
