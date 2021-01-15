@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 const uniqueString = require('unique-string');
 
+function makeid(length) {
+	var result           = '';
+	var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var charactersLength = characters.length;
+	for ( var i = 0; i < length; i++ ) {
+	   result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+ }
+
+
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -20,11 +31,11 @@ const UserSchema = new mongoose.Schema({
     },
     stream_key: {
         type: String,
-        default: uniqueString()
+        default: makeid(32)
     },
     chat_key: {
         type: String,
-        default: uniqueString()+uniqueString()
+        default: makeid(32)+makeid(32)
     },
     stream_title: {
         type: String,
