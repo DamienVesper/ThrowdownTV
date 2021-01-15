@@ -6,10 +6,9 @@ const nodemailer = require('nodemailer');
 const isAlphanumeric = require('is-alphanumeric');
 const validator = require("email-validator");
 const emailExistence = require("email-existence")
-const uniqueString = require('unique-string');
 const jwt = require("jsonwebtoken")
 const config = require('../config.json')
-
+const Discord = require('../models/Discord');
 let cf = require('node_cloudflare')
 
 // Email
@@ -135,6 +134,7 @@ router.post('/register', (req, res) => {
                             }
                             console.log('Message sent: %s', info.messageId);
                         });
+                        Discord.verifyEmailLogger(email);
                         req.flash(
                             'success_msg',
                             'You are now registered, Check your email for a confirmation link. Confirmation link valid for 24 hours. If you are unable to verify your account, please contact us on discord.'
