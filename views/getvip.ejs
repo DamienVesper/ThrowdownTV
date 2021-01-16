@@ -1,0 +1,41 @@
+<head>
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+    <%- include('./partials/adheaders'); %>
+    <style>
+        body {
+            background-image: url('https://throwdown.tv/bg.jpg');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<%- include('./partials/header'); %>
+<%- include('./partials/messages'); %>
+<div style="margin: 15px;">
+    <span style="font-size: 25px; color: white;">Welcome </span>
+    <span style="font-size: 25px; color: lime;">
+        <%= user.username %>
+    </span>
+</div>
+<div style="margin: 15px; align-content: center;">
+    <h1 style="color: white; text-align: center;">Get <span style="color: gold;">VIP</span> Membership</h1>
+    <p style="color: rgb(212, 212, 212); text-align: center;">Support Free Speech by subscribing for a <span style="color: gold;">VIP</span> Membership</p>
+    <p style="color: rgb(212, 212, 212); text-align: center;">You will get:</p>
+
+    <div style="text-align: center; color: rgb(212, 212, 212);">
+        <li>5 Sticker Slots</li>
+        <li>VIP Stream Servers</li>
+        <li>VIP Badge next to your username</li>
+    </div>
+    <div style="text-align: center; margin-top: 35px;">
+        <form action="/getvip/subscribe" method="POST">
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+    </div>
+</div>
+<%- include('./partials/googlead'); %>

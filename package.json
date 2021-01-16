@@ -33,6 +33,7 @@
     "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "paypal-rest-sdk": "^1.8.1",
     "serve-favicon": "^2.5.0",
     "socket.io": "^3.0.4",
     "unique-string": "^2.0.0",

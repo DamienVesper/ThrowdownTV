@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const User = require('../models/User');
-const uniqueString = require('unique-string');
 const axios = require('axios');
 const config = require('../config.json')
 var cf = require('node_cloudflare');
@@ -19,7 +18,8 @@ router.get('/', (req, res) => {
 // TOS
 router.get('/tos', (req, res) => res.render('tos'));
 
-router.post('/dashboard/streamkey', (req, res) => {
+// Post for Streamkey
+router.post('/dashboard/streamkey', ensureAuthenticated, (req, res) => {
   User.findOne({ username: req.user.username }, (err, user) => {
     function makeid(length) {
       var result           = '';
@@ -41,7 +41,7 @@ router.post('/dashboard/streamkey', (req, res) => {
     })
   });
 })
-router.post('/dashboard', (req, res) => {
+router.post('/dashboard', ensureAuthenticated, (req, res) => {
   const streamtitle = req.body.streamtitle
   const streamdescription = req.body.streamdescription
   const streamavatar = req.body.streamavatar

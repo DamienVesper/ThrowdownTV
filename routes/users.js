@@ -55,7 +55,7 @@ router.post('/register', (req, res) => {
     const email = req.body.email.toLowerCase();
     let errors = [];
 
-    let bannedUsernames = ['users','dashboard','register','login','tos','browse','logout','follow','unfollow','following','streams','demo']
+    let bannedUsernames = ['users','dashboard','register','login','tos','browse','logout','follow','unfollow','following','streams','demo','getvip']
 
     //check required fields
     if(!username || !email || !password || !password2) {
