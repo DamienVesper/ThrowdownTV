@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const uniqueString = require('unique-string');
 
 function makeid(length) {
 	var result           = '';
