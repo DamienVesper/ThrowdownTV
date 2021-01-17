@@ -42,8 +42,9 @@ router.get('/send_notification_email/:apikey/:username', (req, res) => {
                     console.log('Message sent: %s', info.messageId);
                 });
             })
-            res.json({status: "success"})
+            
         })
+        res.json({status: "success"})
     })
 });
 // Streamkey Check
