@@ -2,45 +2,51 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
-<% streamers.forEach(function(streamers) { %>
-    <% if (streamers.isLive) { %>
-        <div class="row show">
+<% if(streamers.length > 0){ %>
+    <div class="row show">
         <ul>
-        <div id="ul_<%= streamers.username %>" class="row" style="margin-bottom: 6px;">
-            <div class="column">
-                <div onclick="window.location='/<%= streamers.username %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= streamers.username %>" style="max-width: 300px; max-height: 300px;">
-                </div>
-            </div>
-            <div class="column" style="margin-right: 5px; margin-left: 10px;">
-                <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= streamers.username %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
-                    <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                        <div class="row" style="width: 50%;">
-                            <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
-                                <%= streamers.username %> <div style="margin: 0px;" id="live_status_<%= streamers.username %>" style="word-wrap: unset;"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
-                                <script>
-                                    axios.get('https://cdn.throwdown.tv/api/streams/<%= streamers.username %>')
-                                        .then(function (response){
-                                            if (response.data.isLive) {
-                                                document.getElementById("live_status_<%= streamers.username %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-right: 5px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
-                                            }
-                                        })
-                                </script>
-                            </h3>
+            <% streamers.forEach(function(streamers) { %>
+                <% if (streamers.isLive) { %>
+                    <div id="ul_<%= streamers.username %>" class="row" style="margin-bottom: 6px;">
+                        <div class="column">
+                            <div onclick="window.location='/<%= streamers.username %>'"><img src="https://cdn.throwdown.tv/thumbnail/<%= streamers.username %>" style="max-width: 300px; max-height: 300px;">
+                            </div>
+                        </div>
+                        <div class="column" style="margin-right: 5px; margin-left: 10px;">
+                            <div class="row px-3"> <img src="https://cdn.throwdown.tv/avatar/<%= streamers.username %>" style=" margin-top: 5px; max-width: 50px; max-height: 50px;" class="rounded-circle profile-pic mr-3" alt="profile picture"> 
+                                <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
+                                    <div class="row" style="width: 50%;">
+                                        <h3 style="color: yellow; margin-bottom: 0px; font-size: 25px;" class="lead mb-3">
+                                            <%= streamers.username %> <div style="margin: 0px;" id="live_status_<%= streamers.username %>" style="word-wrap: unset;"><span style="font-size: 10px; margin-top: 0px; color: red;">OFFLINE</span></div>
+                                            <script>
+                                                axios.get('https://cdn.throwdown.tv/api/streams/<%= streamers.username %>')
+                                                    .then(function (response){
+                                                        if (response.data.isLive) {
+                                                            document.getElementById("live_status_<%= streamers.username %>").innerHTML = `<span style="font-size: 10px; margin-top: 0px; color: lime;">ONLINE</span><span style="font-size: 10px; margin-right: 5px; color: orange;"> ${response.data.viewers} Viewers</span> ` 
+                                                        }
+                                                    })
+                                            </script>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="stream_info_title_<%= streamers.username %>"></div>
+                            <div id="stream_info_description_<%= streamers.username %>"></div>
+                            <script>
+                                axios.get('https://cdn.throwdown.tv/api/stream_info/<%= streamers.username %>')
+                                    .then(function (response){
+                                        document.getElementById("stream_info_title_<%= streamers.username %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
+                                        document.getElementById("stream_info_description_<%= streamers.username %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
+                                    })
+                            </script>
                         </div>
                     </div>
-                </div>
-                <div id="stream_info_title_<%= streamers.username %>"></div>
-                <div id="stream_info_description_<%= streamers.username %>"></div>
-                <script>
-                    axios.get('https://cdn.throwdown.tv/api/stream_info/<%= streamers.username %>')
-                        .then(function (response){
-                            document.getElementById("stream_info_title_<%= streamers.username %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 30px;">${response.data.streamtitle}</a>` 
-                            document.getElementById("stream_info_description_<%= streamers.username %>").innerHTML = `<a style="color: white; word-wrap: break-word; font-size: 15px;">${response.data.streamdescription}</a>` 
-                        })
-                </script>
-            </div>
-        </div>
+                <% } %>
+            <% }) %>
         </ul>
     </div>
-    <% } %>
-<% }) %>
+<% } else { %>
+    <div class="row show">
+        Nobody is live right now...
+    </div>
+<% } %>
