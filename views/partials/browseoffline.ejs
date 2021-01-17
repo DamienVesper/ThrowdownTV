@@ -36,7 +36,6 @@
                     axios.get('https://cdn.throwdown.tv/api/streams/<%= streamers %>')
                         .then(function (response){
                             if (response.data.isLive) {
-                                console.log("Offline Streamer isLive status "+response.data.isLive)
                                 document.getElementById("ul_offline_<%= streamers %>").innerHTML = `<div></div>` 
                             }
                         })
