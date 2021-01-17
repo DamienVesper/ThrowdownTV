@@ -4,25 +4,62 @@ const router = express.Router();
 const User = require('../models/User');
 const config = require('../config.json')
 const axios = require('axios')
+const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs')
 
+let transporter = nodemailer.createTransport({
+    host: "localhost",
+    port: 25,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: "notifications@throwdown.tv", 
+        pass: "Dankmeme2000", 
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
+
+// Email Notification API Check
+router.get('/send_notification_email/:apikey/:username', (req, res) => {
+    let apikey = req.params.apikey
+    let username = req.params.username
+    if (apikey !== config.notificationapikey) return res.json({status: "failure"})
+    User.findOne({ username: username }).then(useraccount => {
+        if (!useraccount) return res.json({status: "failure"})
+        useraccount.followers.forEach(async function(user) {
+            await User.findOne({username: user}).then(useracc => {
+                let message = {
+                    from: "Throwdown TV Notifications <notifications@throwdown.tv>",
+                    to: useracc.email,
+                    subject: useraccount.username + " is now Live!",
+                    text: `${useraccount.username} went live with the title "${useraccount.stream_title}". Watch here: https://throwdown.tv/${useraccount.username}` ,
+                };
+                transporter.sendMail(message, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message sent: %s', info.messageId);
+                });
+            })
+            res.json({status: "success"})
+        })
+    })
+});
 // Streamkey Check
-router.get('/streamkey/:streamkey', (req, res) =>
+router.get('/streamkey/:streamkey', (req, res) => {
     User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
         if (useraccount) {
             if ((useraccount.can_stream || config.isPublic) && !useraccount.banned ) {
-                res.json({canstream: true})
-                //console.log("Approved Stream Key " + req.params.streamkey)
+                res.json({canstream: true, username: useraccount.username})
             } else {
-                res.json({canstream: false})
-                //console.log("Denied Stream Key " + req.params.streamkey)
+                res.json({canstream: false, username: useraccount.username})
             }
         } else {
-            res.json({canstream: false})
-            //console.log("Denied Stream Key " + req.params.streamkey)
+            res.json({canstream: false, username: "demo"})
         }
     })
-);
+});
 // Email verification check
 router.get('/email_verify/:emailverificationkey', async (req, res) => {
     const token = req.params.emailverificationkey;

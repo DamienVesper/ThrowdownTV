@@ -18,7 +18,7 @@ let transporter = nodemailer.createTransport({
     secure: false,
     auth: {
          user: 'no-reply@throwdown.tv',
-         pass: config.smtp_password,
+         pass: config.noreply_smtp_password,
     },
     tls: {
         rejectUnauthorized: false
