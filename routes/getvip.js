@@ -14,7 +14,7 @@ router.get('/info', ensureAuthenticated, (req, res) => {
 // POST get vip
 router.post('/subscribe', ensureAuthenticated, (req, res) => {
     //WIP
-    res.redirect('WIP ;)')
+    res.redirect('https://www.patreon.com/ThrowdownTV')
 })
   
 module.exports = router;
