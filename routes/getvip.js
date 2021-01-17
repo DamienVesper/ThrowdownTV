@@ -23,7 +23,7 @@ router.get('/info', ensureAuthenticated, (req, res) => {
 // POST get vip
 router.post('/subscribe', ensureAuthenticated, (req, res) => {
     //WIP
-    res.send('WIP ;)')
+    res.redirect('WIP ;)')
 })
   
 module.exports = router;
