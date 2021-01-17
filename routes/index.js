@@ -128,12 +128,9 @@ router.get('/streams/donate', (req, res) => {
 // Browsing
 router.get('/browse', async (req, res) =>  {
   let streamers = []
-  User.collection.find().toArray(async function(err, data) {
-    data.forEach(async function (user) {
-      await axios.get('https://cdn.throwdown.tv/api/streams/' + user.username)
-        .then(function (response) {
-          streamers.push({username: user.username, isLive: response.data.isLive})
-        })
+  User.collection.find().toArray(function(err, data) {
+    data.forEach(user => {
+      streamers.push(user.username)
     })
 
     res.render('browse', {
