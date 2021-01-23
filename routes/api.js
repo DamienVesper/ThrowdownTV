@@ -48,7 +48,7 @@ router.get('/send_notification_email/:apikey/:username', (req, res) => {
     })
 });
 // Streamkey Check
-router.get('/streamkey/:streamkey', async (req, res) => {
+router.get('/streamkey/:streamkey', (req, res) => {
     User.findOne({ stream_key: req.params.streamkey }).then(useraccount => {
         if (useraccount) {
             if ((useraccount.can_stream || config.isPublic) && !useraccount.banned ) {
