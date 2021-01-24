@@ -24,12 +24,16 @@ router.get(`/browse`, async (req, res) => {
 
 // Following.
 router.get(`/following`, async (req, res) => {
-    if (!req.isAuthenticated()) res.redirect(`/login`);
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
 });
 
 // Dashboard.
 router.get(`/dashboard`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
     const user = await User.findOne({ username: req.user.username });
+    if (!user) return res.redirect(`/logout`);
+
     const ipAddress = req.ip;
 
     if (!user.ipAddresses.includes(ipAddress)) {
