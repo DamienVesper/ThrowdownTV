@@ -81,8 +81,7 @@ let httpServer = http.createServer(app);
 let httpsServer = https.createServer(ssl_options, app);
 
 let cf = require(`node_cloudflare`);
-cf.load((error, fs_error)
-=> {
+cf.load((error, fs_error) => {
     if (fs_error)
     {
         throw new Error(fs_error);

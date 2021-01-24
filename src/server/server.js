@@ -79,7 +79,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-
 // Set view engine.
 app.set(`views`, path.resolve(__dirname, `views`));
 app.set(`view engine`, `ejs`);
