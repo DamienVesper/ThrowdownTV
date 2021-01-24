@@ -7,7 +7,7 @@ const log = require(`./utils/log.js`);
 const fs = require(`fs`);
 const path = require(`path`);
 
-// Socket.io
+// Socket.IO server.
 const io = require(`./socket.js`);
 
 // HTTP / HTTPS transport protocols.
