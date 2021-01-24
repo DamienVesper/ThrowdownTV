@@ -63,50 +63,52 @@ router.get('/streamkey/:streamkey', (req, res) => {
 });
 // Email verification check
 router.get('/email_verify/:emailverificationkey', async (req, res) => {
-    const token = req.params.emailverificationkey;
-    if (token) {
-        jwt.verify(token, config.jwtToken, function(err, decodedToken) {
-            if (err) {
-                req.flash(
-                    'error_msg',
-                    'Incorrect or Expired Activiation Link'
-                );
-                res.redirect('/users/login');
-            } else {
-                const useraccount = await User.findOne({username: username})
-                if (!useraccount) {
-                    const {username, email, password} = decodedToken;
-                    const newUser = new User({
-                        username,
-                        email,
-                        password,
-                    }); 
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        newUser.password = hash;
-                        newUser
-                            .save()
-                            .then(user => {
-                                req.flash(
-                                    'success_msg',
-                                    'Successfully confirmed email, you may now login!'
-                                );
-                                res.redirect('/users/login');
-                            })
-                            .catch(err => console.log(err));
-                        });
-                    })
-                } else {
+    User.findOne({username: username}).then(useraccount=> {
+        const token = req.params.emailverificationkey;
+        if (token) {
+            jwt.verify(token, config.jwtToken, function(err, decodedToken) {
+                if (err) {
                     req.flash(
                         'error_msg',
-                        'User Already Exists.'
+                        'Incorrect or Expired Activiation Link'
                     );
                     res.redirect('/users/login');
+                } else {
+                        if (!useraccount) {
+                            const {username, email, password} = decodedToken;
+                            const newUser = new User({
+                                username,
+                                email,
+                                password,
+                            }); 
+                            bcrypt.genSalt(10, (err, salt) => {
+                                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                                if (err) throw err;
+                                newUser.password = hash;
+                                newUser
+                                    .save()
+                                    .then(user => {
+                                        req.flash(
+                                            'success_msg',
+                                            'Successfully confirmed email, you may now login!'
+                                        );
+                                        res.redirect('/users/login');
+                                    })
+                                    .catch(err => console.log(err));
+                                });
+                            })
+                        } else {
+                            req.flash(
+                                'error_msg',
+                                'User Already'
+                            );
+                            res.redirect('/users/login');
+                        }
                 }
-            }
-        })
-    }
+            })
+        }
+    })
+
     /**
     await axios.get('http://cdn.throwdown.tv/api/streams/' + req.params.emailverificationkey)
         .then(async function (response) {
