@@ -4,12 +4,13 @@
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h1 class="text-center">Log In</h1>
             <form action="/login" id="login-form" method="POST">
+                <div id="login-errors" class="alert alert-danger alert-dismissible fade show hidden"></div>
                 <div class="form group">
                     <label for="username">Username</label>
-                    <input type="username" id="login-username" class="form-control" placeholder="Enter Username" required>
+                    <input type="username" id="login-username" class="form-control" placeholder="Enter Username" autocomplete="username" required>
                     <br>
                     <label for="password">Password</label>
-                    <input type="password" id="login-password" class="form-control" placeholder="Enter Password" required>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter Password" autocomplete="new-password" required>
                     <br>
                     <input type="submit" id="login-button" value="Login" class="btn btn-primary btn-block">
                 </div>
@@ -18,9 +19,31 @@
     </div>
 </div>
 <script>
+    $(document).ready(() => $(`#login-errors`).hide());
+
     $(`#login-button`).on(`click`, e => {
         e.preventDefault();
 
-        $(`submit-login`).attr(`disabled`, true);
+        $(`#login-button`).attr(`disabled`, true);
+        $(`#login-errors`).hide();
+
+        $.ajax({
+            type: `post`,
+            url: `/login`,
+            data: $(`#login-form`).serialize()
+        }).then(res => {
+            if (res.errors) {
+                $(`#login-button`).attr(`disabled`, false);
+                $(`#login-errors`).show();
+
+                $(`#login-errors`).text(res.errors);
+                return false;
+            }
+            else if (res.success) {
+                $(`#login-button`).attr(`disabled`, false);
+                window.location.reload();
+                return true;
+            }
+        });
     });
 </script>
