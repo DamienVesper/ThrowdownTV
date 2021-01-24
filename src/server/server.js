@@ -19,6 +19,8 @@ const app = express();
 const session = require(`express-session`);
 const bodyParser = require(`body-parser`);
 const compression = require(`compression`);
+const flash = require(`connect-flash`);
+const ejsLayouts = require(`express-ejs-layouts`);
 
 // Passport.
 const passport = require(`./passport.js`);
@@ -65,6 +67,8 @@ app.use(passport.session());
 
 // Express middleware.
 app.use(compression());
+app.use(flash());
+app.use(ejsLayouts);
 
 app.use(bodyParser.json({
     limit: `50mb`
@@ -74,6 +78,7 @@ app.use(bodyParser.urlencoded({
     limit: `50mb`,
     extended: true
 }));
+
 
 // Set view engine.
 app.set(`views`, path.resolve(__dirname, `views`));
