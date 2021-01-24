@@ -22,7 +22,6 @@ const app = express();
 const session = require(`express-session`);
 const bodyParser = require(`body-parser`);
 const compression = require(`compression`);
-const flash = require(`connect-flash`);
 const ejsLayouts = require(`express-ejs-layouts`);
 
 // Passport.
@@ -70,7 +69,6 @@ app.use(passport.session());
 
 // Express middleware.
 app.use(compression());
-app.use(flash());
 app.use(ejsLayouts);
 
 app.use(bodyParser.json({

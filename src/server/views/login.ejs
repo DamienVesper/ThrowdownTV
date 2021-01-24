@@ -1,5 +1,26 @@
+<%- include('./partials/header'); %>
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="card card-body" style="background-color: #b1cbe6;"></div>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h1 class="text-center">Log In</h1>
+            <form action="/login" id="login-form" method="POST">
+                <div class="form group">
+                    <label for="username">Username</label>
+                    <input type="username" id="login-username" class="form-control" placeholder="Enter Username" required>
+                    <br>
+                    <label for="password">Password</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter Password" required>
+                    <br>
+                    <input type="submit" id="login-button" value="Login" class="btn btn-primary btn-block">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+<script>
+    $(`#login-button`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`submit-login`).attr(`disabled`, true);
+    });
+</script>
