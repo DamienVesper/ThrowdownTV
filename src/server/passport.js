@@ -54,16 +54,16 @@ passport.use(`login`, new LocalStrategy({
 }));
 
 // Registration.
-passport.use(`register`, new LocalStrategy({
-    usernameField: `register-username`,
-    passwordField: `register-password`
+passport.use(`signup`, new LocalStrategy({
+    usernameField: `signup-username`,
+    passwordField: `signup-password`
 }, (username, password, done) => {
     User.findOne({
         username
     }).then(user => {
         if (user) return done(`User already exists`, false);
 
-        const registerUser = new User({
+        const signupUser = new User({
             username,
             creationDate: new Date(),
             password
@@ -71,13 +71,13 @@ passport.use(`register`, new LocalStrategy({
 
         bcrypt.genSalt(15, (err, salt) => {
             if (err) return done(err);
-            bcrypt.hash(registerUser.password, salt, (err, hash) => {
+            bcrypt.hash(signupUser.password, salt, (err, hash) => {
                 if (err) return done(err);
 
-                registerUser.password = hash;
-                registerUser.save(err => {
+                signupUser.password = hash;
+                signupUser.save(err => {
                     if (err) return done(err);
-                    return done(null, registerUser, `success`);
+                    return done(null, signupUser, `success`);
                 });
             });
         });
