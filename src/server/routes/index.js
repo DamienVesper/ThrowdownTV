@@ -26,13 +26,7 @@ router.get(`/login`, (req, res) => {
 router.get(`/tos`, (req, res) => res.render(`tos.ejs`));
 
 // Browsing.
-router.get(`/browse`, async (req, res) => {
-    const streamers = [];
-    const streamerData = await User.find({ live: true });
-
-    for (const streamer of streamerData) streamers.push(streamer.username);
-    res.render(`browse.ejs`, { streamers });
-});
+router.get(`/browse`, async (req, res) => res.render(`browse.ejs`));
 
 // Following.
 router.get(`/following`, async (req, res) => {

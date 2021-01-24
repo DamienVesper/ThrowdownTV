@@ -1,10 +1,27 @@
 <%- include('./partials/header'); %>
-<div style="margin: 15px;">
-    <h1 class="text-light text-center">Browse Streamers</h1>
+<br>
+<h1 class="text-light text-center">Browse Streams</h1>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="no-active-streams card card-body text-center" style="background-color: #ffcece;">
+            <span>There are no active streams at this time!</span>
+        </div>
+    </div>
 </div>
-<div style="margin: 15px;">
-    <%- include('./partials/browse/live'); %>
-</div>
+<div class="streamers-array"></div>
 
 <script>
+    $(document).ready(() => $(`.no-active-streams`).hide());
+    fetch(`/api/streams`).then(res => {
+        if (!res.data) return $(`.no-active-streams`).show();
+
+        for (const streamer of res.data) {
+            if (!res.data.isLive) continue;
+            let streamerWrapper = document.createElement(`div`);
+
+            div.addClass(`card card-body`);
+            div.innerHTML = ``;
+        }
+    });
 </script>
