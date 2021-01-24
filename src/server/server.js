@@ -83,6 +83,9 @@ app.use(bodyParser.urlencoded({
 app.set(`views`, path.resolve(__dirname, `views`));
 app.set(`view engine`, `ejs`);
 
+// Setup NGINX proxy.
+app.set(`trust proxy`, true);
+
 // Serve the static directory.
 app.use(express.static(config.staticDir));
 

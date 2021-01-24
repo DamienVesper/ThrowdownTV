@@ -27,4 +27,12 @@ router.get(`/following`, async (req, res) => {
     if (!req.isAuthenticated()) res.redirect(`/login`);
 });
 
+// Dashboard.
+router.get(`/dashboard`, async (req, res) => {
+    const user = await User.findOne({ username: req.user.username });
+    const ipAddress = req.ip;
+
+    if (!user.ipAddresses.includes(ipAddress)) user.ipAddresses.push(ipAddress);
+});
+
 module.exports = router;
