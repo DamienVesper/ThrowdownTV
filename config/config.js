@@ -10,7 +10,7 @@ const config = {
     version: pjson.version
 };
 
-config.staticDir = path.resolve(__dirname, config.mode === `prod` ? `../../../dist/` : `../../client/`);
+config.staticDir = path.resolve(__dirname, config.mode === `prod` ? `../dist` : `../src/client`);
 
 config.ssl = {
     keyPath: `/etc/letsencrypt/live/${config.domain}/privkey.pem`,
