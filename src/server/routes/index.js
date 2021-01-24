@@ -10,6 +10,18 @@ router.get(`/`, (req, res) => {
         : res.render(`welcome.ejs`);
 });
 
+// Sign Up / login pages.
+router.get(`/signup`, (req, res) => {
+    req.isAuthenticated()
+        ? res.redirect(`/`)
+        : res.render(`signup.ejs`);
+});
+router.get(`/login`, (req, res) => {
+    req.isAuthenticated()
+        ? res.redirect(`/`)
+        : res.render(`login.ejs`);
+});
+
 // Terms of Service.
 router.get(`/tos`, (req, res) => res.render(`tos.ejs`));
 

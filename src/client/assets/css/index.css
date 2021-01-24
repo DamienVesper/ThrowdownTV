@@ -1,5 +1,11 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     background-color: #0e355e;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
 }
