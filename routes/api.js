@@ -73,38 +73,37 @@ router.get('/email_verify/:emailverificationkey', async (req, res) => {
                 );
                 res.redirect('/users/login');
             } else {
-                User.findOne({username: username}).then(useraccount=> {
-                    if (!useraccount) {
-                        const {username, email, password} = decodedToken;
-                        const newUser = new User({
-                            username,
-                            email,
-                            password,
-                        }); 
-                        bcrypt.genSalt(10, (err, salt) => {
-                            bcrypt.hash(newUser.password, salt, (err, hash) => {
-                            if (err) throw err;
-                            newUser.password = hash;
-                            newUser
-                                .save()
-                                .then(user => {
-                                    req.flash(
-                                        'success_msg',
-                                        'Successfully confirmed email, you may now login!'
-                                    );
-                                    res.redirect('/users/login');
-                                })
-                                .catch(err => console.log(err));
-                            });
-                        })
-                    } else {
-                        req.flash(
-                            'error_msg',
-                            'User Already Exists.'
-                        );
-                        res.redirect('/users/login');
-                    }
-                })
+                const useraccount = await User.findOne({username: username})
+                if (!useraccount) {
+                    const {username, email, password} = decodedToken;
+                    const newUser = new User({
+                        username,
+                        email,
+                        password,
+                    }); 
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                        if (err) throw err;
+                        newUser.password = hash;
+                        newUser
+                            .save()
+                            .then(user => {
+                                req.flash(
+                                    'success_msg',
+                                    'Successfully confirmed email, you may now login!'
+                                );
+                                res.redirect('/users/login');
+                            })
+                            .catch(err => console.log(err));
+                        });
+                    })
+                } else {
+                    req.flash(
+                        'error_msg',
+                        'User Already Exists.'
+                    );
+                    res.redirect('/users/login');
+                }
             }
         })
     }
