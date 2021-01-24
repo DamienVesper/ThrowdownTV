@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require(`mongoose`);
 
 const StickerSchema = new mongoose.Schema({
     stickername: {
@@ -12,9 +12,9 @@ const StickerSchema = new mongoose.Schema({
     stickerowner: {
         type: String,
         required: true
-    },
+    }
 });
 
-const User = mongoose.model('Sticker', StickerSchema);
+const User = mongoose.model(`Sticker`, StickerSchema);
 
 module.exports = User;

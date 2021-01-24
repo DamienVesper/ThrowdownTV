@@ -1,15 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require(`mongoose`);
 
-function makeid(length) {
-	var result           = '';
-	var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	var charactersLength = characters.length;
-	for ( var i = 0; i < length; i++ ) {
+function makeid (length) {
+    let result = ``;
+    const characters = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`;
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
 	   result += characters.charAt(Math.floor(Math.random() * charactersLength));
-	}
-	return result;
- }
-
+    }
+    return result;
+}
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -26,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     },
     reset_link: {
         type: String,
-        default: ''
+        default: ``
     },
     stream_key: {
         type: String,
@@ -34,23 +33,23 @@ const UserSchema = new mongoose.Schema({
     },
     chat_key: {
         type: String,
-        default: makeid(32)+makeid(32)
+        default: makeid(32) + makeid(32)
     },
     stream_title: {
         type: String,
-        default: "My cool stream :)"
+        default: `My cool stream :)`
     },
     stream_description: {
         type: String,
-        default: "Description of my cool stream :)"
+        default: `Description of my cool stream :)`
     },
     avatar_url: {
         type: String,
-        default: "https://cdn.discordapp.com/attachments/736368923590525039/789419292214820894/defaulltpfp.png"
+        default: `https://cdn.discordapp.com/attachments/736368923590525039/789419292214820894/defaulltpfp.png`
     },
     donation_link: {
         type: String,
-        default: "/streams/donate"
+        default: `/streams/donate`
     },
     can_stream: {
         type: Boolean,
@@ -62,13 +61,13 @@ const UserSchema = new mongoose.Schema({
     },
     banreason: {
         type: String,
-        default: "TOS Violation"
+        default: `TOS Violation`
     },
     following: {
-        type: Array,
+        type: Array
     },
     followers: {
-        type: Array,
+        type: Array
     },
     live_viewers: {
         default: 0
@@ -79,7 +78,7 @@ const UserSchema = new mongoose.Schema({
     },
     discordID: {
         type: String,
-        default: "YOUR_DISCORD_ID_HERE"
+        default: `YOUR_DISCORD_ID_HERE`
     },
     isVip: {
         type: Boolean,
@@ -104,6 +103,6 @@ const UserSchema = new mongoose.Schema({
 
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model(`User`, UserSchema);
 
 module.exports = User;
