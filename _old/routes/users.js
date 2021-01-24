@@ -7,7 +7,7 @@ const isAlphanumeric = require('is-alphanumeric');
 const validator = require("email-validator");
 const emailExistence = require("email-existence")
 const jwt = require("jsonwebtoken")
-const config = require('../config.json')
+const config = require('../../config.json')
 const Discord = require('../discord/index');
 let cf = require('node_cloudflare')
 
