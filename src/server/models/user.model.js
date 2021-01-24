@@ -1,3 +1,5 @@
+const { randomString } = require(`../utils/random.js`);
+
 const Mongoose = require(`mongoose`);
 
 const userSchema = Mongoose.Schema({
@@ -30,6 +32,28 @@ const userSchema = Mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    streamSettings: {
+        streamKey: {
+            type: String,
+            default: randomString(32),
+            required: false
+        },
+        chatKey: {
+            type: String,
+            default: randomString(32),
+            required: false
+        },
+        title: {
+            type: String,
+            default: `My Cool Stream!`,
+            required: false
+        },
+        donationLink: {
+            type: String,
+            default: `/streams/donate`,
+            required: false
+        }
     }
 });
 
