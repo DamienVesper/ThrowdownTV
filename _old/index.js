@@ -52,7 +52,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Favicon
-app.use(favicon(`${__dirname  }/public/favicon.ico`));
+app.use(favicon(`${__dirname}/public/favicon.ico`));
 
 // Connect flash
 app.use(flash());
@@ -72,15 +72,15 @@ app.use(`/api`, require(`./routes/api`));
 app.use(`/getvip`, require(`./routes/getvip`));
 
 // SSL
-let ssl_options = {
-    key: fs.readFileSync('./ssl/key.pem'),
-    cert: fs.readFileSync('./ssl/cert.pem')
+const ssl_options = {
+    key: fs.readFileSync(`./ssl/key.pem`),
+    cert: fs.readFileSync(`./ssl/cert.pem`)
 };
 
-let httpServer = http.createServer(app);
-let httpsServer = https.createServer(ssl_options, app);
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(ssl_options, app);
 
-let cf = require(`node_cloudflare`);
+const cf = require(`node_cloudflare`);
 cf.load((error, fs_error) => {
     if (fs_error)
     {
