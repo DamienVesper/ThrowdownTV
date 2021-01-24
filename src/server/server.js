@@ -7,6 +7,9 @@ const log = require(`./utils/log.js`);
 const fs = require(`fs`);
 const path = require(`path`);
 
+// Socket.io
+const io = require(`./socket.js`);
+
 // HTTP / HTTPS transport protocols.
 const https = require(`https`);
 const http = require(`http`);
@@ -105,10 +108,10 @@ const server = config.mode === `dev`
     }, app);
 
 // Bind the webfront to defined port.
-server.listen(config.port);
-log(`green`, `Webfront bound to port ${config.port}.`);
+server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));
 
 module.exports = {
     server,
-    app
+    app,
+    io
 };
