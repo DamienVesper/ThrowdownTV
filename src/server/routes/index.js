@@ -32,7 +32,20 @@ router.get(`/dashboard`, async (req, res) => {
     const user = await User.findOne({ username: req.user.username });
     const ipAddress = req.ip;
 
-    if (!user.ipAddresses.includes(ipAddress)) user.ipAddresses.push(ipAddress);
+    if (!user.ipAddresses.includes(ipAddress)) {
+        user.ipAddresses.push(ipAddress);
+        user.save();
+    }
+
+    res.render(`dashboard.ejs`, {
+        user: user.username,
+        streamTitle: user.streamTitle,
+        streamKey: user.canStream ? user.streamKey : `You do not have permission to stream.`,
+        streamDescription: user.streamDescription,
+        streamAvatar: user.avatarURL,
+        donationLink: user.donationLink,
+        discordID: user.discordID
+    });
 });
 
 module.exports = router;
