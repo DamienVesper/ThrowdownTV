@@ -7,7 +7,11 @@ router.get(`/streams`, async (req, res) => {
     const streamers = [];
     const streamerData = await User.find({ live: true });
 
-    for (const streamer of streamerData) streamers.push(streamer.username);
+    for (const streamer of streamerData) streamers.push({
+        name: streamer.username,
+        title: streamer.settings.title,
+        description: streamer.settings.description
+    });
 
     return res.json(streamers);
 });

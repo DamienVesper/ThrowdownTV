@@ -5,23 +5,37 @@
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
         <div class="no-active-streams card card-body text-center" style="background-color: #ffcece;">
-            <span>There are no active streams at this time!</span>
+            <span>Nobody is live right now...</span>
         </div>
     </div>
 </div>
-<div class="streamers-array"></div>
-
+<div class="row mt-5">
+    <div class="col-md-6 m-auto" style="max-width: 650px;">
+        <div class="active-streams"></div>
+    </div>
+</div>
 <script>
     $(document).ready(() => $(`.no-active-streams`).hide());
-    fetch(`/api/streams`).then(res => {
-        if (!res.data) return $(`.no-active-streams`).show();
+    fetch(`/api/streams`).then(data => data.json()).then(data => {
+        if (data.length === 0) return $(`.no-active-streams`).show();
 
-        for (const streamer of res.data) {
-            if (!res.data.isLive) continue;
-            let streamerWrapper = document.createElement(`div`);
+        for (const streamer of data) {
+            let streamerWrapper = $(`<div>`);
 
-            div.addClass(`card card-body`);
-            div.innerHTML = ``;
+            streamerWrapper.addClass(`card card-body`);
+            streamerWrapper.attr(`style`, `background-color: #b1cbe6; display: flex; flex-direction: row;`);
+            streamerWrapper.html(`
+                <img src="/assets/img/thumbnail.png" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
+                <div style="margin-left: 25px;">
+                    <h2>${streamer.title}</h2>
+                    <p>${streamer.description}
+                    <br>
+                    <b>${streamer.name}</b></p>
+                </div>
+            `);
+
+            $(`.active-streams`).append(streamerWrapper);
+            $(`.active-streams`).append(`<br>`);
         }
     });
 </script>

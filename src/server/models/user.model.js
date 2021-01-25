@@ -33,7 +33,12 @@ const userSchema = Mongoose.Schema({
         type: String,
         required: true
     },
-    streamSettings: {
+    live: {
+        type: String,
+        default: false,
+        required: false
+    },
+    settings: {
         streamKey: {
             type: String,
             default: randomString(32),
@@ -47,6 +52,11 @@ const userSchema = Mongoose.Schema({
         title: {
             type: String,
             default: `My Cool Stream!`,
+            required: false
+        },
+        description: {
+            type: String,
+            default: `A description about my cool stream!`,
             required: false
         },
         donationLink: {
