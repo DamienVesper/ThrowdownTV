@@ -1,65 +1,69 @@
 <head>
-    <script
-    src="https://code.jquery.com/jquery-3.5.1.js"
-    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <%- include('./partials/adheaders'); %>
 </head>
 <%- include('./partials/header'); %>
-    <%- include('./partials/messages'); %>
-        <div style="margin: 15px;">
-            <span style="font-size: 25px; color: white;">Welcome </span>
-            <span style="font-size: 25px; color: lime;">
-                <%= user.username %>
-            </span>
+<%- include('./partials/messages'); %>
+<div style="margin: 15px;">
+    <span style="font-size: 25px; color: white;">Welcome </span>
+    <span style="font-size: 25px; color: lime;">
+        <%= user.username %>
+    </span>
+</div>
+<div style="margin: 15px;">
+    <a href="/<%= user.username %>" class="btn btn-secondary">Livestream Page</a>
+</div>
+<div style="margin: 15px;">
+    <form action="/dashboard" method="POST">
+        <div class="form-group">
+            <label for="streamtitle">Stream Title</label>
+            <input type="streamtitle" name="streamtitle" class="form-control" id="streamtitle">
+            <small id="streamtitle_info" class="form-text text-muted">Enter the title of your stream that will be
+                displayed on your livestream page.</small>
         </div>
-        <div style="margin: 15px;">
-            <a href="/<%= user.username %>" class="btn btn-secondary">Livestream Page</a>
+        <div class="form-group">
+            <label for="donationlink">Donation Link</label>
+            <input type="donationlink" name="donationlink" class="form-control" id="donationlink"
+                style="white-space: pre-line;"></input>
+            <small id="donationlink_info" class="form-text text-muted">Link to your Donation/Tip page</small>
         </div>
-        <div style="margin: 15px;">
-            <form action="/dashboard" method="POST">
-                <div class="form-group">
-                    <label for="streamtitle">Stream Title</label>
-                    <input type="streamtitle" name="streamtitle" class="form-control" id="streamtitle">
-                    <small id="streamtitle_info" class="form-text text-muted">Enter the title of your stream that will be
-                        displayed on your livestream page.</small>
-                </div>
-                <div class="form-group">
-                    <label for="donationlink">Donation Link</label>
-                    <input type="donationlink" name="donationlink" class="form-control" id="donationlink" style="white-space: pre-line;"></input>  
-                    <small id="donationlink_info" class="form-text text-muted">Link to your Donation/Tip page</small>
-                </div>
-                <div class="form-group">
-                    <label for="streamdescription">Stream Description</label>
-                    <input type="streamdescription" name="streamdescription" class="form-control" id="streamdescription" style="white-space: pre-line;"></input>  
-                    <small id="streamdescription_info" class="form-text text-muted">Enter the description of your stream that will be
-                        displayed on your livestream page.</small>
-                </div>
-                <div class="form-group">
-                    <label for="streamavatar">Avatar URL</label>
-                    <input type="streamavatar" name="streamavatar" class="form-control" id="streamavatar"></input>  
-                    <small id="streamavatar_info" class="form-text text-muted">The URL for the image that will be used as your Avatar. (Accepted formats: .png|.jpg</small>
-                </div>
-                <div class="form-group">
-                    <label for="discordid">Avatar URL</label>
-                    <input type="discordid" name="discordid" class="form-control" id="discordid"></input>  
-                    <small id="discordid_info" class="form-text text-muted">Right click on your Discord account and select "Copy ID" to obtain your Discord ID</small>
-                </div>
-                <script>
-                    document.getElementById("streamtitle").value="<%= streamtitle %>";
-                    document.getElementById("donationlink").value="<%= donationlink %>";
-                    document.getElementById("streamdescription").value="<%= streamdescription %>";
-                    document.getElementById("streamavatar").value="<%= streamavatar %>";
-                    document.getElementById("discordid").value="<%= discordid %>";
-                </script>
-                <button type="submit" class="btn btn-primary">Apply Changes</button>
-            </form>
+        <div class="form-group">
+            <label for="streamdescription">Stream Description</label>
+            <input type="streamdescription" name="streamdescription" class="form-control" id="streamdescription"
+                style="white-space: pre-line;"></input>
+            <small id="streamdescription_info" class="form-text text-muted">Enter the description of your stream that
+                will be
+                displayed on your livestream page.</small>
         </div>
+        <div class="form-group">
+            <label for="streamavatar">Avatar URL</label>
+            <input type="streamavatar" name="streamavatar" class="form-control" id="streamavatar"></input>
+            <small id="streamavatar_info" class="form-text text-muted">The URL for the image that will be used as your
+                Avatar. (Accepted formats: .png|.jpg</small>
+        </div>
+        <div class="form-group">
+            <label for="discordid">Avatar URL</label>
+            <input type="discordid" name="discordid" class="form-control" id="discordid"></input>
+            <small id="discordid_info" class="form-text text-muted">Right click on your Discord account and select "Copy
+                ID" to obtain your Discord ID</small>
+        </div>
+        <script>
+            document.getElementById("streamtitle").value = "<%= streamtitle %>";
+            document.getElementById("donationlink").value = "<%= donationlink %>";
+            document.getElementById("streamdescription").value = "<%= streamdescription %>";
+            document.getElementById("streamavatar").value = "<%= streamavatar %>";
+            document.getElementById("discordid").value = "<%= discordid %>";
+        </script>
+        <button type="submit" class="btn btn-primary">Apply Changes</button>
+    </form>
+</div>
 <div class="card">
     <div>
         <div class="card-header" id="headingOne">
             <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+                    aria-controls="collapseOne">
                     Encoder Information
                 </button>
             </h5>
@@ -75,12 +79,13 @@
                     </div>
                 </div>
             </div>
-        </div>                
+        </div>
     </div>
     <div>
         <div class="card-header" id="headingOne">
             <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                    aria-controls="collapseTwo">
                     Stream Key
                 </button>
             </h5>
@@ -109,7 +114,8 @@
     <div>
         <div class="card-header" id="headingOne">
             <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                    aria-controls="collapseThree">
                     Widgets
                 </button>
             </h5>
@@ -127,7 +133,7 @@
                     </div>
                 </div>
             </div>
-        </div>                
+        </div>
     </div>
 </div>
 <div style="margin: 15px;">

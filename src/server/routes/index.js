@@ -40,13 +40,6 @@ router.get(`/dashboard`, async (req, res) => {
     const user = await User.findOne({ username: req.user.username });
     if (!user) return res.redirect(`/logout`);
 
-    const ipAddress = req.ip;
-
-    if (!user.ipAddresses.includes(ipAddress)) {
-        user.ipAddresses.push(ipAddress);
-        user.save();
-    }
-
     res.render(`dashboard.ejs`, {
         user: user.username,
         streamTitle: user.streamTitle,
