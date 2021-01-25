@@ -1,1 +1,37 @@
 <%- include('./partials/header'); %>
+
+<br>
+<h1 class="text-center text-light">Stream Dashboard</h1>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Stream Settings</h2>
+            <form action="/dashboard" method="post">
+                <div class="form-group">
+                    <label for="stream-title">Stream Title</label>
+                    <input type="text" id="stream-title" name="stream-title" class="form-control"
+                        placeholder="Enter a title" maxlength="32">
+                    <br>
+                    <label for="stream-description">Stream Description</label>
+                    <input type="text" id="stream-description" name="stream-description"
+                        placeholder="Enter a description" class="form-control">
+                    <br>
+                    <label for="donation-link">Donation Link</label>
+                    <input type="text" id="donation-link" name="donation-link" class="form-control"
+                        placeholder="Enter a URL to your donation page">
+                    <br>
+                    <input type="submit" value="Update Information" class="btn btn-primary btn-block">
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Encoder Information</h2>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>

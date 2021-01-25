@@ -34,7 +34,7 @@ passport.use(`login`, new LocalStrategy({
             else if (isMatch) {
                 const { randomString } = require(`./utils/random.js`);
 
-                user.token = randomString(128);
+                user.token = randomString(64);
                 user.save();
 
                 return done(null, user);
