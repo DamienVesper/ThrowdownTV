@@ -31,21 +31,13 @@ passport.use(`login`, new LocalStrategy({
         // Login a user.
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) return log(`red`, err.stack);
+            else if (isMatch) {
+                const { randomString } = require(`./utils/random.js`);
 
-            if (isMatch) {
-                const randomNumber = Math.floor(Math.random() * 65536).toString();
+                user.token = randomString(128);
+                user.save();
 
-                bcrypt.genSalt(5, (err, salt) => {
-                    if (err) return done(err);
-                    bcrypt.hash(randomNumber, salt, (err, hash) => {
-                        if (err) return done(err);
-
-                        user.token = hash;
-                        user.save();
-
-                        return done(null, user);
-                    });
-                });
+                return done(null, user);
             } else return done(`Incorrect username / password`, false);
         });
     }).catch(err => {

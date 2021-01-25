@@ -27,6 +27,7 @@ const userSchema = Mongoose.Schema({
     },
     token: {
         type: String,
+        default: randomString(128),
         required: false
     },
     password: {
@@ -40,11 +41,6 @@ const userSchema = Mongoose.Schema({
     },
     settings: {
         streamKey: {
-            type: String,
-            default: randomString(32),
-            required: false
-        },
-        chatKey: {
             type: String,
             default: randomString(32),
             required: false
