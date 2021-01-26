@@ -48,7 +48,18 @@
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Widgets</h2>
             <br>
+            <p><b>Chat Widget:</b> <a id="chat-link"
+                    href="https://throwdown.tv/chat/damienvesper">https://throwdown.tv/chat/damienvesper</a></p>
         </div>
         <br>
     </div>
 </div>
+
+<script>
+    fetch(`/authenticated`).then(data => data.json()).then(data => {
+        let chatURL = `https://throwdown.tv/chat/${data.username}/`;
+        $(`#chat-link`)
+            .text(chatURL)
+            .attr(`href`, chatURL);
+    });
+</script>
