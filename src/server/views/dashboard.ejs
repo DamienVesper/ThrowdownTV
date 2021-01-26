@@ -7,7 +7,7 @@
     <div class="col-md-6 m-auto">
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Stream Settings</h2>
-            <form action="/dashboard" method="post">
+            <form action="/dashboard" method="post" id="dashboard-form">
                 <div class="form-group">
                     <label for="stream-title">Stream Title</label>
                     <input type="text" id="stream-title" name="stream-title" class="form-control"
@@ -21,7 +21,7 @@
                     <input type="text" id="donation-link" name="donation-link" class="form-control"
                         placeholder="Enter a URL to your donation page">
                     <br>
-                    <input type="submit" value="Update Information" class="btn btn-primary btn-block">
+                    <input type="submit" id="dashboard-update-info" value="Update Information" class="btn btn-primary btn-block">
                 </div>
             </form>
         </div>
@@ -48,8 +48,7 @@
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Widgets</h2>
             <br>
-            <p><b>Chat Widget:</b> <a id="chat-link"
-                    href="https://throwdown.tv/chat/damienvesper">https://throwdown.tv/chat/damienvesper</a></p>
+            <p><b>Chat Widget:</b> <a id="chat-link"></a></p>
         </div>
         <br>
     </div>
@@ -61,5 +60,23 @@
         $(`#chat-link`)
             .text(chatURL)
             .attr(`href`, chatURL);
+
+            fetch(`/api/stream-data`).then(data => data.json()).then(data => {
+                $(`#stream-title`).val(data.streamTitle);
+                $(`#stream-description`).val(data.streamDescription);
+                $(`#donation-link`).val(data.donationLink);
+            });
+    });
+
+    $(`#dashboard-update-info`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#dashboard-update-info`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/dashboard`,
+            data: $(`#dashboard-form`).serialize()
+        }).then(() => window.location.reload());
     });
 </script>

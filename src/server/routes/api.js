@@ -16,4 +16,18 @@ router.get(`/streams`, async (req, res) => {
     return res.json(streamers);
 });
 
+router.get(`/stream-data`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const streamerData = await User.findOne({ username: req.user.username });
+
+    const data = {
+        streamTitle: streamerData.settings.title,
+        streamDescription: streamerData.settings.description,
+        donationLink: streamerData.settings.donationLink
+    };
+
+    res.jsonp(data);
+});
+
 module.exports = router;
