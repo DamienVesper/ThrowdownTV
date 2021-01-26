@@ -9,6 +9,21 @@ const xssFilters = require(`xss-filters`);
 const User = require(`../models/user.model.js`);
 const passport = require(`passport`);
 
+// Nodemailer.
+// const nodemailer = require(`nodemailer`);
+// const transport = nodemailer.createTransport({
+//     host: `localhost`,
+//     port: 25,
+//     secure: false,
+//     auth: {
+//         user: process.env.SMTP_USERNAME,
+//         password: process.env.SMTP_TOKEN
+//     },
+//     tls: {
+//         rejectUnauthorized: false
+//     }
+// });
+
 router.post(`/signup`, (req, res, next) => {
     if (!req.body[`signup-username`] || !req.body[`signup-email`] || !req.body[`signup-password`] || !req.body[`signup-password-confirm`] ||
         typeof req.body[`signup-username`] !== `string` || typeof req.body[`signup-email`] !== `string` || typeof req.body[`signup-password`] !== `string` || typeof req.body[`signup-password-confirm`] !== `string`) return res.json({
