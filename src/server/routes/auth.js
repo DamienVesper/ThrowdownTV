@@ -138,7 +138,6 @@ router.get(`/logout`, (req, res, next) => {
 
 router.get(`/authenticated`, (req, res, next) => {
     if (req.isAuthenticated()) {
-        log(`yellow`, `GET data for user "${req.user.username}".`);
         return res.json({
             isLoggedIn: true,
             username: req.user.username,
