@@ -51,4 +51,14 @@ router.get(`/dashboard`, async (req, res) => {
     });
 });
 
+// Chat
+router.get(`/chat/*`, async (req, res) => {
+    if (!req.isAuthenticated()) res.redirect(`/login`);
+
+    const user = await User.findOne({ username: req.url.split(`/`)[2] });
+    if (!user) return res.redirect(`/`);
+
+    res.render(`chat.ejs`);
+});
+
 module.exports = router;
