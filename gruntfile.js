@@ -47,7 +47,8 @@ module.exports = grunt => {
                 files: [
                     {
                         expand: true,
-                        src: [`src/client/**`],
+                        cwd: `src/client/`,
+                        src: [`**`],
                         dest: `dist/`
                     }
                 ]
