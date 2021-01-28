@@ -6,7 +6,7 @@ const config = {
     mode: process.env.NODE_ENV,
     port: process.env.NODE_ENV === `prod` ? 8750 : 8080,
     socketPort: 8443,
-    domain: `throwdown.tv`,
+    domain: `beta.throwdown.tv`,
     version: pjson.version
 };
 
