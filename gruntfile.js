@@ -12,7 +12,7 @@ module.exports = grunt => {
         // Watch for file changes.
         watch: {
             scripts: {
-                files: [`**/*.js`, `!**/node_modules/**`, `**/*.css`, `**/*.html`, `**/*.json`],
+                files: [`**/*.js`, `!**/node_modules/**`, `**/*.json`],
                 tasks: [`build-dev`],
                 options: {
                     spawn: false

@@ -1,3 +1,19 @@
 <link rel="stylesheet" href="/assets/css/chat.css">
 <div class="chat-wrapper">
+    <div class="chat-history"></div>
+    <div class="chat-input-wrapper">
+        <textarea id="chat-input" placeholder="Send a message" class="form-control text-light" rows="1"></textarea>
+        <input type="submit" id="chat-send" class="btn btn-sm btn-secondary" value="Chat">
+    </div>
 </div>
+
+<script>
+    const socket = io.connect(`https://throwdown.tv`, {
+    });
+    $(`#chat-input`).keydown(e => {
+        if (e.key === `Enter`) {
+            e.preventDefault();
+            // Send a socket emit here.
+        }
+    });
+</script>

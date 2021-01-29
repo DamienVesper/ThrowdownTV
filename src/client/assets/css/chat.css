@@ -1,6 +1,36 @@
 .chat-wrapper {
     display: block;
-    background-color: #111;
+    background-color: #333;
     width: 100%;
     height: 100%;
+
+    /* word-wrap: break-word; */
+    /* overflow-y: auto; */
+    /* scrollbar-width: none; */
+}
+
+.chat-input-wrapper {
+    display: flex;
+    position: absolute;
+    bottom: 0.5rem;
+    width: 100%;
+}
+
+#chat-input {
+    font-size: small;
+    background-color: #555;
+    padding: 0.5rem;
+    border: none;
+    bottom: 1rem;
+    margin: 0 0.5rem;
+    resize: none;
+}
+
+#chat-input, #chat-input::placeholder {
+    color: #fff;
+}
+
+#chat-send {
+    font-size: small;
+    margin-right: 0.5rem;
 }
