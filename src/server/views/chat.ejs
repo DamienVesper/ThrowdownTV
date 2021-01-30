@@ -8,6 +8,12 @@
 </div>
 
 <script>
+    $(`#chat-input`).keydown(e => {
+        if (e.key === `Enter`) e.preventDefault();
+    });
+
+    $(`#chat-send`).on(`click`, e => e.preventDefault());
+
     fetch(`/authenticated`).then(data => data.json()).then(data => {
         const username = data.username;
         const token = data.token;
@@ -31,16 +37,10 @@
             }
 
             $(`#chat-input`).keydown(e => {
-                if (e.key === `Enter`) {
-                    e.preventDefault();
-                    sendChatMessage();
-                }
+                if (e.key === `Enter`) sendChatMessage();
             });
 
-            $(`#chat-send`).on(`click`, e => {
-                e.preventDefault();
-                sendChatMessage();
-            });
+            $(`#chat-send`).on(`click`, e => sendChatMessage());
 
             // Receive chat messages.
             socket.on(`chatMessage`, data => {
@@ -48,7 +48,7 @@
                 const message = data.message;
 
                 let messageWrapper = $(`<div>`);
-                
+
                 messageWrapper.addClass(`text-light`);
                 messageWrapper.text(`${user.username}: ${data.message}`);
 
