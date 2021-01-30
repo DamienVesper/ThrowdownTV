@@ -17,9 +17,9 @@
 <script>
     $(document).ready(() => {
         $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1]}`)
+
         let player = videojs(`live-stream`, {
             errorDisplay: false,
-            autoplay: true,
             flvjs: {
                 mediaDataSource: {
                     isLive: true,
@@ -40,6 +40,5 @@
                 type: `video/mp4`
             });
         });
-        console.log(player);
     });
 </script>
