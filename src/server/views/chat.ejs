@@ -54,6 +54,9 @@
                 messageWrapper.html(`<b class="text-${chatColor}">${user.username}:</b> ${data.message}`);
 
                 $(`.chat-history`).append(messageWrapper);
+
+                const chatHistory = document.querySelector(`.chat-history`);
+                chatHistory.scrollTop = chatHistory.scrollHeight - chatHistory.offsetHeight;
             });
 
             $(window).on(`beforeunload`, () => socket.emit(`disconnect`));
