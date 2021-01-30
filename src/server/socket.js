@@ -28,6 +28,9 @@ server.listen(config.socketPort, () => log(`green`, `Socket.IO bound to port ${c
 // Handle new connections.
 io.on(`connection`, socket => {
     log(`magenta`, `A new user has connected to the chat! | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
+
+    // Send a handshake back to the client to let them know that we have connected.
+    socket.emit(`handshake`);
 });
 
 module.exports = io;

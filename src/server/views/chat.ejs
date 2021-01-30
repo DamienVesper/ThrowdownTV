@@ -24,4 +24,6 @@
         e.preventDefault();
         // Send another socket emit here.
     });
+
+    socket.on(`handshake`, () => console.log(`Succesfully connected to the chat server.`));
 </script>
