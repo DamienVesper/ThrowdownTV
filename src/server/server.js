@@ -7,6 +7,9 @@ const log = require(`./utils/log.js`);
 const fs = require(`fs`);
 const path = require(`path`);
 
+// Log errors in a differnt color.
+process.on(`uncaughtException`, err => log(`red`, err.stack));
+
 // Socket.IO server.
 const io = require(`./socket.js`);
 
