@@ -38,9 +38,10 @@
         </div>
         <br>
         <div class="card card-body" style="background-color: #b1cbe6;">
-            <h2 class="text-center">Widgets</h2>
+            <h2 class="text-center">Stream Key</h2>
             <br>
-            <p><b>Chat Widget:</b> <a id="chat-link"></a></p>
+            <p><b>Stream Key:</b> <input readonly type="password" class="form-control" id="stream-key"> <input type="checkbox" onclick="revealStreamKey()"> Reveal Stream Key</p>
+            <p>Do <b style="color: red;">NOT</b> share this Stream Key with anyone. This key lets anyone broadcast on your channel.</p>
         </div>
         <br>
         <div class="card card-body" style="background-color: #b1cbe6;">
@@ -63,6 +64,7 @@
                 $(`#stream-title`).val(data.streamTitle);
                 $(`#stream-description`).val(data.streamDescription);
                 $(`#donation-link`).val(data.donationLink);
+                $(`#stream-key`).val(data.streamKey);
             });
     });
 
@@ -77,4 +79,13 @@
             data: $(`#dashboard-form`).serialize()
         }).then(() => window.location.reload());
     });
+
+    function revealStreamKey() {
+        let x = document.getElementById("stream-key");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
 </script>
