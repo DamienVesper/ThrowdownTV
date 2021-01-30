@@ -24,7 +24,8 @@ router.get(`/stream-data`, async (req, res) => {
     const data = {
         streamTitle: streamerData.settings.title,
         streamDescription: streamerData.settings.description,
-        donationLink: streamerData.settings.donationLink
+        donationLink: streamerData.settings.donationLink,
+        streamKey: streamerData.settings.streamKey
     };
 
     res.jsonp(data);
