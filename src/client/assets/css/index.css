@@ -17,3 +17,21 @@ body {
     border-bottom: 2px solid #000;
     margin-bottom: 12.5px;
 }
+
+::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0);
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #babac093;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
