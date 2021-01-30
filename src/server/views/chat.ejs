@@ -8,22 +8,37 @@
 </div>
 
 <script>
-    const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
-        secure: true,
-        rejectUnauthorized: true,
-        withCredentials: true
-    });
+    fetch(`/authenticated`).then(data => data.json()).then(data => {
+        const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
+            secure: true,
+            rejectUnauthorized: true,
+            withCredentials: true
+        });
 
-    $(`#chat-input`).keydown(e => {
-        if (e.key === `Enter`) {
-            e.preventDefault();
-            // Send a socket emit here.
-        }
-    });
-    $(`#chat-send`).on(`click`, e => {
-        e.preventDefault();
-        // Send another socket emit here.
-    });
+        socket.emit(`connectToChat`, data.username, data.token, window.location.href.split(`/`)[4]);
 
-    socket.on(`handshake`, () => console.log(`Succesfully connected to the chat server.`));
+        socket.on(`handshake`, () => {
+            console.log(`Succesfully connected to the chat server.`);
+            $(`#chat-input`).focus();
+
+            const sendChatMessage = () => {
+                socket.emit(`chatMessage`, {
+                    message: $(`#chat-input`).val()
+                });
+                $(`#chat-input`).val(``);
+            }
+
+            $(`#chat-input`).keydown(e => {
+                if (e.key === `Enter`) {
+                    e.preventDefault();
+                    sendChatMessage();
+                }
+            });
+
+            $(`#chat-send`).on(`click`, e => {
+                e.preventDefault();
+                sendChatMessage();
+            });
+        });
+    });
 </script>
