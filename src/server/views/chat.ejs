@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="/assets/css/chat.css">
 <div class="chat-wrapper">
     <div class="chat-history"></div>
-    <div class="chat-input-wrapper">
+    <form class="chat-input-form">
         <textarea id="chat-input" placeholder="Send a message" class="form-control text-light" rows="1"></textarea>
         <input type="submit" id="chat-send" class="btn btn-sm btn-secondary" value="Chat">
-    </div>
+    </form>
 </div>
 
 <script>
@@ -19,5 +19,9 @@
             e.preventDefault();
             // Send a socket emit here.
         }
+    });
+    $(`#chat-send`).on(`click`, e => {
+        e.preventDefault();
+        // Send another socket emit here.
     });
 </script>
