@@ -61,4 +61,15 @@ router.get(`/chat/*`, async (req, res) => {
     res.render(`chat.ejs`);
 });
 
+router.get(`/:streamer`, async (req, res) => {
+    if (!req.isAuthenticated()) res.redirect(`/login`);
+
+    const streamer = req.params.streamer;
+
+    const user = await User.findOne({ username: streamer });
+    if (!user) return res.redirect(`/404`);
+
+    res.render(`streamer.ejs`)
+});
+
 module.exports = router;

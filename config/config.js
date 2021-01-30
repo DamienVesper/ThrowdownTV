@@ -8,7 +8,8 @@ const config = {
     socketPort: 8443,
     domain: `beta.throwdown.tv`,
     version: pjson.version,
-    staff: [`DamienVesper`, `rajeev`, `xsev`]
+    staff: [`DamienVesper`, `rajeev`, `xsev`],
+    blacklistedUsernames: [`api`,`signup`,`login`,`tos`,`browse`,`following`,`dashboard`,`changestreamkey`]
 };
 
 config.staticDir = path.resolve(__dirname, config.mode === `prod` ? `../dist` : `../src/client`);
