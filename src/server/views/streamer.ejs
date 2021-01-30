@@ -1,10 +1,8 @@
 <%- include('./partials/header'); %>
-<div class="row mt-5">
-    <div class="col-6 col-md-4">
-        <iframe src="" frameborder="0"></iframe>
-    </div>
+<link rel="stylesheet" href="/assets/css/streamer.css">
+<div class="stream-overlay">
+    <iframe class="chat-popout" frameborder="0" height="720px"></iframe>
 </div>
-
 <script>
     $(document).ready(() => $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1]}`));
 </script>
