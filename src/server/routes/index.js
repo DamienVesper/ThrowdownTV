@@ -69,7 +69,7 @@ router.get(`/:streamer`, async (req, res) => {
     const user = await User.findOne({ username: streamer });
     if (!user) return res.redirect(`/404`);
 
-    res.render(`streamer.ejs`)
+    res.render(`streamer.ejs`);
 });
 
 module.exports = router;
