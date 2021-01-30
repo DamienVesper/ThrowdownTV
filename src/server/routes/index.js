@@ -25,6 +25,9 @@ router.get(`/login`, (req, res) => {
 // Terms of Service.
 router.get(`/tos`, (req, res) => res.render(`tos.ejs`));
 
+// 404 Error
+router.get(`/404`, (req, res) => res.render(`404.ejs`));
+
 // Browsing.
 router.get(`/browse`, async (req, res) => res.render(`browse.ejs`));
 
