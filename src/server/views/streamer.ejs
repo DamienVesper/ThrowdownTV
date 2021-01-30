@@ -1,12 +1,10 @@
 <%- include('./partials/header'); %>
 <div class="row mt-5">
-    <div class="col-md-6 m-auto">
-        <div class="card card-body text-center" style="background-color: #b1cbe6;">
-            <img src="/assets/img/logo.png" alt="ThrowdownTV logo" style="width: 150px; height: 150px; margin: auto;">
-            <h1>ThrowdownTV</h1>
-            <p>Free Speech Livestreaming</p>
-            <a href="/signup" class="btn btn-primary btn-block">Sign Up</a>
-            <a href="/login" class="btn btn-success btn-block">Login</a>
-        </div>
+    <div class="col-6 col-md-4">
+        <iframe src="" frameborder="0"></iframe>
     </div>
 </div>
+
+<script>
+    $(document).ready(() => $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1]}`));
+</script>
