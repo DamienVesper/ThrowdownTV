@@ -8,7 +8,7 @@ const config = {
     socketPort: 8443,
     domain: `beta.throwdown.tv`,
     version: pjson.version,
-    staff: [`DamienVesper`, `rajeev`, `xsev`],
+    staff: [`DamienVesper`, `LightWarp`, `xsev`],
     blacklistedUsernames: [`api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `404`]
 };
 
