@@ -6,3 +6,11 @@
     height: calc(100% - 75px);
     width: 30%;
 }
+.stream-popout {
+    display: block;
+    position: absolute;
+    left: 0.6rem;
+    bottom: 0.5rem;
+    height: calc(100% - 75px);
+    width: 68.5%;
+}

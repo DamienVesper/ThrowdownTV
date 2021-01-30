@@ -1,8 +1,51 @@
 <%- include('./partials/header'); %>
 <link rel="stylesheet" href="/assets/css/streamer.css">
 <div class="stream-overlay">
+    <div class="stream-popout">
+        <video
+            id="live-stream"
+            class="video-js vjs-fluid vjs-big-play-centered"
+            controls
+            preload="auto"
+            autoplay="true"
+            fluid="true"
+            width="1280"
+            height="720"
+            poster="/assets/img/thumbnail.png"
+            data-setup="{}"
+        >
+            <source src="https://filesamples.com/samples/video/flv/sample_1280x720.flv" type="video/x-flv" />
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video> 
+    </div>
     <iframe class="chat-popout" frameborder="0" height="720px"></iframe>
 </div>
 <script>
     $(document).ready(() => $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1]}`));
+
+    let player = videojs(`live-stream`, {
+        errorDisplay: false,
+        flvjs: {
+            mediaDataSource: {
+                isLive: true,
+                cors: true,
+                withCredentials: false
+            }
+        }
+    }, function() {
+        this.src({
+            src: "https://filesamples.com/samples/video/flv/sample_1280x720.flv",
+            type: "video/flv"
+        })
+        this.on('error', function(event) {
+            this.src({
+                src: "https://cdn.discordapp.com/attachments/794326060656230442/805079811599892500/throwdown.webm",
+                type: "video/webm"
+            })
+        })
+    })
 </script>
