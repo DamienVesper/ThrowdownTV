@@ -7,7 +7,7 @@ const http = require(`http`);
 const https = require(`https`);
 
 const User = require(`./models/user.model.js`);
-const Ban = require(`./models/ban.model.js`);
+// const Ban = require(`./models/ban.model.js`);
 
 const xssFilters = require(`xss-filters`);
 const chatUsers = [];

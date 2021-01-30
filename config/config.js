@@ -9,7 +9,8 @@ const config = {
     domain: `beta.throwdown.tv`,
     version: pjson.version,
     staff: [`DamienVesper`, `LightWarp`, `xsev`],
-    blacklistedUsernames: [`api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `404`]
+    blacklistedUsernames: [`api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `404`],
+    whitespaceRegex: /" *"|\t|\n|\v|\f|\r|/g
 };
 
 config.staticDir = path.resolve(__dirname, config.mode === `prod` ? `../dist` : `../src/client`);
