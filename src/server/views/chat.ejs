@@ -55,6 +55,8 @@
 
                 $(`.chat-history`).append(messageWrapper);
             });
+
+            $(window).on(`beforeunload`, () => socket.emit(`disconnect`));
         });
     });
 </script>

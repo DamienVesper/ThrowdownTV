@@ -36,7 +36,7 @@ server.listen(config.socketPort, () => log(`green`, `Socket.IO bound to port ${c
 
 // Handle new connections.
 io.on(`connection`, async socket => {
-    log(`magenta`, `A new user has connected to the chat! | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
+    log(`magenta`, `Chat Connection | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
 
     socket.on(`connectToChat`, async (username, token, streamerUsername) => {
         const user = await User.findOne({ username: username });
@@ -72,6 +72,12 @@ io.on(`connection`, async socket => {
                     message: filter.clean(xssFilters.inHTMLData(message.substr(0, 500)))
                 });
             }
+        });
+
+        socket.on(`disconnect`, () => {
+            delete chatUsers[chatUsers.indexOf(chatter)];
+            log(`magenta`, `Chat Disconnection | Username: ${chatter.username} | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
+            return socket.disconnect();
         });
     });
 });
