@@ -44,19 +44,40 @@
 
             // Receive chat messages.
             socket.on(`chatMessage`, data => {
-                const user = data.user;
+                const username = data.username;
                 const message = data.message;
+                const badges = data.badges;
 
-                const chatColor = data.user.username === username ? `success` : data.user.username === streamer ? `danger` : `info`;
+                const chatColor = `${data.badges.streamer ? `warning` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
+
                 let messageWrapper = $(`<div>`);
+                messageWrapper.addClass(`chat-message`);
+                
+                const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${username}:</b> ${message}</span>`);
 
-                messageWrapper.addClass(`chat-message text-light`);
-                messageWrapper.html(`<b class="text-${chatColor}">${user.username}:</b> ${data.message}`);
+                const streamBadge = data.badges.streamer ? $(`<img src="/assets/img/chat/badges/streamer.png" class="chat-badge" alt="Streamer badge">`) : undefined;
+                const moderatorBadge = data.badges.moderator ? $(`<img src="/assets/img/chat/badges/moderator.png" class="chat-badge" alt="Moderator badge">`) : undefined;
+                const staffBadge = data.badges.staff ? $(`<img src="/assets/img/chat/badges/staff.png" class="chat-badge" alt="Staff badge">`) : undefined;
+                const verifiedBadge = data.badges.verified ? $(`<img src="/assets/img/chat/badges/verified.png" class="chat-badge" alt="Verified badge">`) : undefined;
+                const vipBadge = data.badges.vip ? $(`<img src="/assets/img/chat/badges/vip.png" class="chat-badge" alt="VIP badge">`) : undefined;
 
-                $(`.chat-history`).append(messageWrapper);
+                const chatHistory = $(`.chat-history`);
+                streamBadge ? messageWrapper.append(streamBadge) : null;
+                moderatorBadge ? messageWrapper.append(moderatorBadge) : null;
+                staffBadge ? messageWrapper.append(staffBadge) : verifiedBadge ? messageWrapper.append(verifiedBadge) : vipBadge ? messageWrapper.append(vipBadge) : null;
 
-                const chatHistory = document.querySelector(`.chat-history`);
-                chatHistory.scrollTop = chatHistory.scrollHeight - chatHistory.offsetHeight;
+                messageWrapper.append(streamBadge);
+                messageWrapper.append(moderatorBadge);
+                messageWrapper.append(staffBadge);
+                messageWrapper.append(verifiedBadge);
+                messageWrapper.append(vipBadge);
+
+                messageWrapper.append(chatMessage);
+
+                chatHistory.append(messageWrapper);
+
+                const DOMchatHistory = document.querySelector(`.chat-history`);
+                DOMchatHistory.scrollTop = DOMchatHistory.scrollHeight - DOMchatHistory.offsetHeight;
             });
 
             $(window).on(`beforeunload`, () => socket.emit(`disconnect`));

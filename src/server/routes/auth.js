@@ -1,5 +1,6 @@
-// Log utility and request.
+// Log utility and config.
 const log = require(`../utils/log.js`);
+const config = require(`../../../config/config.js`);
 
 const express = require(`express`);
 const router = express.Router();
@@ -8,23 +9,22 @@ const xssFilters = require(`xss-filters`);
 // Authentication.
 const User = require(`../models/user.model.js`);
 const passport = require(`passport`);
+const crypto = require(`crypto`);
 
 // Nodemailer.
 const nodemailer = require(`nodemailer`);
-const transport = process.env.NODE_ENV === `prod`
-    ? nodemailer.createTransport({
-        host: `localhost`,
-        port: 25,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_USERNAME,
-            password: process.env.SMTP_TOKEN
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    })
-    : undefined;
+const transport = nodemailer.createTransport({
+    host: `localhost`,
+    port: 25,
+    secure: false,
+    auth: {
+        user: process.env.SMTP_USERNAME,
+        password: process.env.SMTP_TOKEN
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
 
 router.post(`/signup`, (req, res, next) => {
     if (!req.body[`signup-username`] || !req.body[`signup-email`] || !req.body[`signup-password`] || !req.body[`signup-password-confirm`] ||
@@ -85,24 +85,63 @@ router.post(`/signup`, (req, res, next) => {
                     username
                 }).then(user => {
                     if (!user) return log(`red`, err);
-                    const creationIP = req.header(`x-forwarded-for`) || req.connection.remoteAddress;
+                    const creationIP = req.header(`x-forwarded-for`) || req.socket.remoteAddress;
 
                     user.email = req.body[`signup-email`];
                     user.creationIP = creationIP;
                     user.lastIP = user.creationIP;
+                    user.verified = false;
 
-                    user.save(() => {
-                        log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
-                        req.logIn(user, err => {
-                            if (err) return res.json({
-                                errors: err
-                            });
-                            log(`yellow`, `User "${user.username}" successfully logged in.`);
-                            return res.json({
-                                success: `Logged in`
+                    user.verifyToken = `x${crypto.randomBytes(32).toString(`hex`)}`;
+
+                    const mailOptions = {
+                        from: `Throwdown TV <no-reply@throwdown.tv>`,
+                        to: user.email,
+                        subject: `Verify your Throwdown.TV Account`,
+                        text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
+                    };
+
+                    if (config.mode === `dev`) {
+                        user.save(() => {
+                            log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+                            req.logIn(user, err => {
+                                if (err) return res.json({
+                                    errors: err
+                                });
+                                log(`yellow`, `User "${user.username}" successfully logged in.`);
+                                return res.json({
+                                    success: `Logged in`
+                                });
                             });
                         });
-                    });
+                    }
+                    else {
+                        transport.sendMail(mailOptions, err => {
+                            if (err) {
+                                user.delete();
+                                return res.json({
+                                    errors: `Error sending a verification email to the specified email address.`
+                                });
+                            }
+
+                            user.save(() => {
+                                log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+
+                                if (config.mode === `prod`) return res.json({
+                                    success: `Please verify your email`
+                                });
+
+                                else {
+                                    req.logIn(user, err => {
+                                        if (err) return res.json({
+                                            errors: err
+                                        });
+                                        log(`yellow`, `User "${user.username}" successfully logged in.`);
+                                    });
+                                }
+                            });
+                        });
+                    }
                 });
             }
         })(req, res, next);
@@ -162,6 +201,28 @@ router.get(`/authenticated`, (req, res, next) => {
         });
     } else return res.json({
         isLoggedIn: false
+    });
+});
+
+router.get(`/verify/*`, (req, res, next) => {
+    const token = req.url.split(`/verify/`)[1];
+    if (!token) return res.redirect(`/`);
+
+    User.findOne({
+        verifyToken: token
+    }).then(user => {
+        if (!user) return res.redirect(`/`);
+
+        if (user.verified) return res.redirect(`/`);
+        else {
+            user.verified = true;
+            user.verifyToken = undefined;
+
+            user.save(() => {
+                log(`yellow`, `User "${user.username}" verified email address "${user.email}".`);
+                return res.redirect(`/login`);
+            });
+        }
     });
 });
 

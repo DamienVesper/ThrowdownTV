@@ -12,8 +12,6 @@ const Ban = require(`./models/ban.model.js`);
 const xssFilters = require(`xss-filters`);
 const chatUsers = [];
 
-const Filter = require(`bad-words`);
-const filter = new Filter();
 
 // Configure socket.
 const server = config.mode === `prod`
@@ -39,7 +37,7 @@ io.on(`connection`, async socket => {
     log(`magenta`, `Chat Connection | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
 
     socket.on(`connectToChat`, async (username, token, streamerUsername) => {
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ username });
         const streamer = await User.findOne({ username: streamerUsername });
 
         // If the user or the token is incorrect, disconnect the socket.
@@ -64,12 +62,18 @@ io.on(`connection`, async socket => {
 
             // Message all users in the channel.
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
+
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
-                    user: {
-                        username: chatter.username
-                    },
-                    message: filter.clean(xssFilters.inHTMLData(message.substr(0, 500)))
+                    username: chatter.username,
+                    message: xssFilters.inHTMLData(message.substr(0, 500)),
+                    badges: {
+                        streamer: chatter.username === chatter.channel,
+                        staff: config.staff.includes(chatter.username),
+                        moderator: false,
+                        verified: false,
+                        vip: false
+                    }
                 });
             }
         });

@@ -27,7 +27,7 @@ const userSchema = Mongoose.Schema({
     },
     token: {
         type: String,
-        default: randomString(128),
+        default: randomString(64),
         required: false
     },
     password: {

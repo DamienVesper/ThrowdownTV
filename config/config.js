@@ -7,7 +7,8 @@ const config = {
     port: process.env.NODE_ENV === `prod` ? 8750 : 8080,
     socketPort: 8443,
     domain: `beta.throwdown.tv`,
-    version: pjson.version
+    version: pjson.version,
+    staff: [`DamienVesper`, `rajeevkapoor`, `xsev`]
 };
 
 config.staticDir = path.resolve(__dirname, config.mode === `prod` ? `../dist` : `../src/client`);
