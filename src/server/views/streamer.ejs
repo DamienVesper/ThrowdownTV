@@ -18,23 +18,13 @@
     $(document).ready(() => {
         $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1]}`)
 
-        let player = videojs(`live-stream`, {
-            errorDisplay: false,
-            flvjs: {
-                mediaDataSource: {
-                    isLive: true,
-                    cors: true,
-                    withCredentials: false
-                }
-            }
-        });
+        let player = videojs(`live-stream`);
         player.src({
             src: `https://filesamples.com/samples/video/flv/sample_1280x720.flv`,
             type: `video/flv`
         });
 
         player.on(`error`, event => {
-            console.log(`got here 2`);
             player.src({
                 src: `/assets/video/throwdown.mp4`,
                 type: `video/mp4`

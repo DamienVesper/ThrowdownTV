@@ -21,7 +21,8 @@
                     <input type="text" id="donation-link" name="donation-link" class="form-control"
                         placeholder="Enter a URL to your donation page">
                     <br>
-                    <input type="submit" id="dashboard-update-info" value="Update Information" class="btn btn-primary btn-block">
+                    <input type="submit" id="dashboard-update-info" value="Update Information"
+                        class="btn btn-primary btn-block">
                 </div>
             </form>
         </div>
@@ -40,19 +41,22 @@
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Stream Key</h2>
             <br>
-            <p><b>Stream Key:</b> <br> <input readonly type="password" class="form-control" id="stream-key"> <input type="checkbox" onclick="revealStreamKey()"> Reveal Stream Key</p>
-            <p>Do <b style="color: red;">NOT</b> share this Stream Key with anyone. This key lets anyone broadcast on your channel.</p>
+            <label for="stream-key">Stream Key</label>
             <form action="/changestreamkey" method="post" id="streamkey-update-form">
                 <div class="form-group">
-                    <input type="submit" id="streamkey-update-info" value="Reset Stream Key" class="btn btn-danger btn-block">
+                    <input type="password" class="form-control" id="stream-key" readonly>
+                    <p><input type="checkbox" id="reveal-stream-key"> Reveal Stream Key</p>
+                    <input type="submit" value="Reset Stream Key" id="reset-streamkey" class="btn btn-danger btn-block">
                 </div>
             </form>
+            <p>Do <b>NOT</b> share your stream key with anyone. This key allows anyone to broadcast on your channel.</p>
         </div>
         <br>
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Widgets</h2>
             <br>
-            <p><b>Chat Widget:</b> <br> <input readonly type="text" class="form-control" id="chat-link"></p>
+            <label for="chat-link">Chat Widget</label>
+            <input type="text" class="form-control" id="chat-link" readonly>
         </div>
         <br>
     </div>
@@ -60,17 +64,17 @@
 
 <script>
     fetch(`/authenticated`).then(data => data.json()).then(data => {
-        let chatURL = `https://throwdown.tv/chat/${data.username}/`;
+        let chatURL = `https://throwdown.tv/widget/${data.username}/`;
         $(`#chat-link`)
             .val(chatURL)
             .attr(`href`, chatURL);
 
-            fetch(`/api/stream-data`).then(data => data.json()).then(data => {
-                $(`#stream-title`).val(data.streamTitle);
-                $(`#stream-description`).val(data.streamDescription);
-                $(`#donation-link`).val(data.donationLink);
-                $(`#stream-key`).val(data.streamKey);
-            });
+        fetch(`/api/stream-data`).then(data => data.json()).then(data => {
+            $(`#stream-title`).val(data.streamTitle);
+            $(`#stream-description`).val(data.streamDescription);
+            $(`#donation-link`).val(data.donationLink);
+            $(`#stream-key`).val(data.streamKey);
+        });
     });
 
     $(`#dashboard-update-info`).on(`click`, e => {
@@ -84,10 +88,10 @@
             data: $(`#dashboard-form`).serialize()
         }).then(() => window.location.reload());
     });
-    $(`#streamkey-update-info`).on(`click`, e => {
-        e.preventDefault();
 
-        $(`#streamkey-update-info`).attr(`disabled`, true);
+    $(`#reset-streamkey`).on(`click`, e => {
+        e.preventDefault();
+        $(`#reset-streamkey-info`).attr(`disabled`, true);
 
         $.ajax({
             type: `post`,
@@ -95,12 +99,8 @@
         }).then(() => window.location.reload());
     });
 
-    function revealStreamKey() {
-        let x = document.getElementById("stream-key");
-        if (x.type === "password") {
-            x.type = "text";
-        } else {
-            x.type = "password";
-        }
-    }
+    $(`#reveal-stream-key`).change(() => {
+        let streamKey = document.querySelector(`#stream-key`);
+        $(`#stream-key`).attr(`type`, streamKey.type === `password` ? `text` : `password`);
+    });
 </script>
