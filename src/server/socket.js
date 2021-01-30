@@ -9,6 +9,12 @@ const https = require(`https`);
 const User = require(`./models/user.model.js`);
 const Ban = require(`./models/ban.model.js`);
 
+const xssFilters = require(`xss-filters`);
+const chatUsers = [];
+
+const Filter = require(`bad-words`);
+const filter = new Filter();
+
 // Configure socket.
 const server = config.mode === `prod`
     ? https.createServer({
@@ -43,10 +49,27 @@ io.on(`connection`, async socket => {
         }
 
         const chatter = socket;
+        chatter.username = username;
+        chatter.token = token;
         chatter.channel = streamerUsername;
+        chatUsers.push(chatter);
 
         // Send a handshake back to the client to let them know that we have connected.
         socket.emit(`handshake`);
+
+        // Receiving messages.
+        socket.on(`chatMessage`, message => {
+            const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
+
+            for (const user of usersToMessage) {
+                user.emit(`chatMessage`, {
+                    user: {
+                        username: chatter.username
+                    },
+                    message: filter.clean(xssFilters.inHTMLData(message))
+                });
+            }
+        });
     });
 });
 

@@ -9,6 +9,10 @@
     scrollbar-width: none;
 }
 
+.chat-history {
+    padding: 0.5rem;
+}
+
 .chat-input-form {
     display: flex;
     position: absolute;

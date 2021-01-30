@@ -9,22 +9,24 @@
 
 <script>
     fetch(`/authenticated`).then(data => data.json()).then(data => {
+        const username = data.username;
+        const token = data.token;
+        const streamer = window.location.href.split(`/`)[4];
+
         const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
             secure: true,
             rejectUnauthorized: true,
             withCredentials: true
         });
 
-        socket.emit(`connectToChat`, data.username, data.token, window.location.href.split(`/`)[4]);
+        socket.emit(`connectToChat`, username, token, streamer);
 
         socket.on(`handshake`, () => {
             console.log(`Succesfully connected to the chat server.`);
             $(`#chat-input`).focus();
 
             const sendChatMessage = () => {
-                socket.emit(`chatMessage`, {
-                    message: $(`#chat-input`).val()
-                });
+                socket.emit(`chatMessage`, $(`#chat-input`).val());
                 $(`#chat-input`).val(``);
             }
 
@@ -38,6 +40,19 @@
             $(`#chat-send`).on(`click`, e => {
                 e.preventDefault();
                 sendChatMessage();
+            });
+
+            // Receive chat messages.
+            socket.on(`chatMessage`, data => {
+                const user = data.user;
+                const message = data.message;
+
+                let messageWrapper = $(`<div>`);
+                
+                messageWrapper.addClass(`text-light`);
+                messageWrapper.text(`${user.username}: ${data.message}`);
+
+                $(`.chat-history`).append(messageWrapper);
             });
         });
     });
