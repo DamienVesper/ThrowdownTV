@@ -40,14 +40,19 @@
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Stream Key</h2>
             <br>
-            <p><b>Stream Key:</b> <input readonly type="password" class="form-control" id="stream-key"> <input type="checkbox" onclick="revealStreamKey()"> Reveal Stream Key</p>
+            <p><b>Stream Key:</b> <br> <input readonly type="password" class="form-control" id="stream-key"> <input type="checkbox" onclick="revealStreamKey()"> Reveal Stream Key</p>
             <p>Do <b style="color: red;">NOT</b> share this Stream Key with anyone. This key lets anyone broadcast on your channel.</p>
+            <form action="/changestreamkey" method="post" id="streamkey-update-form">
+                <div class="form-group">
+                    <input type="submit" id="streamkey-update-info" value="Reset Stream Key" class="btn btn-danger btn-block">
+                </div>
+            </form>
         </div>
         <br>
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Widgets</h2>
             <br>
-            <p><b>Chat Widget:</b> <a id="chat-link"></a></p>
+            <p><b>Chat Widget:</b> <br> <input readonly type="text" class="form-control" id="chat-link"></p>
         </div>
         <br>
     </div>
@@ -57,7 +62,7 @@
     fetch(`/authenticated`).then(data => data.json()).then(data => {
         let chatURL = `https://throwdown.tv/chat/${data.username}/`;
         $(`#chat-link`)
-            .text(chatURL)
+            .val(chatURL)
             .attr(`href`, chatURL);
 
             fetch(`/api/stream-data`).then(data => data.json()).then(data => {
@@ -77,6 +82,16 @@
             type: `post`,
             url: `/dashboard`,
             data: $(`#dashboard-form`).serialize()
+        }).then(() => window.location.reload());
+    });
+    $(`#streamkey-update-info`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#streamkey-update-info`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/changestreamkey`,
         }).then(() => window.location.reload());
     });
 
