@@ -28,8 +28,6 @@
         socket.emit(`connectToChat`, username, token, streamer);
 
         socket.on(`handshake`, () => {
-            console.log(`Succesfully connected to the chat server.`);
-
             let initMessage = $(`<div>`);
             initMessage.addClass(`text-muted chat-message`);
             initMessage.text(`Welcome to the chat!`);
@@ -48,7 +46,6 @@
 
             $(`#chat-send`).on(`click`, e => sendChatMessage());
 
-            // Receive chat messages.
             socket.on(`chatMessage`, data => {
                 const username = data.username;
                 const message = data.message;
