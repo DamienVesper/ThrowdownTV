@@ -28,7 +28,7 @@ router.post(`/changestreamkey`, async (req, res) => {
 
     const user = await User.findOne({ username: req.user.username });
 
-    user.settings.streamKey = randomString(32)
+    user.settings.streamKey = randomString(32);
 
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });

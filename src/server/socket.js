@@ -12,7 +12,6 @@ const Ban = require(`./models/ban.model.js`);
 const xssFilters = require(`xss-filters`);
 const chatUsers = [];
 
-
 // Configure socket.
 const server = config.mode === `prod`
     ? https.createServer({
