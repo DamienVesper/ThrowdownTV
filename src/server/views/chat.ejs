@@ -29,6 +29,12 @@
 
         socket.on(`handshake`, () => {
             console.log(`Succesfully connected to the chat server.`);
+
+            let initMessage = $(`<div>`);
+            initMessage.addClass(`text-muted chat-message`);
+            initMessage.text(`Welcome to the chat!`);
+            $(`.chat-history`).append(initMessage);
+
             $(`#chat-input`).focus();
 
             const sendChatMessage = () => {
