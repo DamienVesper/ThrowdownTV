@@ -39,6 +39,14 @@ const userSchema = Mongoose.Schema({
         default: false,
         required: false
     },
+    verified: {
+        type: Boolean,
+        required: false
+    },
+    verifyToken: {
+        type: String,
+        required: false
+    },
     settings: {
         streamKey: {
             type: String,
