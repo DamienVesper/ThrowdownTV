@@ -47,10 +47,11 @@
                 const user = data.user;
                 const message = data.message;
 
+                const chatColor = data.user.username === username ? `success` : data.user.username === streamer ? `danger` : `info`;
                 let messageWrapper = $(`<div>`);
 
-                messageWrapper.addClass(`text-light`);
-                messageWrapper.text(`${user.username}: ${data.message}`);
+                messageWrapper.addClass(`chat-message text-light`);
+                messageWrapper.html(`<b class="text-${chatColor}">${user.username}:</b> ${data.message}`);
 
                 $(`.chat-history`).append(messageWrapper);
             });

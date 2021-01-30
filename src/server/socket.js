@@ -59,14 +59,17 @@ io.on(`connection`, async socket => {
 
         // Receiving messages.
         socket.on(`chatMessage`, message => {
-            const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
+            // Whitespace detection.
+            if (message.length === 0 || message.split(` `).length === (message.length + 1)) return;
 
+            // Message all users in the channel.
+            const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
                     user: {
                         username: chatter.username
                     },
-                    message: filter.clean(xssFilters.inHTMLData(message))
+                    message: filter.clean(xssFilters.inHTMLData(message.substr(0, 500)))
                 });
             }
         });
