@@ -1,3 +1,5 @@
+require(`dotenv`).config();
+
 // Configuration.
 const config = require(`../../config/config.js`);
 require(`dotenv`).config();
@@ -49,7 +51,7 @@ app.use((req, res, next) => {
     if (req.path.includes(`/assets/img/`)) res.header(`Cache-Control`, `public, max-age=86400`);
 
     res.header(`Access-Control-Allow-Credentials`, true);
-    res.header(`Access-Control-Allow-Origin`, `*`);
+    res.header(`Access-Control-Allow-Origin`, `*`); // This can be changed to prevent people from embedding the site on their own.
     res.header(`Access-Control-Allow-Methods`, `POST, GET, OPTIONS, PUT, DELETE, PATCH, HEAD`);
     res.header(`Access-Control-Allow-Headers`, `Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept`);
     req.method.toLowerCase() === `options`

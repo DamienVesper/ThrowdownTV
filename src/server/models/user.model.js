@@ -8,6 +8,11 @@ const userSchema = Mongoose.Schema({
         required: true,
         unique: true
     },
+    displayName: {
+        type: String,
+        required: true,
+        unique: true
+    },
     email: {
         type: String,
         required: false,

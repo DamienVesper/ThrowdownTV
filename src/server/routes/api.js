@@ -9,6 +9,7 @@ router.get(`/streams`, async (req, res) => {
 
     for (const streamer of streamerData) streamers.push({
         name: streamer.username,
+        displayName: streamer.displayName,
         title: streamer.settings.title,
         description: streamer.settings.description
     });

@@ -16,7 +16,7 @@
 </div>
 <script>
     $(document).ready(() => {
-        $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1]}`)
+        $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1].toLowerCase()}`)
 
         let player = videojs(`live-stream`);
         player.src({

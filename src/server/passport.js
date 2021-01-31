@@ -1,3 +1,5 @@
+require(`dotenv`).config();
+
 const bcrypt = require(`bcryptjs`);
 const User = require(`./models/user.model.js`);
 
@@ -56,7 +58,8 @@ passport.use(`signup`, new LocalStrategy({
         if (user) return done(`User already exists`, false);
 
         const signupUser = new User({
-            username,
+            username: username.toLowerCase(),
+            displayName: username,
             creationDate: new Date(),
             password
         });

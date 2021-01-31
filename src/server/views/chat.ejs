@@ -47,7 +47,7 @@
             $(`#chat-send`).on(`click`, e => sendChatMessage());
 
             socket.on(`chatMessage`, data => {
-                const username = data.username;
+                const displayName = data.displayName;
                 const message = data.message;
                 const badges = data.badges;
 
@@ -56,7 +56,7 @@
                 let messageWrapper = $(`<div>`);
                 messageWrapper.addClass(`chat-message`);
                 
-                const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${username}:</b> ${message}</span>`);
+                const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${displayName}:</b> ${message}</span>`);
 
                 const streamBadge = data.badges.streamer ? $(`<img src="/assets/img/chat/badges/streamer.png" class="chat-badge" alt="Streamer badge">`) : undefined;
                 const moderatorBadge = data.badges.moderator ? $(`<img src="/assets/img/chat/badges/moderator.png" class="chat-badge" alt="Moderator badge">`) : undefined;

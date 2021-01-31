@@ -1,3 +1,5 @@
+require(`dotenv`).config();
+
 // Log utility and config.
 const log = require(`../utils/log.js`);
 const config = require(`../../../config/config.js`);
@@ -64,9 +66,8 @@ router.post(`/signup`, (req, res, next) => {
         email: req.body[`signup-email`]
     }).then(user => {
         if (user) {
-            if (!user.verified && ((new Date()) - user.creationDate) > (60 * 60 * 1e3)) {
-                user.delete();
-            } else {
+            if (!user.verified && ((new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
+            else {
                 return res.json({
                     errors: `That email is already in use`
                 });
@@ -92,7 +93,7 @@ router.post(`/signup`, (req, res, next) => {
                     user.lastIP = user.creationIP;
                     user.verified = false;
 
-                    user.verifyToken = `x${crypto.randomBytes(32).toString(`hex`)}`;
+                    user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
 
                     const mailOptions = {
                         from: `Throwdown TV <no-reply@throwdown.tv>`,
@@ -184,7 +185,7 @@ router.post(`/login`, (req, res, next) => {
     })(req, res, next);
 });
 
-router.get(`/logout`, (req, res, next) => {
+router.get(`/logout`, (req, res) => {
     if (req.isAuthenticated()) {
         log(`yellow`, `User "${req.user.username}" logged out.`);
         req.logOut();
@@ -192,11 +193,12 @@ router.get(`/logout`, (req, res, next) => {
     res.redirect(`/`);
 });
 
-router.get(`/authenticated`, (req, res, next) => {
+router.get(`/authenticated`, (req, res) => {
     if (req.isAuthenticated()) {
         return res.json({
             isLoggedIn: true,
             username: req.user.username,
+            displayName: req.user.displayName,
             token: req.user.token ? req.user.token : undefined
         });
     } else return res.json({
@@ -204,7 +206,7 @@ router.get(`/authenticated`, (req, res, next) => {
     });
 });
 
-router.get(`/verify/*`, (req, res, next) => {
+router.get(`/verify/*`, (req, res) => {
     const token = req.url.split(`/verify/`)[1];
     if (!token) return res.redirect(`/`);
 

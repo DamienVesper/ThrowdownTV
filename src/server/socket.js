@@ -47,8 +47,11 @@ io.on(`connection`, async socket => {
 
         const chatter = socket;
         chatter.username = username;
+        chatter.displayName = user.displayName;
+
         chatter.token = token;
         chatter.channel = streamerUsername;
+
         chatUsers.push(chatter);
 
         // Send a handshake back to the client to let them know that we have connected.
@@ -65,6 +68,7 @@ io.on(`connection`, async socket => {
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
                     username: chatter.username,
+                    displayName: chatter.displayName,
                     message: xssFilters.inHTMLData(message.substr(0, 500)),
                     badges: {
                         streamer: chatter.username === chatter.channel,
