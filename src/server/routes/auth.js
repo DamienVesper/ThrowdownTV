@@ -40,7 +40,7 @@ router.post(`/signup`, (req, res, next) => {
         errors: `Your username must be between 3 and 20 characters`
     });
 
-    if (req.body[`signup-username`] !== xssFilters.inHTMLData(req.body[`signup-username`]) || /[^\w\s]/.test(req.body[`signup-username`]) || config.whitespaceRegex.test(req.body[`register-username`]) || req.body[`register-username`].split(` `).length > 1) return res.json({
+    if (req.body[`signup-username`] !== xssFilters.inHTMLData(req.body[`signup-username`]) || /[^\w\s]/.test(req.body[`signup-username`]) || req.body[`signup-username`].split(` `).length > 1) return res.json({
         errors: `Invalid Username`
     });
 
