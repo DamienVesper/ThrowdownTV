@@ -3,7 +3,7 @@
 <div class="stream-overlay">
     <div class="stream-popout">
         <video id="live-stream" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" autoplay="true"
-            fluid="true" width="1280" height="720" poster="/assets/img/thumbnail.png" data-setup="{}">
+            fluid="true" width="1280" height="720" poster="/assets/img/thumbnail.png">
             <source src="https://filesamples.com/samples/video/flv/sample_1280x720.flv" type="video/x-flv">
             <p class="vjs-no-js">
                 To view this video please enable JavaScript, and consider upgrading to a
@@ -16,11 +16,17 @@
 </div>
 <script>
     $(document).ready(() => {
-        $(`iframe`).attr(`src`, `/chat/${window.location.pathname.split(`/`)[1].toLowerCase()}`)
+        const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
+        $(`iframe`).attr(`src`, `/chat/${streamer}`)
 
-        let player = videojs(`live-stream`);
+        let player = videojs(`live-stream`, {
+            controls: true,
+            autoplay: true,
+            preload: `auto`,
+        });
+
         player.src({
-            src: `https://filesamples.com/samples/video/flv/sample_1280x720.flv`,
+            src: `https://us01.throwdown.tv/live/${streamer}.flv`,
             type: `video/flv`
         });
 
