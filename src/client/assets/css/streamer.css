@@ -17,6 +17,13 @@
     white-space: pre-wrap;
 }
 
+#stream-display-name {
+    font-weight: bold;
+    color: lime; 
+    font-size: 15px; 
+    margin-right: 4px;
+}
+
 .info-box {
     margin-top: 5px;
 }
