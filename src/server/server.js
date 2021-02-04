@@ -44,7 +44,8 @@ mongoose.connect(process.env.MONGO_URI, {
 const apiRouter = require(`./routes/api`);
 const authRouter = require(`./routes/auth`);
 const indexRouter = require(`./routes/index`);
-const postRouter = require(`./routes/post.js`);
+const postRouter = require(`./routes/post`);
+const widgetRouter = require(`./routes/widget`);
 
 // Set headers.
 app.use((req, res, next) => {
@@ -102,6 +103,7 @@ app.use(`/api`, apiRouter);
 app.use(`/`, authRouter);
 app.use(`/`, indexRouter);
 app.use(`/`, postRouter);
+app.use(`/widget`, widgetRouter);
 
 // Create the webfront.
 const server = config.mode === `dev`
