@@ -32,4 +32,18 @@ router.get(`/stream-data`, async (req, res) => {
     res.jsonp(data);
 });
 
+router.get(`/public-stream-data`, async (req, res) => {
+
+    const streamerData = await User.findOne({ username: req.user.username });
+
+    const data = {
+        username: streamerData.username,
+        streamTitle: streamerData.settings.title,
+        streamDescription: streamerData.settings.description,
+        donationLink: streamerData.settings.donationLink,
+    };
+
+    res.jsonp(data);
+});
+
 module.exports = router;

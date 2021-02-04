@@ -10,6 +10,25 @@
                 <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
             </p>
         </video>
+        <div class="info-box">
+            <div class="row px-3 "> <img src="/assets/img/defaultpfp.png" class="rounded-circle profile-picture mr-3" alt="profile picture">
+                <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
+                    <div class="row">
+                        <P id="stream-title" class="lead mb-3 stream-title">Test</P>
+                    </div>
+                    <div class="row">
+                        <p id="stream-username" style="color: lime; font-size: 15px; margin-right: 4px;" class="lead mb-3">TestUsername</p>
+
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary streamer-button">Follow</button>
+                        <a id="donation-link" type="button" class="btn btn-success streamer-button" role="button">Donate</a>
+                    </div>
+                </div>
+                <div class="description-box" id="stream-description"></div>
+            </div>
+        </div>
+        
     </div>
     <iframe class="chat-popout" frameborder="0" height="720px"></iframe>
 </div>
@@ -24,9 +43,17 @@
             preload: `auto`,
         });
 
+        fetch(`/api/public-stream-data`).then(data => data.json()).then(data => {
+            $(`#stream-username`).text(data.username);
+            $(`#stream-title`).text(data.streamTitle);
+            $(`#stream-description`).html(data.streamDescription);
+            $(`#donation-link`).attr(`href`, `${data.donationLink}`);
+        });
+
+        let player = videojs(`live-stream`);
         player.src({
             src: `https://us01.throwdown.tv/live/${streamer}.flv`,
-            type: `video/flv`
+            type: `video/x-flv`
         });
 
         player.on(`error`, event => {

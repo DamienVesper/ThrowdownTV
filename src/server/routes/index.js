@@ -65,7 +65,7 @@ router.get(`/chat/*`, async (req, res) => {
 });
 
 router.get(`/:streamer`, async (req, res) => {
-    if (!req.isAuthenticated()) res.redirect(`/login`);
+    //if (!req.isAuthenticated()) res.redirect(`/login`);
 
     const streamer = req.params.streamer;
 

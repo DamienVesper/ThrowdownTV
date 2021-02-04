@@ -35,3 +35,8 @@ body {
 ::-webkit-scrollbar-button {
     display: none;
 }
+
+.dashboard-button {
+    margin-top: 10px;
+    width: 100%;
+}

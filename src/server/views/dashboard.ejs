@@ -11,11 +11,11 @@
                 <div class="form-group">
                     <label for="stream-title">Stream Title</label>
                     <input type="text" id="stream-title" name="stream-title" class="form-control"
-                        placeholder="Enter a title" maxlength="32">
+                        placeholder="Enter a title" maxlength="80">
                     <br>
                     <label for="stream-description">Stream Description</label>
-                    <input type="text" id="stream-description" name="stream-description"
-                        placeholder="Enter a description" class="form-control">
+                    <textarea type="text" id="stream-description" name="stream-description"
+                        placeholder="Enter a description" class="form-control"></textarea>
                     <br>
                     <label for="donation-link">Donation Link</label>
                     <input type="text" id="donation-link" name="donation-link" class="form-control"
@@ -23,6 +23,7 @@
                     <br>
                     <input type="submit" id="dashboard-update-info" value="Update Information"
                         class="btn btn-primary btn-block">
+                    <a id="visit-livestream" type="button" class="btn btn-success dashboard-button" role="button">Livestream Page</a>
                 </div>
             </form>
         </div>
@@ -68,6 +69,7 @@
         $(`#chat-link`)
             .val(chatURL)
             .attr(`href`, chatURL);
+        $(`#visit-livestream`).attr(`href`, `/${data.username}`);
 
         fetch(`/api/stream-data`).then(data => data.json()).then(data => {
             $(`#stream-title`).val(data.streamTitle);
