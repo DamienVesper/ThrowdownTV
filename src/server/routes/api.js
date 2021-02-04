@@ -32,15 +32,16 @@ router.get(`/stream-data`, async (req, res) => {
     res.jsonp(data);
 });
 
-router.get(`/public-stream-data`, async (req, res) => {
-
-    const streamerData = await User.findOne({ username: req.user.username });
+router.get(`/public-stream-data/:streamer`, async (req, res) => {
+    const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
 
     const data = {
         username: streamerData.username,
+        displayName: streamerData.displayName,
         streamTitle: streamerData.settings.title,
         streamDescription: streamerData.settings.description,
         donationLink: streamerData.settings.donationLink,
+        isSuspended: streamerData.isSuspended
     };
 
     res.jsonp(data);

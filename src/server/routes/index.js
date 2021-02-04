@@ -1,6 +1,5 @@
 const express = require(`express`);
 const router = express.Router();
-
 const User = require(`../models/user.model.js`);
 
 // Landing page.
@@ -24,9 +23,6 @@ router.get(`/login`, (req, res) => {
 
 // Terms of Service.
 router.get(`/tos`, (req, res) => res.render(`tos.ejs`));
-
-// 404 Error
-router.get(`/404`, (req, res) => res.render(`404.ejs`));
 
 // Browsing.
 router.get(`/browse`, async (req, res) => res.render(`browse.ejs`));
@@ -65,12 +61,11 @@ router.get(`/chat/*`, async (req, res) => {
 });
 
 router.get(`/:streamer`, async (req, res) => {
-    //if (!req.isAuthenticated()) res.redirect(`/login`);
-
     const streamer = req.params.streamer;
 
     const user = await User.findOne({ username: streamer.toLowerCase() });
-    if (!user) return res.redirect(`/404`);
+    if (!user) return res.render(`404.ejs`);
+    if (user.isSuspended) return res.render(`banned.ejs`);
 
     res.render(`streamer.ejs`);
 });

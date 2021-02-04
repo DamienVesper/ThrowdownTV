@@ -52,6 +52,11 @@ const userSchema = Mongoose.Schema({
         type: String,
         required: false
     },
+    isSuspended: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
     settings: {
         streamKey: {
             type: String,
