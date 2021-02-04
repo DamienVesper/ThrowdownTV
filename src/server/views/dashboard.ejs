@@ -108,6 +108,18 @@
         }).then(() => window.location.reload());
     });
 
+    $(`#account-update-info`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#account-update-info`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/accountoptions`,
+            data: $(`#account-options-form`).serialize()
+        }).then(() => window.location.reload());
+    });
+
     $(`#reset-streamkey`).on(`click`, e => {
         e.preventDefault();
         $(`#reset-streamkey-info`).attr(`disabled`, true);
