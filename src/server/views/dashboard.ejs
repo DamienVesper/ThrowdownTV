@@ -1,7 +1,7 @@
 <%- include('./partials/header'); %>
 
 <br>
-<h1 class="text-center text-light">Stream Dashboard</h1>
+<h1 class="text-center text-light">Dashboard</h1>
 
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
@@ -21,7 +21,7 @@
                     <input type="text" id="donation-link" name="donation-link" class="form-control"
                         placeholder="Enter a URL to your donation page">
                     <br>
-                    <input type="submit" id="dashboard-update-info" value="Update Information"
+                    <input type="submit" id="dashboard-update-info" value="Update Stream Information"
                         class="btn btn-primary btn-block">
                     <a id="visit-livestream" type="button" class="btn btn-success dashboard-button" role="button">Livestream Page</a>
                 </div>
@@ -60,19 +60,36 @@
             <input type="text" class="form-control" id="chat-link" readonly>
         </div>
         <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Account Settings</h2>
+            <label for="display-name" style="font-size: 30px;">Current Username: <span id="current-username" style="color: red;"></span></label>
+            <form action="/accountoptions" method="post" id="account-options-form">
+                <div class="form-group">
+                    <label for="display-name">Display Name <span style="font-style: italic;">(You may only change the Capitalization)</span></label>
+                    <input type="text" id="display-name" name="display-name" class="form-control"
+                        placeholder="Change name Capitalization" maxlength="80">
+                    <br>
+                    <input type="submit" id="account-update-info" value="Update Account Information"
+                        class="btn btn-primary btn-block">
+                </div>
+            </form>
+        </div>
+        <br>
     </div>
 </div>
 
 <script>
     fetch(`/authenticated`).then(data => data.json()).then(data => {
-        let chatURL = `https://throwdown.tv/widget/${data.username}/`;
+        let chatURL = `https://throwdown.tv/widget/chat/${data.username}/`;
         $(`#chat-link`)
             .val(chatURL)
             .attr(`href`, chatURL);
         $(`#visit-livestream`).attr(`href`, `/${data.username}`);
 
         fetch(`/api/stream-data`).then(data => data.json()).then(data => {
+            $(`#current-username`).text(data.username);
             $(`#stream-title`).val(data.streamTitle);
+            $(`#display-name`).val(data.displayName);
             $(`#stream-description`).val(data.streamDescription);
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);

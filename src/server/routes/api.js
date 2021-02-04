@@ -23,6 +23,8 @@ router.get(`/stream-data`, async (req, res) => {
     const streamerData = await User.findOne({ username: req.user.username });
 
     const data = {
+        username: streamerData.username,
+        displayName: streamerData.displayName,
         streamTitle: streamerData.settings.title,
         streamDescription: streamerData.settings.description,
         donationLink: streamerData.settings.donationLink,
