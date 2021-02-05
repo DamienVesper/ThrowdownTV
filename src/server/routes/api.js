@@ -1,4 +1,4 @@
-import { EmoteLoader } from '../emojiloader';
+let EmoteLoader = require("../emojiloader").EmoteLoader;
 const express = require(`express`);
 const router = express.Router();
 

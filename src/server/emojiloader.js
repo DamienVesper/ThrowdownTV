@@ -1,17 +1,9 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import User from './models/User';
+
 import fs from 'fs';
-
-import cookieParser from 'cookie-parser';
-import cookies from 'cookies';
-
-import http from'http';
-import https from 'https'
 
 import glob from 'glob';
 
-export class EmoteLoader {
+class EmoteLoader {
 
 	constructor(){
 		this.emotesJson = {};
@@ -48,3 +40,4 @@ export class EmoteLoader {
 
 
 
+module.exports.EmoteLoader = EmoteLoader
