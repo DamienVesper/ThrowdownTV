@@ -1,23 +1,11 @@
-const { EmoteLoader } = require(`../emojiloader`);
 const express = require(`express`);
 const router = express.Router();
 
 const User = require(`../models/user.model.js`);
-
-const currentLoader = new EmoteLoader();
-currentLoader.loadEmotes();
-
-router.get(`/assets/img/emotes/:emotename`, async (req, res) => {
-    if (currentLoader.emotesArr.includes(req.params.emotename.toLowerCase())) {
-        return res.sendFile(currentLoader.emotesDir[`${req.params.emotename}`]);
-    }
-});
+const emotes = require(`../../../config/emotes.js`);
 
 router.get(`/get-emotes`, async (req, res) => {
-    return res.send(currentLoader.emotesJson);
-});
-router.get(`/get-emotes-list`, async (req, res) => {
-    return res.send(currentLoader.emotesArr);
+    return res.json(emotes);
 });
 
 router.get(`/streams`, async (req, res) => {
