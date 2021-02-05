@@ -1,13 +1,4 @@
-const express = require(`express`);
-const mongoose = require(`mongoose`);
-const User = require(`./models/user.model`);
 const fs = require(`fs`);
-
-const cookieParser = require(`cookie-parser`);
-const cookies = require(`cookies`);
-
-const http = require(`http`);
-const https = require(`https`);
 
 const glob = require(`glob`);
 
@@ -38,7 +29,7 @@ class EmoteLoader {
                 const emoteName = filePath.replace(pathRegex, ``).replace(`.png`, ``).replace(`.jpg`, ``).replace(`.gif`, ``).replace(` `, ``).toLowerCase();
                 this.emotesJson[emoteName] = `/assets/img/emotes/${emoteName.toLowerCase()}`;
                 this.emotesDir[emoteName] = filePath;
-                await fs.writeFileSync(`./config/emotes.json`, JSON.stringify(this.emotesJson, null, 4));
+                fs.writeFileSync(`./config/emotes.json`, JSON.stringify(this.emotesJson, null, 4));
                 this.emotesArr.push(emoteName);
             });
             return JSON.parse(fs.readFileSync(`./config/emotes.json`).toString());
