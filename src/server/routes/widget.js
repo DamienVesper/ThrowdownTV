@@ -8,7 +8,7 @@ router.get(`/chat/:streamer`, async (req, res) => {
 
     if (!streamerData) return res.render(`404.ejs`);
     // res.render(`chatWidget.ejs`);
-    res.send(`WIP`)
+    res.send(`WIP`);
 });
 
 module.exports = router;
