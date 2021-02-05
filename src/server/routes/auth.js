@@ -115,8 +115,7 @@ router.post(`/signup`, (req, res, next) => {
                                 });
                             });
                         });
-                    }
-                    else {
+                    } else {
                         transport.sendMail(mailOptions, err => {
                             if (err) {
                                 user.delete();

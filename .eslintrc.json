@@ -19,7 +19,7 @@
         "eqeqeq": 1,
         "no-eval": 2,
         "array-bracket-newline": 1,
-        "brace-style": 0,
+        "brace-style": 1,
         "comma-spacing": 1,
         "no-var": 1,
         "indent": ["error", 4, {
