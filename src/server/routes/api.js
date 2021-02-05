@@ -1,4 +1,4 @@
-let EmoteLoader = require("../emojiloader").EmoteLoader;
+const { EmoteLoader } = require(`../emojiloader`);
 const express = require(`express`);
 const router = express.Router();
 
