@@ -6,21 +6,28 @@
     margin: 0.5rem 0.25;
 }
 
-.streamer-button {
-    margin-right: 10px;
+.info-box {
+    display: flex;
+    flex-grow: 1;
+    padding-top: 10px;
 }
 
-.stream-title {
+.streamer-buttons {
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+#stream-title {
     font-weight: bold;
-    color: white; 
-    font-size: 25px;
+    color: white;
     white-space: pre-wrap;
 }
 
 #stream-display-name {
     font-weight: bold;
-    color: lime; 
-    font-size: 15px; 
+    color: lime;
+    font-size: 15px;
     margin-right: 4px;
 }
 
@@ -30,25 +37,12 @@
 
 .profile-picture {
     position: static;
-    width: 10%;
-    height: 10%;
+    width: 7.5%;
+    height: 7.5%;
 }
 
 .description-box {
     color: white;
-}
-
-#stream-description{
-    margin-top: 25px;
-    margin-bottom: 40px;
-    margin-left: 150px;
-    margin-right: 50px;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word; 
-    -ms-hyphens: auto; 
-    -moz-hyphens: auto;
 }
 
 @media only screen and (min-width: 600px) {

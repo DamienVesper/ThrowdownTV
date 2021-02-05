@@ -40,14 +40,11 @@ io.on(`connection`, async socket => {
         const streamer = await User.findOne({ username: streamerUsername });
 
         // If the user or the token is incorrect, disconnect the socket.
-        if (!user || user.token !== token || !streamer) {
-            log(`cyan`, `Fraudential credentials provided. Disconnecting IP: ${socket.handshake.address}.`);
-            return socket.disconnect();
-        }
+        if (!user || user.token !== token || !streamer) log(`cyan`, `Guest account connected.`);
 
         const chatter = socket;
         chatter.username = username;
-        chatter.displayName = user.displayName;
+        chatter.displayName = user ? user.displayName : undefined;
 
         chatter.token = token;
         chatter.channel = streamerUsername;

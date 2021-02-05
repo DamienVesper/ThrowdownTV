@@ -19,10 +19,11 @@
         const token = data.token;
         const streamer = window.location.href.split(`/`)[4];
 
-        if (data.username == undefined) {
-            $(`#chat-input`).val(`You must be logged in to chat...`);
-            $(`#chat-input`).prop(`disabled`, true);
-            $(`#chat-send`).prop(`disabled`, true);
+        if (!data.username) {
+            $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
+
+            $(`#chat-input`).attr(`disabled`, true);
+            $(`#chat-send`).attr(`disabled`, true);
         }
 
         const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {

@@ -11,36 +11,32 @@
             </p>
         </video>
         <div class="info-box">
-            <div class="row px-3 "> <img src="/assets/img/defaultpfp.png" class="rounded-circle profile-picture mr-3" alt="profile picture">
-                <div class="flex-column" style="margin-bottom: 0px; margin-left: 10px;">
-                    <div class="row">
-                        <P id="stream-title" class="lead mb-3 stream-title">Test</P>
-                    </div>
-                    <div class="row">
-                        <p id="stream-display-name" class="lead mb-3">TestUsername</p>
-
-                    </div>
-                    <div class="row">
-                        <button type="button" class="btn btn-primary streamer-button">Follow</button>
-                        <a id="donation-link" type="button" class="btn btn-success streamer-button" role="button">Donate</a>
-                    </div>
+            <img src="/assets/img/defaultpfp.png" class="rounded-circle profile-picture mr-3" alt="Profile picture">
+            <div class="streamer-content">
+                <span id="stream-title" class="lead mb-3"></span>
+                <br>
+                <span id="stream-display-name" class="lead mb-3"></span>
+                <div class="description-box" id="stream-description"></div>
+            </div>
+            <div class="streamer-buttons">
+                <div>
+                    <span class="btn btn-sm btn-primary" id="follow-btn" style="margin-right: 5px;">Follow</span>
+                    <a class="btn btn-sm btn-success" id="donation-link">Donate</a>
                 </div>
             </div>
-            <div class="description-box" id="stream-description"></div>
         </div>
-        
     </div>
     <iframe class="chat-popout" frameborder="0" height="720px"></iframe>
 </div>
 <script>
     $(document).ready(() => {
         const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
-        $(`iframe`).attr(`src`, `/chat/${streamer}`)
+        $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
 
         let player = videojs(`live-stream`, {
             controls: true,
             autoplay: true,
-            preload: `auto`,
+            preload: `auto`
         });
 
         fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
@@ -52,9 +48,8 @@
 
         setInterval(() => {
             fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-                if (data.isSuspended) return window.location.reload(true);
-                console.log('not banned yet')
-            })
+                if (data.isSuspended) return window.location.reload();
+            });
         }, 5000)
 
         player.src({
