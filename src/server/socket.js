@@ -80,7 +80,7 @@ io.on(`connection`, async socket => {
 
         socket.on(`disconnect`, () => {
             delete chatUsers[chatUsers.indexOf(chatter)];
-            log(`magenta`, `Chat Disconnection | Username: ${chatter.username} | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
+            log(`magenta`, `Chat Disconnection | ${chatter.username ? `Username: ${chatter.username} | ` : ``}IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
             return socket.disconnect();
         });
     });
