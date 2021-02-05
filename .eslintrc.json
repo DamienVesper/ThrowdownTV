@@ -40,6 +40,6 @@
         "no-useless-escape": 1,
         "camelcase": 1,
         "node/no-callback-literal": 0,
-        "no-return-assign": 0
+        "no-return-assign": 1
     }
 }
