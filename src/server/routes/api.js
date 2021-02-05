@@ -13,10 +13,10 @@ router.get(`/assets/img/emotes/:emotename`, async (req, res) => {
     }
 });
 
-router.get(`/api/get-emotes`, async (req, res) => {
+router.get(`/get-emotes`, async (req, res) => {
     return res.send(currentLoader.emotesJson);
 });
-router.get(`/api/get-emotes-list`, async (req, res) => {
+router.get(`/get-emotes-list`, async (req, res) => {
     return res.send(currentLoader.emotesArr);
 });
 
