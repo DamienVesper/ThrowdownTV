@@ -54,12 +54,23 @@
                 const message = data.message;
                 const badges = data.badges;
 
-                const chatColor = `${data.badges.streamer ? `warning` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
+                const chatColor = `${data.badges.streamer ? `warning` : data.badges.moderator ? `info` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
 
                 let messageWrapper = $(`<div>`);
                 messageWrapper.addClass(`chat-message`);
                 
-                const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${displayName}:</b> ${message}</span>`);
+                let parsedMessage = ``;
+                const emojisInMessage = message.split(`:`);
+                if (emojisInMessage.length > 1) {
+                    for (const slice of emojisInMessage) {
+                        if (emojis.includes(slice)) parsedMessage += `<img src="/assets/img/chat/emotes/${slice}.gif" alt="${slice} emoji" class="chat-emoji">`;
+                        else parsedMessage += `${slice}`;
+                    }
+                    if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);
+                }
+                else parsedMessage = message;
+
+                const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${displayName}:</b> ${parsedMessage}</span>`);
 
                 const streamBadge = data.badges.streamer ? $(`<img src="/assets/img/chat/badges/streamer.png" class="chat-badge" alt="Streamer badge">`) : undefined;
                 const moderatorBadge = data.badges.moderator ? $(`<img src="/assets/img/chat/badges/moderator.png" class="chat-badge" alt="Moderator badge">`) : undefined;
