@@ -40,5 +40,6 @@ module.exports = [
     `troll`,
     `chips`,
     `yes`,
-    `zoomer`
+    `zoomer`,
+    `kekw`
 ];
