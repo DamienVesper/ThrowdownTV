@@ -33,7 +33,8 @@ router.get(`/stream-data`, async (req, res) => {
         streamTitle: streamerData.settings.title,
         streamDescription: streamerData.settings.description,
         donationLink: streamerData.settings.donationLink,
-        streamKey: streamerData.settings.streamKey
+        streamKey: streamerData.settings.streamKey,
+        followers: streamerData.followers
     };
 
     res.jsonp(data);
@@ -51,7 +52,7 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         streamDescription: streamerData.settings.description,
         donationLink: streamerData.settings.donationLink,
         isSuspended: streamerData.isSuspended,
-        followers: streamerData.followers.length
+        followerCount: streamerData.followers.length
     };
 
     res.jsonp(data);
