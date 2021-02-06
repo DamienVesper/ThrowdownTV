@@ -13,7 +13,7 @@
     fetch(`/authenticated`).then(data => data.json()).then(data => {
         const username = data.username;
         const token = data.token;
-        const streamer = window.location.href.split(`/widget/chat/`)[1];
+        const streamer = window.location.href.split(`/widgets/chat/`)[1];
 
         if (!data.username) {
             $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
