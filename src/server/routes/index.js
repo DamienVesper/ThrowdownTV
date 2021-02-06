@@ -52,7 +52,7 @@ router.get(`/dashboard`, async (req, res) => {
 
 // Chat
 router.get(`/chat/*`, async (req, res) => {
-    const user = await User.findOne({ username: req.url.split(`/`)[2] });
+    const user = await User.findOne({ username: req.url.split(`/`)[2].toLowerCase() });
     if (!user) return res.redirect(`/`);
 
     res.render(`chat.ejs`);

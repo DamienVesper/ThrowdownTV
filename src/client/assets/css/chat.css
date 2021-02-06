@@ -43,8 +43,12 @@
     font-size: small;
 }
 
-.chat-badge {
+.chat-badge, .chat-emoji {
     width: 1rem;
     height: 1rem;
     margin-right: 0.25rem;
+}
+
+.chat-emoji {
+    margin-left: 0.25rem;
 }

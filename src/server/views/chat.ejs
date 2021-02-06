@@ -15,82 +15,95 @@
     $(`#chat-send`).on(`click`, e => e.preventDefault());
 
     fetch(`/authenticated`).then(data => data.json()).then(data => {
-        const username = data.username;
-        const token = data.token;
-        const streamer = window.location.href.split(`/`)[4];
+        fetch(`/api/get-emotes`).then(data => data.json()).then(emojis => {
+            const username = data.username;
+            const token = data.token;
+            const streamer = window.location.href.split(`/`)[4].toLowerCase();
 
-        if (!data.username) {
-            $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
+            if (!data.username) {
+                $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
 
-            $(`#chat-input`).attr(`disabled`, true);
-            $(`#chat-send`).attr(`disabled`, true);
-        }
-
-        const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
-            secure: true,
-            rejectUnauthorized: true,
-            withCredentials: true
-        });
-
-        socket.emit(`connectToChat`, username, token, streamer);
-
-        socket.on(`handshake`, () => {
-            let initMessage = $(`<div>`);
-            initMessage.addClass(`text-muted chat-message`);
-            initMessage.text(`Welcome to the chat!`);
-            $(`.chat-history`).append(initMessage);
-
-            $(`#chat-input`).focus();
-
-            const sendChatMessage = () => {
-                socket.emit(`chatMessage`, $(`#chat-input`).val());
-                $(`#chat-input`).val(``);
+                $(`#chat-input`).attr(`disabled`, true);
+                $(`#chat-send`).attr(`disabled`, true);
             }
 
-            $(`#chat-input`).keydown(e => {
-                if (e.key === `Enter`) sendChatMessage();
+            const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
+                secure: true,
+                rejectUnauthorized: true,
+                withCredentials: true
             });
 
-            $(`#chat-send`).on(`click`, e => sendChatMessage());
+            socket.emit(`connectToChat`, username, token, streamer);
 
-            socket.on(`chatMessage`, data => {
-                const displayName = data.displayName;
-                const message = data.message;
-                const badges = data.badges;
+            socket.on(`handshake`, () => {
+                let initMessage = $(`<div>`);
+                initMessage.addClass(`text-muted chat-message`);
+                initMessage.text(`Welcome to the chat!`);
+                $(`.chat-history`).append(initMessage);
 
-                const chatColor = `${data.badges.streamer ? `warning` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
+                $(`#chat-input`).focus();
 
-                let messageWrapper = $(`<div>`);
-                messageWrapper.addClass(`chat-message`);
-                
-                const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${displayName}:</b> ${message}</span>`);
+                const sendChatMessage = () => {
+                    socket.emit(`chatMessage`, $(`#chat-input`).val());
+                    $(`#chat-input`).val(``);
+                }
 
-                const streamBadge = data.badges.streamer ? $(`<img src="/assets/img/chat/badges/streamer.png" class="chat-badge" alt="Streamer badge">`) : undefined;
-                const moderatorBadge = data.badges.moderator ? $(`<img src="/assets/img/chat/badges/moderator.png" class="chat-badge" alt="Moderator badge">`) : undefined;
-                const staffBadge = data.badges.staff ? $(`<img src="/assets/img/chat/badges/staff.png" class="chat-badge" alt="Staff badge">`) : undefined;
-                const verifiedBadge = data.badges.verified ? $(`<img src="/assets/img/chat/badges/verified.png" class="chat-badge" alt="Verified badge">`) : undefined;
-                const vipBadge = data.badges.vip ? $(`<img src="/assets/img/chat/badges/vip.png" class="chat-badge" alt="VIP badge">`) : undefined;
+                $(`#chat-input`).keydown(e => {
+                    if (e.key === `Enter`) sendChatMessage();
+                });
 
-                const chatHistory = $(`.chat-history`);
-                streamBadge ? messageWrapper.append(streamBadge) : null;
-                moderatorBadge ? messageWrapper.append(moderatorBadge) : null;
-                staffBadge ? messageWrapper.append(staffBadge) : verifiedBadge ? messageWrapper.append(verifiedBadge) : vipBadge ? messageWrapper.append(vipBadge) : null;
+                $(`#chat-send`).on(`click`, e => sendChatMessage());
 
-                messageWrapper.append(streamBadge);
-                messageWrapper.append(moderatorBadge);
-                messageWrapper.append(staffBadge);
-                messageWrapper.append(verifiedBadge);
-                messageWrapper.append(vipBadge);
+                socket.on(`chatMessage`, data => {
+                    const displayName = data.displayName;
+                    const message = data.message;
+                    const badges = data.badges;
 
-                messageWrapper.append(chatMessage);
+                    const chatColor = `${data.badges.streamer ? `warning` : data.badges.moderator ? `info` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
 
-                chatHistory.append(messageWrapper);
+                    let messageWrapper = $(`<div>`);
+                    messageWrapper.addClass(`chat-message`);
+                    
+                    let parsedMessage = ``;
+                    const emojisInMessage = message.split(`:`);
+                    if (emojisInMessage.length > 1) {
+                        for (const slice of emojisInMessage) {
+                            if (emojis.includes(slice)) parsedMessage += `<img src="/assets/img/chat/emotes/${slice}.png" alt="${slice} emoji" class="chat-emoji">`;
+                            else parsedMessage += `${slice}`;
+                        }
+                        if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);
+                    }
+                    else parsedMessage = message;
 
-                const DOMchatHistory = document.querySelector(`.chat-history`);
-                DOMchatHistory.scrollTop = DOMchatHistory.scrollHeight - DOMchatHistory.offsetHeight;
+                    const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${displayName}:</b> ${parsedMessage}</span>`);
+
+                    const streamBadge = data.badges.streamer ? $(`<img src="/assets/img/chat/badges/streamer.png" class="chat-badge" alt="Streamer badge">`) : undefined;
+                    const moderatorBadge = data.badges.moderator ? $(`<img src="/assets/img/chat/badges/moderator.png" class="chat-badge" alt="Moderator badge">`) : undefined;
+                    const staffBadge = data.badges.staff ? $(`<img src="/assets/img/chat/badges/staff.png" class="chat-badge" alt="Staff badge">`) : undefined;
+                    const verifiedBadge = data.badges.verified ? $(`<img src="/assets/img/chat/badges/verified.png" class="chat-badge" alt="Verified badge">`) : undefined;
+                    const vipBadge = data.badges.vip ? $(`<img src="/assets/img/chat/badges/vip.png" class="chat-badge" alt="VIP badge">`) : undefined;
+
+                    const chatHistory = $(`.chat-history`);
+                    streamBadge ? messageWrapper.append(streamBadge) : null;
+                    moderatorBadge ? messageWrapper.append(moderatorBadge) : null;
+                    staffBadge ? messageWrapper.append(staffBadge) : verifiedBadge ? messageWrapper.append(verifiedBadge) : vipBadge ? messageWrapper.append(vipBadge) : null;
+
+                    messageWrapper.append(streamBadge);
+                    messageWrapper.append(moderatorBadge);
+                    messageWrapper.append(staffBadge);
+                    messageWrapper.append(verifiedBadge);
+                    messageWrapper.append(vipBadge);
+
+                    messageWrapper.append(chatMessage);
+
+                    chatHistory.append(messageWrapper);
+
+                    const DOMchatHistory = document.querySelector(`.chat-history`);
+                    DOMchatHistory.scrollTop = DOMchatHistory.scrollHeight - DOMchatHistory.offsetHeight;
+                });
+
+                $(window).on(`beforeunload`, () => socket.emit(`disconnect`));
             });
-
-            $(window).on(`beforeunload`, () => socket.emit(`disconnect`));
         });
     });
 </script>
