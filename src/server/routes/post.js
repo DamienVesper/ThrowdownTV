@@ -53,7 +53,6 @@ router.post(`/changestreamkey`, async (req, res) => {
     });
 });
 
-// Follow a streamer
 router.post(`/follow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const streamer = req.params.streamer;
@@ -74,7 +73,6 @@ router.post(`/follow/:streamer`, async (req, res) => {
     });
 });
 
-// Unfollow a streamer
 router.post(`/unfollow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const streamer = req.params.streamer;
@@ -82,16 +80,15 @@ router.post(`/unfollow/:streamer`, async (req, res) => {
     const user = await User.findOne({ username: req.user.username });
 
     if (streamer === req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
+    else if (!user.followers.includes(streamer)) return res.json({ errors: `You do not follow ${streamer}` });
 
-    if (!user.followers.contains(streamer)) return res.json({ errors: `You do not follow ${streamer}` });
-
-    await user.followers.pull(streamer);
-
-    res.redirect(`/${streamer}`);
-
+    user.followers.splice(user.followers.indexOf(streamer), 1);
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
-        return res.json({ success: `Succesfully Unfollowed ${streamer}.` });
+        else {
+            res.redirect(`/${streamer}`);
+            return res.json({ success: `Succesfully Unfollowed ${streamer}.` });
+        }
     });
 });
 
