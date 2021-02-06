@@ -10,7 +10,7 @@ module.exports = [
     `soylul`,
     `crying`,
     `cuck`,
-    `dead`,
+    `soydead`,
     `deadchamp`,
     `soyfacepalm`,
     `fake`,
