@@ -1,0 +1,58 @@
+html,
+body {
+    background-color: transparent;
+}
+.chat-wrapper {
+    display: block;
+    background-color: transparent;
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+}
+
+.chat-history {
+    padding: 0.5rem;
+    overflow-y: auto;
+    max-height: calc(100% - 50px);
+    word-wrap: break-word;
+}
+
+.chat-input-form {
+    display: flex;
+    position: absolute;
+    bottom: 0.5rem;
+    width: 100%;
+}
+
+#chat-input {
+    font-size: small;
+    background-color: rgba(0,0,0,0);
+    padding: 0.5rem;
+    border: none;
+    margin: 0 0.5rem;
+    resize: none;
+}
+
+#chat-input,
+#chat-input::placeholder {
+    color: #fff;
+}
+
+#chat-send {
+    font-size: small;
+    margin-right: 0.5rem;
+}
+
+.chat-message {
+    font-size: small;
+}
+
+.chat-badge {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+}
+
+.chat-emote {
+    vertical-align: middle;
+}

@@ -1,5 +1,6 @@
 const config = require(`../../config/config.js`);
 const log = require(`./utils/log.js`);
+const emotes = require(`../../config/emotes.js`);
 
 const fs = require(`fs`);
 
@@ -56,17 +57,25 @@ io.on(`connection`, async socket => {
 
         // Receiving messages.
         socket.on(`chatMessage`, message => {
+            let modifiedMessage = message;
+
             // Whitespace detection.
             if (message.length === 0 || message.split(` `).length === (message.length + 1)) return;
 
             // Message all users in the channel.
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
 
+            // Emotes
+            emotes.forEach(async (emote) => {
+                const emoteMatch = new RegExp(`:${emote}:`, `g`);
+                modifiedMessage = modifiedMessage.replace(emoteMatch, `<img class="chat-emote" src="/assets/img/emotes/${emote}.gif" alt=":${emote}:" title=":${emote}:" height="30">`);
+            });
+
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
                     username: chatter.username,
                     displayName: chatter.displayName,
-                    message: xssFilters.inHTMLData(message.substr(0, 500)),
+                    message: xssFilters.inHTMLComment(modifiedMessage.substr(0, 500)),
                     badges: {
                         streamer: chatter.username === chatter.channel,
                         staff: config.staff.includes(chatter.username),
