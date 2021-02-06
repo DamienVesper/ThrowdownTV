@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/assets/css/chat.css">
+<link rel="stylesheet" href="/assets/css/widgets/chat.css">
 <div class="chat-wrapper">
     <div class="chat-history"></div>
     <form class="chat-input-form">
@@ -17,12 +17,14 @@
     fetch(`/authenticated`).then(data => data.json()).then(data => {
         const username = data.username;
         const token = data.token;
-        const streamer = window.location.href.split(`/`)[4];
+        const streamer = window.location.href.split(`/widget/chat/`)[1];
 
         if (!data.username) {
             $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
             $(`#chat-input`).attr(`disabled`, true);
             $(`#chat-send`).attr(`disabled`, true);
+            $(`#chat-input`).attr(`hidden`, true);
+            $(`#chat-send`).attr(`hidden`, true);
         }
 
         const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
@@ -36,7 +38,6 @@
         socket.on(`handshake`, () => {
             let initMessage = $(`<div>`);
             initMessage.addClass(`text-muted chat-message`);
-            initMessage.text(`Welcome to the chat!`);
             $(`.chat-history`).append(initMessage);
 
             $(`#chat-input`).focus();
