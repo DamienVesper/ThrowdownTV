@@ -103,7 +103,7 @@ app.use(`/api`, apiRouter);
 app.use(`/`, authRouter);
 app.use(`/`, indexRouter);
 app.use(`/`, postRouter);
-app.use(`/widget`, widgetRouter);
+app.use(`/widgets`, widgetRouter);
 
 // Create the webfront.
 const server = config.mode === `dev`
