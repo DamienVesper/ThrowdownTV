@@ -31,7 +31,6 @@ router.post(`/accountoptions`, async (req, res) => {
     if (req.body[`display-name`].toLowerCase() !== req.user.username) return res.json({ errors: `Display Name must match the Username` });
 
     const user = await User.findOne({ username: req.user.username });
-
     user.displayName = req.body[`display-name`];
 
     user.save(err => {
@@ -44,7 +43,6 @@ router.post(`/changestreamkey`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: req.user.username });
-
     user.settings.streamKey = randomString(32);
 
     user.save(err => {
@@ -55,39 +53,39 @@ router.post(`/changestreamkey`, async (req, res) => {
 
 router.post(`/follow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    const streamer = req.params.streamer;
 
+    const streamer = await User.findOne({ username: req.params.streamer });
     const user = await User.findOne({ username: req.user.username });
 
-    if (streamer === req.user.username) return res.json({ errors: `You cannot follow yourself` });
+    if (!streamer) return res.json({ errors: `That person does not exist!` });
+    else if (streamer.username === req.user.username) return res.json({ errors: `You cannot follow yourself` });
+    else if (user.followers.includes(streamer.username)) return res.json({ errors: `You are already following ${streamer.username}` });
 
-    if (user.followers.contains(streamer)) return res.json({ errors: `You are already following ${streamer}` });
-
-    await user.followers.push(streamer);
-
-    res.redirect(`/${streamer}`);
-
+    user.followers.push(streamer.username);
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
-        return res.json({ success: `Succesfully Followed ${streamer}.` });
+        else {
+            res.redirect(`/${streamer.username}`);
+            return res.json({ success: `Succesfully Followed ${streamer.username}.` });
+        }
     });
 });
 
 router.post(`/unfollow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    const streamer = req.params.streamer;
 
+    const streamer = await User.findOne({ username: req.params.streamer });
     const user = await User.findOne({ username: req.user.username });
 
-    if (streamer === req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
-    else if (!user.followers.includes(streamer)) return res.json({ errors: `You do not follow ${streamer}` });
+    if (streamer.username === req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
+    else if (!user.followers.includes(streamer.username)) return res.json({ errors: `You do not follow ${streamer.username}` });
 
     user.followers.splice(user.followers.indexOf(streamer), 1);
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
         else {
-            res.redirect(`/${streamer}`);
-            return res.json({ success: `Succesfully Unfollowed ${streamer}.` });
+            res.redirect(`/${streamer.username}`);
+            return res.json({ success: `Succesfully Unfollowed ${streamer.username}.` });
         }
     });
 });
