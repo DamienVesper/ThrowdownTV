@@ -66,7 +66,6 @@ router.get(`/follow/:streamer`, async (req, res) => {
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
         else {
-            res.redirect(`/${streamer.username}`);
             return res.json({ success: `Succesfully Followed ${streamer.username}.` });
         }
     });
@@ -86,7 +85,6 @@ router.get(`/unfollow/:streamer`, async (req, res) => {
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
         else {
-            res.redirect(`/${streamer.username}`);
             return res.json({ success: `Succesfully Unfollowed ${streamer.username}.` });
         }
     });
