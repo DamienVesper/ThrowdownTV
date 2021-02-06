@@ -26,9 +26,7 @@ passport.use(`login`, new LocalStrategy({
     User.findOne({
         username: username.toLowerCase()
     }).then(user => {
-        if (!user) {
-            return done(`Incorrect username or password`, false);
-        }
+        if (!user) return done(`Incorrect username or password`, false);
 
         // Login a user.
         bcrypt.compare(password, user.password, (err, isMatch) => {
