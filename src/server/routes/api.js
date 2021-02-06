@@ -42,8 +42,8 @@ router.get(`/stream-data`, async (req, res) => {
 
 router.get(`/public-stream-data/:streamer`, async (req, res) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
-    
-    if (!streamerData) res.redirect(`/`)
+
+    if (!streamerData) res.redirect(`/`);
 
     const data = {
         username: streamerData.username,

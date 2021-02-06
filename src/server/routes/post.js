@@ -60,7 +60,7 @@ router.post(`/follow/:streamer`, async (req, res) => {
 
     const user = await User.findOne({ username: req.user.username });
 
-    if (streamer = req.user.username) return res.json({ errors: `You cannot follow yourself` });
+    if (streamer === req.user.username) return res.json({ errors: `You cannot follow yourself` });
 
     if (user.followers.contains(streamer)) return res.json({ errors: `You are already following ${streamer}` });
 
@@ -81,7 +81,7 @@ router.post(`/unfollow/:streamer`, async (req, res) => {
 
     const user = await User.findOne({ username: req.user.username });
 
-    if (streamer = req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
+    if (streamer === req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
 
     if (!user.followers.contains(streamer)) return res.json({ errors: `You do not follow ${streamer}` });
 
