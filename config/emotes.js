@@ -38,7 +38,7 @@ module.exports = [
     `soy`,
     `this`,
     `troll`,
-    `verypog`,
+    `chips`,
     `yes`,
     `zoomer`
 ];
