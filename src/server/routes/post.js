@@ -62,11 +62,11 @@ router.post(`/follow/:streamer`, async (req, res) => {
 
     if (streamer = req.user.username) return res.json({ errors: `You cannot follow yourself` });
 
-    if (user.followers.contains(streamer)) return res.json({ errors: `You are already following ${streamer}` })
+    if (user.followers.contains(streamer)) return res.json({ errors: `You are already following ${streamer}` });
 
     await user.followers.push(streamer);
 
-    res.redirect(`/${streamer}`)
+    res.redirect(`/${streamer}`);
 
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
@@ -83,11 +83,11 @@ router.post(`/unfollow/:streamer`, async (req, res) => {
 
     if (streamer = req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
 
-    if (!user.followers.contains(streamer)) return res.json({ errors: `You do not follow ${streamer}` })
+    if (!user.followers.contains(streamer)) return res.json({ errors: `You do not follow ${streamer}` });
 
     await user.followers.pull(streamer);
 
-    res.redirect(`/${streamer}`)
+    res.redirect(`/${streamer}`);
 
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
