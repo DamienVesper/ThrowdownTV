@@ -20,7 +20,7 @@
             </div>
             <div class="streamer-buttons">
                 <div>
-                    <span class="btn btn-sm btn-primary" id="follow-btn" style="margin-right: 5px;">Follow</span>
+                    <a class="btn btn-sm btn-primary" id="follow-btn" style="margin-right: 5px;">Follow</a>
                     <a class="btn btn-sm btn-success" id="donation-link">Donate</a>
                 </div>
             </div>
@@ -30,37 +30,46 @@
 </div>
 <script>
     $(document).ready(() => {
-        const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
-        $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
+        fetch(`/authenticated`).then(data => data.json()).then(data => {
+            const username = data.username;
+            
+            // For Debug currently
+            if (!data.username) console.log(`not logged in.`)
 
-        let player = videojs(`live-stream`, {
-            controls: true,
-            autoplay: true,
-            preload: `auto`
-        });
+            const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
+            $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
 
-        fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-            $(`#stream-display-name`).text(data.displayName);
-            $(`#stream-title`).text(data.streamTitle);
-            $(`#stream-description`).html(data.streamDescription);
-            $(`#donation-link`).attr(`href`, `${data.donationLink}`);
-        });
-
-        setInterval(() => {
-            fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-                if (data.isSuspended) return window.location.reload();
+            let player = videojs(`live-stream`, {
+                controls: true,
+                autoplay: true,
+                preload: `auto`
             });
-        }, 5000)
 
-        player.src({
-            src: `https://us01.throwdown.tv/live/${streamer}.flv`,
-            type: `video/x-flv`
-        });
+            $(`#follow-btn`).attr(`href`, `/follow/${streamer}`)
 
-        player.on(`error`, event => {
+            fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                $(`#stream-display-name`).text(data.displayName);
+                $(`#stream-title`).text(data.streamTitle);
+                $(`#stream-description`).html(data.streamDescription);
+                $(`#donation-link`).attr(`href`, `${data.donationLink}`);
+            });
+
+            setInterval(() => {
+                fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                    if (data.isSuspended) return window.location.reload();
+                });
+            }, 5000)
+
             player.src({
-                src: `/assets/video/throwdown.mp4`,
-                type: `video/mp4`
+                src: `https://us01.throwdown.tv/live/${streamer}.flv`,
+                type: `video/x-flv`
+            });
+
+            player.on(`error`, event => {
+                player.src({
+                    src: `/assets/video/throwdown.mp4`,
+                    type: `video/mp4`
+                });
             });
         });
     });
