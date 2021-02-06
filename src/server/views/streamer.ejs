@@ -30,11 +30,8 @@
 </div>
 <script>
     $(document).ready(() => {
-        fetch(`/authenticated`).then(data => data.json()).then(data => {
-            const username = data.username;
-            
-            // For Debug currently
-            if (!data.username) console.log(`not logged in.`)
+        fetch(`/authenticated`).then(data => data.json()).then(userdata => {
+            const username = userdata.username;
 
             const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
             $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
@@ -46,6 +43,16 @@
             });
 
             $(`#follow-btn`).attr(`href`, `/follow/${streamer}`)
+
+            fetch(`/api/get-followers/${streamer}`).then(data => data.json()).then(data => {
+                if (streamer === userdata.username) {
+                    $(`#follow-btn`).attr(`disabled`, true);
+                }
+                if ((data.username) && data.followers.includes(userdata.username)) {
+                    $(`#follow-btn`).text(`Unfollow`)
+                    $(`#follow-btn`).attr(`href`, `/unfollow/${streamer}`)
+                }
+            });
 
             fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
                 $(`#stream-display-name`).text(data.displayName);

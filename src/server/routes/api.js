@@ -43,7 +43,7 @@ router.get(`/stream-data`, async (req, res) => {
 router.get(`/public-stream-data/:streamer`, async (req, res) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
 
-    if (!streamerData) res.redirect(`/`);
+    if (!streamerData) res.render(`404.ejs`);
 
     const data = {
         username: streamerData.username,
@@ -53,6 +53,18 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         donationLink: streamerData.settings.donationLink,
         isSuspended: streamerData.isSuspended,
         followerCount: streamerData.followers.length
+    };
+
+    res.jsonp(data);
+});
+
+router.get(`/get-followers/:streamer`, async (req, res) => {
+    const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
+
+    if (!streamerData) res.render(`404.ejs`);
+
+    const data = {
+        followers: streamerData.followers
     };
 
     res.jsonp(data);

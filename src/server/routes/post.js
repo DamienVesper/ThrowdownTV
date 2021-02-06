@@ -54,7 +54,7 @@ router.post(`/changestreamkey`, async (req, res) => {
 });
 
 // Follow a streamer
-router.post(`/follow/:streamer`, async (req, res) => {
+router.get(`/follow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const streamer = req.params.streamer;
 
@@ -75,7 +75,7 @@ router.post(`/follow/:streamer`, async (req, res) => {
 });
 
 // Unfollow a streamer
-router.post(`/unfollow/:streamer`, async (req, res) => {
+router.get(`/unfollow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const streamer = req.params.streamer;
 
