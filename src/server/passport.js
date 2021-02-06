@@ -24,7 +24,7 @@ passport.use(`login`, new LocalStrategy({
     passwordField: `login-password`
 }, (username, password, done) => {
     User.findOne({
-        username
+        username: username.toLowerCase()
     }).then(user => {
         if (!user) {
             return done(`Incorrect username or password`, false);
