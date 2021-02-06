@@ -80,7 +80,7 @@
 
 <script>
     fetch(`/authenticated`).then(data => data.json()).then(data => {
-        let chatURL = `https://throwdown.tv/widget/chat/${data.username}/`;
+        let chatURL = `https://throwdown.tv/widgets/chat/${data.username}/`;
         $(`#chat-link`)
             .val(chatURL)
             .attr(`href`, chatURL);
