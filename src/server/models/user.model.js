@@ -30,6 +30,10 @@ const userSchema = Mongoose.Schema({
         type: Date,
         required: true
     },
+    followers: {
+        type: Array,
+        required: false
+    },
     token: {
         type: String,
         default: randomString(64),

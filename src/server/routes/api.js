@@ -41,6 +41,8 @@ router.get(`/stream-data`, async (req, res) => {
 
 router.get(`/public-stream-data/:streamer`, async (req, res) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
+    
+    if (!streamerData) res.redirect(`/`)
 
     const data = {
         username: streamerData.username,
@@ -48,7 +50,8 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         streamTitle: streamerData.settings.title,
         streamDescription: streamerData.settings.description,
         donationLink: streamerData.settings.donationLink,
-        isSuspended: streamerData.isSuspended
+        isSuspended: streamerData.isSuspended,
+        followers: streamerData.followers.length
     };
 
     res.jsonp(data);
