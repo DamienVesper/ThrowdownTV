@@ -66,14 +66,17 @@
                     
                     let parsedMessage = ``;
                     const emojisInMessage = message.split(`:`);
+                    console.log(message, emojisInMessage);
                     if (emojisInMessage.length > 1) {
                         for (const slice of emojisInMessage) {
-                            if (emojis.includes(slice)) parsedMessage += `<img src="/assets/img/chat/emotes/${slice}.png" alt="${slice} emoji" class="chat-emoji">`;
+                            console.log(slice);
+                            if (emojis.includes(slice)) parsedMessage += `<img src="/assets/img/chat/emotes/${slice}.gif" alt="${slice} emoji" class="chat-emoji">`;
                             else parsedMessage += `${slice}`;
                         }
                         if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);
                     }
                     else parsedMessage = message;
+                    console.log(parsedMessage);
 
                     const chatMessage = $(`<span class="text-light"><b class="text-${chatColor}">${displayName}:</b> ${parsedMessage}</span>`);
 
