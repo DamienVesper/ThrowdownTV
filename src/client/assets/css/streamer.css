@@ -45,10 +45,11 @@
     color: white;
 }
 
-.followers {
+.viewers, .followers {
     font-size: 14px;
     margin-right: 20px;
     color: rgb(209, 209, 209);
+    align-self: center;
 }
 
 #streamer-error,
