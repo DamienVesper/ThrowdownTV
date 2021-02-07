@@ -11,10 +11,10 @@ fs.readdir(path.resolve(__dirname, `./commands`), (err, files) => {
 
     for (const command of files) {
         const commandName = command.split(`.`)[0];
-        if (command.split(`.`) === `_template`) continue;
+        if (commandName === `_template`) continue;
         const cmd = require(`./commands/${command}`);
         commands.push({
-            name: command.split(`.`)[0],
+            name: commandName,
             description: cmd.description,
             aliases: cmd.aliases,
             run: cmd.run
@@ -24,7 +24,7 @@ fs.readdir(path.resolve(__dirname, `./commands`), (err, files) => {
 });
 
 const run = (message, chatter, chatUsers) => {
-    const args = message.slice(0, config.chatPrefix.length).trim().split(` `);
+    const args = message.slice(config.chatPrefix.length).trim().split(` `);
     const command = args.shift();
 
     const cmd = commands.find(cmd => cmd.name === command || cmd.aliases.includes(command));

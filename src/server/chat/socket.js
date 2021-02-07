@@ -60,12 +60,6 @@ io.on(`connection`, async socket => {
             // Whitespace detection.
             if (message.length === 0 || message.split(` `).length === (message.length + 1)) return;
 
-            // If the message is a command, then forward it to the command handler.
-            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
-
-            // Message all users in the channel.
-            const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
-
             // Update chatter perms.
             chatter.perms = {
                 streamer: chatter.username === chatter.channel,
@@ -74,6 +68,12 @@ io.on(`connection`, async socket => {
                 verified: config.perms.verified.includes(chatter.username),
                 vip: streamer.channel.vips.includes(chatter.username)
             };
+
+            // If the message is a command, then forward it to the command handler.
+            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
+
+            // Message all users in the channel.
+            const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
 
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
