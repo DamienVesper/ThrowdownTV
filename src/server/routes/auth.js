@@ -173,7 +173,7 @@ router.post(`/login`, (req, res, next) => {
         });
 
         else if (!user.verified) return res.json({
-            errors: `You have not verified your email`
+            errors: `Please verify your email`
         });
 
         req.logIn(user, err => {
