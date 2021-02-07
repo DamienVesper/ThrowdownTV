@@ -46,7 +46,7 @@
 }
 
 .viewers, .followers {
-    font-size: 18px;
+    font-size: 1rem;
     margin-right: 20px;
     color: rgb(209, 209, 209);
     align-self: center;
