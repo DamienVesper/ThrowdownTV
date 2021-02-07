@@ -61,6 +61,18 @@ const userSchema = Mongoose.Schema({
         default: false,
         required: false
     },
+    channel: {
+        moderators: {
+            type: Array,
+            default: [],
+            required: false
+        },
+        vips: {
+            type: Array,
+            default: [],
+            required: false
+        }
+    },
     settings: {
         streamKey: {
             type: String,
