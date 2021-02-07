@@ -2,7 +2,7 @@ const User = require(`../../models/user.model.js`);
 const log = require(`../../utils/log.js`);
 
 module.exports = {
-    description: `An amazing command!`,
+    description: `Promote a chat user to moderator.`,
     aliases: []
 };
 
