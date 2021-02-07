@@ -45,6 +45,18 @@
     color: white;
 }
 
+.followers {
+    font-size: 14px;
+    margin-right: 20px;
+    color: rgb(209, 209, 209);
+}
+
+#streamer-error,
+#streamer-success {
+    position: block;
+    z-index: 2; 
+}
+
 @media only screen and (min-width: 600px) {
 
     .chat-popout,

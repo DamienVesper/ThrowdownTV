@@ -1,5 +1,11 @@
 <%- include('./partials/header'); %>
 <link rel="stylesheet" href="/assets/css/streamer.css">
+<div id="streamer-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span id="streamer-error-message"></span>
+</div>
+<div id="streamer-success" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span id="streamer-success-message"></span>
+</div>
 <div class="stream-overlay">
     <div class="stream-popout">
         <video id="live-stream" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" autoplay="true"
@@ -17,11 +23,16 @@
                 <br>
                 <span id="stream-display-name" class="lead mb-3"></span>
                 <div class="description-box" id="stream-description"></div>
+                <p class="followers">Followers: <span style="color: orange;" id="followcount"></span></p>
             </div>
             <div class="streamer-buttons">
-                <div>
-                    <a class="btn btn-sm btn-primary" id="follow-btn" style="margin-right: 5px;">Follow</a>
-                    <a class="btn btn-sm btn-success" id="donation-link">Donate</a>
+                <div class="row">
+                    <form id="follow-btn-form" method="post" action="/follow">
+                        <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
+                    </form>
+                    <form id="donation-link" method="get" action="/follow">
+                        <button type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -30,10 +41,15 @@
 </div>
 <script>
     $(document).ready(() => {
+        const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
+
+        $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
+        $(`#streamer-error`).hide();
+        $(`#streamer-success`).hide();
+
         fetch(`/authenticated`).then(data => data.json()).then(userdata => {
             const username = userdata.username;
 
-            const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
             $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
 
             let player = videojs(`live-stream`, {
@@ -42,15 +58,17 @@
                 preload: `auto`
             });
 
-            $(`#follow-btn`).attr(`href`, `/follow/${streamer}`)
+            $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
 
             fetch(`/api/get-followers/${streamer}`).then(data => data.json()).then(data => {
                 if (streamer === userdata.username) {
                     $(`#follow-btn`).attr(`disabled`, true);
+                    $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
                 }
-                if ((data.username) && data.followers.includes(userdata.username)) {
-                    $(`#follow-btn`).text(`Unfollow`)
-                    $(`#follow-btn`).attr(`href`, `/unfollow/${streamer}`)
+                if (data.followers.includes(userdata.username.toLowerCase())) {
+                    console.log(`already following lol`)
+                    $(`#follow-btn`).html(`Unfollow`)
+                    $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
                 }
             });
 
@@ -58,7 +76,39 @@
                 $(`#stream-display-name`).text(data.displayName);
                 $(`#stream-title`).text(data.streamTitle);
                 $(`#stream-description`).html(data.streamDescription);
-                $(`#donation-link`).attr(`href`, `${data.donationLink}`);
+                $(`#donation-link`).attr(`action`, `${data.donationLink}`);
+                $(`#followcount`).text(data.followerCount)
+            });
+
+            $(`#follow-btn`).on(`click`, e => {
+                e.preventDefault();
+
+                $(`#follow-btn`).attr(`disabled`, true);
+
+                let postUrl = `/follow/${streamer}`
+
+                if ($(`#follow-btn`).html() === `Unfollow`) {
+                    postUrl = `/unfollow/${streamer}`;
+                    $(`#follow-btn-form`).attr(`action`, `/unfollow/${streamer}`)
+                }
+
+                $.ajax({
+                    type: `post`,
+                    url: `${postUrl}`,
+                    data: $(`#follow-btn`).serialize()
+                }).then(res => {
+                    console.log(res)
+                    if (res.errors) {
+                        $(`#streamer-error`).show();
+                        $(`#streamer-error-message`).text(res.errors);
+                        console.log(`There were errors`)
+                    } else if (res.success) {
+                        $(`#streamer-success`).show();
+                        $(`#streamer-success-message`).text(res.success);
+                        console.log(`Success`)
+                    }
+                    setTimeout(function(){ window.location.reload(true) }, 1000);
+                });
             });
 
             setInterval(() => {

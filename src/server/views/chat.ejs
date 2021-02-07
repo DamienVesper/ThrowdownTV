@@ -70,7 +70,7 @@
                         for (const slice of emojisInMessage) {
                             const emoji = emojis.find(emoji => emoji.name === slice);
 
-                            if (emoji) parsedMessage += `<img src="/assets/img/chat/emotes/${emoji.name}.${emoji.extension}" alt="${emoji.name} emoji" class="chat-emoji">`;
+                            if (emoji) parsedMessage += `<img src="/assets/img/chat/emotes/${emoji.name}.${emoji.extension}" alt=":${emoji.name}:" title=":${emoji.name}:" class="chat-emoji">`;
                             else parsedMessage += `${slice}`;
                         }
                         if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);

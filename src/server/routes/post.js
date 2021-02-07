@@ -52,7 +52,7 @@ router.post(`/changestreamkey`, async (req, res) => {
 });
 
 // Follow a streamer
-router.get(`/follow/:streamer`, async (req, res) => {
+router.post(`/follow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamer = await User.findOne({ username: req.params.streamer });
@@ -60,10 +60,10 @@ router.get(`/follow/:streamer`, async (req, res) => {
 
     if (!streamer) return res.json({ errors: `That person does not exist!` });
     else if (streamer.username === req.user.username) return res.json({ errors: `You cannot follow yourself` });
-    else if (user.followers.includes(streamer.username)) return res.json({ errors: `You are already following ${streamer.username}` });
+    else if (streamer.followers.includes(user.username)) return res.json({ errors: `You are already following ${streamer.username}` });
 
-    user.followers.push(streamer.username);
-    user.save(err => {
+    streamer.followers.push(user.username);
+    streamer.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
         else {
             return res.json({ success: `Succesfully Followed ${streamer.username}.` });
@@ -72,17 +72,17 @@ router.get(`/follow/:streamer`, async (req, res) => {
 });
 
 // Unfollow a streamer
-router.get(`/unfollow/:streamer`, async (req, res) => {
+router.post(`/unfollow/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamer = await User.findOne({ username: req.params.streamer });
     const user = await User.findOne({ username: req.user.username });
 
     if (streamer.username === req.user.username) return res.json({ errors: `You cannot unfollow yourself` });
-    else if (!user.followers.includes(streamer.username)) return res.json({ errors: `You do not follow ${streamer.username}` });
+    else if (!streamer.followers.includes(user.username)) return res.json({ errors: `You do not follow ${streamer.username}` });
 
-    user.followers.splice(user.followers.indexOf(streamer), 1);
-    user.save(err => {
+    streamer.followers.splice(user.followers.indexOf(streamer), 1);
+    streamer.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
         else {
             return res.json({ success: `Succesfully Unfollowed ${streamer.username}.` });
