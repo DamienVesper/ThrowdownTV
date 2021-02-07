@@ -59,6 +59,7 @@
             });
 
             $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
+            $(`#follow-btn`).attr(`title`, `Follow ${streamer}`)
 
             fetch(`/api/get-followers/${streamer}`).then(data => data.json()).then(data => {
                 if (streamer === userdata.username) {
@@ -66,9 +67,9 @@
                     $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
                 }
                 if (data.followers.includes(userdata.username.toLowerCase())) {
-                    console.log(`already following lol`)
                     $(`#follow-btn`).html(`Unfollow`)
                     $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
+                    $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)
                 }
             });
 
@@ -97,15 +98,12 @@
                     url: `${postUrl}`,
                     data: $(`#follow-btn`).serialize()
                 }).then(res => {
-                    console.log(res)
                     if (res.errors) {
                         $(`#streamer-error`).show();
                         $(`#streamer-error-message`).text(res.errors);
-                        console.log(`There were errors`)
                     } else if (res.success) {
                         $(`#streamer-success`).show();
                         $(`#streamer-success-message`).text(res.success);
-                        console.log(`Success`)
                     }
                     setTimeout(function(){ window.location.reload(true) }, 1000);
                 });
