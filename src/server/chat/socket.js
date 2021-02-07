@@ -70,9 +70,9 @@ io.on(`connection`, async socket => {
             chatter.perms = {
                 streamer: chatter.username === chatter.channel,
                 staff: config.perms.staff.includes(chatter.username),
-                moderator: false, // streamer.channel.moderators.includes(chatter.username),
+                moderator: streamer.channel.moderators.includes(chatter.username),
                 verified: config.perms.verified.includes(chatter.username),
-                vip: false // streamer.channel.vips.includes(chatter.username)
+                vip: streamer.channel.vips.includes(chatter.username)
             };
 
             for (const user of usersToMessage) {
