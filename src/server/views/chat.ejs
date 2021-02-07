@@ -68,7 +68,9 @@
                     const emojisInMessage = message.split(`:`);
                     if (emojisInMessage.length > 1) {
                         for (const slice of emojisInMessage) {
-                            if (emojis.includes(slice)) parsedMessage += `<img src="/assets/img/chat/emotes/${slice}.gif" alt="${slice} emoji" class="chat-emoji">`;
+                            const emoji = emojis.find(emoji => emoji.name === slice);
+
+                            if (emoji) parsedMessage += `<img src="/assets/img/chat/emotes/${emoji.name}.${emoji.extension}" alt="${emoji.name} emoji" class="chat-emoji">`;
                             else parsedMessage += `${slice}`;
                         }
                         if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);

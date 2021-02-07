@@ -1,8 +1,24 @@
 const express = require(`express`);
 const router = express.Router();
 
+const fs = require(`fs`);
+const path = require(`path`);
+
 const User = require(`../models/user.model.js`);
-const emotes = require(`../../../config/emotes.js`);
+const log = require(`../utils/log.js`);
+
+// Setup emotes.
+const emotes = [];
+fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err, files) => {
+    if (err) return log(`red`, err.stack);
+
+    for (const emote of files) {
+        emotes.push({
+            name: emote.split(`.`)[0],
+            extension: emote.split(`.`).pop()
+        });
+    }
+});
 
 router.get(`/get-emotes`, async (req, res) => {
     return res.json(emotes);
