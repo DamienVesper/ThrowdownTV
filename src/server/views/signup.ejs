@@ -53,7 +53,9 @@
                 return false;
             } else if (res.success) {
                 $(`#signup-button`).attr(`disabled`, false);
-                window.location.reload();
+                $(`#signup-error`).show();
+
+                $(`#signup-error-message`).text(res.success);
                 return true;
             }
         });
