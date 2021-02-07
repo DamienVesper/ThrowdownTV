@@ -172,6 +172,10 @@ router.post(`/login`, (req, res, next) => {
             errors: `User does not exist`
         });
 
+        else if (!user.verified) return res.json({
+            errors: `You have not verified your email`
+        });
+
         req.logIn(user, err => {
             if (err) return res.json({
                 errors: err
