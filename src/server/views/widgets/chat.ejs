@@ -54,7 +54,7 @@
                 const message = data.message;
                 const badges = data.badges;
 
-                const chatColor = `${data.badges.streamer ? `warning` : data.badges.moderator ? `info` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
+                const chatColor = `${data.badges.streamer ? `orange` : data.badges.moderator ? `info` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
 
                 let messageWrapper = $(`<div>`);
                 messageWrapper.addClass(`chat-message`);
