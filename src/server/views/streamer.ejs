@@ -25,17 +25,15 @@
                 <div class="description-box" id="stream-description"></div>
             </div>
             <div class="streamer-buttons">
-                <span class="followers">
-                    <i class="icofont icofont-eye-alt"></i>
-                    <span id="follow-count"></span>
-                </span>
                 <div class="row">
-                    <form id="follow-btn-form" method="post" action="/follow">
+                    <div>
+                        <span class="followers" style="align-self: center;">
+                            <i class="icofont icofont-eye-alt" style="margin-right: 5px;"></i>
+                            <span id="follow-count"></span>
+                        </span>
                         <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
-                    </form>
-                    <form id="donation-link" method="get" action="/follow">
                         <button type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -85,8 +83,6 @@
             });
 
             $(`#follow-btn`).on(`click`, e => {
-                e.preventDefault();
-
                 $(`#follow-btn`).attr(`disabled`, true);
 
                 let postUrl = `/follow/${streamer}`
