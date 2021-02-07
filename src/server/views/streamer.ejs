@@ -25,8 +25,11 @@
                 <div class="description-box" id="stream-description"></div>
             </div>
             <div class="streamer-buttons">
+                <span class="followers">
+                    <i class="icofont icofont-eye-alt"></i>
+                    <span id="follow-count"></span>
+                </span>
                 <div class="row">
-                    <p class="followers"><i class="icofont-eye-alt"></i><span style="color: orange;" id="followcount"></span></p>
                     <form id="follow-btn-form" method="post" action="/follow">
                         <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
                     </form>
@@ -78,7 +81,7 @@
                 $(`#stream-title`).text(data.streamTitle);
                 $(`#stream-description`).html(data.streamDescription);
                 $(`#donation-link`).attr(`action`, `${data.donationLink}`);
-                $(`#followcount`).text(data.followerCount)
+                $(`#follow-count`).text(data.followerCount)
             });
 
             $(`#follow-btn`).on(`click`, e => {
