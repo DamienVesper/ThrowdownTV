@@ -1,16 +1,17 @@
-const config = require(`../../config/config.js`);
-const log = require(`./utils/log.js`);
+const config = require(`../../../config/config.js`);
+const log = require(`../utils/log.js`);
 
 const fs = require(`fs`);
 
 const http = require(`http`);
 const https = require(`https`);
 
-const User = require(`./models/user.model.js`);
-// const Ban = require(`./models/ban.model.js`);
+const User = require(`../models/user.model.js`);
 
 const xssFilters = require(`xss-filters`);
 const chatUsers = [];
+
+const commandHandler = require(`./commandHandler.js`);
 
 // Configure socket.
 const server = config.mode === `prod`
@@ -59,21 +60,27 @@ io.on(`connection`, async socket => {
             // Whitespace detection.
             if (message.length === 0 || message.split(` `).length === (message.length + 1)) return;
 
+            // If the message is a command, then forward it to the command handler.
+            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
+
             // Message all users in the channel.
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
+
+            // Update chatter perms.
+            chatter.perms = {
+                streamer: chatter.username === chatter.channel,
+                staff: config.perms.staff.includes(chatter.username),
+                moderator: false, // streamer.channel.moderators.includes(chatter.username),
+                verified: config.perms.verified.includes(chatter.username),
+                vip: false // streamer.channel.vips.includes(chatter.username)
+            };
 
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
                     username: chatter.username,
                     displayName: chatter.displayName,
                     message: xssFilters.inHTMLData(message.substr(0, 500)),
-                    badges: {
-                        streamer: chatter.username === chatter.channel,
-                        staff: config.staff.includes(chatter.username),
-                        moderator: false,
-                        verified: false,
-                        vip: false
-                    }
+                    badges: chatter.perms
                 });
             }
         });

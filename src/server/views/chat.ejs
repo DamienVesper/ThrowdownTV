@@ -61,7 +61,7 @@
 
                     const chatColor = `${data.badges.streamer ? `warning` : data.badges.moderator ? `info` : data.badges.staff ? `primary` : data.badges.vip ? `danger` : `light`}`;
 
-                    let messageWrapper = $(`<div>`);
+                    const messageWrapper = $(`<div>`);
                     messageWrapper.addClass(`chat-message`);
                     
                     let parsedMessage = ``;
@@ -99,6 +99,17 @@
                     messageWrapper.append(chatMessage);
 
                     chatHistory.append(messageWrapper);
+
+                    const DOMchatHistory = document.querySelector(`.chat-history`);
+                    DOMchatHistory.scrollTop = DOMchatHistory.scrollHeight - DOMchatHistory.offsetHeight;
+                });
+
+                socket.on(`commandMessage`, message => {
+                    const messageWrapper = $(`<div>`);
+                    messageWrapper.addClass(`chat-message`);
+
+                    messageWrapper.html(`<span class="text-muted">${message}</span>`)
+                    $(`.chat-history`).append(messageWrapper);
 
                     const DOMchatHistory = document.querySelector(`.chat-history`);
                     DOMchatHistory.scrollTop = DOMchatHistory.scrollHeight - DOMchatHistory.offsetHeight;

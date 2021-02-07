@@ -13,7 +13,7 @@ const path = require(`path`);
 process.on(`uncaughtException`, err => log(`red`, err.stack));
 
 // Socket.IO server.
-const io = require(`./socket.js`);
+const io = require(`./chat/socket.js`);
 
 // HTTP / HTTPS transport protocols.
 const https = require(`https`);

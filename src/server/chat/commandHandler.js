@@ -1,0 +1,38 @@
+const fs = require(`fs`);
+const path = require(`path`);
+
+const config = require(`../../../config/config.js`);
+const log = require(`../utils/log.js`);
+
+// Load commands.
+const commands = [];
+fs.readdir(path.resolve(__dirname, `./commands`), (err, files) => {
+    if (err) return log(`red`, err.stack);
+
+    for (const command of files) {
+        if (command.name === `_template`) continue;
+
+        const cmd = require(`./commands/${command}`);
+        commands.push({
+            name: command.split(`.`)[0],
+            description: cmd.description,
+            aliases: cmd.aliases,
+            run: cmd.run
+        });
+    }
+});
+
+const run = (message, chatter, chatUsers) => {
+    const args = message.slice(0, config.chatPrefix.length).trim().split(` `);
+    const command = args.shift();
+
+    const cmd = commands.find(cmd => cmd.name === command || cmd.aliases.includes(command));
+
+    if (!cmd) return chatter.emit(`commandMessage`, `That command does not exist!`);
+    return cmd.run(message, args, chatter, chatUsers);
+};
+
+module.exports = {
+    commands,
+    run
+};
