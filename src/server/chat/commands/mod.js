@@ -15,5 +15,5 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     else if (chatUser.channel.moderators.includes(userToMod)) return chatter.emit(`commandMessage`, `That user is already a moderator of your channel!`);
 
     chatUser.channel.moderators.push(userToMod);
-    chatter.emit(`commandMessage`, `Promoted ${userToMod} to a moderator of your channel.`);
+    chatUser.save(() => chatter.emit(`commandMessage`, `Promoted ${userToMod} to a moderator of your channel.`));
 };
