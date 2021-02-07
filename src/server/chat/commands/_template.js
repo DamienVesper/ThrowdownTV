@@ -1,4 +1,3 @@
-
 module.exports = {
     description: `An amazing command!`,
     aliases: []
