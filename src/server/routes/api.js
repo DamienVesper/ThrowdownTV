@@ -7,7 +7,7 @@ const path = require(`path`);
 const User = require(`../models/user.model.js`);
 const log = require(`../utils/log.js`);
 
-// Setup emotes.
+// Load emotes.
 const emotes = [];
 fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err, files) => {
     if (err) return log(`red`, err.stack);
