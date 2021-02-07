@@ -45,14 +45,12 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-nodemon": "^0.4.2",
-    "grunt-webpack": "^4.0.2",
     "https": "^1.0.0",
     "mongoose": "^5.11.13",
     "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "socket.io": "^3.1.0",
-    "webpack": "^5.17.0",
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {

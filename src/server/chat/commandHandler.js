@@ -10,8 +10,8 @@ fs.readdir(path.resolve(__dirname, `./commands`), (err, files) => {
     if (err) return log(`red`, err.stack);
 
     for (const command of files) {
-        if (command.name === `_template`) continue;
-
+        const commandName = command.split(`.`)[0];
+        if (command.split(`.`) === `_template`) continue;
         const cmd = require(`./commands/${command}`);
         commands.push({
             name: command.split(`.`)[0],
@@ -19,6 +19,7 @@ fs.readdir(path.resolve(__dirname, `./commands`), (err, files) => {
             aliases: cmd.aliases,
             run: cmd.run
         });
+        log(`yellow`, `Loaded command ${command.split(`.`)[0]}.`);
     }
 });
 
