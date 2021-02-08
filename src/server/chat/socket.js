@@ -92,7 +92,7 @@ io.on(`connection`, async socket => {
             if (streamer.channel.bans.includes(chatter.username)) return;
 
             // If the message is a command, then forward it to the command handler.
-            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
+            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers, streamerUsername);
 
             // Message all users in the channel.
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
