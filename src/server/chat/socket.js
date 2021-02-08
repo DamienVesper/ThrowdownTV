@@ -88,6 +88,9 @@ io.on(`connection`, async socket => {
                 vip: user.perms.vip
             };
 
+            // Check if user is banned
+            if (streamer.channel.bans.includes(chatter.username)) return;
+
             // If the message is a command, then forward it to the command handler.
             if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
 
