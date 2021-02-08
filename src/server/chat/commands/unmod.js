@@ -2,11 +2,11 @@ const User = require(`../../models/user.model.js`);
 
 module.exports = {
     description: `Demote a moderator.`,
-    aliases: [`demod`]
+    aliases: [`demod`],
+    usage: `<user>`
 };
 
 module.exports.run = async (message, args, chatter, chatUsers) => {
-    if (!args[0]) return chatter.emit(`commandMessage`, `You must specify a user to demote!`);
     const userToUnmod = args.shift().toLowerCase();
 
     const chatUser = await User.findOne({ username: chatter.username });

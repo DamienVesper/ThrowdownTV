@@ -2,11 +2,11 @@ const User = require(`../../models/user.model.js`);
 
 module.exports = {
     description: `Promote a chat user to moderator.`,
-    aliases: []
+    aliases: [],
+    usage: `<user>`
 };
 
 module.exports.run = async (message, args, chatter, chatUsers) => {
-    if (!args[0]) return chatter.emit(`commandMessage`, `You must specify a user to promote!`);
     const userToMod = args.shift().toLowerCase();
 
     const chatUser = await User.findOne({ username: chatter.username });
