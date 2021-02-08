@@ -21,12 +21,12 @@ module.exports.run = async (message, args, chatter, chatUsers, streamerUsername)
     */
 
     // Message all users in the channel.
-    const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
-    for (const user of usersToMessage) {
+    const users = chatUsers.filter(user => user.channel === chatter.channel);
+    for (const user of users) {
         user.emit(`chatMessage`, {
             username: chatter.username,
             displayName: chatter.displayName,
-            message: `<i src="https://media.discordapp.net/attachments/765053953226309642/765284896447922206/Keemmoment.gif" title="/sticker ${sticker}">`,
+            message: `<img src="/assets/img/header-logo.png" title="/sticker ${sticker}" height="80"></img>`,
             badges: chatter.perms
         });
     }
