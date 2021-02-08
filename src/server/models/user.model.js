@@ -63,7 +63,7 @@ const userSchema = Mongoose.Schema({
             default: [],
             required: false
         },
-        vips: {
+        bans: {
             type: Array,
             default: [],
             required: false
