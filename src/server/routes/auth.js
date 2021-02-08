@@ -103,6 +103,7 @@ router.post(`/signup`, (req, res, next) => {
                     };
 
                     if (config.mode === `dev`) {
+                        user.verified = true;
                         user.save(() => {
                             log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
                             req.logIn(user, err => {

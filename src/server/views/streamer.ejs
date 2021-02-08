@@ -64,25 +64,30 @@
             $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
             $(`#follow-btn`).attr(`title`, `Follow ${streamer}`)
 
-            fetch(`/api/get-followers/${streamer}`).then(data => data.json()).then(data => {
-                if (streamer === userdata.username) {
-                    $(`#follow-btn`).attr(`disabled`, true);
-                    $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
-                }
-                if (data.followers.includes(userdata.username.toLowerCase())) {
-                    $(`#follow-btn`).html(`Unfollow`)
-                    $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
-                    $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)
-                }
-            });
+            const getStreamData = () => {
+                fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                    $(`#stream-display-name`).text(data.displayName);
+                    $(`#stream-title`).text(data.streamTitle);
+                    $(`#stream-description`).html(data.streamDescription);
+                    $(`#donation-link`).attr(`action`, `${data.donationLink}`);
 
-            fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-                $(`#stream-display-name`).text(data.displayName);
-                $(`#stream-title`).text(data.streamTitle);
-                $(`#stream-description`).html(data.streamDescription);
-                $(`#donation-link`).attr(`action`, `${data.donationLink}`);
-                $(`#follow-count`).text(data.followerCount)
-            });
+                    $(`#follow-count`).text(data.followers.length);
+                    $(`#viewer-count`).text(data.viewers.length);
+
+                    if (streamer === userdata.username) {
+                        $(`#follow-btn`).attr(`disabled`, true);
+                        $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
+                    }
+                    if (data.followers.includes(userdata.username.toLowerCase())) {
+                        $(`#follow-btn`).html(`Unfollow`)
+                        $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
+                        $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)
+                    }
+                });
+            }
+
+            setInterval(getStreamData, 5e3);
+            getStreamData();
 
             $(`#follow-btn`).on(`click`, e => {
                 $(`#follow-btn`).attr(`disabled`, true);

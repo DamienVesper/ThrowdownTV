@@ -30,10 +30,6 @@ const userSchema = Mongoose.Schema({
         type: Date,
         required: true
     },
-    followers: {
-        type: Array,
-        required: false
-    },
     token: {
         type: String,
         default: randomString(64),
@@ -73,6 +69,18 @@ const userSchema = Mongoose.Schema({
             required: false
         }
     },
+    perms: {
+        staff: {
+            type: Boolean,
+            default: false,
+            required: false
+        },
+        vip: {
+            type: Boolean,
+            default: false,
+            required: false
+        }
+    },
     settings: {
         streamKey: {
             type: String,
@@ -94,6 +102,16 @@ const userSchema = Mongoose.Schema({
             default: `/streams/donate`,
             required: false
         }
+    },
+    viewers: {
+        type: Array,
+        default: [],
+        required: false
+    },
+    followers: {
+        type: Array,
+        default: [],
+        required: false
     }
 });
 
