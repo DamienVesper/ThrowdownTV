@@ -17,7 +17,7 @@
             </p>
         </video>
         <div class="info-box">
-            <img src="/assets/img/defaultpfp.png" class="rounded-circle profile-picture mr-3" alt="Profile picture">
+            <img src="/assets/img/defaultpfp.png" id="avatar" class="rounded-circle profile-picture mr-3" alt="Avatar">
             <div class="streamer-content">
                 <span id="stream-title" class="lead mb-3"></span>
                 <br>
@@ -70,7 +70,7 @@
                     $(`#stream-title`).text(data.streamTitle);
                     $(`#stream-description`).html(data.streamDescription);
                     $(`#donation-link`).attr(`action`, `${data.donationLink}`);
-
+                    $(`#avatar`).attr(`src`, `${data.avatarURL}`)
                     $(`#follow-count`).text(data.followers.length);
                     $(`#viewer-count`).text(data.viewers.length);
 
@@ -78,7 +78,7 @@
                         $(`#follow-btn`).attr(`disabled`, true);
                         $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
                     }
-                    if (data.followers.includes(userdata.username.toLowerCase())) {
+                    if (data.followers.includes(userdata.username)) {
                         $(`#follow-btn`).html(`Unfollow`)
                         $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
                         $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)

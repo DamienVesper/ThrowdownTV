@@ -7,18 +7,15 @@ module.exports = {
     usage: `<stickername>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers, streamerUsername) => {
+module.exports.run = async (message, args, chatter, chatUsers) => {
     const sticker = args.shift().toLowerCase();
 
-    /**
-    const chatUser = await User.findOne({ username: chatter.username });
     const stickerToSend = await Sticker.findOne({ stickerName: sticker });
-    const stickerOwner = await User.findOne({ username: stickerToSend.ownerUsername });
+    const stickerOwner = await User.findOne({ username: chatter.username });
 
     if (!stickerToSend) return chatter.emit(`commandMessage`, `That sticker does not exist!`);
-    else if (!stickerOwner.followers.includes(stickerToSend.ownerUsername) && stickerToSend.ownerUsername !== streamerUsername) return chatter.emit(`commandMessage`, `You must follow ${stickerToSend.ownerUsername} to use this sticker in this channel!`);
-    else if (!chatUser.channelsBannedOn.includes(streamerUsername)) return chatter.emit(`commandMessage`, `Usage of the sticker "${sticker}" has been banned on this channel.`);
-    */
+    else if ((!stickerOwner && stickerToSend.ownerUsername !== chatter.channel) && stickerToSend.ownerUsername !== `throwdown`) return chatter.emit(`commandMessage`, `You must follow ${stickerToSend.ownerUsername} to use this sticker in this channel!`);
+    else if (stickerToSend.channelsBannedOn.includes(chatter.channel)) return chatter.emit(`commandMessage`, `Usage of the sticker "${sticker}" has been banned on this channel.`);
 
     // Message all users in the channel.
     const users = chatUsers.filter(user => user.channel === chatter.channel);
@@ -26,7 +23,7 @@ module.exports.run = async (message, args, chatter, chatUsers, streamerUsername)
         user.emit(`chatMessage`, {
             username: chatter.username,
             displayName: chatter.displayName,
-            message: `<img src="/assets/img/header-logo.png" title="/sticker ${sticker}" height="80"></img>`,
+            message: `<img src="${stickerToSend.path}" title="/sticker ${sticker}" height="80"></img>`,
             badges: chatter.perms
         });
     }

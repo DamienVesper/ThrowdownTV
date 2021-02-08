@@ -57,6 +57,11 @@ const userSchema = Mongoose.Schema({
         default: false,
         required: false
     },
+    avatarURL: {
+        type: String,
+        default: `/assets/uploads/defaultpfp.png`,
+        required: false
+    },
     channel: {
         moderators: {
             type: Array,

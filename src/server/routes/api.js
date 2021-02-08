@@ -70,7 +70,8 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         donationLink: streamerData.settings.donationLink,
         isSuspended: streamerData.isSuspended,
         viewers: streamerData.viewers,
-        followers: streamerData.followers
+        followers: streamerData.followers,
+        avatarURL: streamerData.avatarURL
     };
 
     res.jsonp(data);

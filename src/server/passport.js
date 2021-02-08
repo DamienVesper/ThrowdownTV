@@ -18,6 +18,32 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+// On new database, add the default user.
+async function initializeDefaultUser () {
+    const defaultUser = await User.findOne({ username: `throwdown` });
+    if (!defaultUser) {
+        const defaultUser = new User({
+            username: `throwdown`,
+            displayName: `Throwdown`,
+            email: `no-reply@throwdown.tv`,
+            verified: true,
+            creationDate: new Date(),
+            password: `throwdown`,
+            settings: {
+                title: `ThrowdownTV`,
+                description: `Free Speech Livestreaming.`
+            }
+        });
+        defaultUser.save(err => {
+            if (err) return log(`red`, err);
+            return log(`green`, `Initialized Default User on new Database.`);
+        });
+    } else {
+        log(`green`, `Users already initialized.`);
+    }
+}
+initializeDefaultUser();
+
 // Strategy.
 passport.use(`login`, new LocalStrategy({
     usernameField: `login-username`,

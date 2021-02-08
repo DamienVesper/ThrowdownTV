@@ -1,6 +1,19 @@
 const express = require(`express`);
 const router = express.Router();
 const { randomString } = require(`../utils/random.js`);
+const multer = require(`multer`);
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, `src/client/assets/uploads/`);
+    },
+    filename: function (req, file, cb) {
+        const parts = file.mimetype.split(`/`);
+        cb(null, `${file.fieldname}-${Date.now()}.${parts[1]}`);
+    }
+});
+
+const upload = multer({ storage });
 
 const User = require(`../models/user.model.js`);
 
@@ -23,7 +36,8 @@ router.post(`/dashboard`, async (req, res) => {
     });
 });
 
-router.post(`/accountoptions`, async (req, res) => {
+// Update account info
+router.post(`/accountoptions/updateinfo`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`display-name`] || typeof req.body[`display-name`] !== `string`) return res.json({ errors: `Please fill out all fields` });
@@ -39,6 +53,24 @@ router.post(`/accountoptions`, async (req, res) => {
     });
 });
 
+// Update Avatar
+router.post(`/accountoptions/updatepfp`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    upload.single(`avatar`)(req, res, async (error) => {
+        // if (!req.file) return res.json({ errors: `Please upload a file.` });
+        if (!req.file) return console.log(`No file`);
+        if (error) return res.json({ errors: `An error occoured while uploading the file.` });
+        const user = await User.findOne({ username: req.user.username });
+        user.avatarURL = `/assets/uploads/${req.file.filename}`;
+
+        user.save(err => {
+            if (err) return res.json({ errors: `Invalid account data` });
+            return res.json({ success: `Succesfully updated account data.` });
+        });
+    });
+});
+
+// Change Stream Key
 router.post(`/changestreamkey`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 

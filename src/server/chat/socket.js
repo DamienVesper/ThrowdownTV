@@ -7,11 +7,31 @@ const http = require(`http`);
 const https = require(`https`);
 
 const User = require(`../models/user.model.js`);
+const Sticker = require(`../models/sticker.model.js`);
 
 const xssFilters = require(`xss-filters`);
 const chatUsers = [];
 
 const commandHandler = require(`./commandHandler.js`);
+
+// On new database, add the default sticker.
+async function initializeStickers () {
+    const sticker = await Sticker.findOne({ stickerName: `throwdown` });
+    if (!sticker) {
+        const defaultSticker = new Sticker({
+            stickerName: `throwdown`,
+            ownerUsername: `throwdown`,
+            path: `/assets/img/header-logo.png`
+        });
+        defaultSticker.save(err => {
+            if (err) return log(`red`, err);
+            return log(`green`, `Initialized Default Sticker on new Database.`);
+        });
+    } else {
+        log(`green`, `Stickers already initialized.`);
+    }
+}
+initializeStickers();
 
 // Configure socket.
 const server = config.mode === `prod`
@@ -92,7 +112,7 @@ io.on(`connection`, async socket => {
             if (streamer.channel.bans.includes(chatter.username)) return;
 
             // If the message is a command, then forward it to the command handler.
-            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers, streamerUsername);
+            if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
 
             // Message all users in the channel.
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);

@@ -63,13 +63,25 @@
         <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Account Settings</h2>
             <label for="display-name" style="font-size: 30px;">Current Username: <span id="current-username" style="color: red;"></span></label>
-            <form action="/accountoptions" method="post" id="account-options-form">
+            <form action="/accountoptions/displayname" method="post" id="account-options-form">
                 <div class="form-group">
                     <label for="display-name">Display Name <span style="font-style: italic;">(You may only change the Capitalization)</span></label>
                     <input type="text" id="display-name" name="display-name" class="form-control"
                         placeholder="Change name Capitalization" maxlength="80">
                     <br>
-                    <input type="submit" id="account-update-info" value="Update Account Information"
+                    <input type="submit" id="account-update-info" value="Update Display Name"
+                        class="btn btn-primary btn-block">
+                </div>
+            </form>
+            <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg, .gif)</span></label>
+                    <div class="form-group">
+                        <label for="validatedCustomFile">Choose Image...</label>
+                        <input type="file" id="avatar" name="avatar" class="form-control-file">        
+                    </div>
+                    <br>
+                    <input type="submit" id="account-update-pfp" value="Update Profile Picture"
                         class="btn btn-primary btn-block">
                 </div>
             </form>
@@ -108,6 +120,18 @@
         }).then(() => window.location.reload());
     });
 
+    $(`#account-update-pfp`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#account-update-pfp`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/accountoptions/updatepfp`,
+            data: $(`account-pfp-form`).serialize()
+        }).then(() => window.location.reload());
+    });
+
     $(`#account-update-info`).on(`click`, e => {
         e.preventDefault();
 
@@ -115,10 +139,11 @@
 
         $.ajax({
             type: `post`,
-            url: `/accountoptions`,
+            url: `/accountoptions/updateinfo`,
             data: $(`#account-options-form`).serialize()
         }).then(() => window.location.reload());
     });
+
 
     $(`#reset-streamkey`).on(`click`, e => {
         e.preventDefault();
