@@ -77,11 +77,11 @@
                 <div class="form-group">
                     <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg, .gif)</span></label>
                     <div class="form-group">
-                        <label for="validatedCustomFile">Choose Image...</label>
-                        <input type="file" id="avatar" name="avatar" class="form-control-file">        
+                        <label for="account-pfp-form">Choose Image...</label>
+                        <input type="file" id="avatar" name="file" class="form-control-file">        
                     </div>
                     <br>
-                    <input type="submit" id="account-update-pfp" value="Update Profile Picture"
+                    <input type="submit" for="account-pfp-form" id="account-update-pfp" value="Update Profile Picture"
                         class="btn btn-primary btn-block">
                 </div>
             </form>
@@ -122,13 +122,14 @@
 
     $(`#account-update-pfp`).on(`click`, e => {
         e.preventDefault();
-
         $(`#account-update-pfp`).attr(`disabled`, true);
 
         $.ajax({
             type: `post`,
             url: `/accountoptions/updatepfp`,
-            data: $(`account-pfp-form`).serialize()
+            processData: false,
+            contentType: false,
+            data: $(`#avatar`)
         }).then(() => window.location.reload());
     });
 

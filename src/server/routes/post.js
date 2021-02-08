@@ -1,20 +1,7 @@
 const express = require(`express`);
 const router = express.Router();
 const { randomString } = require(`../utils/random.js`);
-const multer = require(`multer`);
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, `src/client/assets/uploads/`);
-    },
-    filename: function (req, file, cb) {
-        const parts = file.mimetype.split(`/`);
-        cb(null, `${file.fieldname}-${Date.now()}.${parts[1]}`);
-    }
-});
-
-const upload = multer({ storage });
-
+const upload = require(`express-fileupload`);
 const User = require(`../models/user.model.js`);
 
 // All POST requests are handled within this router (except authentication).
@@ -55,18 +42,22 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 
 // Update Avatar
 router.post(`/accountoptions/updatepfp`, async (req, res) => {
+    console.log(req.files)
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    upload.single(`avatar`)(req, res, async (error) => {
-        // if (!req.file) return res.json({ errors: `Please upload a file.` });
-        if (!req.file) return console.log(`No file`);
-        if (error) return res.json({ errors: `An error occoured while uploading the file.` });
-        const user = await User.findOne({ username: req.user.username });
-        user.avatarURL = `/assets/uploads/${req.file.filename}`;
+    if (!req.file) return res.json({ errors: `Please upload a file.` });
+    let file = req.files.file;
+    let fileextension = file.name.split('.').pop();;
+    let filename = file.name.split('.').slice(0, -1).join('.')
+    console.log(filename)
+    console.log(fileextension)
+    file.mv(`src/client/assets/uploads/${req.user.username}`)
+    const user = await User.findOne({ username: req.user.username });
+    user.avatarURL = `/assets/uploads/${req.user.username}/${req.file.filename}`;
 
-        user.save(err => {
-            if (err) return res.json({ errors: `Invalid account data` });
-            return res.json({ success: `Succesfully updated account data.` });
-        });
+    user.save(err => {
+        if (err) return res.json({ errors: `Invalid account data` });
+        // return res.json({ success: `Succesfully updated account data.` });
+        return res.redirect(`/dashboard`)
     });
 });
 
