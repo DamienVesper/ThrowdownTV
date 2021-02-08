@@ -18,6 +18,7 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     else if (chatUser.channel.bans.includes(userToBan)) return chatter.emit(`commandMessage`, `That user is already banned from your channel!`);
 
     chatUser.channel.bans.push(userToBan);
+    if (chatUser.channel.moderators.includes(userToBan)) chatUser.channel.moderators.splice(chatUser.channel.moderators.indexOf(userToBan), 1);
     chatUser.save(() => chatter.emit(`commandMessage`, `${userToBan} has been banned.`));
 
     const users = chatUsers.filter(user => user.channel === chatter.channel && user.username !== chatter.username);
