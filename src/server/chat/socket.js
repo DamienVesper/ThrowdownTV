@@ -64,7 +64,7 @@ io.on(`connection`, async socket => {
 
         chatUsers.push(chatter);
 
-        if (chatter.username && !streamer.username === chatter.username && !streamer.viewers.includes(chatter.username)) {
+        if (chatter.username && streamer.username !== chatter.username && !streamer.viewers.includes(chatter.username)) {
             streamer.viewers.push(chatter.username);
             streamer.save();
         }
