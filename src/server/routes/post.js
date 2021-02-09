@@ -3,6 +3,10 @@ const router = express.Router();
 const { randomString } = require(`../utils/random.js`);
 const User = require(`../models/user.model.js`);
 
+// Multer
+const multer = require(`multer`);
+const upload = multer({ dest: `src/client/assets/uploads/` });
+
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
@@ -40,16 +44,10 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 });
 
 // Update Avatar
-router.post(`/accountoptions/updatepfp`, (req, res) => {
-    console.log(req.files);
+router.post(`/accountoptions/updatepfp`, upload.single(`avatar`), (req, res) => {
+    console.log(req.file);
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     if (!req.file) return res.json({ errors: `Please upload a file.` });
-    const file = req.files.file;
-    const fileextension = file.name.split(`.`).pop();
-    const filename = file.name.split(`.`).slice(0, -1).join(`.`);
-    console.log(filename);
-    console.log(fileextension);
-    file.mv(`src/client/assets/uploads/${req.user.username}`);
 
     const user = User.findOne({ username: req.user.username });
 
