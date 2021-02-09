@@ -129,7 +129,7 @@
             url: `/accountoptions/updatepfp`,
             processData: false,
             contentType: false,
-            data: $(`#avatar`)
+            data: $(`#avatar`).serialize()
         }).then(() => window.location.reload());
     });
 
