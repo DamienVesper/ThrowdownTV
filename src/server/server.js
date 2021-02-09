@@ -29,6 +29,10 @@ const bodyParser = require(`body-parser`);
 const compression = require(`compression`);
 const ejsLayouts = require(`express-ejs-layouts`);
 
+// Multer
+const multer = require(`multer`);
+const upload = multer({ dest: `src/client/assets/uploads/` });
+
 // Passport.
 const passport = require(`./passport.js`);
 
@@ -77,6 +81,7 @@ app.use(passport.session());
 // Express middleware.
 app.use(compression());
 app.use(ejsLayouts);
+app.use(upload.single());
 
 app.use(bodyParser.json({
     limit: `50mb`

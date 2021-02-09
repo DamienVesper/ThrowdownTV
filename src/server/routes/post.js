@@ -5,7 +5,22 @@ const User = require(`../models/user.model.js`);
 
 // Multer
 const multer = require(`multer`);
-const upload = multer({ dest: `src/client/assets/uploads/` });
+const multerConfig = {
+    storage: multer.diskStorage({
+        destination: function (req, file, next) {
+            next(null, `src/client/assets/uploads/`);
+        },
+        filename: function (req, file, next) {
+            const ext = file.mimetype.split(`/`)[1];
+            next(null, `${file.fieldname}-${Date.now()}.${ext}`);
+        }
+    }),
+    fileFilter: function (req, file, next) {
+        if (!file) next();
+        if (file.mimetype === `image/png` || file.mimetype === `image/jpeg` || file.mimetype === `image/jpg`) next();
+        else return next();
+    }
+};
 
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
@@ -44,10 +59,11 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 });
 
 // Update Avatar
-router.post(`/accountoptions/updatepfp`, upload.single(`avatar`), (req, res) => {
-    console.log(req.file);
+router.post(`/accountoptions/updatepfp`, multer(multerConfig).single(`avatar`), (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    if (!req.file) return res.json({ errors: `Please upload a file.` });
+    // if (!req.file) return res.json({ errors: `Please upload a file.` });
+    if (!req.file) return res.redirect(`/dashboard`);
+    console.log(req.file);
 
     const user = User.findOne({ username: req.user.username });
 

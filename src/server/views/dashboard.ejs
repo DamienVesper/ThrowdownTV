@@ -75,10 +75,10 @@
             </form>
             <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg, .gif)</span></label>
+                    <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg)</span></label>
                     <div class="form-group">
                         <label for="account-pfp-form">Choose Image...</label>
-                        <input type="file" id="avatar" name="file" class="form-control-file">        
+                        <input type="file" id="avatar" name="avatar" class="form-control-file">        
                     </div>
                     <br>
                     <input type="submit" for="account-pfp-form" id="account-update-pfp" value="Update Profile Picture"
@@ -123,13 +123,16 @@
     $(`#account-update-pfp`).on(`click`, e => {
         e.preventDefault();
         $(`#account-update-pfp`).attr(`disabled`, true);
-
+        let uploadfile = $("input[name=avatar]")[0].files[0];
+        let data = new FormData();
+        data.append(`avatar`, uploadfile)
         $.ajax({
             type: `post`,
             url: `/accountoptions/updatepfp`,
             processData: false,
             contentType: false,
-            data: $(`#avatar`).serialize()
+            cache: false,
+            data: data
         }).then(() => window.location.reload());
     });
 
