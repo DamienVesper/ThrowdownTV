@@ -73,14 +73,19 @@
                         class="btn btn-primary btn-block">
                 </div>
             </form>
-            <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form" enctype="multipart/form-data">
+            <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form">
                 <div class="form-group">
                     <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg)</span></label>
                     <label for="account-pfp-form">Choose Image...</label>
-                    <input type="file" id="avatar" name="profilepicture" class="form-control-file">    
-                    <br>   
+                    <input type="text" id="display-avatar" name="display-avatar" class="form-control"
+                        placeholder="Change name Capitalization" maxlength="80">
+                    <br>
                     <input type="submit" for="account-pfp-form" id="account-update-pfp" value="Update Profile Picture"
                     class="btn btn-primary btn-block">
+                </div>
+                <div>
+                    <p>Current Avatar:</p>
+                    <img src="/assets/uploads/defaultpfp.png" id="current-display-avatar" class="rounded-circle profile-picture mr-3" style="max-width: 25%;" alt="Avatar">
                 </div>
             </form>
         </div>
@@ -103,6 +108,8 @@
             $(`#stream-description`).val(data.streamDescription);
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);
+            $(`#display-avatar`).val(data.avatarURL);
+            $(`#current-display-avatar`).attr(`src`, data.avatarURL);
         });
     });
 
@@ -118,45 +125,17 @@
         }).then(() => window.location.reload());
     });
 
-    $(`#account-pfp-form`).submit(e => {
-        e.preventDefault();
-        let data = new FormData();
-        data.append(`profilepicture`, this.new_attachments);
-        console.log(data)
-        $.ajax({
-            url: `/accountoptions/updatepfp`,
-            type: `POST`,
-            contentType: false,
-            processData: false,
-            cache: false,
-            data: data,
-            success: function(res) {
-                window.location.reload();            
-            },
-            error: function() {
-                alert('Error: Update Avatar Failed...');
-                window.location.reload();
-            }
-        })
-    })
-
-    /**
     $(`#account-update-pfp`).on(`click`, e => {
         e.preventDefault();
+
         $(`#account-update-pfp`).attr(`disabled`, true);
-        let uploadfile = $("input[name=avatar]").files;
-        let data = new FormData();
-        data.append(`avatar`, uploadfile)
+
         $.ajax({
             type: `post`,
             url: `/accountoptions/updatepfp`,
-            processData: false,
-            contentType: `w-xxx-form-urlencoded`,
-            cache: false,
-            data: data
+            data: $(`#account-pfp-form`).serialize()
         }).then(() => window.location.reload());
     });
-    */
 
     $(`#account-update-info`).on(`click`, e => {
         e.preventDefault();

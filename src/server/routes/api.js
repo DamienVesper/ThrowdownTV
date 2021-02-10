@@ -51,7 +51,8 @@ router.get(`/stream-data`, async (req, res) => {
         donationLink: streamerData.settings.donationLink,
         streamKey: streamerData.settings.streamKey,
         viewers: streamerData.viewers,
-        followers: streamerData.followers
+        followers: streamerData.followers,
+        avatarURL: streamerData.avatarURL
     };
 
     res.jsonp(data);

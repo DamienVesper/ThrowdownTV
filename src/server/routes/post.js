@@ -3,26 +3,6 @@ const router = express.Router();
 const { randomString } = require(`../utils/random.js`);
 const User = require(`../models/user.model.js`);
 
-// Multer
-const multer = require(`multer`);
-const multerConfig = {
-    storage: multer.diskStorage({
-        destination: function (req, file, next) {
-            next(null, `src/client/assets/uploads/`);
-        },
-        filename: function (req, file, next) {
-            const ext = file.mimetype.split(`/`)[1];
-            next(null, `${file.fieldname}-${Date.now()}.${ext}`);
-        }
-    }),
-    fileFilter: function (req, file, next) {
-        if (!file) next();
-        if (file.mimetype === `image/png` || file.mimetype === `image/jpeg` || file.mimetype === `image/jpg`) next();
-        else return next();
-    }
-};
-const upload = multer({ storage: multerConfig.storage, limits: { fileSize: `3mb` } }).single(`profilepicture`);
-
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
@@ -60,27 +40,18 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 });
 
 // Update Avatar
-router.post(`/accountoptions/updatepfp`, (req, res) => {
-    console.log(req);
+router.post(`/accountoptions/updatepfp`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    // if (!req.file) return res.json({ errors: `Please upload a file.` });
-    // if (!req.file) return res.redirect(`/dashboard`);
 
-    upload(req, res, (err) => {
-        if (err) return log(`red`, `Error Uploading File`);
-    });
+    if (!req.body[`display-avatar`] || typeof req.body[`display-avatar`] !== `string`) return res.json({ errors: `Please fill out all fields` });
 
-    /**
-    const user = User.findOne({ username: req.user.username });
-
-    user.avatarURL = `/assets/uploads/${req.user.username}/${req.file.filename}`;
+    const user = await User.findOne({ username: req.user.username });
+    user.avatarURL = req.body[`display-avatar`];
 
     user.save(err => {
         if (err) return res.json({ errors: `Invalid account data` });
-        // return res.json({ success: `Succesfully updated account data.` });
-        return res.redirect(`/dashboard`);
+        return res.json({ success: `Succesfully updated account avatar.` });
     });
-    */
 });
 
 // Change Stream Key

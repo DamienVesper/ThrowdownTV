@@ -74,6 +74,8 @@
                     $(`#follow-count`).text(data.followers.length);
                     $(`#viewer-count`).text(data.viewers.length);
 
+                    $.get(data.avatarURL).fail(function () {$(`#avatar`).attr(`src`, `/assets/uploads/defaultpfp.png`)})
+
                     if (streamer === userdata.username) {
                         $(`#follow-btn`).attr(`disabled`, true);
                         $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
