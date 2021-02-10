@@ -60,7 +60,7 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 
 // Update Avatar
 router.post(`/accountoptions/updatepfp`, multer(multerConfig).single(`image`), (req, res) => {
-    console.log(req.files);
+    console.log(req.file);
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     // if (!req.file) return res.json({ errors: `Please upload a file.` });
     if (!req.file) return res.redirect(`/dashboard`);
