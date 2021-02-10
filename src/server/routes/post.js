@@ -59,11 +59,11 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 });
 
 // Update Avatar
-router.post(`/accountoptions/updatepfp`, multer(multerConfig).single(`avatar`), (req, res) => {
+router.post(`/accountoptions/updatepfp`, multer(multerConfig).single(`image`), (req, res) => {
+    console.log(req.files);
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     // if (!req.file) return res.json({ errors: `Please upload a file.` });
     if (!req.file) return res.redirect(`/dashboard`);
-    console.log(req.file);
 
     const user = User.findOne({ username: req.user.username });
 

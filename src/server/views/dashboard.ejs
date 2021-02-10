@@ -76,13 +76,11 @@
             <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg)</span></label>
-                    <div class="form-group">
-                        <label for="account-pfp-form">Choose Image...</label>
-                        <input type="file" id="avatar" name="avatar" class="form-control-file">        
-                    </div>
-                    <br>
+                    <label for="account-pfp-form">Choose Image...</label>
+                    <input type="file" id="avatar" name="image" class="form-control-file">    
+                    <br>   
                     <input type="submit" for="account-pfp-form" id="account-update-pfp" value="Update Profile Picture"
-                        class="btn btn-primary btn-block">
+                    class="btn btn-primary btn-block">
                 </div>
             </form>
         </div>
@@ -120,21 +118,42 @@
         }).then(() => window.location.reload());
     });
 
+    $(`#account-pfp-form`).submit(function() {
+        let data = new FormData($(`#account-pfp-form`)[0]);
+        $.ajax({
+            url: `/accountoptions/updatepfp`,
+            type: `POST`,
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: data,
+            success: function(res) {
+                window.location.reload();            
+            },
+            error: function() {
+                alert('Error: Update Avatar Failed...');
+                window.location.reload();
+            }
+        })
+    })
+
+    /**
     $(`#account-update-pfp`).on(`click`, e => {
         e.preventDefault();
         $(`#account-update-pfp`).attr(`disabled`, true);
-        let uploadfile = $("input[name=avatar]")[0].files[0];
+        let uploadfile = $("input[name=avatar]").files;
         let data = new FormData();
         data.append(`avatar`, uploadfile)
         $.ajax({
             type: `post`,
             url: `/accountoptions/updatepfp`,
             processData: false,
-            contentType: false,
+            contentType: `w-xxx-form-urlencoded`,
             cache: false,
             data: data
         }).then(() => window.location.reload());
     });
+    */
 
     $(`#account-update-info`).on(`click`, e => {
         e.preventDefault();
