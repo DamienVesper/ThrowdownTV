@@ -21,6 +21,7 @@ const multerConfig = {
         else return next();
     }
 };
+const upload = multer({ storage: multerConfig.storage, limits: { fileSize: `3mb` } }).single(`profilepicture`);
 
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
@@ -59,12 +60,17 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 });
 
 // Update Avatar
-router.post(`/accountoptions/updatepfp`, multer(multerConfig).single(`image`), (req, res) => {
-    console.log(req.file);
+router.post(`/accountoptions/updatepfp`, (req, res) => {
+    console.log(req);
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     // if (!req.file) return res.json({ errors: `Please upload a file.` });
-    if (!req.file) return res.redirect(`/dashboard`);
+    // if (!req.file) return res.redirect(`/dashboard`);
 
+    upload(req, res, (err) => {
+        if (err) return log(`red`, `Error Uploading File`);
+    });
+
+    /**
     const user = User.findOne({ username: req.user.username });
 
     user.avatarURL = `/assets/uploads/${req.user.username}/${req.file.filename}`;
@@ -74,6 +80,7 @@ router.post(`/accountoptions/updatepfp`, multer(multerConfig).single(`image`), (
         // return res.json({ success: `Succesfully updated account data.` });
         return res.redirect(`/dashboard`);
     });
+    */
 });
 
 // Change Stream Key

@@ -77,7 +77,7 @@
                 <div class="form-group">
                     <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg)</span></label>
                     <label for="account-pfp-form">Choose Image...</label>
-                    <input type="file" id="avatar" name="image" class="form-control-file">    
+                    <input type="file" id="avatar" name="profilepicture" class="form-control-file">    
                     <br>   
                     <input type="submit" for="account-pfp-form" id="account-update-pfp" value="Update Profile Picture"
                     class="btn btn-primary btn-block">
@@ -118,8 +118,11 @@
         }).then(() => window.location.reload());
     });
 
-    $(`#account-pfp-form`).submit(function() {
-        let data = new FormData($(`#account-pfp-form`)[0]);
+    $(`#account-pfp-form`).submit(e => {
+        e.preventDefault();
+        let data = new FormData();
+        data.append(`profilepicture`, this.new_attachments);
+        console.log(data)
         $.ajax({
             url: `/accountoptions/updatepfp`,
             type: `POST`,
