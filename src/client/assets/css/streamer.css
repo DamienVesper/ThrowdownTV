@@ -36,6 +36,7 @@
 }
 
 .profile-picture {
+    object-fit: cover;
     position: static;
     width: 7.5%;
     height: 7.5%;
