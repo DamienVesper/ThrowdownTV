@@ -38,6 +38,7 @@
 .profile-picture {
     object-fit: cover;
     position: static;
+    border-radius: 50%;
     width: 7.5%;
     height: 7.5%;
 }
