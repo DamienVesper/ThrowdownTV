@@ -46,6 +46,7 @@ const authRouter = require(`./routes/auth`);
 const indexRouter = require(`./routes/index`);
 const postRouter = require(`./routes/post`);
 const widgetRouter = require(`./routes/widget`);
+const vipRouter = require(`./routes/vip`);
 
 // Set headers.
 app.use((req, res, next) => {
@@ -104,6 +105,7 @@ app.use(`/`, authRouter);
 app.use(`/`, indexRouter);
 app.use(`/`, postRouter);
 app.use(`/widgets`, widgetRouter);
+app.use(`/vip`, vipRouter);
 
 // Create the webfront.
 const server = config.mode === `dev`

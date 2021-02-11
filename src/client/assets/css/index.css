@@ -49,3 +49,8 @@ body {
     max-width: 100%;
     max-height: 100%;
 }
+
+.vip-page-p {
+    font-size: large;
+    align-self: center;
+}
