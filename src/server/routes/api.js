@@ -72,7 +72,9 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         isSuspended: streamerData.isSuspended,
         viewers: streamerData.viewers,
         followers: streamerData.followers,
-        avatarURL: streamerData.avatarURL
+        avatarURL: streamerData.avatarURL,
+        isVip: streamerData.perms.vip,
+        isStaff: streamerData.perms.staff
     };
 
     res.jsonp(data);
