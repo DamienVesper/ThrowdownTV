@@ -100,12 +100,12 @@ console.log(config.staticDir);
 app.use(express.static(config.staticDir));
 
 // Use routes.
+app.use(`/widgets`, widgetRouter);
 app.use(`/api`, apiRouter);
 app.use(`/`, authRouter);
-app.use(`/`, indexRouter);
 app.use(`/`, postRouter);
-app.use(`/widgets`, widgetRouter);
-app.use(`/vip`, vipRouter);
+app.use(`/`, vipRouter);
+app.use(`/`, indexRouter);
 
 // Create the webfront.
 const server = config.mode === `dev`
