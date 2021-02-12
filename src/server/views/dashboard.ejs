@@ -111,14 +111,14 @@
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);
             $.get(data.avatarURL).then(successCallback, errorCallback);
-            $(`#current-display-avatar`).attr(`src`, data.avatarURL);
+            $(`#display-avatar`).val(data.avatarURL);
 
             function successCallback(response) {
-                $(`#display-avatar`).attr(`src`, `${data.avatarURL}`)
+                $(`#current-display-avatar`).attr(`src`, `${data.avatarURL}`)
             }
 
             function errorCallback(error) {
-                $(`#display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
+                $(`#current-display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
             }
         });
     });
