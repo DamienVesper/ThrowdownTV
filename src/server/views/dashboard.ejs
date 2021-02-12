@@ -61,8 +61,16 @@
         </div>
         <br>
         <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Stickers (VIP Only)</h2>
+            <p id="sticker-info" class="text-center">To add stickers, join the <a href="https://discord.me/throwdowntv">Discord</a></p>
+            <br>
+            <div id="stickers"></div>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
             <h2 class="text-center">Account Settings</h2>
             <label for="display-name" style="font-size: 30px;">Current Username: <span id="current-username" style="color: red;"></span></label>
+            <label for="display-name" style="font-size: 30px;">Account Status: <span id="current-account-status" style="color: orange;"></span></label>
             <form action="/accountoptions/displayname" method="post" id="account-options-form">
                 <div class="form-group">
                     <label for="display-name">Display Name <span style="font-style: italic;">(You may only change the Capitalization)</span></label>
@@ -110,18 +118,38 @@
             $(`#stream-description`).val(data.streamDescription);
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);
-            $.get(data.avatarURL).then(successCallback, errorCallback);
             $(`#display-avatar`).val(data.avatarURL);
+            $.get(data.avatarURL).then(avatarSuccessCallback, avatarErrorCallback);
+            $.get(data.isVip).then(vipSuccessCallback, vipErrorCallback);
 
-            function successCallback(response) {
+            function vipSuccessCallback(response) {
+                $(`#current-account-status`).text(`VIP`)
+                $(`#current-account-status`).css(`color`, `orange`)
+            }
+
+            function vipErrorCallback(error) {
+                $(`#current-account-status`).text(`Free`)
+                $(`#current-account-status`).css(`color`, `grey`)
+                $(`#sticker-info`).text(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`)
+            }
+
+            function avatarSuccessCallback(response) {
                 $(`#current-display-avatar`).attr(`src`, `${data.avatarURL}`)
             }
 
-            function errorCallback(error) {
+            function avatarErrorCallback(error) {
                 $(`#current-display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
             }
         });
     });
+
+    fetch(`/api/get-stickers`).then(data => data.json()).then(data => {
+        if (!data.length > 0) return $(`#stickers`).append(`<p class="text-center" style="font-size: 25px;">No Stickers Available for this Channel</p>`)
+        data.forEach(sticker => {
+            $(`#stickers`).append(`<p class="text-center" style="font-size: 15px;">/sticker <span style="font-weight: bold;">${sticker.stickerName}</span></p>`)
+            $(`#stickers`).append(`<img src="${sticker.path}" style="max-height: 70px;" class="center-align-image"></img>`)
+        });
+    })
 
     $(`#dashboard-update-info`).on(`click`, e => {
         e.preventDefault();

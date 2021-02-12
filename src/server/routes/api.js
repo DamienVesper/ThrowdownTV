@@ -5,6 +5,7 @@ const fs = require(`fs`);
 const path = require(`path`);
 
 const User = require(`../models/user.model.js`);
+const Sticker = require(`../models/sticker.model.js`);
 const log = require(`../utils/log.js`);
 
 // Load emotes.
@@ -22,6 +23,17 @@ fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err,
 
 router.get(`/get-emotes`, async (req, res) => {
     return res.json(emotes);
+});
+
+router.get(`/get-stickers`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    const stickerData = await Sticker.find({ ownerUsername: req.user.username });
+    if (!stickerData) return res.json({ errors: `No stickers for this user` });
+    const stickers = [];
+    stickerData.forEach(async (sticker) => {
+        stickers.push(sticker);
+    });
+    res.json(stickers);
 });
 
 router.get(`/streams`, async (req, res) => {
@@ -52,7 +64,9 @@ router.get(`/stream-data`, async (req, res) => {
         streamKey: streamerData.settings.streamKey,
         viewers: streamerData.viewers,
         followers: streamerData.followers,
-        avatarURL: streamerData.avatarURL
+        avatarURL: streamerData.avatarURL,
+        isVip: streamerData.perms.vip,
+        isStaff: streamerData.perms.staff
     };
 
     res.jsonp(data);

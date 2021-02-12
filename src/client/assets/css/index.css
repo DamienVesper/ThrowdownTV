@@ -54,3 +54,9 @@ body {
     font-size: large;
     align-self: center;
 }
+
+.center-align-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
