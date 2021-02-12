@@ -63,7 +63,8 @@ router.get(`/following-streams`, async (req, res) => {
         description: streamer.settings.description
     });
 
-    return res.json(streamers);
+    // return res.json(streamers);
+    return res.send(streamers)
 });
 
 router.get(`/stream-data`, async (req, res) => {
