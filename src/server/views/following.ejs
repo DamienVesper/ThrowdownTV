@@ -4,7 +4,7 @@
 
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="no-active-following card card-body text-center" style="background-color: #ffcece;">
+        <div class="no-active-streams card card-body text-center" style="background-color: #ffcece;">
             <span>You are not following anyone...</span>
         </div>
     </div>
@@ -17,7 +17,7 @@
 <script>
     $(document).ready(() => $(`.no-active-streams`).hide());
     fetch(`/api/following-streams`).then(data => data.json()).then(data => {
-        if (data.length === 0) return console.log(`nothing`) //$(`.no-active-streams`).show();
+        if (data.length === 0) return $(`.no-active-streams`).show();
 
         for (const streamer of data) {
             let streamerWrapper = $(`<div>`);
@@ -34,8 +34,8 @@
                 </div>
             `);
 
-            $(`.active-streams`).append(streamerWrapper);
-            $(`.active-streams`).append(`<br>`);
+            $(`.active-following`).append(streamerWrapper);
+            $(`.active-following`).append(`<br>`);
         }
     });
 </script>
