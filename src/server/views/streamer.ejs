@@ -80,14 +80,14 @@
                     let streamerVIP = data.isVip;
                     let streamerStaff = data.isStaff;
                     if(!streamerVIP){
-                        $(`#vipbadge`).hide()
+                        $(`#vipbadge`).hide();
                     }
                     if(!streamerStaff){
-                        $(`#staffbadge`).hide()
+                        $(`#staffbadge`).hide();
                     }
                     // If you are a staff member, there is no need to have a VIP badge
                     if(streamerStaff){
-                        $(`#vipbadge`).hide()
+                        $(`#vipbadge`).hide();
                     }
 
                     $.get(data.avatarURL).fail(function () {$(`#avatar`).attr(`src`, `/assets/uploads/defaultpfp.png`)})
