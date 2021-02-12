@@ -72,7 +72,9 @@
                     $(`#stream-title`).text(data.streamTitle);
                     $(`#stream-description`).html(data.streamDescription);
                     $(`#donation-link`).attr(`action`, `${data.donationLink}`);
-                    $(`#avatar`).attr(`src`, `${data.avatarURL}`)
+                    $.get(data.avatarURL)
+                        .fail(function () {$(`#avatar`).attr(`src`, `/assets/img/defaultpfp.png`)})
+                        .success(function () {$(`#avatar`).attr(`src`, `${data.avatarURL}`)})
                     $(`#follow-count`).text(data.followers.length);
                     $(`#viewer-count`).text(data.viewers.length);
                     
@@ -89,9 +91,7 @@
                     if(streamerStaff){
                         $(`#vipbadge`).hide();
                     }
-
-                    $.get(data.avatarURL).fail(function () {$(`#avatar`).attr(`src`, `/assets/uploads/defaultpfp.png`)})
-
+                    
                     if (streamer === userdata.username) {
                         $(`#follow-btn`).attr(`disabled`, true);
                         $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
