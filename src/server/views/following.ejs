@@ -17,7 +17,7 @@
 <script>
     $(document).ready(() => $(`.no-active-streams`).hide());
     fetch(`/api/following-streams`).then(data => data.json()).then(data => {
-        if (data.length === 0) return $(`.no-active-streams`).show();
+        if (data.length === 0) return console.log(`nothing`) //$(`.no-active-streams`).show();
 
         for (const streamer of data) {
             let streamerWrapper = $(`<div>`);
