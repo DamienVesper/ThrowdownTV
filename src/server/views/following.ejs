@@ -16,34 +16,26 @@
 </div>
 <script>
     $(document).ready(() => $(`.no-active-streams`).hide());
-    fetch(`/authenticated`).then(data => data.json()).then(userdata => {
-        fetch(`/api/streams`).then(data => data.json()).then(data => {
-            if (data.length === 0) return $(`.no-active-following`).show();
+    fetch(`/api/following-streams`).then(data => data.json()).then(data => {
+        if (data.length === 0) return $(`.no-active-streams`).show();
 
-            for (const streamer of data) {
-                fetch(`/api/streamer-data`).then(streamerdata => streamerdata.json()).then(streamerdata => {
-                    for (streamerFollowers of streamerdata.followers) {
-                        if (streamerFollowers.contains(userdata.username)) {
-                            let streamerWrapper = $(`<div>`);
+        for (const streamer of data) {
+            let streamerWrapper = $(`<div>`);
 
-                            streamerWrapper.addClass(`card card-body`);
-                            streamerWrapper.attr(`style`, `background-color: #b1cbe6; display: flex; flex-direction: row;`);
-                            streamerWrapper.html(`
-                                <img src="/assets/img/thumbnail.png" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
-                                <div style="margin-left: 25px;">
-                                    <h2><a href="/${streamer.name}">${streamer.title}</a></h2>
-                                    <p>${streamer.description}
-                                    <br>
-                                    <b>${streamer.displayName}</b></p>
-                                </div>
-                            `);
+            streamerWrapper.addClass(`card card-body`);
+            streamerWrapper.attr(`style`, `background-color: #b1cbe6; display: flex; flex-direction: row;`);
+            streamerWrapper.html(`
+                <img src="/assets/img/thumbnail.png" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
+                <div style="margin-left: 25px;">
+                    <h2><a href="/${streamer.name}">${streamer.title}</a></h2>
+                    <p>${streamer.description}
+                    <br>
+                    <b>${streamer.displayName}</b></p>
+                </div>
+            `);
 
-                            $(`.active-following`).append(streamerWrapper);
-                            $(`.active-following`).append(`<br>`);
-                        }
-                    }
-                })
-            }
-        });
+            $(`.active-streams`).append(streamerWrapper);
+            $(`.active-streams`).append(`<br>`);
+        }
     });
 </script>

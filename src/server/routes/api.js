@@ -50,6 +50,22 @@ router.get(`/streams`, async (req, res) => {
     return res.json(streamers);
 });
 
+router.get(`/streams`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const streamers = [];
+    const streamerData = await User.find({ followers: req.user.username });
+
+    for (const streamer of streamerData) streamers.push({
+        name: streamer.username,
+        displayName: streamer.displayName,
+        title: streamer.settings.title,
+        description: streamer.settings.description
+    });
+
+    return res.json(streamers);
+});
+
 router.get(`/stream-data`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
