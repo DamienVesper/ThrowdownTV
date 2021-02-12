@@ -77,11 +77,11 @@
                     $(`#viewer-count`).text(data.viewers.length);
 
                     function successCallback(response) {
-                        $(`#display-avatar`).attr(`src`, `${data.avatarURL}`)
+                        $(`#avatar`).attr(`src`, `${data.avatarURL}`)
                     }
 
                     function errorCallback(error) {
-                        $(`#display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
+                        $(`#avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
                     }
                     
                     // Check to see if the user is a VIP or a staff member
