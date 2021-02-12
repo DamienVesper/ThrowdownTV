@@ -119,7 +119,12 @@
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);
             $(`#display-avatar`).val(data.avatarURL);
-            $.get(data.avatarURL).then(avatarSuccessCallback, avatarErrorCallback);
+            $.get(data.avatarURL)
+                .done(function() {
+                    $(`#current-display-avatar`).attr(`src`, `${data.avatarURL}`);
+                }).fail(function() {
+                    $(`#current-display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`);
+                });
 
             if (data.isVip) {
                 $(`#current-account-status`).text(`VIP`)
@@ -128,14 +133,6 @@
                 $(`#current-account-status`).text(`Free`);
                 $(`#current-account-status`).css(`color`, `grey`);
                 $(`#sticker-info`).html(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`);
-            }
-
-            function avatarSuccessCallback(response) {
-                $(`#current-display-avatar`).attr(`src`, `${data.avatarURL}`)
-            }
-
-            function avatarErrorCallback(error) {
-                $(`#current-display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
             }
         });
     });

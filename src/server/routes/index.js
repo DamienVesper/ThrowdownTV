@@ -33,6 +33,7 @@ router.get(`/staff`, async (req, res) => res.render(`staff.ejs`));
 // Following.
 router.get(`/following`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
+    res.render(`following.ejs`);
 });
 
 // Dashboard.
