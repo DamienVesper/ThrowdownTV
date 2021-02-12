@@ -8,7 +8,6 @@ require(`dotenv`).config();
 const log = require(`./utils/log.js`);
 const fs = require(`fs`);
 const path = require(`path`);
-const cors = require(`cors`);
 
 // Log errors in a differnet color.
 process.on(`uncaughtException`, err => log(`red`, err.stack));
@@ -79,7 +78,6 @@ app.use(passport.session());
 // Express middleware.
 app.use(compression());
 app.use(ejsLayouts);
-app.use(cors());
 
 app.use(bodyParser.json({
     limit: `50mb`
