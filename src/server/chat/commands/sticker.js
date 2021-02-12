@@ -12,10 +12,12 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     const stickerToSend = await Sticker.findOne({ stickerName: sticker });
     const stickerOwner = await User.findOne({ username: chatter.username });
+    const channel = await User.findOne({ username: chatter.channel });
 
     if (!stickerToSend) return chatter.emit(`commandMessage`, `That sticker does not exist!`);
     else if ((!stickerOwner && stickerToSend.ownerUsername !== chatter.channel) && stickerToSend.ownerUsername !== `throwdown`) return chatter.emit(`commandMessage`, `You must follow ${stickerToSend.ownerUsername} to use this sticker in this channel!`);
     else if (stickerToSend.channelsBannedOn.includes(chatter.channel)) return chatter.emit(`commandMessage`, `Usage of the sticker "${sticker}" has been banned on this channel.`);
+    else if ((stickerToSend.ownerUsername !== channel) && (!channel.settings.useGlobalStickers)) return chatter.emit(`commandMessage`, `Sending stickers from other channels has been disabled.`);
 
     // Message all users in the channel.
     const users = chatUsers.filter(user => user.channel === chatter.channel);

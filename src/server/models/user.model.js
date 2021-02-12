@@ -106,6 +106,11 @@ const userSchema = Mongoose.Schema({
             type: String,
             default: `/streams/donate`,
             required: false
+        },
+        useGlobalStickers: {
+            type: Boolean,
+            default: true,
+            required: false
         }
     },
     viewers: {
