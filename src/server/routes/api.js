@@ -50,7 +50,7 @@ router.get(`/streams`, async (req, res) => {
     return res.json(streamers);
 });
 
-router.get(`/streams`, async (req, res) => {
+router.get(`/following-streams`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamers = [];
