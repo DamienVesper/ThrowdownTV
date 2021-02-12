@@ -59,7 +59,7 @@ const userSchema = Mongoose.Schema({
     },
     avatarURL: {
         type: String,
-        default: `/assets/uploads/defaultpfp.png`,
+        default: `/assets/img/defaultpfp.png`,
         required: false
     },
     channel: {
