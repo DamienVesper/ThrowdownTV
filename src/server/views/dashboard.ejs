@@ -127,7 +127,7 @@
             } else {
                 $(`#current-account-status`).text(`Free`);
                 $(`#current-account-status`).css(`color`, `grey`);
-                $(`#sticker-info`).text(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`);
+                $(`#sticker-info`).html(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`);
             }
 
             function avatarSuccessCallback(response) {
