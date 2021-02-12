@@ -1,6 +1,7 @@
 const express = require(`express`);
 const router = express.Router();
 const User = require(`../models/user.model.js`);
+const cors = require(`cors`);
 
 // Landing page.
 router.get(`/`, (req, res) => {
@@ -37,7 +38,7 @@ router.get(`/following`, async (req, res) => {
 });
 
 // Dashboard.
-router.get(`/dashboard`, async (req, res) => {
+router.get(`/dashboard`, cors(), async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: req.user.username });
@@ -62,7 +63,7 @@ router.get(`/chat/*`, async (req, res) => {
     res.render(`chat.ejs`);
 });
 
-router.get(`/:streamer`, async (req, res) => {
+router.get(`/:streamer`, cors(), async (req, res) => {
     const streamer = req.params.streamer;
 
     const user = await User.findOne({ username: streamer.toLowerCase() });
