@@ -110,10 +110,16 @@
             $(`#stream-description`).val(data.streamDescription);
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);
-            $.get(data.avatarURL)
-                .success(function () {$(`#display-avatar`).attr(`src`, `${data.avatarURL}`)})
-                .fail(function () {$(`#display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)});
+            $.get(data.avatarURL).then(successCallback, errorCallback);
             $(`#current-display-avatar`).attr(`src`, data.avatarURL);
+
+            function successCallback(response) {
+                $(`#display-avatar`).attr(`src`, `${data.avatarURL}`)
+            }
+
+            function errorCallback(error) {
+                $(`#display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
+            }
         });
     });
 

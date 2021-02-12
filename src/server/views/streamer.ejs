@@ -72,11 +72,17 @@
                     $(`#stream-title`).text(data.streamTitle);
                     $(`#stream-description`).html(data.streamDescription);
                     $(`#donation-link`).attr(`action`, `${data.donationLink}`);
-                    $.get(data.avatarURL)
-                        .success(function () {$(`#avatar`).attr(`src`, `${data.avatarURL}`)})
-                        .fail(function () {$(`#avatar`).attr(`src`, `/assets/img/defaultpfp.png`)});
+                    $.get(data.avatarURL).then(successCallback, errorCallback);
                     $(`#follow-count`).text(data.followers.length);
                     $(`#viewer-count`).text(data.viewers.length);
+
+                    function successCallback(response) {
+                        $(`#display-avatar`).attr(`src`, `${data.avatarURL}`)
+                    }
+
+                    function errorCallback(error) {
+                        $(`#display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
+                    }
                     
                     // Check to see if the user is a VIP or a staff member
                     let streamerVIP = data.isVip;
