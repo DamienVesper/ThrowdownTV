@@ -27,6 +27,9 @@ router.get(`/tos`, (req, res) => res.render(`tos.ejs`));
 // Browsing.
 router.get(`/browse`, async (req, res) => res.render(`browse.ejs`));
 
+// Staff
+router.get(`/staff`, async (req, res) => res.render(`staff.ejs`));
+
 // Following.
 router.get(`/following`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
