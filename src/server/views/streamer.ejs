@@ -73,8 +73,8 @@
                     $(`#stream-description`).html(data.streamDescription);
                     $(`#donation-link`).attr(`action`, `${data.donationLink}`);
                     $.get(data.avatarURL)
-                        .fail(function () {$(`#avatar`).attr(`src`, `/assets/img/defaultpfp.png`)})
                         .success(function () {$(`#avatar`).attr(`src`, `${data.avatarURL}`)})
+                        .fail(function () {$(`#avatar`).attr(`src`, `/assets/img/defaultpfp.png`)});
                     $(`#follow-count`).text(data.followers.length);
                     $(`#viewer-count`).text(data.viewers.length);
                     

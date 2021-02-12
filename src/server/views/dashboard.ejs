@@ -86,7 +86,7 @@
                 <div>
                     <p>Current Avatar:</p>
                     <div class="profile-picture-cropper">
-                        <img src="/assets/uploads/defaultpfp.png" id="current-display-avatar" class="profile-picture rounded" style="max-width: 25%;" alt="Avatar">
+                        <img src="/assets/img/defaultpfp.png" id="current-display-avatar" class="profile-picture rounded" style="max-width: 25%;" alt="Avatar">
                     </div>
                 </div>
             </form>
@@ -110,7 +110,9 @@
             $(`#stream-description`).val(data.streamDescription);
             $(`#donation-link`).val(data.donationLink);
             $(`#stream-key`).val(data.streamKey);
-            $(`#display-avatar`).val(data.avatarURL);
+            $.get(data.avatarURL)
+                .success(function () {$(`#display-avatar`).attr(`src`, `${data.avatarURL}`)})
+                .fail(function () {$(`#display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`)});
             $(`#current-display-avatar`).attr(`src`, data.avatarURL);
         });
     });
