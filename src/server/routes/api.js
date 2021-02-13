@@ -8,6 +8,8 @@ const User = require(`../models/user.model.js`);
 const Sticker = require(`../models/sticker.model.js`);
 const log = require(`../utils/log.js`);
 
+const request = require(`request`);
+
 // Load emotes.
 const emotes = [];
 fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err, files) => {
@@ -34,6 +36,13 @@ router.get(`/get-stickers`, async (req, res) => {
         stickers.push(sticker);
     });
     res.json(stickers);
+});
+
+router.get(`/sticker/:sticker`, async (req, res) => {
+    const stickerData = await Sticker.find({ ownerUsername: req.params.sticker });
+    if (!stickerData) return res.status(404).json({ errors: `404 - Sticker Not Found` });
+    res.setHeader(`content-disposition`);
+    request(stickerData.path).pipe(res);
 });
 
 router.get(`/streams`, async (req, res) => {
