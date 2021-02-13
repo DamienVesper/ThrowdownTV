@@ -45,6 +45,7 @@ router.get(`/stream-key/:streamKey`, async (req, res) => {
 
     const data = {
         username: streamerData.username,
+        verified: streamerData.verified,
         isSuspended: streamerData.isSuspended,
         isVip: streamerData.perms.vip
     };
