@@ -38,13 +38,6 @@ router.get(`/get-stickers`, async (req, res) => {
     res.json(stickers);
 });
 
-router.get(`/sticker/:sticker`, async (req, res) => {
-    const stickerData = await Sticker.find({ ownerUsername: req.params.sticker });
-    if (!stickerData) return res.status(404).json({ errors: `404 - Sticker Not Found` });
-    res.setHeader(`content-disposition`);
-    request(stickerData.path).pipe(res);
-});
-
 router.get(`/streams`, async (req, res) => {
     const streamers = [];
     const streamerData = await User.find({ live: true });
