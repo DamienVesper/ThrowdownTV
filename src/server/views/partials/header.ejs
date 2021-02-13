@@ -53,10 +53,12 @@
                     $(`#nav-signup`).show();
                 } else {
                     $(`#nav-logout`).show();
-                    console.log("req 1")
+
+                    /*
                     fetch(`/api/public-stream-data/` + data.username.toLowerCase()).then(data => data.json()).then(data2 => {
-                        if(!data2.isVip ||! data2.isStaff) $(`#get-vip`).hide();
+                        if(data2.isVip || data2.isStaff) $(`#get-vip`).hide();
                     })
+                    */
                 }
             });
 
