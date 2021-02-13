@@ -27,7 +27,7 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
         user.emit(`chatMessage`, {
             username: chatter.username,
             displayName: chatter.displayName,
-            message: `<img src="${stickerToSend.path}" title="/sticker ${sticker}" height="80"></img>`,
+            message: `<img src="${stickerToSend.path}" title="/sticker ${sticker}" height=20></img>`,
             badges: chatter.perms
         });
     }
