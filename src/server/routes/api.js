@@ -39,8 +39,10 @@ router.get(`/get-stickers`, async (req, res) => {
 router.get(`/stream-key/:streamKey`, async (req, res) => {
     const streamkey = req.params.streamKey;
     if (!streamkey) res.json({ errors: `Stream key not supplied.` });
+
     const streamerData = await User.findOne({ "settings.streamKey": streamkey });
     if (!streamerData) res.json({ errors: `Invalid Stream Key` });
+
     const data = {
         username: streamerData.username,
         isSuspended: streamerData.isSuspended,
