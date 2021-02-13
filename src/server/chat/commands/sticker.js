@@ -19,6 +19,8 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     else if (stickerToSend.channelsBannedOn.includes(chatter.channel)) return chatter.emit(`commandMessage`, `Usage of the sticker "${sticker}" has been banned on this channel.`);
     else if ((stickerToSend.ownerUsername !== channel) && (!channel.settings.useGlobalStickers)) return chatter.emit(`commandMessage`, `Sending stickers from other channels has been disabled.`);
 
+    console.log(stickerToSend.path);
+
     // Message all users in the channel.
     const users = chatUsers.filter(user => user.channel === chatter.channel);
     for (const user of users) {
