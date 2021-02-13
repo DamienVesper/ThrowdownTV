@@ -60,7 +60,7 @@
                 messageWrapper.addClass(`chat-message`);
 
                 let parsedMessage = ``;
-                if(!message.startsWith("<img ")){
+                if(!message.startsWith(`<img title="/sticker`)){
                     const emojisInMessage = message.split(`:`);
                     if (emojisInMessage.length > 1) {
                         for (const slice of emojisInMessage) {
