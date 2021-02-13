@@ -58,17 +58,20 @@
 
                 let messageWrapper = $(`<div>`);
                 messageWrapper.addClass(`chat-message`);
-                
-                let parsedMessage = ``;
-                const emojisInMessage = message.split(`:`);
-                if (emojisInMessage.length > 1) {
-                    for (const slice of emojisInMessage) {
-                        const emoji = emojis.find(emoji => emoji.name === slice);
 
-                        if (emoji) parsedMessage += `<img src="/assets/img/chat/emotes/${emoji.name}.${emoji.extension}" alt="${emoji.name} emoji" class="chat-emoji">`;
-                        else parsedMessage += `${slice}`;
+                let parsedMessage = ``;
+                if(!message.startsWith("<img ")){
+                    const emojisInMessage = message.split(`:`);
+                    if (emojisInMessage.length > 1) {
+                        for (const slice of emojisInMessage) {
+                            const emoji = emojis.find(emoji => emoji.name === slice);
+
+                            if (emoji) parsedMessage += `<img src="/assets/img/chat/emotes/${emoji.name}.${emoji.extension}" alt="${emoji.name} emoji" class="chat-emoji">`;
+                            else parsedMessage += `${slice}`;
+                        }
+                        if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);
                     }
-                    if (parsedMessage.charAt(parsedMessage.length - 1) === `:`) parsedMessage = parsedMessage.slice(0, parsedMessage.length - 1);
+                    else parsedMessage = message;
                 }
                 else parsedMessage = message;
 
