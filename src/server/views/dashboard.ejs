@@ -126,7 +126,11 @@
                     $(`#current-display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`);
                 });
 
-            if (data.isVip) {
+            if (data.isStaff) {
+                $(`#current-account-status`).text(`Staff`)
+                $(`#current-account-status`).css(`color`, `#032cfc`)
+            }
+            else if (data.isVip) {
                 $(`#current-account-status`).text(`VIP`)
                 $(`#current-account-status`).css(`color`, `orange`)
             } else {
