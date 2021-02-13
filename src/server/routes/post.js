@@ -11,10 +11,16 @@ router.post(`/dashboard`, async (req, res) => {
     typeof req.body[`stream-title`] !== `string` || typeof req.body[`stream-description`] !== `string` || typeof req.body[`donation-link`] !== `string`) return res.json({ errors: `Please fill out all fields` });
 
     const user = await User.findOne({ username: req.user.username });
+    let globalStickerStatus = true;
 
     user.settings.title = req.body[`stream-title`].substr(0, 80);
     user.settings.description = req.body[`stream-description`].substr(0, 1000);
     user.settings.donationLink = req.body[`donation-link`].substr(0, 128);
+
+    if (req.body[`allow-global-emotes`]) globalStickerStatus = true;
+    else globalStickerStatus = false;
+
+    user.settings.useGlobalStickers = globalStickerStatus;
 
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });

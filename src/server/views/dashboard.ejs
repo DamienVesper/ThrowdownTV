@@ -23,7 +23,7 @@
                     <br>
                     <div>
                         <label class="switch">
-                            <input type="checkbox" id="allow-global-emotes">
+                            <input type="checkbox" id="allow-global-emotes" name="allow-global-emotes" value="true">
                             <span class="slider round"></span>
                         </label>
                         <label for="allow-global-emotes">Allow use of Global Stickers <span style="font-style: italic;">(If enabled, stickers from other channels can be used on your channel's chat)</span></label>
@@ -145,6 +145,11 @@
                 $(`#current-account-status`).text(`Free`);
                 $(`#current-account-status`).css(`color`, `grey`);
                 $(`#sticker-info`).html(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`);
+            }
+            if (data.allowGlobalEmotes) {
+                $(`#allow-global-emotes`).attr(`checked`, true)
+            } else {
+                $(`#allow-global-emotes`).attr(`checked`, false)
             }
         });
     });

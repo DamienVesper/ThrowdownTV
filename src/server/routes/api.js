@@ -8,8 +8,6 @@ const User = require(`../models/user.model.js`);
 const Sticker = require(`../models/sticker.model.js`);
 const log = require(`../utils/log.js`);
 
-const request = require(`request`);
-
 // Load emotes.
 const emotes = [];
 fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err, files) => {
@@ -84,7 +82,8 @@ router.get(`/stream-data`, async (req, res) => {
         followers: streamerData.followers,
         avatarURL: streamerData.avatarURL,
         isVip: streamerData.perms.vip,
-        isStaff: streamerData.perms.staff
+        isStaff: streamerData.perms.staff,
+        allowGlobalEmotes: streamerData.settings.useGlobalStickers
     };
 
     res.jsonp(data);
