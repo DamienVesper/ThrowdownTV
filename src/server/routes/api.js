@@ -26,9 +26,9 @@ router.get(`/get-emotes`, async (req, res) => {
 });
 
 router.get(`/rtmp-api/:streamer/:apikey`, async (req, res) => {
-    const streamer = req.params.streamer;
+    const streamer = req.params.streamer.toLowerCase();
     const apikey = req.params.apikey;
-    const streamerData = await Sticker.find({ username: streamer });
+    const streamerData = await User.findOne({ username: streamer });
     if (!streamerData) return res.json({ errors: `Invalid User` });
     if (apikey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
     const data = {
