@@ -4,7 +4,7 @@
 
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="no-active-following card card-body text-center" style="background-color: #ffcece;">
+        <div class="no-active-streams card card-body text-center" style="background-color: #ffcece;">
             <span>Nobody is live right now...</span>
         </div>
     </div>
@@ -15,7 +15,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(() => $(`.no-active-following`).hide());
+    $(document).ready(() => $(`.no-active-streams`).hide());
     fetch(`/api/streams`).then(data => data.json()).then(data => {
         if (data.length === 0) return $(`.no-active-streams`).show();
 

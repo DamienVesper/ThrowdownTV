@@ -1,10 +1,10 @@
 <%- include('./partials/header'); %>
 <br>
-<h1 class="text-light text-center">Following:</h1>
+<h1 class="text-light text-center">Currently Following</h1>
 
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="no-active-streams card card-body text-center" style="background-color: #ffcece;">
+        <div class="no-active-following card card-body text-center" style="background-color: #ffcece;">
             <span>You are not following anyone...</span>
         </div>
     </div>
@@ -15,9 +15,9 @@
     </div>
 </div>
 <script>
-    $(document).ready(() => $(`.no-active-streams`).hide());
+    $(document).ready(() => $(`.no-active-following`).hide());
     fetch(`/api/following-streams`).then(data => data.json()).then(data => {
-        if (data.length === 0) return $(`.no-active-streams`).show();
+        if (data.length === 0) return $(`.no-active-following`).show();
 
         for (const streamer of data) {
             let streamerWrapper = $(`<div>`);
