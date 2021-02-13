@@ -25,6 +25,18 @@ router.get(`/get-emotes`, async (req, res) => {
     return res.json(emotes);
 });
 
+router.get(`/rtmp-api/:streamer/:apikey`, async (req, res) => {
+    const streamer = req.params.streamer;
+    const apikey = req.params.apikey;
+    const streamerData = await Sticker.find({ username: streamer });
+    if (!streamerData) return res.json({ errors: `Invalid User` });
+    if (apikey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
+    const data = {
+        username: streamerData.username
+    };
+    res.json(data);
+});
+
 router.get(`/get-stickers`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const stickerData = await Sticker.find({ ownerUsername: req.user.username });
