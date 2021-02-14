@@ -83,7 +83,7 @@ router.get(`/stream-key/:streamKey`, async (req, res) => {
 });
 
 router.get(`/streams`, async (req, res) => {
-    const streamerData = await User.find({ isLive: true });
+    const streamerData = await User.find({ live: true });
     const streams = [];
 
     for (const streamer of streamerData) {
