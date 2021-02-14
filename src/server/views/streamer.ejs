@@ -71,15 +71,6 @@
             }
         });
 
-        fetch(`https://us01.throwdown.tv/api/${streamer}`).then(livedata => livedata.json()).then(livedata => {
-            if (livedata.isLive === false) {
-                player.src({
-                    src: `/assets/video/throwdown.mp4`,
-                    type: `video/mp4`
-                });
-            }
-        })
-
         let live = false;
 
         // Intially Hide Badges
