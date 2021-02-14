@@ -6,7 +6,7 @@ const config = {
     mode: process.env.NODE_ENV,
     port: process.env.NODE_ENV === `prod` ? 8750 : 8080,
     socketPort: 8443,
-    domain: `beta.throwdown.tv`,
+    domain: `throwdown.tv`,
     version: pjson.version,
     blacklistedUsernames: [`api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `widget`, `follow`, `unfollow`, `throwdown`, `vip`, `staff`],
     chatPrefix: `/`
