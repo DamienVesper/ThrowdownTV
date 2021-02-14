@@ -6,7 +6,7 @@ require(`dotenv`).config();
 
 // Utilities.
 const log = require(`./utils/log.js`);
-const antiDuplicator = require(`./utils/antiDuplicator`);
+const antiDuplicator = require(`./utils/antiDuplicator.js`);
 const fs = require(`fs`);
 const path = require(`path`);
 
