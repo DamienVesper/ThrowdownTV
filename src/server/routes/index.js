@@ -72,4 +72,12 @@ router.get(`/:streamer`, async (req, res) => {
     res.render(`streamer.ejs`);
 });
 
+router.get(`/vip`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user.perms.vip) return res.render(`subscribeVIP.ejs`);
+    else return res.render(`alreadyVIP.ejs`);
+});
+
 module.exports = router;
