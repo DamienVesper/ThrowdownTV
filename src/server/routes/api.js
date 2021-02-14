@@ -3,6 +3,7 @@ const router = express.Router();
 
 const fs = require(`fs`);
 const path = require(`path`);
+const axios = require(`axios`);
 
 const User = require(`../models/user.model.js`);
 const Sticker = require(`../models/sticker.model.js`);
@@ -83,17 +84,15 @@ router.get(`/stream-key/:streamKey`, async (req, res) => {
 });
 
 router.get(`/streams`, async (req, res) => {
-    const streamers = [];
-    const streamerData = await User.find({ live: true });
+    const streamerData = await User.find();
+    const streams = [];
 
-    for (const streamer of streamerData) streamers.push({
-        name: streamer.username,
-        displayName: streamer.displayName,
-        title: streamer.settings.title,
-        description: streamer.settings.description
+    streamerData.forEach(async (streamer) => {
+        const result = await axios.get(`https://us01.throwdown.tv/api/${streamer.username}`);
+        if (result.data.isLive === true) streams.push(streamer.username);
     });
 
-    return res.json(streamers);
+    return res.json(streams);
 });
 
 router.get(`/following-streams`, async (req, res) => {
