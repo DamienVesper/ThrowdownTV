@@ -1,43 +1,28 @@
-const User = require(`../models/user.model`);
+const { randomString } = require(`./random.js`);
+const User = require(`../models/user.model.js`);
 
-const runStreamKeys = async function () {
-    function makeid (length) {
-        let result = ``;
-        const characters = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`;
-        const charactersLength = characters.length;
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+const log = require(`./log.js`);
+
+module.exports = async () => {
+    log(`cyan`, `Checking for duplicate stream keys...`);
+
+    const dbUsers = await User.find({});
+
+    const streamKeys = [];
+    for (const user of dbUsers) streamKeys.push(user.settings.streamKey);
+
+    for (const user of dbUsers) {
+        const usersWithSameStreamKey = await User.find({ 'settings.streamKey': user.settings.streamKey });
+
+        if (usersWithSameStreamKey.length !== 1) {
+            for (const user of usersWithSameStreamKey) {
+                log(`blue`, `Duplicate stream key for ${user.username} found. Resetting...`);
+
+                let newStreamKey = randomString(32);
+                while (streamKeys.includes(newStreamKey)) newStreamKey = randomString(32);
+                user.settings.streamKey = newStreamKey;
+                user.save();
+            }
         }
-        return result;
     }
-
-    // Literally bugged rn - Does not work
-    const result = await User.aggregate([
-        { $group: { _id: `$settings.streamKey`, streamKey: { $first: `$settings.streamKey` }, count: { $sum: 1 } } },
-        { $match: { count: { $gt: 1 } } },
-        { $project: { streamKey: 1, _id: 0 } },
-        { $group: { _id: null, duplicateKeys: { $push: `$settings.streamKey` } } },
-        { $project: { _id: 0, duplicateKeys: 1 } }
-    ]);
-    if (!result || !result[0]) return console.log(`No Duplicates (Stream Keys)!`);
-    console.log(result[0]);
-    const duplicateChatKeys = result[0].duplicateKeys;
-
-    if (!duplicateChatKeys[0]) return console.log(`No Duplicates (stream keys)`);
-    console.log(`Duplicate Keys: ${duplicateChatKeys}`);
-
-    duplicateChatKeys.forEach(async key => {
-        const result = await User.find({ "settings.streamKey": key });
-        result.forEach(async userObj => {
-            console.log(`settings stream key for user ${userObj.username}`);
-
-            userObj.settings.streamKey = makeid(32);
-            userObj.save();
-        });
-    });
-    console.log(`Fixed duplicates!`);
-};
-
-module.exports.fixAllDuplicates = async function fixAllDuplicates () {
-    await runStreamKeys();
 };

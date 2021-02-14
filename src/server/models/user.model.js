@@ -90,7 +90,8 @@ const userSchema = Mongoose.Schema({
         streamKey: {
             type: String,
             default: randomString(32),
-            required: false
+            required: false,
+            unique: true
         },
         title: {
             type: String,

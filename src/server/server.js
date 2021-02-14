@@ -118,11 +118,9 @@ const server = config.mode === `dev`
         rejectUnauthorized: false
     }, app);
 
-// Run the antiDuplicator
-antiDuplicator.fixAllDuplicates();
-setInterval(async () => {
-    await antiDuplicator.fixAllDuplicates();
-}, 30 * 1000);
+// Make sure there are no duplicates.
+antiDuplicator();
+setInterval(antiDuplicator, 18e5);
 
 // Bind the webfront to defined port.
 server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));
