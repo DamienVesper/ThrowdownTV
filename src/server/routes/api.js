@@ -84,14 +84,14 @@ router.get(`/stream-key/:streamKey`, async (req, res) => {
 });
 
 router.get(`/streams`, async (req, res) => {
-    const streamerData = await User.collection.find().toArray();
+    const streamerData = await User.find().toArray();
     const streams = [];
 
-    streamerData.forEach(async (streamer) => {
+    for (const streamer of streamerData) {
         const result = await axios.get(`https://us01.throwdown.tv/api/${streamer.username}`);
         console.log(`${streamer.username}-${result.data.isLive}`);
         if (result.data.isLive === true) streams.push(streamer.username);
-    });
+    }
 
     res.json(streams);
     console.log(streams);
