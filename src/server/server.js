@@ -6,6 +6,7 @@ require(`dotenv`).config();
 
 // Utilities.
 const log = require(`./utils/log.js`);
+const antiDuplicator = require(`./utils/antiduplicator`);
 const fs = require(`fs`);
 const path = require(`path`);
 
@@ -116,6 +117,12 @@ const server = config.mode === `dev`
         requestCert: false,
         rejectUnauthorized: false
     }, app);
+
+// Run the antiDuplicator
+antiDuplicator.fixAllDuplicates();
+setInterval(async function(){
+    await antiDuplicator.fixAllDuplicates();
+}, 30 * 1000)
 
 // Bind the webfront to defined port.
 server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));
