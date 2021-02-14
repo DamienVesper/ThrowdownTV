@@ -21,13 +21,14 @@
             <div class="streamer-content">
                 <span id="stream-title" class="lead mb-3"></span>
                 <br>
-                <img src="/assets/img/chat/badges/staff.png" id="staffbadge" width="15" height="15" alt="[Throwdown Staff]"  visible=false title="Throwdown TV Staff">
-                <img src="/assets/img/chat/badges/vip.png" id="vipbadge" width="15" height="15" alt="[VIP]" title="VIP">
+                <img src="/assets/img/chat/badges/staff.png" id="staffbadge" width="15" height="15" alt="[Throwdown Staff]"  visible=false title="ThrowdownTV Staff">
+                <img src="/assets/img/chat/badges/vip.png" id="vipbadge" width="15" height="15" alt="[VIP]" title="ThrowdownTV VIP Member">
                 <span id="stream-display-name" class="lead mb-3"></span>
                 <div class="description-box" id="stream-description"></div>
             </div>
             <div class="streamer-buttons">
                 <div>
+                    <span class="live-status" id="livestatus">OFFLINE</span>
                     <span class="viewers text-danger" title="Live Viewers">
                         <i class="icofont icofont-eye-alt" style="margin-right: 2.5px;"></i>
                         <span id="viewer-count">0</span>
@@ -119,7 +120,37 @@
                 });
             }
 
+            const checkCrucialData = () => {
+                fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                    if (data.isSuspended) return window.location.reload();
+                    if (data.isLive === true) {
+                        $(`#livestatus`).text(`LIVE`);
+                        $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
+                        if ($(`#livestatus`).text() === `OFFLINE`) {
+                            player.src({
+                                src: `https://us01.throwdown.tv/stream/${streamer}`,
+                                type: `video/x-flv`
+                            });
+                        }
+                    } else {
+                        $(`#livestatus`).text(`OFFLINE`);
+                        $(`#livestatus`).removeClass(`status-online`).addClass(`status-offline`);
+                        if ($(`#livestatus`).text() === `ONLINE`) {
+                            player.src({
+                                src: `/assets/video/throwdown.mp4`,
+                                type: `video/mp4`
+                            });
+                        }
+                    }
+                });
+            }
+
+            player.controlBar.hide();
+            player.bigPlayButton.hide();
+
             setInterval(getStreamData, 5e3);
+            setInterval(checkCrucialData, 5000)
+            checkCrucialData();
             getStreamData();
 
             $(`#follow-btn`).on(`click`, e => {
@@ -148,16 +179,7 @@
                 });
             });
 
-            setInterval(() => {
-                fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-                    if (data.isSuspended) return window.location.reload();
-                });
-            }, 5000)
-
-            player.src({
-                src: `https://us01.throwdown.tv/stream/${streamer}`,
-                type: `video/x-flv`
-            });
+            
 
             player.on(`error`, event => {
                 player.src({

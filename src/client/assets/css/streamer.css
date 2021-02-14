@@ -60,6 +60,23 @@
     z-index: 2; 
 }
 
+#live-stream {
+    display: block;
+}
+
+.live-status {
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.status-offline {
+    color: red;
+}
+
+.status-online {
+    color: lime
+}
+
 @media only screen and (min-width: 600px) {
 
     .chat-popout,

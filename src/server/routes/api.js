@@ -38,6 +38,22 @@ router.get(`/rtmp-api/:streamer/:apikey`, async (req, res) => {
     res.json(data);
 });
 
+router.post(`/stream-status/:streamkey/:status/:apikey`, async (req, res) => {
+    const streamkey = req.params.streamkey.toLowerCase();
+    const status = req.params.status.toLowerCase();
+    const apikey = req.params.apikey;
+    const streamerData = await User.findOne({ "settings.streamKey": streamkey });
+    if (!streamerData) return res.json({ errors: `Invalid User` });
+    if (apikey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
+    if (status === `true`) streamerData.live = true;
+    else if (status === `false`) streamerData.live = false;
+    else return res.json({ errors: `Invalid Status, must be either true or false` });
+    streamerData.save(err => {
+        if (err) return res.json({ errors: `Invalid user data` });
+        return res.json({ success: `Succesfully updated stream status.` });
+    });
+});
+
 router.get(`/get-stickers`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const stickerData = await Sticker.find({ ownerUsername: req.user.username });
@@ -135,7 +151,8 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         followers: streamerData.followers,
         avatarURL: streamerData.avatarURL,
         isVip: streamerData.perms.vip,
-        isStaff: streamerData.perms.staff
+        isStaff: streamerData.perms.staff,
+        isLive: streamerData.live
     };
 
     res.jsonp(data);
