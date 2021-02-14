@@ -170,8 +170,6 @@
             getStreamData();
 
             $(`#follow-btn`).on(`click`, e => {
-                $(`#follow-btn`).attr(`disabled`, true);
-
                 let postUrl = `/follow/${streamer}`
 
                 if ($(`#follow-btn`).html() === `Unfollow`) {
@@ -190,8 +188,19 @@
                     } else if (res.success) {
                         $(`#streamer-success`).show();
                         $(`#streamer-success-message`).text(res.success);
+                        fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                            if (data.followers.includes(userdata.username)) {
+                                $(`#follow-btn`).html(`Unfollow`)
+                                $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
+                                $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)
+                            } else {
+                                $(`#follow-btn`).html(`Follow`)
+                                $(`#follow-btn`).attr(`action`, `/follow/${streamer}`)
+                                $(`#follow-btn`).attr(`title`, `Follow ${streamer}`)
+                            }
+                        })
                     }
-                    setTimeout(function(){ window.location.reload(true) }, 1000);
+                    setTimeout(function(){ $(`#streamer-success`).hide(); }, 2000);
                 });
             });
 
