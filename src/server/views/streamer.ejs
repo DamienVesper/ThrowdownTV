@@ -64,7 +64,15 @@
             let player = videojs(`live-stream`, {
                 controls: true,
                 autoplay: true,
-                preload: `auto`
+                preload: `auto`,
+                errorDisplay: false,
+                flvjs: {
+                    mediaDataSource: {
+                        isLive: true,
+                        cors: true,
+                        withCredentials: false
+                    }
+                }
             });
 
             $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
