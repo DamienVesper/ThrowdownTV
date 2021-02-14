@@ -88,7 +88,7 @@ passport.use(`signup`, new LocalStrategy({
             displayName: username,
             creationDate: new Date(),
             settings: {
-                streamKey: `${username.toLowerCase()}_${randomString(32)}`
+                streamKey: `${username.toLowerCase()}${randomString(32)}`
             },
             password
         });
