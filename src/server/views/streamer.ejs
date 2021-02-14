@@ -131,6 +131,8 @@
                                 src: `https://us01.throwdown.tv/stream/${streamer}`,
                                 type: `video/x-flv`
                             });
+                            player.controlBar.show();
+                            player.bigPlayButton.show();
                         }
                     } else {
                         $(`#livestatus`).text(`OFFLINE`);
@@ -140,6 +142,8 @@
                                 src: `/assets/video/throwdown.mp4`,
                                 type: `video/mp4`
                             });
+                            player.controlBar.hide();
+                            player.bigPlayButton.hide();
                         }
                     }
                 });
