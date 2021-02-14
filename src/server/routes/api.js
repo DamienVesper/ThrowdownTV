@@ -98,8 +98,7 @@ router.get(`/streams`, async (req, res) => {
         });
     }
 
-    res.json(streams);
-    console.log(streams);
+    return res.json(streams);
 });
 
 router.get(`/following-streams`, async (req, res) => {
