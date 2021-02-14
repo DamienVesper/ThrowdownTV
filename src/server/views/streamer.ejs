@@ -152,8 +152,10 @@
                 });
             }
 
-            player.controlBar.hide();
-            player.bigPlayButton.hide();
+            player.src({
+                src: `https://us01.throwdown.tv/stream/${streamer}`,
+                type: `video/x-flv`
+            });
 
             setInterval(getStreamData, 5e3);
             setInterval(checkCrucialData, 5000)
