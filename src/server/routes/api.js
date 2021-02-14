@@ -84,7 +84,7 @@ router.get(`/stream-key/:streamKey`, async (req, res) => {
 });
 
 router.get(`/streams`, async (req, res) => {
-    const streamerData = await User.find().toArray();
+    const streamerData = await User.find();
     const streams = [];
 
     for (const streamer of streamerData) {
