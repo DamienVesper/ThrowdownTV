@@ -28,7 +28,7 @@
             </div>
             <div class="streamer-buttons">
                 <div>
-                    <span class="live-status" id="livestatus">OFFLINE</span>
+                    <span class="live-status" id="livestatus"></span>
                     <span class="viewers text-danger" title="Live Viewers">
                         <i class="icofont icofont-eye-alt" style="margin-right: 2.5px;"></i>
                         <span id="viewer-count">0</span>
@@ -49,6 +49,21 @@
     $(document).ready(() => {
         const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
 
+        // Player
+        let player = videojs(`live-stream`, {
+            controls: true,
+            autoplay: true,
+            preload: `auto`,
+            errorDisplay: false,
+            flvjs: {
+                mediaDataSource: {
+                    isLive: true,
+                    cors: true,
+                    withCredentials: false
+                }
+            }
+        });
+
         // Intially Hide Badges
         $(`#staffbadge`).hide();
         $(`#vipbadge`).hide();
@@ -61,20 +76,6 @@
             const username = userdata.username;
 
             $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
-
-            let player = videojs(`live-stream`, {
-                controls: true,
-                autoplay: true,
-                preload: `auto`,
-                errorDisplay: false,
-                flvjs: {
-                    mediaDataSource: {
-                        isLive: true,
-                        cors: true,
-                        withCredentials: false
-                    }
-                }
-            });
 
             $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
             $(`#follow-btn`).attr(`title`, `Follow ${streamer}`)
