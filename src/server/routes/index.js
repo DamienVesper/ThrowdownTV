@@ -62,6 +62,14 @@ router.get(`/chat/*`, async (req, res) => {
     res.render(`chat.ejs`);
 });
 
+router.get(`/vip`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user.perms.vip) return res.render(`subscribeVIP.ejs`);
+    else return res.render(`alreadyVIP.ejs`);
+});
+
 router.get(`/:streamer`, async (req, res) => {
     const streamer = req.params.streamer;
 
@@ -70,14 +78,6 @@ router.get(`/:streamer`, async (req, res) => {
     if (user.isSuspended) return res.render(`banned.ejs`);
 
     res.render(`streamer.ejs`);
-});
-
-router.get(`/vip`, async (req, res) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-    const user = await User.findOne({ username: req.user.username });
-
-    if (!user.perms.vip) return res.render(`subscribeVIP.ejs`);
-    else return res.render(`alreadyVIP.ejs`);
 });
 
 module.exports = router;
