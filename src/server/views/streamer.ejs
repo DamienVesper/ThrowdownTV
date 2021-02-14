@@ -145,7 +145,7 @@
             const checkCrucialData = () => {
                 fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
                     if (data.isSuspended) return window.location.reload();
-                    if (data.isLive === true) {
+                    if (data.isLive) {
                         $(`#livestatus`).text(`LIVE`);
                         $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
                         if (live === false) {
@@ -165,7 +165,6 @@
                             });
                         }
                         live = false
-
                     }
                 });
             }
