@@ -29,6 +29,13 @@
                 $(`#chat-send`).attr(`disabled`, true);
             }
 
+            if (data.isSuspended) {
+                $(`#chat-input`).attr(`placeholder`, `Your account is suspended, you cannot chat.`);
+
+                $(`#chat-input`).attr(`disabled`, true);
+                $(`#chat-send`).attr(`disabled`, true);
+            }
+
             const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
                 secure: true,
                 rejectUnauthorized: true,

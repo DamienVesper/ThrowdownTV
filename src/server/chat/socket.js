@@ -109,6 +109,9 @@ io.on(`connection`, async socket => {
                 vip: user.perms.vip
             };
 
+            // Check if user account is suspended
+            if (user.isSuspended) return;
+
             // Check if user is banned
             if (streamer.channel.bans.includes(chatter.username)) return;
 

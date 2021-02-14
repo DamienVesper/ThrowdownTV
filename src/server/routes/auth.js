@@ -203,7 +203,8 @@ router.get(`/authenticated`, (req, res) => {
             isLoggedIn: true,
             username: req.user.username,
             displayName: req.user.displayName,
-            token: req.user.token ? req.user.token : undefined
+            token: req.user.token ? req.user.token : undefined,
+            isSuspended: req.user.isSuspended
         });
     } else return res.json({
         isLoggedIn: false
