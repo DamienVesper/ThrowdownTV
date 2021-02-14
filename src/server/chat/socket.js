@@ -132,7 +132,6 @@ io.on(`connection`, async socket => {
             delete chatUsers[chatUsers.indexOf(chatter)];
             log(`magenta`, `Chat Disconnection | ${chatter.username ? `Username: ${chatter.username} | ` : ``}IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
 
-            console.log(streamer.viewers);
             if (streamer.viewers.includes(chatter.username)) {
                 streamer.viewers.splice(streamer.viewers.indexOf(chatter.username), 1);
                 streamer.save();
