@@ -90,7 +90,12 @@ router.get(`/streams`, async (req, res) => {
     for (const streamer of streamerData) {
         const result = await axios.get(`https://us01.throwdown.tv/api/${streamer.username}`);
         console.log(`${streamer.username}-${result.data.isLive}`);
-        if (result.data.isLive === true) streams.push(streamer.username);
+        if (result.data.isLive === true) streams.push({
+            name: streamer.username,
+            displayName: streamer.displayName,
+            title: streamer.settings.title,
+            description: streamer.settings.description
+        });
     }
 
     res.json(streams);
