@@ -3,7 +3,6 @@ const router = express.Router();
 
 const fs = require(`fs`);
 const path = require(`path`);
-const axios = require(`axios`);
 
 const User = require(`../models/user.model.js`);
 const Sticker = require(`../models/sticker.model.js`);
@@ -84,12 +83,11 @@ router.get(`/stream-key/:streamKey`, async (req, res) => {
 });
 
 router.get(`/streams`, async (req, res) => {
-    const streamerData = await User.find();
+    const streamerData = await User.find({ isLive: true });
     const streams = [];
 
     for (const streamer of streamerData) {
-        const result = await axios.get(`https://us01.throwdown.tv/api/${streamer.username}`);
-        if (result.data.isLive === true) streams.push({
+        streams.push({
             name: streamer.username,
             displayName: streamer.displayName,
             title: streamer.settings.title,
@@ -98,6 +96,19 @@ router.get(`/streams`, async (req, res) => {
     }
 
     return res.json(streams);
+});
+
+router.post(`/change-streamer-status`, async (req, res) => {
+    const streamer = req.body.streamer;
+    const apiKey = req.body.apiKey;
+    const streamerStatus = req.body.streamerStatus;
+
+    if (apiKey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
+    else if (streamerStatus === undefined || (streamerStatus !== false && streamerStatus !== true)) return res.json({ errors: `Invalid Streamer Status` });
+
+    const user = await User.findOne({ username: streamer });
+    user.isLive = streamerStatus;
+    user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
 
 router.get(`/following-streams`, async (req, res) => {
