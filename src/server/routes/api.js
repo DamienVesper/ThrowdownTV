@@ -107,7 +107,7 @@ router.post(`/change-streamer-status`, async (req, res) => {
     else if (streamerStatus === undefined || (streamerStatus !== false && streamerStatus !== true)) return res.json({ errors: `Invalid Streamer Status` });
 
     const user = await User.findOne({ username: streamer });
-    user.isLive = streamerStatus;
+    user.live = streamerStatus;
     user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
 
