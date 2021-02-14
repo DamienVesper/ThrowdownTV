@@ -3,6 +3,8 @@ require(`dotenv`).config();
 const bcrypt = require(`bcryptjs`);
 const User = require(`./models/user.model.js`);
 
+const { randomString } = require(`./utils/random.js`);
+
 const passport = require(`passport`);
 const LocalStrategy = require(`passport-local`).Strategy;
 
@@ -85,6 +87,9 @@ passport.use(`signup`, new LocalStrategy({
             username: username.toLowerCase(),
             displayName: username,
             creationDate: new Date(),
+            settings: {
+                streamKey: `${username.toLowerCase()}_${randomString(64)}`
+            },
             password
         });
 
