@@ -1,0 +1,41 @@
+<%- include('./partials/header'); %>
+<br>
+<h1 class="text-light text-center">Currently Following</h1>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="no-active-following card card-body text-center" style="background-color: #ffcece;">
+            <span>You are not following anyone...</span>
+        </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto" style="max-width: 650px;">
+        <div class="active-following"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => $(`.no-active-following`).hide());
+    fetch(`/api/following-streams`).then(data => data.json()).then(data => {
+        if (data.length === 0) return $(`.no-active-following`).show();
+
+        for (const streamer of data) {
+            let streamerWrapper = $(`<div>`);
+
+            streamerWrapper.addClass(`card card-body`);
+            streamerWrapper.attr(`style`, `background-color: #b1cbe6; display: flex; flex-direction: row;`);
+            streamerWrapper.html(`
+                <img src="/assets/img/thumbnail.png" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
+                <div style="margin-left: 25px;">
+                    <h2><a href="/${streamer.name}">${streamer.title}</a></h2>
+                    <p>${streamer.description}
+                    <br>
+                    <b style="color: green;">${streamer.displayName}</b></p>
+                </div>
+            `);
+
+            $(`.active-following`).append(streamerWrapper);
+            $(`.active-following`).append(`<br>`);
+        }
+    });
+</script>

@@ -1,0 +1,216 @@
+<%- include('./partials/header'); %>
+
+<br>
+<h1 class="text-center text-light">Dashboard</h1>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Stream Settings</h2>
+            <form action="/dashboard" method="post" id="dashboard-form">
+                <div class="form-group">
+                    <label for="stream-title">Stream Title</label>
+                    <input type="text" id="stream-title" name="stream-title" class="form-control"
+                        placeholder="Enter a title" maxlength="80">
+                    <br>
+                    <label for="stream-description">Stream Description</label>
+                    <textarea type="text" id="stream-description" name="stream-description"
+                        placeholder="Enter a description" class="form-control"></textarea>
+                    <br>
+                    <label for="donation-link">Donation Link</label>
+                    <input type="text" id="donation-link" name="donation-link" class="form-control"
+                        placeholder="Enter a URL to your donation page">
+                    <br>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="allow-global-emotes" name="allow-global-emotes" value="true">
+                            <span class="slider round"></span>
+                        </label>
+                        <label for="allow-global-emotes">Allow use of Global Stickers <span style="font-style: italic;">(If enabled, stickers from other channels can be used on your channel's chat)</span></label>
+                    </div>
+                    <br>
+                    <input type="submit" id="dashboard-update-info" value="Update Stream Information"
+                        class="btn btn-primary btn-block">
+                    <a id="visit-livestream" type="button" class="btn btn-success dashboard-button" role="button">Livestream Page</a>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">RTMP Servers</h2>
+            <br>
+            <div class="rtmp-servers text-center" style="display: flex; justify-content: space-around;">
+                <div class="card p-8" style="padding: 16px;">
+                    <span><b>US 01:</b></span>
+                    <span><code>rtmp://us01.throwdown.tv/live</code></span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Stream Key</h2>
+            <br>
+            <label for="stream-key">Stream Key</label>
+            <form action="/changestreamkey" method="post" id="streamkey-update-form">
+                <div class="form-group">
+                    <input type="password" class="form-control" id="stream-key" readonly>
+                    <p><input type="checkbox" id="reveal-stream-key"> Reveal Stream Key</p>
+                    <input type="submit" value="Reset Stream Key" id="reset-streamkey" class="btn btn-danger btn-block">
+                </div>
+            </form>
+            <p>Do <b>NOT</b> share your stream key with anyone. This key allows anyone to broadcast on your channel.</p>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Widgets</h2>
+            <br>
+            <label for="chat-link">Chat Widget</label>
+            <input type="text" class="form-control" id="chat-link" readonly>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Stickers (VIP Only)</h2>
+            <p id="sticker-info" class="text-center">To add stickers, join the <a href="https://discord.me/throwdowntv">Discord</a></p>
+            <br>
+            <div id="stickers"></div>
+        </div>
+        <br>
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h2 class="text-center">Account Settings</h2>
+            <label for="display-name" style="font-size: 30px;">Current Username: <span id="current-username" style="color: red;"></span></label>
+            <label for="display-name" style="font-size: 30px;">Account Status: <span id="current-account-status" style="color: orange;"></span></label>
+            <form action="/accountoptions/displayname" method="post" id="account-options-form">
+                <div class="form-group">
+                    <label for="display-name">Display Name <span style="font-style: italic;">(You may only change the Capitalization)</span></label>
+                    <input type="text" id="display-name" name="display-name" class="form-control"
+                        placeholder="Change name Capitalization" maxlength="80">
+                    <br>
+                    <input type="submit" id="account-update-info" value="Update Display Name"
+                        class="btn btn-primary btn-block">
+                </div>
+            </form>
+            <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form">
+                <div class="form-group">
+                    <label for="profilepicture">Profile Avatar <span style="font-style: italic;">(Allowed file types: .jpg, .png, .jpeg)</span></label>
+                    <label for="account-pfp-form">Choose Image...</label>
+                    <input type="text" id="display-avatar" name="display-avatar" class="form-control"
+                        placeholder="Avatar Image URL" maxlength="1000">
+                    <br>
+                    <input type="submit" for="account-pfp-form" id="account-update-pfp" value="Update Profile Picture"
+                    class="btn btn-primary btn-block">
+                </div>
+                <div>
+                    <p>Current Avatar:</p>
+                    <div class="profile-picture-cropper">
+                        <img src="/assets/img/defaultpfp.png" id="current-display-avatar" class="profile-picture rounded" style="max-width: 25%;" alt="Avatar">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br>
+    </div>
+</div>
+
+<script>
+    fetch(`/authenticated`).then(data => data.json()).then(data => {
+        let chatURL = `https://throwdown.tv/widgets/chat/${data.username}/`;
+        $(`#chat-link`)
+            .val(chatURL)
+            .attr(`href`, chatURL);
+        $(`#visit-livestream`).attr(`href`, `/${data.username}`);
+
+        fetch(`/api/stream-data`).then(data => data.json()).then(data => {
+            $(`#current-username`).text(data.username);
+            $(`#stream-title`).val(data.streamTitle);
+            $(`#display-name`).val(data.displayName);
+            $(`#stream-description`).val(data.streamDescription);
+            $(`#donation-link`).val(data.donationLink);
+            $(`#stream-key`).val(data.streamKey);
+            $(`#display-avatar`).val(data.avatarURL);
+            $.get(data.avatarURL)
+                .done(function() {
+                    $(`#current-display-avatar`).attr(`src`, `${data.avatarURL}`);
+                }).fail(function() {
+                    $(`#current-display-avatar`).attr(`src`, `/assets/img/defaultpfp.png`);
+                });
+
+            if (data.isStaff) {
+                $(`#current-account-status`).text(`Staff`)
+                $(`#current-account-status`).css(`color`, `#032cfc`)
+            }
+            else if (data.isVip) {
+                $(`#current-account-status`).text(`VIP`)
+                $(`#current-account-status`).css(`color`, `orange`)
+            } else {
+                $(`#current-account-status`).text(`Free`);
+                $(`#current-account-status`).css(`color`, `grey`);
+                $(`#sticker-info`).html(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`);
+            }
+            if (data.allowGlobalEmotes) {
+                $(`#allow-global-emotes`).attr(`checked`, true)
+            } else {
+                $(`#allow-global-emotes`).attr(`checked`, false)
+            }
+        });
+    });
+
+    fetch(`/api/get-stickers`).then(data => data.json()).then(data => {
+        if (!data.length > 0) return $(`#stickers`).append(`<p class="text-center" style="font-size: 25px;">No Stickers Available for this Channel</p>`)
+        data.forEach(sticker => {
+            $(`#stickers`).append(`<p class="text-center" style="font-size: 15px;">/sticker <span style="font-weight: bold;">${sticker.stickerName}</span></p>`)
+            $(`#stickers`).append(`<img src="${sticker.path}" style="max-height: 70px;" class="center-align-image"></img>`)
+        });
+    })
+
+    $(`#dashboard-update-info`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#dashboard-update-info`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/dashboard`,
+            data: $(`#dashboard-form`).serialize()
+        }).then(() => window.location.reload());
+    });
+
+    $(`#account-update-pfp`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#account-update-pfp`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/accountoptions/updatepfp`,
+            data: $(`#account-pfp-form`).serialize()
+        }).then(() => window.location.reload());
+    });
+
+    $(`#account-update-info`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#account-update-info`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/accountoptions/updateinfo`,
+            data: $(`#account-options-form`).serialize()
+        }).then(() => window.location.reload());
+    });
+
+
+    $(`#reset-streamkey`).on(`click`, e => {
+        e.preventDefault();
+        $(`#reset-streamkey-info`).attr(`disabled`, true);
+
+        $.ajax({
+            type: `post`,
+            url: `/changestreamkey`,
+        }).then(() => window.location.reload());
+    });
+
+    $(`#reveal-stream-key`).change(() => {
+        let streamKey = document.querySelector(`#stream-key`);
+        $(`#stream-key`).attr(`type`, streamKey.type === `password` ? `text` : `password`);
+    });
+</script>

@@ -1,0 +1,67 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1f578f;">
+    <div class="container-fluid">
+        <a href="/"><img src="/assets/img/header-logo.png" class="navbar-brand header-logo" alt="ThrowdownTV logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="/browse" class="nav-link" id="nav-browse">Browse</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/following" class="nav-link" id="nav-following">Following</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link" id="nav-dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tos" class="nav-link">Terms of Service</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/staff" class="nav-link">Staff</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://discord.me/throwdowntv" class="nav-link">Discord</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/vip" class="nav-link" style="font-weight: bold; color: #8af29b;" id="get-vip">Get VIP</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" style="margin-left: 10px;">
+                    <a href="/login" id="nav-login" class="btn btn-block btn-success my-2 my-sm-0" style="display: none;">Log In</a>
+                </li>
+                <li class="nav-item" style="margin-left: 10px;">
+                    <a href="/signup" id="nav-signup" class="btn btn-block btn-primary my-2 my-sm-0" style="display: none;">Sign Up</a>
+                </li>
+                <li class="nav-item" style="margin-left: 10px;">
+                    <a href="/logout" id="nav-logout" class="btn btn-block btn-danger my-2 my-sm-0" style="display: none;">Log Out</a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(() => {
+            fetch(`/authenticated`).then(data => data.json()).then(data => {
+                if (!data.isLoggedIn) {
+                    $(`#nav-login`).show();
+                    $(`#nav-signup`).show();
+                } else {
+                    $(`#nav-logout`).show();
+
+                    /*
+                    fetch(`/api/public-stream-data/` + data.username.toLowerCase()).then(data => data.json()).then(data2 => {
+                        if(data2.isVip || data2.isStaff) $(`#get-vip`).hide();
+                    })
+                    */
+                }
+            });
+
+        });
+    </script>
+</nav>

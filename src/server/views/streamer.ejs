@@ -1,0 +1,204 @@
+<%- include('./partials/header'); %>
+
+<link rel="stylesheet" href="https://vjs.zencdn.net/7.10.2/video-js.css">
+<link rel="stylesheet" href="/assets/css/streamer.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.11.4/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-flvjs@0.2.0/dist/videojs-flvjs.min.js"></script>
+
+<div id="streamer-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span id="streamer-error-message"></span>
+</div>
+<div id="streamer-success" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span id="streamer-success-message"></span>
+</div>
+<div class="stream-overlay">
+    <div class="stream-popout">
+        <video id="live-stream" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" autoplay="true"
+            fluid="true" width="1280" height="720" poster="/assets/img/thumbnail.png">
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video>
+        <div class="info-box">
+            <img src="/assets/img/defaultpfp.png" id="avatar" class="rounded-circle profile-picture mr-3" alt="Avatar">
+            <div class="streamer-content">
+                <span id="stream-title" class="lead mb-3"></span>
+                <br>
+                <img src="/assets/img/chat/badges/staff.png" id="staffbadge" width="15" height="15" alt="[Throwdown Staff]"  visible=false title="ThrowdownTV Staff">
+                <img src="/assets/img/chat/badges/vip.png" id="vipbadge" width="15" height="15" alt="[VIP]" title="ThrowdownTV VIP Member">
+                <span id="stream-display-name" class="lead mb-3"></span>
+                <div class="description-box" id="stream-description"></div>
+            </div>
+            <div class="streamer-buttons">
+                <div>
+                    <span class="live-status" id="livestatus"></span>
+                    <span class="viewers text-danger" title="Live Viewers">
+                        <i class="icofont icofont-eye-alt" style="margin-right: 2.5px;"></i>
+                        <span id="viewer-count">0</span>
+                    </span>
+                    <span class="followers text-primary" title="Followers">
+                        <i class="icofont icofont-people" style="margin-right: 2.5px;"></i>
+                        <span id="follow-count">0</span>
+                    </span>
+                    <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
+                    <button id="donate-btn" type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <iframe class="chat-popout" frameborder="0" height="720px"></iframe>
+</div>
+<script>
+    $(document).ready(() => {
+        const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
+
+        // Player
+        let player = videojs(`live-stream`, {
+            controls: true,
+            autoplay: true,
+            preload: `auto`,
+            errorDisplay: true,
+            flvjs: {
+                mediaDataSource: {
+                    isLive: true,
+                    cors: true,
+                    withCredentials: false
+                }
+            }
+        });
+
+        let live = false;
+
+        // Intially Hide Badges
+        $(`#staffbadge`).hide();
+        $(`#vipbadge`).hide();
+
+        $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
+        $(`#streamer-error`).hide();
+        $(`#streamer-success`).hide();
+
+        fetch(`/authenticated`).then(data => data.json()).then(userdata => {
+            const username = userdata.username;
+
+            $(`.chat-popout`).attr(`src`, `/chat/${streamer}`);
+
+            $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
+            $(`#follow-btn`).attr(`title`, `Follow ${streamer}`)
+
+            const getStreamData = () => {
+                fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                    $(`#stream-display-name`).text(data.displayName);
+                    $(`#stream-title`).text(data.streamTitle);
+                    $(`#stream-description`).html(data.streamDescription);
+                    $(`#donation-btn`).attr(`action`, `${data.donationLink}`);
+                    $.get(data.avatarURL).then(successCallback, errorCallback);
+                    $(`#follow-count`).text(data.followers.length);
+                    $(`#viewer-count`).text(data.viewers.length);
+
+                    function successCallback(response) {
+                        $(`#avatar`).attr(`src`, `${data.avatarURL}`)
+                    }
+
+                    function errorCallback(error) {
+                        $(`#avatar`).attr(`src`, `/assets/img/defaultpfp.png`)
+                    }
+                    
+                    // Check to see if the user is a VIP or a staff member
+                    let streamerVIP = data.isVip;
+                    let streamerStaff = data.isStaff;
+                    if(streamerVIP) {
+                        $(`#vipbadge`).show();
+                    }
+                    if(streamerStaff) {
+                        $(`#staffbadge`).show();
+                        $(`#vipbadge`).hide();
+                    }
+                    
+                    if (streamer === userdata.username) {
+                        $(`#follow-btn`).attr(`disabled`, true);
+                        $(`#follow-btn`).attr(`title`, `You cannot follow yourself.`)
+                    }
+                    if (data.followers.includes(userdata.username)) {
+                        $(`#follow-btn`).html(`Unfollow`)
+                        $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
+                        $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)
+                    }
+                    $(`#donate-btn`).on(`click`, e => {
+                        window.open(data.donationLink)
+                    });
+                });
+            }
+
+            const checkCrucialData = () => {
+                fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                    if (data.isSuspended) return window.location.reload();
+                    if (data.isLive) {
+                        $(`#livestatus`).text(`LIVE`);
+                        $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
+                        if (live === false) {
+                            player.src({
+                                src: `https://us01.throwdown.tv/stream/${streamer}`,
+                                type: `video/x-flv`
+                            });
+                        }
+                        live = true;
+                    } else {
+                        $(`#livestatus`).text(`OFFLINE`);
+                        $(`#livestatus`).removeClass(`status-online`).addClass(`status-offline`);
+                        if (live === true) {
+                            player.src({
+                                src: `/assets/video/throwdown.mp4`,
+                                type: `video/mp4`
+                            });
+                        }
+                        live = false
+                    }
+                });
+            }
+
+            player.controlBar.progressControl.seekBar.hide();
+
+            setInterval(getStreamData, 5e3);
+            setInterval(checkCrucialData, 5000)
+            checkCrucialData();
+            getStreamData();
+
+            $(`#follow-btn`).on(`click`, e => {
+                $(`#follow-btn`).attr(`disabled`, true);
+
+                let postUrl = `/follow/${streamer}`
+
+                if ($(`#follow-btn`).html() === `Unfollow`) {
+                    postUrl = `/unfollow/${streamer}`;
+                    $(`#follow-btn-form`).attr(`action`, `/unfollow/${streamer}`)
+                }
+
+                $.ajax({
+                    type: `post`,
+                    url: `${postUrl}`,
+                    data: $(`#follow-btn`).serialize()
+                }).then(res => {
+                    if (res.errors) {
+                        $(`#streamer-error`).show();
+                        $(`#streamer-error-message`).text(res.errors);
+                    } else if (res.success) {
+                        $(`#streamer-success`).show();
+                        $(`#streamer-success-message`).text(res.success);
+                    }
+                    setTimeout(function(){ window.location.reload(true) }, 1000);
+                });
+            });
+
+            player.on(`error`, event => {
+                player.src({
+                    src: `/assets/video/throwdown.mp4`,
+                    type: `video/mp4`
+                });
+            });
+        });
+    });
+</script>

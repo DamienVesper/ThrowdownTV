@@ -1,0 +1,21 @@
+<%- include('./partials/header'); %>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<br>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <p class="vip-page-p" style="font-size: 40px;">Subscribe for a VIP membership</p>
+            <p class="vip-page-p" style="font-size: 20px;">Support Free Speech and get the following perks:</p>
+            <div class="col-md-6 m-auto">
+                <li>10 Sticker Slots</li>
+                <li>VIP Badge in Chat and Channel</li>
+                <li>Premium Stream Servers <span style="font-weight: bold;">(WIP)</span></li>
+                <p>More perks coming soon...</p>
+            </div>
+            <br>
+            <form action="https://www.patreon.com/ThrowdownTV" id="login-form" method="GET">
+                <input type="submit" id="subscribe-button" value="Subscribe" class="btn btn-primary btn-block">
+            </form>
+        </div>
+    </div>
+</div>
