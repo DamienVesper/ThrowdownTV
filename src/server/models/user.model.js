@@ -40,7 +40,7 @@ const userSchema = Mongoose.Schema({
         required: true
     },
     live: {
-        type: String,
+        type: Boolean,
         default: false,
         required: false
     },
