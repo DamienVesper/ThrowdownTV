@@ -9,7 +9,7 @@
 .chat-history {
     padding: 0.5rem;
     overflow-y: auto;
-    max-height: calc(100% - 50px);
+    max-height: calc(100% - 70px);
     word-wrap: break-word;
 }
 
@@ -18,6 +18,7 @@
     position: absolute;
     bottom: 0.5rem;
     width: 100%;
+    height: 50px;
 }
 
 #chat-input {
