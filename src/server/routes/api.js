@@ -88,11 +88,13 @@ router.get(`/streams`, async (req, res) => {
     const streams = [];
 
     streamerData.forEach(async (streamer) => {
+        console.log(streamer.username);
         const result = await axios.get(`https://us01.throwdown.tv/api/${streamer.username}`);
         if (result.data.isLive === true) streams.push(streamer.username);
     });
 
-    return res.json(streams);
+    res.json(streams);
+    console.log(streams);
 });
 
 router.get(`/following-streams`, async (req, res) => {
