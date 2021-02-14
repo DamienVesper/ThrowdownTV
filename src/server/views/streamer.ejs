@@ -143,6 +143,8 @@
                 type: `video/x-flv`
             });
 
+            player.controlBar.progressControl.seekBar.dispose();
+
             setInterval(getStreamData, 5e3);
             setInterval(checkCrucialData, 5000)
             checkCrucialData();
