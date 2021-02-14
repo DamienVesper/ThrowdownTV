@@ -45,7 +45,7 @@
                         <span id="follow-count">0</span>
                     </span>
                     <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
-                    <button type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
+                    <button id="donate-btn" type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@
                     $(`#stream-display-name`).text(data.displayName);
                     $(`#stream-title`).text(data.streamTitle);
                     $(`#stream-description`).html(data.streamDescription);
-                    $(`#donation-link`).attr(`action`, `${data.donationLink}`);
+                    $(`#donation-btn`).attr(`action`, `${data.donationLink}`);
                     $.get(data.avatarURL).then(successCallback, errorCallback);
                     $(`#follow-count`).text(data.followers.length);
                     $(`#viewer-count`).text(data.viewers.length);
@@ -136,6 +136,9 @@
                         $(`#follow-btn`).attr(`action`, `/unfollow/${streamer}`)
                         $(`#follow-btn`).attr(`title`, `Unfollow ${streamer}`)
                     }
+                    $(`#donate-btn`).on(`click`, e => {
+                        window.open(data.donationLink)
+                    });
                 });
             }
 
@@ -201,8 +204,6 @@
                     setTimeout(function(){ window.location.reload(true) }, 1000);
                 });
             });
-
-            
 
             player.on(`error`, event => {
                 player.src({
