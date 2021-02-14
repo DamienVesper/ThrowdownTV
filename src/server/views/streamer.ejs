@@ -128,25 +128,11 @@
                         if (livedata.isLive === true) {
                             $(`#livestatus`).text(`LIVE`);
                             $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
-                            if ($(`#livestatus`).text() === `OFFLINE`) {
-                                player.src({
-                                    src: `https://us01.throwdown.tv/stream/${streamer}`,
-                                    type: `video/x-flv`
-                                });
-                                player.controlBar.show();
-                                player.bigPlayButton.show();
-                            }
+                            if ($(`#livestatus`).text() === `OFFLINE`) window.location.reload(true)
                         } else {
                             $(`#livestatus`).text(`OFFLINE`);
                             $(`#livestatus`).removeClass(`status-online`).addClass(`status-offline`);
-                            if ($(`#livestatus`).text() === `ONLINE`) {
-                                player.src({
-                                    src: `/assets/video/throwdown.mp4`,
-                                    type: `video/mp4`
-                                });
-                                player.controlBar.hide();
-                                player.bigPlayButton.hide();
-                            }
+                            if ($(`#livestatus`).text() === `ONLINE`) window.location.reload(true)
                         }
                     })
                 });
