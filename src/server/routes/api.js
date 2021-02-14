@@ -106,7 +106,7 @@ router.post(`/change-streamer-status`, async (req, res) => {
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
     else if (streamerStatus === undefined || (streamerStatus !== false && streamerStatus !== true)) return res.json({ errors: `Invalid Streamer Status` });
 
-    const user = await User.findOne({ username: streamer });
+    const user = await User.findOne({ "settings.streamKey": streamer });
     user.live = streamerStatus;
     user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
