@@ -64,6 +64,17 @@
             }
         });
 
+        fetch(`https://us01.throwdown.tv/api/${streamer}`).then(livedata => livedata.json()).then(livedata => {
+            if (livedata.isLive === false) {
+                player.src({
+                    src: `/assets/video/throwdown.mp4`,
+                    type: `video/mp4`
+                });
+            }
+        })
+
+        let live = false;
+
         // Intially Hide Badges
         $(`#staffbadge`).hide();
         $(`#vipbadge`).hide();
@@ -128,20 +139,28 @@
                         if (livedata.isLive === true) {
                             $(`#livestatus`).text(`LIVE`);
                             $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
-                            if ($(`#livestatus`).text() === `OFFLINE`) window.location.reload(true)
+                            if (live === false) {
+                                player.src({
+                                    src: `https://us01.throwdown.tv/stream/${streamer}`,
+                                    type: `video/x-flv`
+                                });
+                            }
+                            live = true;
                         } else {
                             $(`#livestatus`).text(`OFFLINE`);
                             $(`#livestatus`).removeClass(`status-online`).addClass(`status-offline`);
-                            if ($(`#livestatus`).text() === `ONLINE`) window.location.reload(true)
+                            if (live === true) {
+                                player.src({
+                                    src: `/assets/video/throwdown.mp4`,
+                                    type: `video/mp4`
+                                });
+                            }
+                            live = false
+
                         }
                     })
                 });
             }
-
-            player.src({
-                src: `https://us01.throwdown.tv/stream/${streamer}`,
-                type: `video/x-flv`
-            });
 
             player.controlBar.progressControl.seekBar.dispose();
 
