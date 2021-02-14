@@ -52,17 +52,18 @@ const io = require(`socket.io`)(server, {
 });
 server.listen(config.socketPort, () => log(`green`, `Socket.IO bound to port ${config.socketPort}.`));
 
-// Reset viewer count.
-const resetViewerCount = async () => {
+// Reset stats.
+const resetStats = async () => {
     const users = await User.find({});
     for (const user of users) {
         user.viewers = [];
+        user.live = false;
         user.save();
     }
 
-    log(`cyan`, `Reset the viewer count of all users.`);
+    log(`cyan`, `Reset the viewer count and livestream status of all users.`);
 };
-resetViewerCount();
+resetStats();
 
 // Handle new connections.
 io.on(`connection`, async socket => {
