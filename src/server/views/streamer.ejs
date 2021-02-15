@@ -149,7 +149,7 @@
                             $(`#livestatus`).text(`LIVE`);
                             $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
                             if (live === false) {
-                                player.src({
+                                player.updateSrc({
                                     src: `https://us01.throwdown.tv/stream_source/${streamer}`,
                                     type: `video/x-flv`,
                                     label: `SOURCE`
