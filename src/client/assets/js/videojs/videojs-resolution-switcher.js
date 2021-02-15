@@ -58,7 +58,6 @@
         this.controlText('Quality');
 
         if(options.dynamicLabel){
-          videojs.dom.addClass(this.label, 'vjs-resolution-button-label');
           this.el().appendChild(this.label);
         }else{
           var staticLabel = document.createElement('span');
