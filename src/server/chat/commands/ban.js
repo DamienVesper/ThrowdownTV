@@ -15,7 +15,7 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     if (!(chatter.perms.moderator || chatter.perms.streamer)) return chatter.emit(`commandMessage`, `You do not have permission to do that!`);
     else if (!userToBanExists) return chatter.emit(`commandMessage`, `That user does not exist!`);
     else if (chatter.username === userToBan) return chatter.emit(`commandMessage`, `You cannot ban yourself!`);
-    else if (streamer.channel.bans.includes(userToBan)) return chatter.emit(`commandMessage`, `That user is already banned from your channel!`);
+    else if (streamer.channel.bans.includes(userToBan)) return chatter.emit(`commandMessage`, `That user is already barred from your channel's chat!`);
 
     streamer.channel.bans.push(userToBan);
     if (streamer.channel.moderators.includes(userToBan)) streamer.channel.moderators.splice(streamer.channel.moderators.indexOf(userToBan), 1);

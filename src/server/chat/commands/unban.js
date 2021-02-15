@@ -14,7 +14,7 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     if (!(chatter.perms.moderator || chatter.perms.streamer)) return chatter.emit(`commandMessage`, `You do not have permission to do that!`);
     else if (!userToUnbanExists) return chatter.emit(`commandMessage`, `That user does not exist!`);
-    else if (!streamer.channel.bans.includes(userToUnban)) return chatter.emit(`commandMessage`, `That user is not banned from your channel!`);
+    else if (!streamer.channel.bans.includes(userToUnban)) return chatter.emit(`commandMessage`, `That user is not barred from your channel's chat!`);
     else if (chatter.username === userToUnban) return chatter.emit(`commandMessage`, `You cannot unban yourself!`);
 
     streamer.channel.bans.splice(streamer.channel.bans.indexOf(userToUnban), 1);
