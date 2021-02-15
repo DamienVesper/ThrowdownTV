@@ -249,7 +249,7 @@ router.post(`/changepassword/:token`, async (req, res) => {
         if (err) return res.json({ errors: `An Unknown Error Occoured` });
         bcrypt.hash(req.body[`new-password`], salt, (err, hash) => {
             if (err) return res.json({ errors: `An Unknown Error Occoured` });
-
+            user.recoverytoken = `${randomString(32)}VERIFIED${randomString(32)}`;
             user.password = hash;
             user.save(err => {
                 if (err) return res.json({ errors: `An Unknown Error Occoured` });
