@@ -4,7 +4,8 @@
 <link rel="stylesheet" href="/assets/css/streamer.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.11.4/video.min.js"></script>
+<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+<script src="/assets/js/videojs/nuevo.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-flvjs@0.2.0/dist/videojs-flvjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-resolution-switcher/0.4.2/videojs-resolution-switcher.min.js"></script>
 <link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/videojs-resolution-switcher/0.4.2/videojs-resolution-switcher.min.css"></script>
@@ -17,7 +18,7 @@
 </div>
 <div class="stream-overlay">
     <div class="stream-popout">
-        <video id="live-stream" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" autoplay="true"
+        <video id="live-stream" class="video-js vjs-16-9 vjs-big-play-centered" controls preload="auto" autoplay="true"
             fluid="true" width="1280" height="720" poster="/assets/img/thumbnail.png">
             <p class="vjs-no-js">
                 To view this video please enable JavaScript, and consider upgrading to a
@@ -74,10 +75,13 @@
             plugins: {
                 videoJsResolutionSwitcher: {
                     default: 'high',
-                    dynamicLabel: true
+                    dynamicLabel: true,
+                    ui: true
                 }
             }
         });
+
+        player.nuevo();
 
         let live = false;
 
@@ -149,7 +153,7 @@
                             $(`#livestatus`).text(`LIVE`);
                             $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
                             if (live === false) {
-                                player.src({
+                                player.updateSrc({
                                     src: `https://us01.throwdown.tv/stream_source/${streamer}`,
                                     type: `video/x-flv`,
                                     label: `SOURCE`
