@@ -6,10 +6,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.11.4/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-flvjs@0.2.0/dist/videojs-flvjs.min.js"></script>
-<head>
-    <meta property="og:title" content="ThrowdownTV - Streamer">
-    <meta property="og:description" content="Free Speech Live Streaming">
-</head>
 
 <div id="streamer-error" class="alert alert-danger alert-dismissible fade show" role="alert">
     <span id="streamer-error-message"></span>
@@ -95,8 +91,6 @@
 
             const getStreamData = () => {
                 fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-                    $(`meta[property='og:title']`).attr(`content`, `${data.displayName} - ${data.streamTitle}`);
-                    $(`meta[property='og:description']`).attr(`content`, data.streamDescription);
                     $(`#stream-display-name`).text(data.displayName);
                     $(`#stream-title`).text(data.streamTitle);
                     $(`#stream-description`).html(data.streamDescription);
