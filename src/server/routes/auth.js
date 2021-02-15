@@ -7,10 +7,12 @@ const config = require(`../../../config/config.js`);
 const express = require(`express`);
 const router = express.Router();
 const xssFilters = require(`xss-filters`);
+const { randomString } = require(`../utils/random.js`);
 
 // Authentication.
 const User = require(`../models/user.model.js`);
 const passport = require(`passport`);
+const bcrypt = require(`bcryptjs`);
 const crypto = require(`crypto`);
 
 // Nodemailer.
@@ -202,12 +204,93 @@ router.get(`/authenticated`, (req, res) => {
         return res.json({
             isLoggedIn: true,
             username: req.user.username,
+            email: req.user.email,
             displayName: req.user.displayName,
             token: req.user.token ? req.user.token : undefined,
             isSuspended: req.user.isSuspended
         });
     } else return res.json({
         isLoggedIn: false
+    });
+});
+
+router.get(`/changepassword/:token`, async (req, res) => {
+    const token = req.params.token;
+    const user = await User.findOne({ recoverytoken: token });
+
+    if (!user) {
+        res.render(`error.ejs`);
+        res.json({ errors: `Invalid/Expired Recovery Token` });
+    } else {
+        res.render(`changepassword.ejs`);
+    }
+});
+
+router.post(`/changepassword/:token`, async (req, res) => {
+    if (!req.body[`new-password`] || !req.body[`new-password-confirm`] || typeof req.body[`new-password`] !== `string` || typeof req.body[`new-password-confirm`] !== `string`) return res.json({ errors: `Please fill out all fields` });
+
+    if (req.body[`new-password`] !== xssFilters.inHTMLData(req.body[`new-password`])) return res.json({
+        errors: `Invalid Password`
+    });
+
+    if (req.body[`new-password`] !== req.body[`new-password-confirm`]) return res.json({
+        errors: `Passwords do not match`
+    });
+
+    if (req.body[`new-password`] < 7 || req.body[`new-password`] > 48) return res.json({
+        errors: `Password must be between 7 and 48 characters`
+    });
+
+    const token = req.params.token;
+    const user = await User.findOne({ recoverytoken: token });
+    if (!user) return res.json({ errors: `Invalid/Expired Recovery Token` });
+
+    bcrypt.genSalt(15, (err, salt) => {
+        if (err) return res.json({ errors: `An Unknown Error Occoured` });
+        bcrypt.hash(req.body[`new-password`], salt, (err, hash) => {
+            if (err) return res.json({ errors: `An Unknown Error Occoured` });
+
+            user.password = hash;
+            user.save(err => {
+                if (err) return res.json({ errors: `An Unknown Error Occoured` });
+                if (req.isAuthenticated()) req.logOut();
+                res.json({ success: `Succesfully reset password. Redirecting...` });
+                log(`blue`, `Successfully Changed Password of ${user.username}.`);
+            });
+        });
+    });
+});
+
+router.get(`/recoveraccount`, (req, res) => {
+    res.render(`accountrecovery.ejs`);
+});
+
+router.post(`/recoveraccount`, async (req, res) => {
+    if (!req.body[`recover-email`] || typeof req.body[`recover-email`] !== `string`) return res.json({ errors: `Please fill out the recovery email` });
+
+    const user = await User.findOne({ email: req.body[`recover-email`] });
+    if (!user) return res.json({ errors: `Account with this email address does not exist.` });
+
+    user.recoverytoken = `${user.username}verify${randomString(64)}`;
+    user.save(() => {
+        log(`magenta`, `Saving Recovery Token...`);
+        const mailOptions = {
+            from: `Throwdown TV <no-reply@throwdown.tv>`,
+            to: user.email,
+            subject: `Recover your Throwdown.TV Account`,
+            text: `Hello ${user.username}, \n\nA request was recieved to recover your account, if this was not you, please ignore this email. \n\nChange your account password with the link here: https://${config.domain}/changepassword/${user.recoverytoken}`
+        };
+        log(`yellow`, `Attempting to send a Recovery Email to ${user.username} at "${user.email}".`);
+        if (config.mode === `dev`) {
+            log(`green`, `Verification Email: http://localhost:8080/changepassword/${user.recoverytoken}`);
+            res.json({ success: `DEV MODE: Please visit the recover link in logs.` });
+        } else {
+            transport.sendMail(mailOptions, err => {
+                if (err) return res.json({ errors: `Error sending a recovery email to the specified email address.` });
+                res.json({ success: `Please check your email for a password recovery link.` });
+                log(`blue`, `Sent a Recovery Email to ${user.username} at "${user.email}".`);
+            });
+        }
     });
 });
 

@@ -35,6 +35,11 @@ const userSchema = Mongoose.Schema({
         default: randomString(64),
         required: false
     },
+    recoverytoken: {
+        type: String,
+        default: randomString(64),
+        required: false
+    },
     password: {
         type: String,
         required: true

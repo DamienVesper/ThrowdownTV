@@ -1,0 +1,58 @@
+<%- include('./partials/header'); %>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h1 class="text-center">Recover Account</h1>
+            <br>
+            <form action="/recoveraccount" id="recover-form" method="POST">
+                <div id="recover-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span id="recover-error-message"></span>
+                </div>
+                <div id="recover-success" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span id="recover-success-message"></span>
+                </div>
+                <div class="form group">
+                    <label for="email">Email</label>
+                    <input id="recover-email" type="email" name="recover-email" class="form-control" placeholder="Enter Email"
+                        autocomplete="email" required>
+                    <br>
+                    <input type="submit" id="recover-button" value="Send Recovery Email" class="btn btn-primary btn-block">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        $(`#recover-error`).hide()
+        $(`#recover-success`).hide()
+    });
+
+    fetch(`/authenticated`).then(data => data.json()).then(data => {
+        if (data.email) $(`#recover-email`).val(data.email);
+    })
+
+    $(`#recover-button`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#recover-button`).attr(`disabled`, true);
+        $(`#recover-error`).hide();
+
+        $.ajax({
+            type: `post`,
+            url: `/recoveraccount`,
+            data: $(`#recover-form`).serialize()
+        }).then(res => {
+            if (res.errors) {
+                $(`#recover-button`).attr(`disabled`, false);
+                $(`#recover-error`).show();
+                $(`#recover-error-message`).text(res.errors);
+                return false;
+            } else if (res.success) {
+                $(`#recover-success`).show()
+                $(`#recover-success-message`).text(res.success);
+                return true;
+            }
+        });
+    });
+</script>

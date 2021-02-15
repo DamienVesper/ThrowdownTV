@@ -1,0 +1,20 @@
+<%- include('./partials/header'); %>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <br>
+            <div id="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span id="error-message"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        $(`#error`).hide()
+        if (res.errors) {
+            $(`#error`).show();
+            $(`#error-message`).text(res.errors);
+        }
+    });
+</script>

@@ -8,6 +8,9 @@
                 <div id="login-error" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <span id="login-error-message"></span>
                 </div>
+                <div id="login-success" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span id="login-success-message"></span>
+                </div>
                 <div class="form group">
                     <label for="username">Username</label>
                     <input type="username" name="login-username" class="form-control" placeholder="Enter Username"
@@ -17,6 +20,10 @@
                     <input type="password" name="login-password" class="form-control" placeholder="Enter Password"
                         autocomplete="new-password" required>
                     <br>
+                    <div>
+                        <a href="/recoveraccount">Forgot Password?</a>
+                    </div>
+                    <br>
                     <input type="submit" id="login-button" value="Login" class="btn btn-primary btn-block">
                 </div>
             </form>
@@ -24,13 +31,17 @@
     </div>
 </div>
 <script>
-    $(document).ready(() => $(`#login-error`).hide());
+    $(document).ready(() => {
+        $(`#login-error`).hide();
+        $(`#login-success`).hide();
+    });
 
     $(`#login-button`).on(`click`, e => {
         e.preventDefault();
 
         $(`#login-button`).attr(`disabled`, true);
         $(`#login-error`).hide();
+        $(`#login-success`).hide();
 
         $.ajax({
             type: `post`,
@@ -40,11 +51,12 @@
             if (res.errors) {
                 $(`#login-button`).attr(`disabled`, false);
                 $(`#login-error`).show();
-
                 $(`#login-error-message`).text(res.errors);
                 return false;
             } else if (res.success) {
                 $(`#login-button`).attr(`disabled`, false);
+                $(`#login-success`).show();
+                $(`#login-success-message`).text(res.errors);
                 window.location.reload();
                 return true;
             }
