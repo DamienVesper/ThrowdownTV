@@ -18,6 +18,7 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     else if (streamer.channel.bans.includes(userToBan)) return chatter.emit(`commandMessage`, `That user is already barred from your channel's chat!`);
 
     streamer.channel.bans.push(userToBan);
+    if (streamer.channel.timeouts.includes(userToBan)) streamer.channel.timeouts.splice((userToBan), 1);
     if (streamer.channel.moderators.includes(userToBan)) streamer.channel.moderators.splice(streamer.channel.moderators.indexOf(userToBan), 1);
     streamer.save(() => chatter.emit(`commandMessage`, `${userToBan} has been banned.`));
 

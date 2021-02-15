@@ -15,9 +15,9 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     if (!(chatter.perms.moderator || chatter.perms.streamer)) return chatter.emit(`commandMessage`, `You do not have permission to do that!`);
     else if (!userToTimeoutExists) return chatter.emit(`commandMessage`, `That user does not exist!`);
     else if (chatter.username === userToTimeout) return chatter.emit(`commandMessage`, `You cannot time yourself out!`);
-    else if (streamer.channel.bans.includes(userToTimeout)) return chatter.emit(`commandMessage`, `That user is already barred from your channel's chat!`);
+    else if (streamer.channel.timeouts.includes(userToTimeout)) return chatter.emit(`commandMessage`, `That user is already barred from your channel's chat!`);
 
-    streamer.channel.bans.push(userToTimeout);
+    streamer.channel.timeouts.push(userToTimeout);
     if (streamer.channel.moderators.includes(userToTimeout)) streamer.channel.moderators.splice(streamer.channel.moderators.indexOf(userToTimeout), 1);
     streamer.save(() => chatter.emit(`commandMessage`, `${userToTimeout} has been timed out for 5 minutes.`));
 
@@ -25,8 +25,8 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     for (const user of users) user.emit(`commandMessage`, `${userToTimeout} was timed out for 5 minutes by a moderator.`);
 
     setTimeout(() => {
-        if (!streamer.channel.bans.includes(userToTimeout)) return;
-        streamer.channel.bans.splice(streamer.channel.bans.indexOf(userToTimeout), 1);
+        if (!streamer.channel.timeouts.includes(userToTimeout)) return;
+        streamer.channel.timeouts.splice(streamer.channel.timeouts.indexOf(userToTimeout), 1);
         streamer.save(() => {
             for (const user of users) user.emit(`commandMessage`, `${userToTimeout} was automatically unmuted.`);
             chatter.emit(`commandMessage`, `${userToTimeout} was automatically unmuted.`);

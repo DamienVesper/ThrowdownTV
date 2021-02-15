@@ -14,9 +14,10 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     if (!(chatter.perms.moderator || chatter.perms.streamer)) return chatter.emit(`commandMessage`, `You do not have permission to do that!`);
     else if (!userToUnbanExists) return chatter.emit(`commandMessage`, `That user does not exist!`);
-    else if (!streamer.channel.bans.includes(userToUnban)) return chatter.emit(`commandMessage`, `That user is not barred from your channel's chat!`);
+    else if (!streamer.channel.bans.includes(userToUnban) && !streamer.channel.timeouts.includes(userToUnban)) return chatter.emit(`commandMessage`, `That user is not barred from your channel's chat!`);
     else if (chatter.username === userToUnban) return chatter.emit(`commandMessage`, `You cannot unban yourself!`);
 
+    if (streamer.channel.timeouts.includes(userToUnban)) streamer.channel.timeouts.splice(streamer.channel.bans.indexOf(userToUnban), 1);
     streamer.channel.bans.splice(streamer.channel.bans.indexOf(userToUnban), 1);
     streamer.save(() => chatter.emit(`commandMessage`, `${userToUnban} has been unbanned.`));
 

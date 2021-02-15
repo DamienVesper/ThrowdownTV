@@ -77,6 +77,11 @@ const userSchema = Mongoose.Schema({
             type: Array,
             default: [],
             required: false
+        },
+        timeouts: {
+            type: Array,
+            default: [],
+            required: false
         }
     },
     perms: {
