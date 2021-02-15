@@ -7,8 +7,6 @@
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 <script src="/assets/js/videojs/nuevo.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-flvjs@0.2.0/dist/videojs-flvjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-resolution-switcher/0.4.2/videojs-resolution-switcher.min.js"></script>
-<link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/videojs-resolution-switcher/0.4.2/videojs-resolution-switcher.min.css"></script>
 
 <div id="streamer-error" class="alert alert-danger alert-dismissible fade show" role="alert">
     <span id="streamer-error-message"></span>
@@ -153,7 +151,7 @@
                             $(`#livestatus`).text(`LIVE`);
                             $(`#livestatus`).removeClass(`status-offline`).addClass(`status-online`);
                             if (live === false) {
-                                player.updateSrc({
+                                player.src({
                                     src: `https://us01.throwdown.tv/stream_source/${streamer}`,
                                     type: `video/x-flv`,
                                     label: `SOURCE`
