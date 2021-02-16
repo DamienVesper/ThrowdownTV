@@ -8,8 +8,12 @@ const config = {
     socketPort: 8443,
     domain: `throwdown.tv`,
     version: pjson.version,
-    blacklistedUsernames: [`api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `widget`, `follow`, `unfollow`, `throwdown`, `vip`, `staff`, `recoveraccount`, `changepassword`],
+    blacklistedUsernames: [`api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `widget`, `follow`, `unfollow`, `throwdown`, `vip`, `staff`, `recoveraccount`, `changepassword`, `report`],
     chatPrefix: `/`
+};
+
+config.discordconfig = {
+    reportchannel: `811173931741347850`
 };
 
 config.staticDir = path.resolve(__dirname, config.mode === `prod` ? `../dist` : `../src/client`);

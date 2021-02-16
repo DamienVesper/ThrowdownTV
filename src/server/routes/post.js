@@ -2,6 +2,13 @@ const express = require(`express`);
 const router = express.Router();
 const { randomString } = require(`../utils/random.js`);
 const User = require(`../models/user.model.js`);
+const config = require(`../../../config/config.js`);
+const { verify } = require(`hcaptcha`);
+
+// Discord
+const Discord = require(`discord.js`);
+const client = new Discord.Client();
+client.login(process.env.DISCORD_BOT_TOKEN);
 
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
@@ -110,6 +117,31 @@ router.post(`/unfollow/:streamer`, async (req, res) => {
             return res.json({ success: `Succesfully Unfollowed ${streamer.username}.` });
         }
     });
+});
+
+router.post(`/report/:streamer`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    if (config.mode === `prod`) {
+        if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
+        verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
+            .then((data) => {
+                if (!data) return res.json({ errors: `Invalid Captcha` });
+            }).catch(() => {
+                return res.json({ errors: `Captcha Error` });
+            });
+    }
+    if (!req.body[`report-comments`]) return res.json({ errors: `Report Description Empty` });
+    const streamer = await User.findOne({ username: req.params.streamer.toLowerCase() });
+    if (!streamer) return res.json({ errors: `Streamer does not exist.` });
+    const channel = client.channels.cache.get(config.discordconfig.reportchannel);
+    const embed = new Discord.MessageEmbed()
+        .setTitle(`${req.params.streamer.toLowerCase()}`)
+        .setColor(`#0099ff`)
+        .setURL(`http://${config.domain}/${req.params.streamer.toLowerCase()}`)
+        .setAuthor(`USER REPORT`, client.user.displayAvatarURL())
+        .setDescription(`TOS Category: ${req.body[`tos-category`]}`)
+        .addField(`Description of Report`, req.body[`report-comments`]);
+    await channel.send(embed);
 });
 
 module.exports = router;

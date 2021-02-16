@@ -1,0 +1,79 @@
+<%- include('./partials/header'); %>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <h1 id="title" class="text-center">Report</h1>
+            <br>
+            <form action="/report" id="report-form" method="POST">
+                <div id="report-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span id="report-error-message"></span>
+                </div>
+                <div id="report-success" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span id="report-success-message"></span>
+                </div>
+                <div class="form group">
+                    <label for="username">Streamer to Report</label>
+                    <input id="username" type="username" name="report-username" class="form-control" placeholder="Enter Username"
+                        autocomplete="username" required readonly>
+                    <br>
+                    <label for="tos-category">TOS Category:</label>
+                    <select class="form-control" id="tos-category" name="tos-category">
+                        <option>Sexual Content</option>
+                        <option>Violent or repulsive content</option>
+                        <option>Harmful or dangerous acts</option>
+                        <option>Child abuse</option>
+                        <option>Promotes terrorism</option>
+                        <option>Infringes my rights</option>
+                        <option>Illegal Activity</option>
+                    </select>
+                    <br>
+                    <label for="report-comments">Streamer to Report</label>
+                    <textarea id="report-comments" type="report-comments" name="report-comments" class="form-control" placeholder="Description of Report (Required)"
+                        autocomplete="report-comments" required></textarea>
+                    <br>
+                    <div class="h-captcha" data-sitekey="b5bed0d5-a077-493d-9ae0-3a66e4d05a6c"></div>
+                    <br>
+                    <input type="submit" id="report-button" value="Submit Report" class="btn btn-primary btn-block">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        $(`#report-error`).hide();
+        $(`#report-success`).hide();
+    });
+
+    const streamer = window.location.pathname.split(`/`)[2].toLowerCase();
+    $(`#report-form`).attr(`action`, `/report/${streamer}`)
+    $(`#title`).text(`Report ${streamer}`)
+    $(`#username`).val(streamer)
+
+    $(`#report-button`).on(`click`, e => {
+        e.preventDefault();
+
+        $(`#report-button`).attr(`disabled`, true);
+        $(`#report-error`).hide();
+        $(`#report-success`).hide();
+
+        $.ajax({
+            type: `post`,
+            url: `/report/${streamer}`,
+            data: $(`#report-form`).serialize()
+        }).then(res => {
+            if (res.errors) {
+                $(`#report-button`).attr(`disabled`, false);
+                $(`#report-error`).show();
+                $(`#report-error-message`).text(res.errors);
+                return false;
+            } else if (res.success) {
+                $(`#report-button`).attr(`disabled`, false);
+                $(`#report-success`).show();
+                $(`#report-success-message`).text(res.errors);
+                window.location.reload();
+                return true;
+            }
+        });
+    });
+</script>

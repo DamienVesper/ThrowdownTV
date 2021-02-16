@@ -33,7 +33,8 @@ router.get(`/rtmp-api/:streamer/:apikey`, async (req, res) => {
     if (apikey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
     const data = {
         username: streamerData.username,
-        streamkey: streamerData.settings.streamKey
+        streamkey: streamerData.settings.streamKey,
+        isLive: streamerData.live
     };
     res.json(data);
 });

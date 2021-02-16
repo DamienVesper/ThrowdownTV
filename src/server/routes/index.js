@@ -70,6 +70,13 @@ router.get(`/vip`, async (req, res) => {
     else return res.render(`alreadyVIP.ejs`);
 });
 
+router.get(`/report/:streamer`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    const streamer = await User.findOne({ username: req.params.streamer.toLowerCase() });
+    if (!streamer) return res.json({ errors: `Streamer does not exist.` });
+    res.render(`report.ejs`);
+});
+
 router.get(`/:streamer`, async (req, res) => {
     const streamer = req.params.streamer;
 
