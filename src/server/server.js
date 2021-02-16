@@ -8,6 +8,7 @@ require(`dotenv`).config();
 const log = require(`./utils/log.js`);
 const antiDuplicator = require(`./utils/antiDuplicator.js`);
 const clearTimeouts = require(`./utils/clearTimeouts.js`);
+const resetRTMPServers = require(`./utils/resetRTMPServers.js`);
 
 const fs = require(`fs`);
 const path = require(`path`);
@@ -124,6 +125,9 @@ setInterval(antiDuplicator, 18e5);
 
 // Clear Timed out users.
 clearTimeouts();
+
+// Reset RTMP Servers of all users
+resetRTMPServers();
 
 // Bind the webfront to defined port.
 server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));

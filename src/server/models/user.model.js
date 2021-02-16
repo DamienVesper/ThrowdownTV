@@ -118,6 +118,11 @@ const userSchema = Mongoose.Schema({
             default: `/streams/donate`,
             required: false
         },
+        rtmpServer: {
+            type: String,
+            default: `us01`,
+            required: false
+        },
         useGlobalStickers: {
             type: Boolean,
             default: true,
