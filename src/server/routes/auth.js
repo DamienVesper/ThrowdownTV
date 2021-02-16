@@ -16,7 +16,7 @@ const bcrypt = require(`bcryptjs`);
 const crypto = require(`crypto`);
 
 // Captcha
-const { verify } = require(`hcaptcha`);
+const hcaptcha = require(`hcaptcha`);
 
 // Nodemailer.
 const nodemailer = require(`nodemailer`);
@@ -72,7 +72,7 @@ router.post(`/signup`, async (req, res, next) => {
 
     if (config.mode === `prod`) {
         try {
-            const { success } = await verify(
+            const { success } = await hcaptcha(
                 process.env.HCAPTCHA_KEY,
                 req.body[`h-captcha-response`]
             );
@@ -183,7 +183,7 @@ router.post(`/login`, async (req, res, next) => {
 
     if (config.mode === `prod`) {
         try {
-            const { success } = await verify(
+            const success = await hcaptcha(
                 process.env.HCAPTCHA_KEY,
                 req.body[`h-captcha-response`]
             );
