@@ -193,7 +193,7 @@ router.post(`/login`, async (req, res, next) => {
             return res.json({ errors: `Captcha Error. Try again.` });
         }
     }
-
+    res.json({ success: `Logged in, Redirecting...` })
     passport.authenticate(`login`, (err, user, info) => {
         if (err) {
             log(`red`, err);
