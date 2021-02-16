@@ -75,7 +75,7 @@ router.post(`/signup`, async (req, res, next) => {
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
             }).catch(() => {
-                return res.json({ errors: `Invalid Captcha` });
+                return res.json({ errors: `Captcha Error` });
             });
     }
     const user = await User.findOne({ email: req.body[`signup-email`] });
@@ -182,7 +182,7 @@ router.post(`/login`, async (req, res, next) => {
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
             }).catch(() => {
-                return res.json({ errors: `Invalid Captcha` });
+                return res.json({ errors: `Captcha Error` });
             });
     }
     passport.authenticate(`login`, (err, user, info) => {

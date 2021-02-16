@@ -7,6 +7,8 @@ require(`dotenv`).config();
 // Utilities.
 const log = require(`./utils/log.js`);
 const antiDuplicator = require(`./utils/antiDuplicator.js`);
+const clearTimeouts = require(`./utils/clearTimeouts.js`);
+
 const fs = require(`fs`);
 const path = require(`path`);
 
@@ -119,6 +121,9 @@ const server = config.mode === `dev`
 // Make sure there are no duplicates.
 antiDuplicator();
 setInterval(antiDuplicator, 18e5);
+
+// Clear Timed out users.
+clearTimeouts();
 
 // Bind the webfront to defined port.
 server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));

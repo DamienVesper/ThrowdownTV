@@ -18,8 +18,8 @@ module.exports = async () => {
             for (const user of usersWithSameStreamKey) {
                 log(`blue`, `Duplicate stream key for ${user.username} found. Resetting...`);
 
-                let newStreamKey = randomString(32);
-                while (streamKeys.includes(newStreamKey)) newStreamKey = randomString(32);
+                let newStreamKey = `${user.username}${randomString(32)}`;
+                while (streamKeys.includes(newStreamKey)) newStreamKey = `${user.username}${randomString(32)}`;
                 user.settings.streamKey = newStreamKey;
                 user.save();
             }
