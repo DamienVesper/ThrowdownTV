@@ -176,6 +176,8 @@ router.post(`/login`, async (req, res, next) => {
         if (!req.body[`h-captcha-response`]) return res.json({ errors: `Please solve the captcha.` });
     }
 
+    console.log(req.body.token)
+
     if (!req.body[`login-username`] || !req.body[`login-password`] ||
         typeof req.body[`login-username`] !== `string` || typeof req.body[`login-password`] !== `string`) return res.json({
         errors: `Please fill out all fields`
