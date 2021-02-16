@@ -143,9 +143,6 @@ router.post(`/report/:streamer`, async (req, res) => {
         .addField(`Description of Report`, req.body[`report-comments`]);
     await channel.send(embed);
     res.json({ success: `Your Report was successfully sent, Redirecting you back...` });
-    setTimeout(() => {
-        res.redirect(`/${req.params.streamer.toLowerCase()}`);
-    }, 5000);
 });
 
 module.exports = router;
