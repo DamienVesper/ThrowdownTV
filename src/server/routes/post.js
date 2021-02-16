@@ -140,7 +140,8 @@ router.post(`/report/:streamer`, async (req, res) => {
         .setURL(`http://${config.domain}/${req.params.streamer.toLowerCase()}`)
         .setAuthor(`USER REPORT`, client.user.displayAvatarURL())
         .setDescription(`TOS Category: ${req.body[`tos-category`]}`)
-        .addField(`Description of Report`, req.body[`report-comments`]);
+        .addField(`Description of Report`, req.body[`report-comments`])
+        .setImage(`https://us01.throwdown.tv/thumbnail/${req.params.streamer.toLowerCase()}`);
     await channel.send(embed);
     res.json({ success: `Your Report was successfully sent, Redirecting you back...` });
 });
