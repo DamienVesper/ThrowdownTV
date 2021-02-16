@@ -74,7 +74,7 @@ router.post(`/signup`, async (req, res, next) => {
         try {
             const { success } = await verify(
                 process.env.HCAPTCHA_KEY,
-                req.body.token
+                req.body[`h-captcha-response`]
             );
             if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
@@ -186,7 +186,7 @@ router.post(`/login`, async (req, res, next) => {
         try {
             const { success } = await verify(
                 process.env.HCAPTCHA_KEY,
-                req.body.token
+                req.body[`h-captcha-response`]
             );
             if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
