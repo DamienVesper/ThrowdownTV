@@ -176,8 +176,6 @@ router.post(`/login`, async (req, res, next) => {
         if (!req.body[`h-captcha-response`]) return res.json({ errors: `Please solve the captcha.` });
     }
 
-    console.log(req.body[`h-captcha-response`])
-
     if (!req.body[`login-username`] || !req.body[`login-password`] ||
         typeof req.body[`login-username`] !== `string` || typeof req.body[`login-password`] !== `string`) return res.json({
         errors: `Please fill out all fields`
@@ -189,7 +187,7 @@ router.post(`/login`, async (req, res, next) => {
                 process.env.HCAPTCHA_KEY,
                 req.body[`h-captcha-response`]
             );
-            if (!success) return res.json({ errors: `Invalid Captcha` });
+            if (success === false) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
             return res.json({ errors: `Captcha Error. Try again.` });
         }
