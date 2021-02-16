@@ -92,7 +92,8 @@ router.get(`/streams`, async (req, res) => {
             name: streamer.username,
             displayName: streamer.displayName,
             title: streamer.settings.title,
-            description: streamer.settings.description
+            description: streamer.settings.description,
+            rtmpServer: streamer.settings.rtmpServer
         });
     }
 
@@ -124,7 +125,8 @@ router.get(`/following-streams`, async (req, res) => {
         name: streamer.username,
         displayName: streamer.displayName,
         title: streamer.settings.title,
-        description: streamer.settings.description
+        description: streamer.settings.description,
+        rtmpServer: streamer.settings.rtmpServer
     });
 
     return res.json(streamers);

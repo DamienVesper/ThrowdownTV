@@ -147,7 +147,7 @@ router.post(`/report/:streamer`, async (req, res) => {
             { name: `Stream Description`, value: streamer.settings.description },
             { name: `Donation Link`, value: streamer.settings.donationLink }
         )
-        .setImage(`https://us01.throwdown.tv/thumbnail/${req.params.streamer.toLowerCase()}`);
+        .setImage(`https://${streamer.settings.rtmpServer}.throwdown.tv/snapshot/${req.params.streamer.toLowerCase()}`);
     await channel.send(embed);
     res.json({ success: `Your Report was successfully sent, redirecting...` });
 });
