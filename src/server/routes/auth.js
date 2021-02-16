@@ -173,7 +173,7 @@ router.post(`/login`, async (req, res, next) => {
         });
     }
     if (config.mode === `prod`) {
-        if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
+        if (!req.body[`h-captcha-response`]) return res.json({ errors: `Please solve the captcha.` });
     }
 
     if (!req.body[`login-username`] || !req.body[`login-password`] ||
