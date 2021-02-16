@@ -45,6 +45,7 @@
 }
 
 .description-box {
+    margin-top: 40px;
     color: white;
     position: absolute;
     white-space: pre-wrap;
