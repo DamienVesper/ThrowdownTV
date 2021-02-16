@@ -103,12 +103,14 @@ router.post(`/change-streamer-status`, async (req, res) => {
     const streamer = req.body.streamer;
     const apiKey = req.body.apiKey;
     const streamerStatus = req.body.streamerStatus;
+    const rtmpServer = req.body.rtmpServer;
 
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
     else if (streamerStatus === undefined || (streamerStatus !== false && streamerStatus !== true)) return res.json({ errors: `Invalid Streamer Status` });
 
     const user = await User.findOne({ username: streamer });
     user.live = streamerStatus;
+    user.rtmpServer = rtmpServer;
     user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
 
@@ -168,7 +170,8 @@ router.get(`/public-stream-data/:streamer`, async (req, res) => {
         avatarURL: streamerData.avatarURL,
         isVip: streamerData.perms.vip,
         isStaff: streamerData.perms.staff,
-        isLive: streamerData.live
+        isLive: streamerData.live,
+        rtmpServer: streamerData.settings.rtmpServer
     };
 
     res.jsonp(data);
