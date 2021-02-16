@@ -113,7 +113,6 @@
                     $(`#donation-btn`).attr(`action`, `${data.donationLink}`);
                     $.get(data.avatarURL).then(successCallback, errorCallback);
                     $(`#follow-count`).text(data.followers.length);
-                    $(`#viewer-count`).text(data.viewers.length);
 
                     function successCallback(response) {
                         $(`#avatar`).attr(`src`, `${data.avatarURL}`)
@@ -151,6 +150,9 @@
 
             const checkCrucialData = () => {
                 fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+                    fetch(`https://${data.rtmpServer}.throwdown.tv/api/${streamer}`).then(data => data.json()).then(viewerdata => {
+                        $(`#viewer-count`).text(viewerdata.viewers);
+                    })
                     fetch(`https://us01.throwdown.tv/api/${streamer}`).then(livedata => livedata.json()).then(livedata => {
                         if (data.isSuspended) return window.location.reload();
                         if (livedata.isLive === true) {
