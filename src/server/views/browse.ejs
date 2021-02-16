@@ -27,8 +27,8 @@
             streamerWrapper.html(`
                 <img src="https://${streamer.rtmpServer}.throwdown.tv/thumbnail/${streamer.name}" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
                 <div style="margin-left: 25px;">
-                    <h2><a href="/${streamer.name}">${streamer.title}</a></h2>
-                    <p>${streamer.description}
+                    <h2><a href="/${streamer.name}" class="stream-data-condensed">${streamer.title}</a></h2>
+                    <p class="stream-data-condensed">${streamer.description}
                     <br>
                     <b style="color: green;">${streamer.displayName}</b></p>
                 </div>

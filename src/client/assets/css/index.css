@@ -123,3 +123,12 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.stream-data-condensed {
+    word-wrap: break-word;
+    display: inline-block;
+    max-width: 330px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
