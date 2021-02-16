@@ -54,6 +54,7 @@
                     </span>
                     <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
                     <button id="donate-btn" type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
+                    <a id="report-btn" class="icofont icofont-gavel" href="/report" title="Report" style="font-size: 20px; margin-right: 2.5px; color: gray;"></a>
                 </div>
             </div>
         </div>
@@ -92,6 +93,7 @@
         $(`#vipbadge`).hide();
 
         $(`#follow-btn-form`).attr(`action`, `/follow/${streamer}`)
+        $(`#report-btn`).attr(`href`, `/report/${streamer}`)
         $(`#streamer-error`).hide();
         $(`#streamer-success`).hide();
 
