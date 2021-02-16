@@ -70,8 +70,7 @@
             } else if (res.success) {
                 $(`#report-button`).attr(`disabled`, false);
                 $(`#report-success`).show();
-                $(`#report-success-message`).text(res.errors);
-                window.location.reload();
+                $(`#report-success-message`).text(res.success);
                 return true;
             }
         });

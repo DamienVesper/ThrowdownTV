@@ -58,7 +58,7 @@
             } else if (res.success) {
                 $(`#login-button`).attr(`disabled`, false);
                 $(`#login-success`).show();
-                $(`#login-success-message`).text(res.errors);
+                $(`#login-success-message`).text(res.success);
                 window.location.reload();
                 return true;
             }
