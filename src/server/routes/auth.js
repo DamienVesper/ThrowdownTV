@@ -71,16 +71,11 @@ router.post(`/signup`, async (req, res, next) => {
     });
 
     if (config.mode === `prod`) {
-        try {
-            const { success } = await hcaptcha(
-                process.env.HCAPTCHA_KEY,
-                req.body[`h-captcha-response`]
-            );
-            if (!success) return res.json({ errors: `Invalid Captcha` });
-        } catch (e) {
-            log(`red`, e);
-            return res.json({ errors: `Captcha Error. Try again.` });
-        }
+        const { success } = await hcaptcha(
+            process.env.HCAPTCHA_KEY,
+            req.body[`h-captcha-response`]
+        );
+        if (!success) return res.json({ errors: `Invalid Captcha` });
     }
 
     const user = await User.findOne({ email: req.body[`signup-email`] });
@@ -183,19 +178,14 @@ router.post(`/login`, async (req, res, next) => {
     });
 
     if (config.mode === `prod`) {
-        try {
-            const success = await hcaptcha(
-                process.env.HCAPTCHA_KEY,
-                req.body[`h-captcha-response`]
-            );
-            console.log(success)
-            if (success === false) return res.json({ errors: `Invalid Captcha` });
-        } catch (e) {
-            log(`red`, e);
-            return res.json({ errors: `Captcha Error. Try again.` });
-        }
+        const success = await hcaptcha(
+            process.env.HCAPTCHA_KEY,
+            req.body[`h-captcha-response`]
+        );
+        console.log(success)
+        if (success === false) return res.json({ errors: `Invalid Captcha` });
+        res.json({ success: `Logged in, Redirecting...` });
     }
-    res.json({ success: `Logged in, Redirecting...` });
     passport.authenticate(`login`, (err, user, info) => {
         if (err) {
             log(`red`, err);
