@@ -172,7 +172,6 @@ router.post(`/login`, async (req, res, next) => {
             success: `Logged in`
         });
     }
-    console.log(req.body[`h-captcha-response`]);
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
     }
@@ -188,7 +187,6 @@ router.post(`/login`, async (req, res, next) => {
                 process.env.HCAPTCHA_KEY,
                 req.body[`h-captcha-response`]
             );
-            console.log(success)
             if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
             return res.json({ errors: `Captcha Error. Try again.` });
