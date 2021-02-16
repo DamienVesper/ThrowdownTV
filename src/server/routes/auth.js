@@ -33,7 +33,7 @@ const transport = nodemailer.createTransport({
     }
 });
 
-router.post(`/signup`, (req, res, next) => {
+router.post(`/signup`, async (req, res, next) => {
     if (config.mode === `prod`) {
         if (!req.body.token) return res.status(400).json({ errors: `Please solve the captcha.` });
     }
@@ -72,7 +72,7 @@ router.post(`/signup`, (req, res, next) => {
 
     if (config.mode === `prod`) {
         try {
-            const { success } = verify(
+            const { success } = await verify(
                 process.env.HCAPTCHA_KEY,
                 req.body.token
             );
@@ -82,94 +82,91 @@ router.post(`/signup`, (req, res, next) => {
         }
     }
 
-    User.findOne({
-        email: req.body[`signup-email`]
-    }).then(user => {
-        if (user) {
-            if (!user.verified && ((new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
-            else {
-                return res.json({
-                    errors: `That email is already in use`
-                });
-            }
-        }
-
-        passport.authenticate(`signup`, (err, user, info) => {
-            if (err) return res.json({
-                errors: err
+    const user = await User.findOne({ email: req.body[`signup-email`] });
+    if (user) {
+        if (!user.verified && ((new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
+        else {
+            return res.json({
+                errors: `That email is already in use`
             });
+        }
+    }
 
-            const username = user.username ? user.username : ``;
+    passport.authenticate(`signup`, async (err, user, info) => {
+        if (err) return res.json({
+            errors: err
+        });
 
-            if (info) {
-                User.findOne({
-                    username
-                }).then(user => {
-                    if (!user) return log(`red`, err);
-                    const creationIP = req.header(`x-forwarded-for`) || req.socket.remoteAddress;
+        const username = user.username ? user.username : ``;
 
-                    user.email = req.body[`signup-email`];
-                    user.creationIP = creationIP;
-                    user.lastIP = user.creationIP;
-                    user.verified = false;
+        if (info) {
+            User.findOne({
+                username
+            }).then(user => {
+                if (!user) return log(`red`, err);
+                const creationIP = req.header(`x-forwarded-for`) || req.socket.remoteAddress;
 
-                    user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
+                user.email = req.body[`signup-email`];
+                user.creationIP = creationIP;
+                user.lastIP = user.creationIP;
+                user.verified = false;
 
-                    const mailOptions = {
-                        from: `Throwdown TV <no-reply@throwdown.tv>`,
-                        to: user.email,
-                        subject: `Verify your Throwdown.TV Account`,
-                        text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
-                    };
+                user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
 
-                    if (config.mode === `dev`) {
-                        user.verified = true;
+                const mailOptions = {
+                    from: `Throwdown TV <no-reply@throwdown.tv>`,
+                    to: user.email,
+                    subject: `Verify your Throwdown.TV Account`,
+                    text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
+                };
+
+                if (config.mode === `dev`) {
+                    user.verified = true;
+                    user.save(() => {
+                        log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+                        req.logIn(user, err => {
+                            if (err) return res.json({
+                                errors: err
+                            });
+                            log(`yellow`, `User "${user.username}" successfully logged in.`);
+                            return res.json({
+                                success: `Logged in`
+                            });
+                        });
+                    });
+                } else {
+                    transport.sendMail(mailOptions, err => {
+                        if (err) {
+                            user.delete();
+                            return res.json({
+                                errors: `Error sending a verification email to the specified email address.`
+                            });
+                        }
+
                         user.save(() => {
                             log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
-                            req.logIn(user, err => {
-                                if (err) return res.json({
-                                    errors: err
-                                });
-                                log(`yellow`, `User "${user.username}" successfully logged in.`);
-                                return res.json({
-                                    success: `Logged in`
-                                });
+
+                            if (config.mode === `prod`) return res.json({
+                                success: `Please verify your email`
                             });
-                        });
-                    } else {
-                        transport.sendMail(mailOptions, err => {
-                            if (err) {
-                                user.delete();
-                                return res.json({
-                                    errors: `Error sending a verification email to the specified email address.`
+
+                            else {
+                                req.logIn(user, err => {
+                                    if (err) return res.json({
+                                        errors: err
+                                    });
+                                    log(`yellow`, `User "${user.username}" successfully logged in.`);
                                 });
                             }
-
-                            user.save(() => {
-                                log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
-
-                                if (config.mode === `prod`) return res.json({
-                                    success: `Please verify your email`
-                                });
-
-                                else {
-                                    req.logIn(user, err => {
-                                        if (err) return res.json({
-                                            errors: err
-                                        });
-                                        log(`yellow`, `User "${user.username}" successfully logged in.`);
-                                    });
-                                }
-                            });
                         });
-                    }
-                });
-            }
-        })(req, res, next);
-    });
+                    });
+                }
+            });
+        }
+    })(req, res, next);
 });
 
-router.post(`/login`, (req, res, next) => {
+router.post(`/login`, async (req, res, next) => {
     if (req.isAuthenticated()) {
         return res.json({
             success: `Logged in`
@@ -187,7 +184,7 @@ router.post(`/login`, (req, res, next) => {
 
     if (config.mode === `prod`) {
         try {
-            const { success } = verify(
+            const { success } = await verify(
                 process.env.HCAPTCHA_KEY,
                 req.body.token
             );
