@@ -178,13 +178,13 @@ router.post(`/login`, async (req, res, next) => {
     });
 
     if (config.mode === `prod`) {
-        const { success } = await hcaptcha(
-            process.env.HCAPTCHA_KEY,
-            req.body[`h-captcha-response`]
-        );
-        console.log(success)
-        if (success === false) return res.json({ errors: `Invalid Captcha` });
-        res.json({ success: `Logged in, Redirecting...` });
+        hcaptcha(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
+            .then((data) => {
+                if (!data) return res.json({ errors: `Invalid Captcha` });
+                res.json({ success: `Logged in, Redirecting...` });
+            }).catch(() => {
+                return res.json({ errors: `Invalid Captcha` });
+            });
     }
     passport.authenticate(`login`, (err, user, info) => {
         if (err) {
