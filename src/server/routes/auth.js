@@ -78,6 +78,7 @@ router.post(`/signup`, async (req, res, next) => {
             );
             if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
+            log(`red`, e);
             return res.json({ errors: `Captcha Error. Try again.` });
         }
     }
@@ -190,6 +191,7 @@ router.post(`/login`, async (req, res, next) => {
             console.log(success)
             if (success === false) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
+            log(`red`, e);
             return res.json({ errors: `Captcha Error. Try again.` });
         }
     }
