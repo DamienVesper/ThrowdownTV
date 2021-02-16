@@ -172,7 +172,7 @@ router.post(`/login`, async (req, res, next) => {
             success: `Logged in`
         });
     }
-    console.log(req.body[`h-captcha-response`])
+    console.log(req.body[`h-captcha-response`]);
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
     }
@@ -193,7 +193,7 @@ router.post(`/login`, async (req, res, next) => {
             return res.json({ errors: `Captcha Error. Try again.` });
         }
     }
-    res.json({ success: `Logged in, Redirecting...` })
+    res.json({ success: `Logged in, Redirecting...` });
     passport.authenticate(`login`, (err, user, info) => {
         if (err) {
             log(`red`, err);
