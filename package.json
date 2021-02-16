@@ -44,6 +44,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-nodemon": "^0.4.2",
+    "hcaptcha": "^0.0.2",
     "https": "^1.0.0",
     "mongoose": "^5.11.13",
     "nodemailer": "^6.4.17",

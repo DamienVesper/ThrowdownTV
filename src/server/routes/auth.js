@@ -15,6 +15,9 @@ const passport = require(`passport`);
 const bcrypt = require(`bcryptjs`);
 const crypto = require(`crypto`);
 
+// Captcha
+const { verify } = require(`hcaptcha`);
+
 // Nodemailer.
 const nodemailer = require(`nodemailer`);
 const transport = nodemailer.createTransport({
@@ -31,6 +34,9 @@ const transport = nodemailer.createTransport({
 });
 
 router.post(`/signup`, (req, res, next) => {
+    if (config.mode === `prod`) {
+        if (!req.body.token) return res.status(400).json({ errors: `Please solve the captcha.` });
+    }
     if (!req.body[`signup-username`] || !req.body[`signup-email`] || !req.body[`signup-password`] || !req.body[`signup-password-confirm`] ||
         typeof req.body[`signup-username`] !== `string` || typeof req.body[`signup-email`] !== `string` || typeof req.body[`signup-password`] !== `string` || typeof req.body[`signup-password-confirm`] !== `string`) return res.json({
         errors: `Please fill out all fields`
@@ -63,6 +69,18 @@ router.post(`/signup`, (req, res, next) => {
     if (req.body[`signup-password`] < 7 || req.body[`signup-password`] > 48) return res.json({
         errors: `Password must be between 7 and 48 characters`
     });
+
+    if (config.mode === `prod`) {
+        try {
+            const { success } = verify(
+                process.env.HCAPTCHA_KEY,
+                req.body.token
+            );
+            if (!success) return res.status(400).json({ errors: `Invalid Captcha` });
+        } catch (e) {
+            return res.status(400).json({ errors: `Captcha Error. Try again.` });
+        }
+    }
 
     User.findOne({
         email: req.body[`signup-email`]
@@ -158,10 +176,26 @@ router.post(`/login`, (req, res, next) => {
         });
     }
 
+    if (config.mode === `prod`) {
+        if (!req.body.token) return res.status(400).json({ errors: `Please solve the captcha.` });
+    }
+
     if (!req.body[`login-username`] || !req.body[`login-password`] ||
         typeof req.body[`login-username`] !== `string` || typeof req.body[`login-password`] !== `string`) return res.json({
         errors: `Please fill out all fields`
     });
+
+    if (config.mode === `prod`) {
+        try {
+            const { success } = verify(
+                process.env.HCAPTCHA_KEY,
+                req.body.token
+            );
+            if (!success) return res.status(400).json({ errors: `Invalid Captcha` });
+        } catch (e) {
+            return res.status(400).json({ errors: `Captcha Error. Try again.` });
+        }
+    }
 
     passport.authenticate(`login`, (err, user, info) => {
         if (err) {
