@@ -8,8 +8,6 @@ module.exports = async () => {
     const dbUsers = await User.find();
 
     for (const user of dbUsers) {
-        log(`blue`, `Resetting RTMP Server of ${user.username}...`);
-
         user.settings.rtmpServer = `us01`;
         user.save();
     }
