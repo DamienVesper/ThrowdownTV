@@ -54,7 +54,7 @@
                 $(`#signup-error-message`).text(res.errors);
                 return false;
             } else if (res.success) {
-                $(`#signup-button`).attr(`disabled`, false);
+                $(`#signup-button`).attr(`disabled`, true);
                 $(`#signup-error`).show();
 
                 $(`#signup-error-message`).text(res.success);

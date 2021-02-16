@@ -133,6 +133,7 @@ router.post(`/report/:streamer`, async (req, res) => {
     if (!req.body[`report-comments`]) return res.json({ errors: `Report Description Empty` });
     const streamer = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamer) return res.json({ errors: `Streamer does not exist.` });
+    if (!streamer.live) return res.json({ errors: `Streamer is not live, please contact us on Discord if it is serious.` });
     const channel = client.channels.cache.get(config.discordconfig.reportchannel);
     const embed = new Discord.MessageEmbed()
         .setTitle(`${req.params.streamer.toLowerCase()}`)
