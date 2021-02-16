@@ -172,7 +172,7 @@ router.post(`/login`, async (req, res, next) => {
             success: `Logged in`
         });
     }
-
+    console.log(req.body[`h-captcha-response`])
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
     }
