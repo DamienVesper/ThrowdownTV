@@ -74,12 +74,10 @@ router.post(`/signup`, async (req, res, next) => {
         verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
-                res.json({ success: `Logged in, Redirecting...` });
             }).catch(() => {
                 return res.json({ errors: `Invalid Captcha` });
             });
     }
-
     const user = await User.findOne({ email: req.body[`signup-email`] });
     if (user) {
         if (!user.verified && ((new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
@@ -183,7 +181,6 @@ router.post(`/login`, async (req, res, next) => {
         verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
-                res.json({ success: `Logged in, Redirecting...` });
             }).catch(() => {
                 return res.json({ errors: `Invalid Captcha` });
             });
