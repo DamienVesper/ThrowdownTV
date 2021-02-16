@@ -16,7 +16,7 @@ const bcrypt = require(`bcryptjs`);
 const crypto = require(`crypto`);
 
 // Captcha
-const hcaptcha = require(`hcaptcha`);
+const { hcaptcha } = require(`hcaptcha`);
 
 // Nodemailer.
 const nodemailer = require(`nodemailer`);
