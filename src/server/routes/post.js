@@ -144,7 +144,7 @@ router.post(`/report/:streamer`, async (req, res) => {
         .addField(`Description of Report`, req.body[`report-comments`])
         .setImage(`https://us01.throwdown.tv/thumbnail/${req.params.streamer.toLowerCase()}`);
     await channel.send(embed);
-    res.json({ success: `Your Report was successfully sent` });
+    res.json({ success: `Your Report was successfully sent, redirecting...` });
 });
 
 module.exports = router;
