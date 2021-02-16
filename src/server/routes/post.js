@@ -133,7 +133,7 @@ router.post(`/report/:streamer`, async (req, res) => {
     if (!req.body[`report-comments`]) return res.json({ errors: `Report Description Empty` });
     const streamer = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamer) return res.json({ errors: `Streamer does not exist.` });
-    if (!streamer.live) return res.json({ errors: `Streamer is not live, please contact us on Discord if it is serious.` });
+    // if (!streamer.live) return res.json({ errors: `Streamer is not live, please contact us on Discord if it is serious.` });
     const channel = client.channels.cache.get(config.discordconfig.reportchannel);
     const embed = new Discord.MessageEmbed()
         .setTitle(`${req.params.streamer.toLowerCase()}`)
@@ -142,6 +142,11 @@ router.post(`/report/:streamer`, async (req, res) => {
         .setAuthor(`USER REPORT`, client.user.displayAvatarURL())
         .setDescription(`TOS Category: ${req.body[`tos-category`]}`)
         .addField(`Description of Report`, req.body[`report-comments`])
+        .addFields(
+            { name: `Stream Title`, value: streamer.settings.title },
+            { name: `Stream Description`, value: streamer.settings.description },
+            { name: `Donation Link`, value: streamer.settings.donationLink }
+        )
         .setImage(`https://us01.throwdown.tv/thumbnail/${req.params.streamer.toLowerCase()}`);
     await channel.send(embed);
     res.json({ success: `Your Report was successfully sent, redirecting...` });
