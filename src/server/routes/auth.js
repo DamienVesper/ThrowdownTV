@@ -188,6 +188,7 @@ router.post(`/login`, async (req, res, next) => {
                 process.env.HCAPTCHA_KEY,
                 req.body[`h-captcha-response`]
             );
+            console.log(success)
             if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
             return res.json({ errors: `Captcha Error. Try again.` });
