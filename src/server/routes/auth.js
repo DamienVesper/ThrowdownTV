@@ -16,7 +16,7 @@ const bcrypt = require(`bcryptjs`);
 const crypto = require(`crypto`);
 
 // Captcha
-const { hcaptcha } = require(`hcaptcha`);
+const { verify } = require(`hcaptcha`);
 
 // Nodemailer.
 const nodemailer = require(`nodemailer`);
@@ -71,11 +71,13 @@ router.post(`/signup`, async (req, res, next) => {
     });
 
     if (config.mode === `prod`) {
-        const { success } = await hcaptcha(
-            process.env.HCAPTCHA_KEY,
-            req.body[`h-captcha-response`]
-        );
-        if (!success) return res.json({ errors: `Invalid Captcha` });
+        verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
+            .then((data) => {
+                if (!data) return res.json({ errors: `Invalid Captcha` });
+                res.json({ success: `Logged in, Redirecting...` });
+            }).catch(() => {
+                return res.json({ errors: `Invalid Captcha` });
+            });
     }
 
     const user = await User.findOne({ email: req.body[`signup-email`] });
@@ -178,7 +180,7 @@ router.post(`/login`, async (req, res, next) => {
     });
 
     if (config.mode === `prod`) {
-        hcaptcha(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
+        verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
                 res.json({ success: `Logged in, Redirecting...` });
