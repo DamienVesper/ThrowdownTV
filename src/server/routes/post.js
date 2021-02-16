@@ -20,7 +20,7 @@ router.post(`/dashboard`, async (req, res) => {
     const user = await User.findOne({ username: req.user.username });
     let globalStickerStatus = true;
 
-    user.settings.title = req.body[`stream-title`].substr(0, 80);
+    user.settings.title = req.body[`stream-title`].substr(0, 74);
     user.settings.description = req.body[`stream-description`].substr(0, 1000);
     user.settings.donationLink = req.body[`donation-link`].substr(0, 128);
 
