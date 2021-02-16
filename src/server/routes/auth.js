@@ -178,7 +178,7 @@ router.post(`/login`, async (req, res, next) => {
     });
 
     if (config.mode === `prod`) {
-        const success = await hcaptcha(
+        const { success } = await hcaptcha(
             process.env.HCAPTCHA_KEY,
             req.body[`h-captcha-response`]
         );
