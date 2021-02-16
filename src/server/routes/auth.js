@@ -35,7 +35,7 @@ const transport = nodemailer.createTransport({
 
 router.post(`/signup`, async (req, res, next) => {
     if (config.mode === `prod`) {
-        if (!req.body.token) return res.status(400).json({ errors: `Please solve the captcha.` });
+        if (!req.body.token) return res.json({ errors: `Please solve the captcha.` });
     }
     if (!req.body[`signup-username`] || !req.body[`signup-email`] || !req.body[`signup-password`] || !req.body[`signup-password-confirm`] ||
         typeof req.body[`signup-username`] !== `string` || typeof req.body[`signup-email`] !== `string` || typeof req.body[`signup-password`] !== `string` || typeof req.body[`signup-password-confirm`] !== `string`) return res.json({
@@ -76,9 +76,9 @@ router.post(`/signup`, async (req, res, next) => {
                 process.env.HCAPTCHA_KEY,
                 req.body.token
             );
-            if (!success) return res.status(400).json({ errors: `Invalid Captcha` });
+            if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
-            return res.status(400).json({ errors: `Captcha Error. Try again.` });
+            return res.json({ errors: `Captcha Error. Try again.` });
         }
     }
 
@@ -174,7 +174,7 @@ router.post(`/login`, async (req, res, next) => {
     }
 
     if (config.mode === `prod`) {
-        if (!req.body.token) return res.status(400).json({ errors: `Please solve the captcha.` });
+        if (!req.body.token) return res.json({ errors: `Please solve the captcha.` });
     }
 
     if (!req.body[`login-username`] || !req.body[`login-password`] ||
@@ -188,9 +188,9 @@ router.post(`/login`, async (req, res, next) => {
                 process.env.HCAPTCHA_KEY,
                 req.body.token
             );
-            if (!success) return res.status(400).json({ errors: `Invalid Captcha` });
+            if (!success) return res.json({ errors: `Invalid Captcha` });
         } catch (e) {
-            return res.status(400).json({ errors: `Captcha Error. Try again.` });
+            return res.json({ errors: `Captcha Error. Try again.` });
         }
     }
 
