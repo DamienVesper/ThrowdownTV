@@ -85,9 +85,9 @@ router.post(`/send-notifications`, async (req, res) => {
             subject: `${streamerData.displayName} went Live!`,
             text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`,
             html: `
-                <style>
-                    background-color: #b1cbe6; display: flex; flex-direction: row;
-                </style>
+                <head>
+                    <style>background-color: #b1cbe6; display: flex; flex-direction: row;</style>
+                </head>
                 <img src="https://${streamerData.rtmpServer}.throwdown.tv/thumbnail/${streamerData.username}" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
                 <div style="margin-left: 25px;">
                     <h2><a href="/${streamerData.username}" class="stream-data-condensed">${streamerData.settings.title}</a></h2>
