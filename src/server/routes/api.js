@@ -83,7 +83,19 @@ router.post(`/send-notifications`, async (req, res) => {
             from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
             to: followerAccount.email,
             subject: `${streamerData.displayName} went Live!`,
-            text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
+            text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`,
+            html: `
+                <style>
+                    background-color: #b1cbe6; display: flex; flex-direction: row;
+                </style>
+                <img src="https://${streamer.rtmpServer}.throwdown.tv/thumbnail/${streamer.name}" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
+                <div style="margin-left: 25px;">
+                    <h2><a href="/${streamer.name}" class="stream-data-condensed">${streamer.title}</a></h2>
+                    <p class="stream-data-condensed">${streamer.description}
+                    <br>
+                    <b style="color: green;">${streamer.displayName}</b></p>
+                </div>
+            `
         };
         transport.sendMail(mailOptions, err => {
             if (err) {
