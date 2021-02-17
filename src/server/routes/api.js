@@ -8,6 +8,21 @@ const User = require(`../models/user.model.js`);
 const Sticker = require(`../models/sticker.model.js`);
 const log = require(`../utils/log.js`);
 
+// Nodemailer.
+const nodemailer = require(`nodemailer`);
+const transport = nodemailer.createTransport({
+    host: `localhost`,
+    port: 25,
+    secure: false,
+    auth: {
+        user: process.env.NOTIFICATION_SMTP_USERNAME,
+        password: process.env.SMTP_TOKEN
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
+
 // Load emotes.
 const emotes = [];
 fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err, files) => {
@@ -53,6 +68,29 @@ router.post(`/stream-status/:streamkey/:status/:apikey`, async (req, res) => {
         if (err) return res.json({ errors: `Invalid user data` });
         return res.json({ success: `Succesfully updated stream status.` });
     });
+});
+
+router.post(`/send-notifications`, async (req, res) => {
+    const streamer = req.body.streamer;
+    const apiKey = req.body.apiKey;
+    if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.json({ errors: `Invalid API Key` });
+    const streamerData = await User.findOne({ username: streamer });
+    if (!streamerData) return res.json({ errors: `Invalid User` });
+    for (const follower of streamerData.followers) {
+        const followerAccount = await User.findOne({ username: follower });
+        const mailOptions = {
+            from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
+            to: followerAccount.email,
+            subject: `${streamerData.displayName} went Live!`,
+            text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
+        };
+        transport.sendMail(mailOptions, err => {
+            if (err) {
+                log(`red`, err);
+            }
+        });
+    }
+    res.json({ errors: `Sent out notification emails for Streamer: ${streamerData.username}` });
 });
 
 router.get(`/get-stickers`, async (req, res) => {
