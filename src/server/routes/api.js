@@ -88,12 +88,12 @@ router.post(`/send-notifications`, async (req, res) => {
                 <style>
                     background-color: #b1cbe6; display: flex; flex-direction: row;
                 </style>
-                <img src="https://${streamer.rtmpServer}.throwdown.tv/thumbnail/${streamer.name}" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
+                <img src="https://${streamerData.rtmpServer}.throwdown.tv/thumbnail/${streamerData.username}" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;">
                 <div style="margin-left: 25px;">
-                    <h2><a href="/${streamer.name}" class="stream-data-condensed">${streamer.title}</a></h2>
-                    <p class="stream-data-condensed">${streamer.description}
+                    <h2><a href="/${streamerData.username}" class="stream-data-condensed">${streamerData.settings.title}</a></h2>
+                    <p class="stream-data-condensed">${streamerData.settings.description}
                     <br>
-                    <b style="color: green;">${streamer.displayName}</b></p>
+                    <b style="color: green;">${streamerData.displayName}</b></p>
                 </div>
             `
         };
