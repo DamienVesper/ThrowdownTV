@@ -45,7 +45,7 @@
     width: 100px;
     height: 100px;
     height: 100%;
-    display: inline;
+    display: block;
     overflow: hidden;
     border-radius:50%;
 }
@@ -55,7 +55,7 @@
 }
 
 .description-box {
-    margin-top: 40px;
+    margin-top: 35px;
     color: white;
     position: absolute;
     white-space: pre-wrap;
