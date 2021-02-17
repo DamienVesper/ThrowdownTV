@@ -5,6 +5,7 @@ const fs = require(`fs`);
 const path = require(`path`);
 
 const User = require(`../models/user.model.js`);
+const config = require(`../../../config/config.js`);
 const Sticker = require(`../models/sticker.model.js`);
 const log = require(`../utils/log.js`);
 
