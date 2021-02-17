@@ -7,7 +7,6 @@ const { verify } = require(`hcaptcha`);
 
 // Discord
 const Discord = require(`discord.js`);
-const axios = require(`axios`);
 const client = new Discord.Client();
 client.login(process.env.DISCORD_BOT_TOKEN);
 
@@ -136,7 +135,6 @@ router.post(`/report/:streamer`, async (req, res) => {
     if (!streamer) return res.json({ errors: `Streamer does not exist.` });
     // if (!streamer.live) return res.json({ errors: `Streamer is not live, please contact us on Discord if it is serious.` });
     const channel = client.channels.cache.get(config.discordconfig.reportchannel);
-    await axios.get(`https://${streamer.settings.rtmpServer}.throwdown.tv/snapshot/${req.params.streamer.toLowerCase()}`);
     const embed = new Discord.MessageEmbed()
         .setTitle(`${req.params.streamer.toLowerCase()}`)
         .setColor(`#0099ff`)
@@ -149,11 +147,9 @@ router.post(`/report/:streamer`, async (req, res) => {
             { name: `Stream Description`, value: streamer.settings.description },
             { name: `Donation Link`, value: streamer.settings.donationLink }
         )
-        .setImage(`https://${streamer.settings.rtmpServer}.throwdown.tv/snapshot/${req.params.streamer.toLowerCase()}`)
+        .setImage(`https://${streamer.settings.rtmpServer}.throwdown.tv/thumbnail/${req.params.streamer.toLowerCase()}`)
         .setFooter(`Reported by: ${req.user.username}`);
-    setTimeout(() => {
-        channel.send(embed);
-    }, 1000);
+    await channel.send(embed);
     res.json({ success: `Your Report was successfully sent, redirecting...` });
 });
 
