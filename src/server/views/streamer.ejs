@@ -9,12 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/videojs-flvjs@0.2.0/dist/videojs-flvjs.min.js"></script>
 <script src="/assets/js/videojs/videojs-resolution-switcher.js"></script>
 
-<style>
-    .video-js .vjs-big-play-button {
-        display: none;
-    }
-</style>
-
 <div id="streamer-error" class="alert alert-danger alert-dismissible fade show" role="alert">
     <span id="streamer-error-message"></span>
 </div>
@@ -32,7 +26,9 @@
             </p>
         </video>
         <div class="info-box">
-            <img src="/assets/img/defaultpfp.png" id="avatar" class="rounded-circle profile-picture mr-3" alt="Avatar">
+            <div class="crop">
+                <img src="/assets/img/defaultpfp.png" id="avatar" class="rounded-circle profile-picture" alt="Avatar">
+            </div>
             <div class="streamer-content">
                 <span id="stream-title" class="lead mb-3"></span>
                 <br>

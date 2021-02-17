@@ -37,11 +37,21 @@
 }
 
 .profile-picture {
-    object-fit: cover;
-    display: inline;
+    width: 90px;
+    height: 90px;
+}
+
+.crop {
+    width: 100px;
+    height: 100px;
     height: 100%;
-    width: 7.5%;
-    height: 7.5%;
+    display: inline;
+    overflow: hidden;
+    border-radius:50%;
+}
+
+.video-js .vjs-big-play-button {
+    display: none;
 }
 
 .description-box {
