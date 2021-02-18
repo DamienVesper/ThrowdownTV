@@ -86,7 +86,7 @@ router.post(`/vip/subscribe`, async (req, res) => {
             }
         ]
     }, async (err, subscription) => {
-        if (err) return res.json({ errors: `An Error Occoured in creating subscription...` });
+        if (err) return res.json({ errors: `An Error Occoured in creating subscription...`, message: err });
         user.subscription.subscriptionId = subscription.id;
         user.subscription.customerId = customer.id;
         user.perms.vip = true;
