@@ -82,7 +82,7 @@ router.post(`/vip/subscribe`, async (req, res) => {
         customer: customer.id,
         items: [
             {
-                price: `price_1IM9lXKPLdW4fjoHSy9ukyFz`
+                price: `price_1IMD5aKPLdW4fjoH533XF58a`
             }
         ]
     }, async (err, subscription) => {
