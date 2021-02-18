@@ -76,7 +76,7 @@ router.get(`/vip/success`, async (req, res) => {
     res.send(`Success`);
 });
 
-router.get(`/vip/error`, async (req, res) => {
+router.get(`/vip/cancel`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     console.log(req.query);
     res.send(`Error`);
