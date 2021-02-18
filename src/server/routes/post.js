@@ -4,6 +4,7 @@ const { randomString } = require(`../utils/random.js`);
 const User = require(`../models/user.model.js`);
 const config = require(`../../../config/config.js`);
 const { verify } = require(`hcaptcha`);
+const stripe = require(`stripe`)(process.env.STRIPE_LIVE_KEY);
 
 // Discord
 const Discord = require(`discord.js`);
@@ -32,6 +33,61 @@ router.post(`/dashboard`, async (req, res) => {
     user.save(err => {
         if (err) return res.json({ errors: `Invalid user data` });
         return res.json({ success: `Succesfully updated stream data.` });
+    });
+});
+
+// Post for VIP Unsubscription
+router.post(`/vip/unsubscribe`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const user = await User.findOne({ username: req.user.username });
+    await stripe.subscriptions.update(
+        user.subscription.subscriptionId,
+        { cancel_at_period_end: true }
+    );
+    user.subscription.subscriptionId = ``;
+    user.perms.vip = false;
+    user.save(err => {
+        if (err) return res.json({ errors: `Invalid user data` });
+        return res.redirect(`/vip`);
+    });
+});
+
+// Post for VIP Subscription
+router.post(`/vip/subscribe`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const customer = await stripe.customers.create({
+        email: req.user.email,
+        name: req.user.username,
+        source: req.body.stripeToken,
+        address: {
+            city: `Chennai`,
+            country: `India`,
+            line1: `1/25 Thomas Nagar, Little Mount, Saidapet`,
+            line2: null,
+            postal_code: `600015`,
+            state: `Tamil Nadu`
+
+        }
+    });
+    stripe.subscriptions.create({
+        customer: customer.id,
+        items: [
+            {
+                price: `price_1IM9lXKPLdW4fjoHSy9ukyFz`
+            }
+        ]
+    }, async (err, subscription) => {
+        if (err) return res.json({ errors: `An Error Occoured in creating subscription...` });
+        const user = await User.findOne({ username: req.user.username });
+        user.subscription.subscriptionId = subscription.id;
+        user.subscription.customerId = customer.id;
+        user.perms.vip = true;
+        user.save(err => {
+            if (err) return res.json({ errors: `Invalid user data` });
+            return res.redirect(`/vip`);
+        });
     });
 });
 

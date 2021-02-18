@@ -129,6 +129,18 @@ const userSchema = Mongoose.Schema({
             required: false
         }
     },
+    subscription: {
+        subscriptionId: {
+            type: String,
+            default: ``,
+            required: false
+        },
+        customerId: {
+            type: String,
+            default: ``,
+            required: false
+        }
+    },
     viewers: {
         type: Array,
         default: [],

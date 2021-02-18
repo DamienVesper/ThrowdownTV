@@ -1,5 +1,12 @@
 <%- include('./partials/header'); %>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+    .center{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+</style>
 <br>
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
@@ -13,8 +20,21 @@
                 <p>More perks coming soon...</p>
             </div>
             <br>
-            <a id="subscribe-button" href="https://www.patreon.com/ThrowdownTV"
-                class="btn btn-primary btn-block">Subscribe</a>
+            <div class="center">
+                <form id="subscribe-form" action="/vip/subscribe" method="post">
+                    <script src="https://checkout.stripe.com/checkout.js" id="subscribe" class="stripe-button" style="text-align: center; width: 100%;"
+                        data-key="pk_live_51IM9GbKPLdW4fjoHTHo3MKGM3C06U0tu7QA1a3QJk6EzNoJEcB5q26p8PiYYQsvM1295PMeQ8Pc57ZQOEQwBI9Md00b9wqLMtW"
+                        data-amount="1000"
+                        data-name="ThrowdownTV VIP Membership"
+                        data-description="Monthly VIP Membership"
+                        data-image="/assets/img/throwdown.png"
+                        data-currency="usd">
+                    </script>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    $(`#subscribe`).html(`Subscribe (10$ Monthly)`)
+</script>
