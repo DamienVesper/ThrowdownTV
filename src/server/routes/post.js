@@ -41,6 +41,9 @@ router.post(`/vip/unsubscribe`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: req.user.username });
+
+    if (!user.perms.vip) return res.json({ errors: `You are not VIP` });
+
     await stripe.subscriptions.update(
         user.subscription.subscriptionId,
         { cancel_at_period_end: true }
@@ -56,6 +59,10 @@ router.post(`/vip/unsubscribe`, async (req, res) => {
 // Post for VIP Subscription
 router.post(`/vip/subscribe`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const user = await User.findOne({ username: req.user.username });
+
+    if (user.perms.vip) return res.json({ errors: `You are already VIP` });
 
     const customer = await stripe.customers.create({
         email: req.user.email,
@@ -80,7 +87,6 @@ router.post(`/vip/subscribe`, async (req, res) => {
         ]
     }, async (err, subscription) => {
         if (err) return res.json({ errors: `An Error Occoured in creating subscription...` });
-        const user = await User.findOne({ username: req.user.username });
         user.subscription.subscriptionId = subscription.id;
         user.subscription.customerId = customer.id;
         user.perms.vip = true;
