@@ -130,12 +130,17 @@ const userSchema = Mongoose.Schema({
         }
     },
     subscription: {
-        subscriptionId: {
+        paymentId: {
             type: String,
             default: ``,
             required: false
         },
-        customerId: {
+        paymentToken: {
+            type: String,
+            default: ``,
+            required: false
+        },
+        payerId: {
             type: String,
             default: ``,
             required: false

@@ -46,14 +46,15 @@
     "grunt-nodemon": "^0.4.2",
     "hcaptcha": "^0.0.2",
     "https": "^1.0.0",
+    "moment": "^2.29.1",
     "mongoose": "^5.11.13",
     "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "paypal-rest-sdk": "^1.8.1",
     "request": "^2.88.2",
     "socket.io": "^3.1.0",
-    "stripe": "^8.137.0",
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {

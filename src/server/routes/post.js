@@ -4,12 +4,26 @@ const { randomString } = require(`../utils/random.js`);
 const User = require(`../models/user.model.js`);
 const config = require(`../../../config/config.js`);
 const { verify } = require(`hcaptcha`);
-const stripe = require(`stripe`)(process.env.STRIPE_LIVE_KEY);
+const paypal = require(`paypal-rest-sdk`);
+const log = require(`../utils/log.js`);
+const Moment = require(`moment`);
 
 // Discord
 const Discord = require(`discord.js`);
 const client = new Discord.Client();
 client.login(process.env.DISCORD_BOT_TOKEN);
+
+const isoDate = new Date();
+isoDate.setSeconds(isoDate.getSeconds() + 4);
+// eslint-disable-next-line no-unused-expressions
+`${isoDate.toISOString().slice(0, 19)}Z`;
+
+// Paypal config
+paypal.configure({
+    mode: process.env.PAYPAL_ENV_SANDBOX,
+    client_id: process.env.PAYPAL_SANDBOX_CLIENT_ID,
+    client_secret: process.env.PAYPAL_SANDBOX_CLIENT_SECRET
+});
 
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
@@ -43,17 +57,6 @@ router.post(`/vip/unsubscribe`, async (req, res) => {
     const user = await User.findOne({ username: req.user.username });
 
     if (!user.perms.vip) return res.json({ errors: `You are not VIP` });
-
-    await stripe.subscriptions.update(
-        user.subscription.subscriptionId,
-        { cancel_at_period_end: true }
-    );
-    user.subscription.subscriptionId = ``;
-    user.perms.vip = false;
-    user.save(err => {
-        if (err) return res.json({ errors: `Invalid user data` });
-        return res.redirect(`/vip`);
-    });
 });
 
 // Post for VIP Subscription
@@ -61,39 +64,90 @@ router.post(`/vip/subscribe`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: req.user.username });
-
     if (user.perms.vip) return res.json({ errors: `You are already VIP` });
 
-    const customer = await stripe.customers.create({
-        email: req.user.email,
-        name: req.user.username,
-        source: req.body.stripeToken,
-        address: {
-            city: `Chennai`,
-            country: `India`,
-            line1: `1/25 Thomas Nagar, Little Mount, Saidapet`,
-            line2: null,
-            postal_code: `600015`,
-            state: `Tamil Nadu`
+    const startDate = `${Moment(new Date()).add(10, `minute`).format(`gggg-MM-DDTHH:mm:ss`)}Z`;
 
-        }
-    });
-    stripe.subscriptions.create({
-        customer: customer.id,
-        items: [
+    const billingPlanAttributes = {
+        description: `Create Plan for Regular`,
+        merchant_preferences: {
+            auto_bill_amount: `yes`,
+            cancel_url: `http://localhost:8080/vip/cancel`,
+            initial_fail_amount_action: `continue`,
+            max_fail_attempts: `1`,
+            return_url: `http://localhost:8080/vip/success`
+        },
+        name: `ThrowdownTV VIP Membership`,
+        payment_definitions: [
             {
-                price: `price_1IMD5aKPLdW4fjoH533XF58a`
+                amount: {
+                    currency: `USD`,
+                    value: `10`
+                },
+                cycles: `0`,
+                frequency: `MONTH`,
+                frequency_interval: `1`,
+                name: `Monthly Payment`,
+                type: `REGULAR`
             }
-        ]
-    }, async (err, subscription) => {
-        if (err) return res.json({ errors: `An Error Occoured in creating subscription...`, message: err });
-        user.subscription.subscriptionId = subscription.id;
-        user.subscription.customerId = customer.id;
-        user.perms.vip = true;
-        user.save(err => {
-            if (err) return res.json({ errors: `Invalid user data` });
-            return res.redirect(`/vip`);
-        });
+        ],
+        type: `INFINITE`
+    };
+
+    const billingPlanUpdateAttributes = [
+        {
+            op: `replace`,
+            path: `/`,
+            value: {
+                state: `ACTIVE`
+            }
+        }
+    ];
+
+    const billingAgreementAttributes = {
+        name: `Name of Payment Agreement`,
+        description: `Description of  your payment  agreement`,
+        start_date: startDate,
+        plan: {
+            id: ``
+        },
+        payer: {
+            payment_method: `paypal`
+        }
+    };
+
+    paypal.billingPlan.create(billingPlanAttributes, (error, billingPlan) => {
+        log(`cyan`, `Creating Billing Plan...`);
+        if (error) {
+            log(`red`, error);
+            res.json({ errors: error });
+        } else {
+            log(`green`, `Create Billing Plan Response`);
+            paypal.billingPlan.update(billingPlan.id, billingPlanUpdateAttributes, (error, response) => {
+                if (error) {
+                    log(`red`, error);
+                    res.json({ errors: error });
+                } else {
+                    billingAgreementAttributes.plan.id = billingPlan.id;
+                    paypal.billingAgreement.create(billingAgreementAttributes, (error, billingAgreement) => {
+                        if (error) {
+                            log(`red`, error);
+                            res.json({ errors: error });
+                        } else {
+                            billingAgreement.links.forEach(agreement => {
+                                if (agreement.rel === `approval_url`) {
+                                    // Redirecting to paypal portal with approvalUrl.
+                                    const approvalUrl = agreement.href;
+                                    const token = approvalUrl.split(`token=`)[1];
+                                    console.log(approvalUrl, token);
+                                    res.redirect(approvalUrl);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 });
 

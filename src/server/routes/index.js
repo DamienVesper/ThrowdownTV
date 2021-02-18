@@ -70,6 +70,18 @@ router.get(`/vip`, async (req, res) => {
     else return res.render(`alreadyVIP.ejs`);
 });
 
+router.get(`/vip/success`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    console.log(req.query);
+    res.send(`Success`);
+});
+
+router.get(`/vip/error`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    console.log(req.query);
+    res.send(`Error`);
+});
+
 router.get(`/report/:streamer`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const streamer = await User.findOne({ username: req.params.streamer.toLowerCase() });
