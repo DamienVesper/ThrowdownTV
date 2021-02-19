@@ -23,6 +23,10 @@
     font-weight: bold;
     color: white;
     white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 
 #stream-display-name {
@@ -54,13 +58,6 @@
     display: none;
 }
 
-.description-box {
-    margin-top: 35px;
-    color: white;
-    position: absolute;
-    white-space: pre-wrap;
-}
-
 .viewers, .followers {
     font-size: 1rem;
     margin-right: 20px;
@@ -86,12 +83,27 @@
 .status-offline {
     color: red;
 }
-
+.description-box {
+    display: none;
+}
 .status-online {
     color: lime
 }
 
 @media only screen and (min-width: 600px) {
+
+    .description-box {
+        margin-top: 35px;
+        color: white;
+        display: block;
+        position: absolute;
+        white-space: pre-wrap;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
+    
+    }
 
     .chat-popout,
     .stream-popout {
@@ -108,15 +120,5 @@
     .stream-popout {
         left: 0.5rem;
         width: 68.5%;
-    }
-
-    
-    .description-box {
-        word-wrap: break-word;
-        display: inline-block;
-        max-width: 330px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 }
