@@ -132,7 +132,8 @@ router.get(`/streams`, async (req, res) => {
             displayName: streamer.displayName,
             title: streamer.settings.title,
             description: streamer.settings.description,
-            rtmpServer: streamer.settings.rtmpServer
+            rtmpServer: streamer.settings.rtmpServer,
+            isLive: streamer.live
         });
     }
 
