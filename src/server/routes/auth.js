@@ -284,7 +284,7 @@ router.post(`/changepassword/:token`, async (req, res) => {
 });
 
 router.get(`/recoveraccount`, (req, res) => {
-    res.render(`accountrecovery.ejs`);
+    res.render(`accountRecovery.ejs`);
 });
 
 router.post(`/recoveraccount`, async (req, res) => {

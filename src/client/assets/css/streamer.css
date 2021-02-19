@@ -109,4 +109,14 @@
         left: 0.5rem;
         width: 68.5%;
     }
+
+    
+    .description-box {
+        word-wrap: break-word;
+        display: inline-block;
+        max-width: 330px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
