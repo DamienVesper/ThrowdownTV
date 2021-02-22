@@ -128,6 +128,11 @@ const userSchema = Mongoose.Schema({
             default: true,
             required: false
         },
+        lockdown: {
+            type: Boolean,
+            default: false,
+            required: false
+        },
         notifications: {
             type: Boolean,
             default: true,

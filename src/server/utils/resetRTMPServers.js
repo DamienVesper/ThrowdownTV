@@ -10,6 +10,7 @@ module.exports = async () => {
     for (const user of dbUsers) {
         user.settings.rtmpServer = `us01`;
         user.settings.notifications = true;
+        user.settings.lockdown = false;
         user.save();
     }
 };
