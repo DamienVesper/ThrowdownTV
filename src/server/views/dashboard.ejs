@@ -89,6 +89,18 @@
                         class="btn btn-primary btn-block">
                 </div>
             </form>
+            <br>
+            <h3 class="text-center">General Settings</h3>
+            <form action="/accountoptions/generaloptions" method="post" id="account-generaloptions-form">
+                <label class="switch">
+                    <input type="checkbox" id="allow-notifications" name="allow-notifications" value="true">
+                    <span class="slider round"></span>
+                </label>
+                <label for="allow-notifications">Email Notifications</label>
+                <input type="submit" for="account-generaloptions-form" id="account-generaloptions-update" value="Update General Settings"
+                    class="btn btn-primary btn-block">
+            </form>
+            <br>
             <form action="/accountoptions/updatepfp" method="post" id="account-pfp-form">
                 <div class="form-group">
                     <label for="profilepicture">Profile Avatar URL <span style="font-style: italic;">(Example: https://domain.com/image.png|.jpg|.gif)</span></label>
@@ -147,6 +159,11 @@
                 $(`#current-account-status`).css(`color`, `grey`);
                 $(`#sticker-info`).html(`You are not a VIP Member, <a href="/vip">Subscribe</a> now to get 5 Sticker Slots`);
             }
+            if (data.notifications) {
+                $(`#allow-notifications`).attr(`checked`, true)
+            } else {
+                $(`#allow-notifications`).attr(`checked`, false)
+            }
             if (data.allowGlobalEmotes) {
                 $(`#allow-global-emotes`).attr(`checked`, true)
             } else {
@@ -199,6 +216,15 @@
         }).then(() => window.location.reload());
     });
 
+    $(`#account-generaloptions-update`).on(`click`, e => {
+        e.preventDefault();
+
+        $.ajax({
+            type: `post`,
+            url: `/accountoptions/generaloptions`,
+            data: $(`#account-generaloptions-form`).serialize()
+        }).then(() => window.location.reload());
+    });
 
     $(`#reset-streamkey`).on(`click`, e => {
         e.preventDefault();

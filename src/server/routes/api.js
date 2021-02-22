@@ -79,17 +79,19 @@ router.post(`/send-notifications`, async (req, res) => {
     if (!streamerData) return res.json({ errors: `Invalid User` });
     for (const follower of streamerData.followers) {
         const followerAccount = await User.findOne({ username: follower });
-        const mailOptions = {
-            from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
-            to: followerAccount.email,
-            subject: `${streamerData.displayName} went Live!`,
-            text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
-        };
-        transport.sendMail(mailOptions, err => {
-            if (err) {
-                log(`red`, err);
-            }
-        });
+        if (follower.settings.notifications) {
+            const mailOptions = {
+                from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
+                to: followerAccount.email,
+                subject: `${streamerData.displayName} went Live!`,
+                text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
+            };
+            transport.sendMail(mailOptions, err => {
+                if (err) {
+                    log(`red`, err);
+                }
+            });
+        }
     }
     res.json({ errors: `Sent out notification emails for Streamer: ${streamerData.username}` });
 });
@@ -190,7 +192,8 @@ router.get(`/stream-data`, async (req, res) => {
         avatarURL: streamerData.avatarURL,
         isVip: streamerData.perms.vip,
         isStaff: streamerData.perms.staff,
-        allowGlobalEmotes: streamerData.settings.useGlobalStickers
+        allowGlobalEmotes: streamerData.settings.useGlobalStickers,
+        notifications: streamerData.settings.notifications
     };
 
     res.jsonp(data);

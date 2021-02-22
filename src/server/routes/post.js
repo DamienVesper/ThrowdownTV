@@ -52,6 +52,25 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
     });
 });
 
+// Update General Options
+router.post(`/accountoptions/generaloptions`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    let notifications = true;
+
+    const user = await User.findOne({ username: req.user.username });
+
+    if (req.body[`allow-notifications`]) notifications = true;
+    else notifications = false;
+
+    user.settings.notifications = notifications;
+
+    user.save(err => {
+        if (err) return res.json({ errors: `Invalid account data` });
+        return res.json({ success: `Succesfully updated general settings.` });
+    });
+});
+
 // Update Avatar
 router.post(`/accountoptions/updatepfp`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
