@@ -127,6 +127,11 @@ const userSchema = Mongoose.Schema({
             type: Boolean,
             default: true,
             required: false
+        },
+        notifications: {
+            type: Boolean,
+            default: true,
+            required: false
         }
     },
     subscription: {
