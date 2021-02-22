@@ -115,6 +115,9 @@ io.on(`connection`, async socket => {
             // Check if user is banned
             if (streamer.channel.bans.includes(chatter.username) || streamer.channel.timeouts.includes(chatter.username)) return chatter.emit(`commandMessage`, `You have been banned from talking in this chat.`);
 
+            // Check if channel is on lockdown
+            if (streamer.settings.lockdown === true && !streamer.channel.moderators.includes(chatter.username) && chatter.username !== streamerUsername) return chatter.emit(`commandMessage`, `Chat is currently under lockdown.`);
+
             // If the message is a command, then forward it to the command handler.
             if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
 
