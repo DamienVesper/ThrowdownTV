@@ -113,7 +113,7 @@ io.on(`connection`, async socket => {
             if (user.isSuspended) return;
 
             // Check if user is banned
-            if (streamer.channel.bans.includes(chatter.username) || streamer.channel.timeouts.includes(chatter.username)) return;
+            if (streamer.channel.bans.includes(chatter.username) || streamer.channel.timeouts.includes(chatter.username)) return chatter.emit(`commandMessage`, `You have been banned from talking in this chat.`);
 
             // If the message is a command, then forward it to the command handler.
             if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);

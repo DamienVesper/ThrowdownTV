@@ -93,7 +93,7 @@ router.post(`/send-notifications`, async (req, res) => {
             });
         }
     }
-    res.json({ errors: `Sent out notification emails for Streamer: ${streamerData.username}` });
+    res.json({ success: `Sent out notification emails for Streamer: ${streamerData.username}` });
 });
 
 router.get(`/get-stickers`, async (req, res) => {
