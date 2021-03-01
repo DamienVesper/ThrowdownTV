@@ -32,6 +32,7 @@ const session = require(`express-session`);
 const bodyParser = require(`body-parser`);
 const compression = require(`compression`);
 const ejsLayouts = require(`express-ejs-layouts`);
+const useragent = require(`express-useragent`);
 
 // Passport.
 const passport = require(`./passport.js`);
@@ -81,6 +82,7 @@ app.use(passport.session());
 // Express middleware.
 app.use(compression());
 app.use(ejsLayouts);
+app.use(useragent.express());
 
 app.use(bodyParser.json({
     limit: `50mb`

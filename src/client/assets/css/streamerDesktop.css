@@ -83,28 +83,25 @@
 .status-offline {
     color: red;
 }
+
 .description-box {
-    display: none;
+    margin-top: 35px;
+    color: white;
+    display: block;
+    position: absolute;
+    white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+
 }
+
 .status-online {
     color: lime
 }
 
 @media only screen and (min-width: 600px) {
-
-    .description-box {
-        margin-top: 35px;
-        color: white;
-        display: block;
-        position: absolute;
-        white-space: pre-wrap;
-        word-break: break-word;
-        -webkit-hyphens: auto;
-        -moz-hyphens: auto;
-        hyphens: auto;
-    
-    }
-
     .chat-popout,
     .stream-popout {
         position: absolute;

@@ -96,7 +96,8 @@ router.get(`/:streamer`, async (req, res) => {
     if (!user) return res.render(`404.ejs`);
     if (user.isSuspended) return res.render(`banned.ejs`);
 
-    res.render(`streamer.ejs`);
+    if (!req.useragent.isMobile) res.render(`streamerDesktop.ejs`);
+    else res.render(`streamerMobile.ejs`);
 });
 
 module.exports = router;

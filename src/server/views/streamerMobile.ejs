@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="https://vjs.zencdn.net/7.10.2/video-js.css">
 <link rel="stylesheet" href="/assets/js/videojs/videojs-resolution-switcher.css">
-<link rel="stylesheet" href="/assets/css/streamer.css">
+<link rel="stylesheet" href="/assets/css/streamerMobile.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
@@ -26,38 +26,29 @@
             </p>
         </video>
         <div class="info-box">
-            <div class="crop">
-                <img src="/assets/img/defaultpfp.png" id="avatar" class="rounded-circle profile-picture" alt="Avatar">
-            </div>
-            <div class="streamer-content">
-                <span id="stream-title" class="lead mb-3"></span>
-                <br>
-                <img src="/assets/img/chat/badges/staff.png" id="staffbadge" width="15" height="15" alt="[Throwdown Staff]"  visible=false title="ThrowdownTV Staff">
-                <img src="/assets/img/chat/badges/vip.png" id="vipbadge" width="15" height="15" alt="[VIP]" title="ThrowdownTV VIP Member">
-                <span id="stream-display-name" class="lead mb-3"></span>
-                <div class="description-box" id="stream-description"></div>
-            </div>
-            <div class="streamer-buttons">
-                <div>
-                    <span class="live-status" id="livestatus"></span>
-                    <span class="viewers text-danger" title="Live Viewers">
-                        <i class="icofont icofont-eye-alt" style="margin-right: 2.5px;"></i>
-                        <span id="viewer-count">0</span>
-                    </span>
-                    <span class="followers text-primary" title="Followers">
-                        <i class="icofont icofont-people" style="margin-right: 2.5px;"></i>
-                        <span id="follow-count">0</span>
-                    </span>
-                    <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
-                    <button id="donate-btn" type="submit" class="btn btn-sm btn-success" style="margin-right: 5px;">Donate</button>
-                    <a id="report-btn" class="icofont icofont-gavel" href="/report" title="Report" style="font-size: 20px; margin-right: 2.5px; color: gray;"></a>
-                </div>
-            </div>
+            <span class="viewers text-danger" title="Live Viewers">
+                <i class="icofont icofont-eye-alt" style="margin-right: 2.5px;"></i>
+                <span id="viewer-count">0</span>
+            </span>
+            <span class="followers text-primary" title="Followers">
+                <i class="icofont icofont-people" style="margin-right: 2.5px;"></i>
+                <span id="follow-count">0</span>
+            </span>
+            <a id="report-btn" class="icofont icofont-gavel" href="/report" title="Report" style="font-size: 20px;color: gray;"></a>
         </div>
+    </div>
+    <div class="streamer-content">
+        <img src="/assets/img/chat/badges/staff.png" id="staffbadge" class="statusbadge" width="15" height="15" alt="[Throwdown Staff]"  visible=false title="ThrowdownTV Staff">
+        <img src="/assets/img/chat/badges/vip.png" id="vipbadge" class="statusbadge" width="15" height="15" alt="[VIP]" title="ThrowdownTV VIP Member">
+        <span id="stream-display-name" class="lead mb-3"></span>
+        <span class="live-status" id="livestatus"></span>
+    </div>
+    <div class="streamer-buttons"> 
+        <button id="follow-btn" type="submit" class="btn btn-sm btn-primary" style="margin-right: 5px;">Follow</button>
+        <button id="donate-btn" type="submit" class="btn btn-sm btn-success">Donate</button>
     </div>
     <iframe class="chat-popout" frameborder="0" height="720px"></iframe>
 </div>
-<div class="xc449bad4854773ff" data-zone="ed5b5f7a7fd34c19b9ef458496205159" style="width:234px;height:60px;display: inline-block;margin: 0 auto"></div>
 <script>
     const streamer = window.location.pathname.split(`/`)[1].toLowerCase();
 
