@@ -4,7 +4,7 @@ const User = require(`../models/user.model.js`);
 
 // Landing page.
 router.get(`/`, (req, res) => {
-    console.log(req.headers[`x-forwarded-for`]);
+    console.log(req.ip);
     req.isAuthenticated()
         ? res.redirect(`/browse`)
         : res.render(`welcome.ejs`);
