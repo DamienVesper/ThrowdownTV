@@ -11,6 +11,7 @@ const { randomString } = require(`../utils/random.js`);
 
 // Authentication.
 const User = require(`../models/user.model.js`);
+const Ban = require(`../models/ban.model.js`);
 const passport = require(`passport`);
 const bcrypt = require(`bcryptjs`);
 const crypto = require(`crypto`);
@@ -34,6 +35,8 @@ const transport = nodemailer.createTransport({
 });
 
 router.post(`/signup`, async (req, res, next) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
     }
@@ -163,6 +166,8 @@ router.post(`/signup`, async (req, res, next) => {
 });
 
 router.post(`/login`, async (req, res, next) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         return res.json({
             success: `Logged in`
@@ -213,7 +218,9 @@ router.post(`/login`, async (req, res, next) => {
     })(req, res, next);
 });
 
-router.get(`/logout`, (req, res) => {
+router.get(`/logout`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         log(`yellow`, `User "${req.user.username}" logged out.`);
         req.logOut();
@@ -221,7 +228,9 @@ router.get(`/logout`, (req, res) => {
     res.redirect(`/`);
 });
 
-router.get(`/authenticated`, (req, res) => {
+router.get(`/authenticated`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         return res.json({
             isLoggedIn: true,
@@ -237,6 +246,8 @@ router.get(`/authenticated`, (req, res) => {
 });
 
 router.get(`/changepassword/:token`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     const token = req.params.token;
     const user = await User.findOne({ recoverytoken: token });
 
@@ -249,6 +260,8 @@ router.get(`/changepassword/:token`, async (req, res) => {
 });
 
 router.post(`/changepassword/:token`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.body[`new-password`] || !req.body[`new-password-confirm`] || typeof req.body[`new-password`] !== `string` || typeof req.body[`new-password-confirm`] !== `string`) return res.json({ errors: `Please fill out all fields` });
 
     if (req.body[`new-password`] !== xssFilters.inHTMLData(req.body[`new-password`])) return res.json({
@@ -283,11 +296,15 @@ router.post(`/changepassword/:token`, async (req, res) => {
     });
 });
 
-router.get(`/recoveraccount`, (req, res) => {
+router.get(`/recoveraccount`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     res.render(`accountRecovery.ejs`);
 });
 
 router.post(`/recoveraccount`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.body[`recover-email`] || typeof req.body[`recover-email`] !== `string`) return res.json({ errors: `Please fill out the recovery email` });
 
     const user = await User.findOne({ email: req.body[`recover-email`] });
@@ -316,7 +333,9 @@ router.post(`/recoveraccount`, async (req, res) => {
     });
 });
 
-router.get(`/verify/*`, (req, res) => {
+router.get(`/verify/*`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     const token = req.url.split(`/verify/`)[1];
     if (!token) return res.redirect(`/`);
 

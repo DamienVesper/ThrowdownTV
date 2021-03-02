@@ -11,4 +11,4 @@ const banSchema = Mongoose.Schema({
     }
 });
 
-module.exports = Mongoose.model(`IPBan`, banSchema);
+module.exports = Mongoose.model(`Ban`, banSchema);

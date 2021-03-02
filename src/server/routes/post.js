@@ -2,6 +2,7 @@ const express = require(`express`);
 const router = express.Router();
 const { randomString } = require(`../utils/random.js`);
 const User = require(`../models/user.model.js`);
+const Ban = require(`../models/ban.model.js`);
 const config = require(`../../../config/config.js`);
 const { verify } = require(`hcaptcha`);
 
@@ -12,6 +13,9 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
 // All POST requests are handled within this router (except authentication).
 router.post(`/dashboard`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`stream-title`] || !req.body[`stream-description`] || !req.body[`donation-link`] ||
@@ -37,6 +41,9 @@ router.post(`/dashboard`, async (req, res) => {
 
 // Update account info
 router.post(`/accountoptions/updateinfo`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`display-name`] || typeof req.body[`display-name`] !== `string`) return res.json({ errors: `Please fill out all fields` });
@@ -54,6 +61,9 @@ router.post(`/accountoptions/updateinfo`, async (req, res) => {
 
 // Update General Options
 router.post(`/accountoptions/generaloptions`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     let notifications = true;
@@ -73,6 +83,9 @@ router.post(`/accountoptions/generaloptions`, async (req, res) => {
 
 // Update Avatar
 router.post(`/accountoptions/updatepfp`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`display-avatar`] || typeof req.body[`display-avatar`] !== `string`) return res.json({ errors: `Please fill out all fields` });
@@ -88,6 +101,9 @@ router.post(`/accountoptions/updatepfp`, async (req, res) => {
 
 // Change Stream Key
 router.post(`/changestreamkey`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: req.user.username });
@@ -101,6 +117,9 @@ router.post(`/changestreamkey`, async (req, res) => {
 
 // Follow a streamer
 router.post(`/follow/:streamer`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamer = await User.findOne({ username: req.params.streamer });
@@ -121,6 +140,9 @@ router.post(`/follow/:streamer`, async (req, res) => {
 
 // Unfollow a streamer
 router.post(`/unfollow/:streamer`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamer = await User.findOne({ username: req.params.streamer });
@@ -139,6 +161,9 @@ router.post(`/unfollow/:streamer`, async (req, res) => {
 });
 
 router.post(`/report/:streamer`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
