@@ -1,14 +1,6 @@
 const Mongoose = require(`mongoose`);
 
 const banSchema = Mongoose.Schema({
-    timestamp: {
-        type: Date,
-        required: false
-    },
-    username: {
-        type: String,
-        required: true
-    },
     IP: {
         type: String,
         required: true
@@ -19,4 +11,4 @@ const banSchema = Mongoose.Schema({
     }
 });
 
-module.exports = Mongoose.model(`Ban`, banSchema);
+module.exports = Mongoose.model(`IPBan`, banSchema);
