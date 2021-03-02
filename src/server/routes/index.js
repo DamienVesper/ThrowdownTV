@@ -25,7 +25,10 @@ router.get(`/login`, (req, res) => {
 router.get(`/tos`, (req, res) => res.render(`tos.ejs`));
 
 // Browsing.
-router.get(`/browse`, async (req, res) => res.render(`browse.ejs`));
+router.get(`/browse`, async (req, res) => {
+    if (!req.useragent.isMobile) res.render(`browse.ejs`);
+    else res.render(`browseMobile.ejs`);
+});
 
 // Staff
 router.get(`/staff`, async (req, res) => res.render(`staff.ejs`));
@@ -33,7 +36,8 @@ router.get(`/staff`, async (req, res) => res.render(`staff.ejs`));
 // Following.
 router.get(`/following`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    res.render(`following.ejs`);
+    if (!req.useragent.isMobile) res.render(`following.ejs`);
+    else res.render(`followingMobile.ejs`);
 });
 
 // Dashboard.

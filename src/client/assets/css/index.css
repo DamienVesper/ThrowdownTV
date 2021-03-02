@@ -132,3 +132,12 @@ input:checked + .slider:before {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.stream-data-condensed-mobile {
+    word-wrap: break-word;
+    display: inline-block;
+    max-width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

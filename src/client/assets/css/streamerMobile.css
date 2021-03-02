@@ -27,7 +27,27 @@
     display: block;
 }
 
+.streamerbadge {
+    display: flex;
+    flex-grow: 1;
+    padding-top: 10px;
+}
+
+.description-box {
+    padding: 10px;
+    color: white;
+    display: block;
+    position: absolute;
+    white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+
+}
+
 #stream-title {
+    display: flex;
     font-weight: bold;
     color: white;
     white-space: pre-wrap;
@@ -35,6 +55,7 @@
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
+    padding: 10px;
 }
 
 #stream-display-name {
