@@ -200,6 +200,7 @@ router.get(`/stream-data`, async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamerData = await User.findOne({ username: req.user.username });
+    if (!streamerData) return res.json({ errors: `That user does not exist!` });
 
     const data = {
         username: streamerData.username,
