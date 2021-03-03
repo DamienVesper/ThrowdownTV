@@ -99,7 +99,6 @@ app.set(`view engine`, `ejs`);
 app.set(`trust proxy`, true);
 
 // Serve the static directory.
-console.log(config.staticDir);
 app.use(express.static(config.staticDir));
 
 // Use routes.
