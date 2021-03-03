@@ -81,20 +81,25 @@ router.post(`/stream-status/:streamkey/:status/:apikey`, async (req, res) => {
 router.post(`/send-notifications`, async (req, res) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     const streamer = req.body.streamer;
     const apiKey = req.body.apiKey;
+
     if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.json({ errors: `Invalid API Key` });
+
     const streamerData = await User.findOne({ username: streamer });
     if (!streamerData) return res.json({ errors: `Invalid User` });
+
     for (const follower of streamerData.followers) {
         const followerAccount = await User.findOne({ username: follower });
-        if (follower.settings.notifications) {
+        if (followerAccount.settings.notifications) {
             const mailOptions = {
                 from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
                 to: followerAccount.email,
                 subject: `${streamerData.displayName} went Live!`,
                 text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
             };
+
             transport.sendMail(mailOptions, err => {
                 if (err) {
                     log(`red`, err);
