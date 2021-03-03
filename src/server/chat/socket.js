@@ -143,7 +143,6 @@ io.on(`connection`, async socket => {
                 streamer.viewers.splice(streamer.viewers.indexOf(chatter.username), 1);
                 streamer.save();
             }
-
             return socket.disconnect();
         });
     });
