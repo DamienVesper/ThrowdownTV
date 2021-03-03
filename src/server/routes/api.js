@@ -109,21 +109,23 @@ router.post(`/send-notifications`, async (req, res) => {
 });
 
 router.get(`/get-stickers`, async (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
     const stickerData = await Sticker.find({ ownerUsername: req.user.username });
     if (!stickerData) return res.json({ errors: `No stickers for this user` });
+
     const stickers = [];
-    stickerData.forEach(async (sticker) => {
-        stickers.push(sticker);
-    });
+    for (const sticker of stickerData) stickers.push(sticker);
     res.json(stickers);
 });
 
 router.get(`/stream-key/:streamKey`, async (req, res) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     const streamkey = req.params.streamKey;
     if (!streamkey) res.json({ errors: `Stream key not supplied.` });
 
