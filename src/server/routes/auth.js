@@ -255,7 +255,7 @@ router.get(`/changepassword/:token`, async (req, res) => {
         res.render(`error.ejs`);
         res.json({ errors: `Invalid/Expired Recovery Token` });
     } else {
-        res.render(`changepassword.ejs`);
+        res.render(`changePassword.ejs`);
     }
 });
 
