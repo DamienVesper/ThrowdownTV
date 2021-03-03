@@ -95,8 +95,6 @@
                 const DOMchatHistory = document.querySelector(`.chat-history`);
                 DOMchatHistory.scrollTop = DOMchatHistory.scrollHeight - DOMchatHistory.offsetHeight;
             });
-
-            $(window).on(`beforeunload`, () => socket.emit(`disconnect`));
         });
     });
 </script>

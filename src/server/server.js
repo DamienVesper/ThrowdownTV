@@ -118,15 +118,11 @@ const server = config.mode === `dev`
         rejectUnauthorized: false
     }, app);
 
-// Make sure there are no duplicates.
-antiDuplicator();
+// Run scripts on start.
+antiDuplicator().then(() => clearTimeouts().then(() => resetRTMPServers()));
+
+// Anti-duplicator.
 setInterval(antiDuplicator, 18e5);
-
-// Clear Timed out users.
-clearTimeouts();
-
-// Reset RTMP Servers of all users
-resetRTMPServers();
 
 // Bind the webfront to defined port.
 server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));
