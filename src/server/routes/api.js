@@ -101,9 +101,7 @@ router.post(`/send-notifications`, async (req, res) => {
             };
 
             transport.sendMail(mailOptions, err => {
-                if (err) {
-                    log(`red`, err);
-                }
+                if (err) log(`red`, err);
             });
         }
     }
