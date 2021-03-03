@@ -21,12 +21,12 @@
 
         for (const streamer of data) {
             let streamerWrapper = $(`<div>`);
-            let statusColor = `red`
-            let status = `OFFLINE`
+            let statusColor = `red`;
+            let status = `OFFLINE`;
 
-            if (streamer.isLive === true) {
-                statusColor = `lime`
-                status = `LIVE`
+            if (streamer.isLive) {
+                statusColor = `lime`;
+                status = `LIVE`;
             }
 
             streamerWrapper.addClass(`card card-body`);

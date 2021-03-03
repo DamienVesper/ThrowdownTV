@@ -39,8 +39,7 @@ router.get(`/tos`, async (req, res) => {
 router.get(`/browse`, async (req, res) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-    if (!req.useragent.isMobile) res.render(`browse.ejs`);
-    else res.render(`browseMobile.ejs`);
+    res.render(`browse.ejs`);
 });
 
 // Staff
@@ -55,8 +54,8 @@ router.get(`/following`, async (req, res) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.isAuthenticated()) return res.redirect(`/login`);
-    if (!req.useragent.isMobile) res.render(`following.ejs`);
-    else res.render(`followingMobile.ejs`);
+
+    res.render(`following.ejs`);
 });
 
 // Dashboard.
@@ -133,8 +132,7 @@ router.get(`/:streamer`, async (req, res) => {
     if (!user) return res.render(`404.ejs`);
     if (user.isSuspended) return res.render(`banned.ejs`);
 
-    if (!req.useragent.isMobile) res.render(`streamerDesktop.ejs`);
-    else res.render(`streamerMobile.ejs`);
+    res.render(`streamer.ejs`);
 });
 
 module.exports = router;
