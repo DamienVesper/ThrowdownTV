@@ -234,6 +234,45 @@ router.get("/fetch-user/:userToFetch", async (req, res) => {
     return res.json(user);
 })
 
+// Ban User
+router.get(`/banuser/:ttusername`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+   
+    const accessingUser = await User.findOne({ username: req.user.username });
+    if(!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    let userToBan = User.findOne({"username": req.params.ttusername});
+    userToBan.isSuspended = true;
+    userToBan.live = false;
+
+    userToBan.save(err => {
+        if (err) return res.json({ errors: `Invalid user data` });
+    });
+});
+
+// Unban User
+router.get(`/unbanuser/:ttusername`, async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+   
+    const accessingUser = await User.findOne({ username: req.user.username });
+    if(!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    let userToBan = User.findOne({"username": req.params.ttusername});
+    userToBan.isSuspended = false;
+    userToBan.live = false;
+
+    userToBan.save(err => {
+        if (err) return res.json({ errors: `Invalid user data` });
+    });
+});
+
+
 router.post(`/change-streamer-status`, async (req, res) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
