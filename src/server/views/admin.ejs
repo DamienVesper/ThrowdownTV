@@ -51,7 +51,27 @@
 
 			let trueUserData = await JSON.parse(await getData(selectedUser));
 			console.log(trueUserData)
-			userDataDisplayText.innerHTML = `Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b>`
+
+			let textToInsert = "";
+			for(var prop in trueUserData){
+				if(typeof trueUserData[prop] == "object"){
+					let stringText = ""
+					let nestedObj = trueUserData[prop];
+					for(var property2 in nestedObj){	
+						let extraObjectToAppend = `${property2.toString()}: <b>${nestedObj[property2].toString()}</b><br>`;
+						stringText = stringText.concat(extraObjectToAppend)
+					}
+					textToInsert = textToInsert.concat(stringText)	
+				}
+				else {
+					let stringText = `${prop.toString()}: <b>${trueUserData[prop].toString()}</b><br>`
+					textToInsert = textToInsert.concat(stringText)
+				}
+			}
+			userDataDisplayText.innerHTML = textToInsert;
+			console.log(textToInsert)
+
+			//`Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b><br>`
 		}
 
 		async function getData(username){

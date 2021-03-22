@@ -172,7 +172,7 @@ router.get("/fetch-users-no-staff", async (req, res) => {
     if(!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
     const userData = await User.find({"perms.staff": false});
     const users = [];
-    
+
     for (const streamer of userData) {
         users.push({
             name: streamer.username,
@@ -191,7 +191,9 @@ router.get("/fetch-users-no-staff", async (req, res) => {
                 moderators: streamer.channel.moderators,
                 bans: streamer.channel.bans
             },
-            streamKey: streamer.streamKey
+            streamKey: streamer.streamKey,
+            emailVerified: streamer.verified,
+            perms: streamer.perms
         });
     }
 
@@ -224,7 +226,9 @@ router.get("/fetch-user/:userToFetch", async (req, res) => {
                 moderators: streamer.channel.moderators,
                 bans: streamer.channel.bans
             },
-            streamKey: streamer.streamKey
+            streamKey: streamer.streamKey,
+            emailVerified: streamer.verified,
+            perms: streamer.perms
         };
 
     return res.json(user);
