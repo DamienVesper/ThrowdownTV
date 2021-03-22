@@ -58,7 +58,7 @@
 					let stringText = ""
 					let nestedObj = trueUserData[prop];
 					for(var property2 in nestedObj){	
-						let extraObjectToAppend = `${property2.toString()}: <b>${nestedObj[property2].toString()}</b><br>`;
+						let extraObjectToAppend = `${prop}.${property2.toString()}: <b>${nestedObj[property2].toString()}</b><br>`;
 						stringText = stringText.concat(extraObjectToAppend)
 					}
 					textToInsert = textToInsert.concat(stringText)	
