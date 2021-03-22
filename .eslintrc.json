@@ -9,11 +9,6 @@
         "standard",
         "eslint:recommended"
     ],
-    "plugins": [
-        "import",
-        "node",
-        "promise"
-    ],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
         "ecmaVersion": 6,
