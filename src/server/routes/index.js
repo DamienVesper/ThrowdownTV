@@ -55,10 +55,9 @@ router.get(`/admin`, async (req, res) => {
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const accessingUser = await User.findOne({ username: req.user.username });
-    if(!accessingUser.perms.staff) res.send(`You must be an administrator to access this page!`);
+    if (!accessingUser.perms.staff) res.send(`You must be an administrator to access this page!`);
     else res.render(`admin.ejs`);
 });
-
 
 // Following.
 router.get(`/following`, async (req, res) => {
