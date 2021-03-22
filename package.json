@@ -24,17 +24,26 @@
     "url": "https://github.com/ThrowdownTV/ThrowdownTV/issues"
   },
   "homepage": "https://github.com/ThrowdownTV/ThrowdownTV#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/eslint-parser": "^7.13.10",
+    "eslint": "^7.22.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
-    "connect-mongo": "^3.2.0",
+    "connect-mongo": "^4.4.0",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.0.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "ejs": "^3.1.5",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.17.1",
@@ -47,22 +56,13 @@
     "hcaptcha": "^0.0.2",
     "helmet": "^4.4.1",
     "https": "^1.0.0",
-    "mongoose": "^5.11.18",
-    "nodemailer": "^6.4.17",
+    "mongoose": "^5.12.1",
+    "nodemailer": "^6.5.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "request": "^2.88.2",
     "socket.io": "^4.0.0",
     "xss-filters": "^1.2.7"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/eslint-parser": "^7.13.10",
-    "eslint": "^7.22.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1"
   }
 }
