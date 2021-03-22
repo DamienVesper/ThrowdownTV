@@ -162,6 +162,74 @@ router.get(`/streams`, async (req, res) => {
     return res.json(streams);
 });
 
+router.get("/fetch-users-no-staff", async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: req.user.username });
+    if(!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    const userData = await User.find({"perms.staff": false});
+    const users = [];
+    
+    for (const streamer of userData) {
+        users.push({
+            name: streamer.username,
+            displayName: streamer.displayName,
+            streamTitle: streamer.settings.title,
+            description: streamer.settings.description,
+            rtmpServer: streamer.settings.rtmpServer,
+            isLive: streamer.live,
+            isBanned: streamer.isSuspended,
+            isVIP: streamer.perms.vip,
+            email: streamer.email,
+            creationIP: streamer.creationIP,
+            lastIP: streamer.lastIP,
+            avatarURL: streamer.avatarURL,
+            channel: {
+                moderators: streamer.channel.moderators,
+                bans: streamer.channel.bans
+            },
+            streamKey: streamer.streamKey
+        });
+    }
+
+    return res.json(users);
+})
+
+router.get("/fetch-user/:userToFetch", async (req, res) => {
+    const ip = await Ban.findOne({ IP: req.ip });
+    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: req.user.username });
+    if(!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    const streamer = await User.findOne({"username": req.params.userToFetch});
+    const user = {
+            name: streamer.username,
+            displayName: streamer.displayName,
+            streamTitle: streamer.settings.title,
+            description: streamer.settings.description,
+            rtmpServer: streamer.settings.rtmpServer,
+            isLive: streamer.live,
+            isBanned: streamer.isSuspended,
+            isVIP: streamer.perms.vip,
+            email: streamer.email,
+            creationIP: streamer.creationIP,
+            lastIP: streamer.lastIP,
+            avatarURL: streamer.avatarURL,
+            channel: {
+                moderators: streamer.channel.moderators,
+                bans: streamer.channel.bans
+            },
+            streamKey: streamer.streamKey
+        };
+
+    return res.json(user);
+})
+
 router.post(`/change-streamer-status`, async (req, res) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);

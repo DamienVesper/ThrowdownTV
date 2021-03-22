@@ -2,5 +2,60 @@
 <br>
 <h1 class="text-light text-center">Admin Panel [WIP] </h1>
 
+
+<div class="user-list">
+	<select id="user-dropdown" name="user-dropdown" onchange="selectedUser()">
+		<option selected="selected">Please Select a user</option>
+	</select>
+</div>
+
+<div id="user-data" name="user-data" style="visibility: hidden">
+	<p id="selectedusertext" style="color:white">Selected User: </p>
+	<p id="userdatatext" style="color:white"></p>
+</div>
+
 <script>
+	var allUsersArr = [];
+	// Fetch all of the users
+	fetch(`/api/fetch-users-no-staff`).then(data => data.json()).then(users => {
+		let allUsers = users;
+		let userDropdown = document.getElementById("user-dropdown");
+
+		console.log(allUsers)
+		allUsers.forEach((user, index) => {
+		let option_elem = document.createElement('option');
+
+		option_elem.value = index;
+		option_elem.textContent = user.name;
+
+		userDropdown.appendChild(option_elem);
+
+		allUsersArr.push(user);
+		});
+
+
+	});
+
+		async function selectedUser(){
+			var userdataDiv = document.getElementById("user-data")
+			var e = document.getElementById("user-dropdown");
+			var selectedUser = e.options[e.selectedIndex].text;
+			var selectedIndex = e.selectedIndex
+			if(selectedUser == "Please Select a user") return userdataDiv.style.visibility = 'hidden';
+
+			userdataDiv.style.visibility = 'visible';
+			let Displaytext = document.getElementById("selectedusertext");
+			Displaytext.innerHTML = "Selected User: " + selectedUser
+
+			let userDataDisplayText = document.getElementById("userdatatext");
+
+			let trueUserData = await JSON.parse(await getData(selectedUser));
+			console.log(trueUserData)
+			userDataDisplayText.innerHTML = `Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b>`
+		}
+
+		async function getData(username){
+			let data2 = await fetch(`/api/fetch-user/${username}`)
+			return await JSON.stringify(await data2.json())
+		}
 </script>
