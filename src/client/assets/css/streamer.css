@@ -1,0 +1,258 @@
+@charset "utf-8";
+@import "palette.css";
+
+/** Common styles for both the mobile and desktop layout */
+.streamer-buttons {
+    margin-top: 15px;
+	max-height: 30px;
+	z-index: 1;
+}
+
+#stream-display-name {
+    font-weight: bold;
+    color: lime;
+    font-size: 15px;
+    margin-right: 4px;
+}
+
+.interaction-btns {
+	display: inline-block;
+}
+
+#title-tooltip {
+	position: absolute;
+	background: var(--dblue);
+	color: #ffffff;
+	padding: 8px;
+	border-radius: 5px;
+	z-index: 999;
+}
+
+#stream-title {
+	font-weight: bold;
+    color: white;
+    white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+}
+
+.profile-picture {
+	background-color: #F00;
+	border-radius: 0% !important;
+}
+
+.chat-popout,
+.stream-popout {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0.5rem 0.25px;
+}
+
+.info-box {
+    display: flex;
+    flex-grow: 1;
+    padding-top: 10px;
+}
+
+#avatar {
+	width: 100%;
+	height: 100%;
+}
+
+.circle-crop {
+	border-radius: 50%;
+}
+
+#livestatus.offline {
+    color: #AAAAAA;
+}
+
+#livestatus.online {
+    color: #ff3b3b
+}
+
+
+
+
+.info-box {
+    margin-top: 5px;
+}
+
+.video-js .vjs-big-play-button {
+    display: none;
+}
+
+.viewers, .followers {
+    font-size: 1rem;
+    margin-right: 20px;
+    color: rgb(209, 209, 209);
+    align-self: center;
+}
+
+#streamer-error,
+#streamer-success {
+    position: block;
+    z-index: 2; 
+}
+
+#live-stream {
+    display: block;
+}
+
+.live-status {
+    margin-right: 20px;
+    font-weight: bold;
+	color: white;
+}
+
+
+#stream-description {
+    margin-top: 3px;
+    color: white;
+    white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+
+#follow-btn, #donate-btn {
+	margin-right: 2px !important;
+}
+
+.streamer-icon {
+	margin-right: 2.5px;
+}
+
+
+/* Desktop Layout */
+@media only screen and (min-width: 992px){
+	/* Variables */
+	:root {
+		--streamerButtonsWidth: 420px;
+		--pfpDims: 90px;
+		--infoBoxHeight: calc(var(--pfpDims) + 10px);
+	}
+
+	.info-box {
+		max-height: var(--infoBoxHeight);
+	}
+
+	.profile-picture {
+		width: var(--pfpDims);
+		height: var(--pfpDims);
+		margin-right: 10px;
+	}
+
+	.streamer-content {
+		max-width: calc(92% - var(--streamerButtonsWidth));
+	}
+
+	.streamer-content #stream-title {
+		max-height: 75%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.streamer-buttons {
+		position: absolute;
+		display: block;
+		right: 0;
+		max-width: var(--streamerButtonsWidth);
+	}
+
+	#stream-description {
+		display: block;
+    	position: absolute;
+		margin-top: 5px;
+	}
+
+
+
+
+
+    .chat-popout,
+    .stream-popout {
+        position: absolute;
+        bottom: 0rem;
+        height: calc(100% - 75px);
+    }
+
+    .chat-popout {
+        right: 0.5rem;
+        width: 30%;
+    }
+
+    .stream-popout {
+        left: 0.5rem;
+        width: 68.5%;
+        max-width: 68.5%;
+    }
+
+	.chat-popout:before {
+		margin-top: 15px;
+	}
+
+
+	
+
+
+	#stream-title {
+		color:burlywood!important;
+	}
+}
+
+/** Flexible livestream size (desktop view) */
+@media only screen and (min-width: 992px) and (max-width: 1099px){
+	.stream-popout {
+		width: 67.5%;
+		max-width: 67.5%
+	}
+}
+@media only screen and (min-width: 1100px) and (max-width: 1499px){
+	.stream-popout {
+		width: 68%;
+		max-width: 68%;
+	}
+}
+
+
+/* Mobile Layout */
+@media only screen and (max-width: 991px){
+	#stream-title {
+		color:rebeccapurple!important;
+	}
+
+	.streamer-buttons {
+		position: relative;
+		display: block;
+		text-align: center;
+	}
+
+	.stream-overlay {
+		margin: 0 5px;
+	}
+}
+
+/* Very small devices (eg: iPhone SE, Galaxy Note 3, etc) */
+@media only screen and (max-width: 399px){
+	.interaction-btns {
+		display: block;
+	}
+
+	.streamer-buttons {
+		max-height: 60px;
+		margin-top: 5px;
+	}
+
+	.followers {
+		margin-right: 0;
+	}
+}

@@ -43,6 +43,8 @@
 .profile-picture {
     width: 90px;
     height: 90px;
+	background-color: #F00;
+	border-radius: 0% !important;
 }
 
 .crop {
@@ -51,7 +53,7 @@
     height: 100%;
     display: block;
     overflow: hidden;
-    border-radius:50%;
+    /* border-radius:50%; */
 }
 
 .video-js .vjs-big-play-button {
