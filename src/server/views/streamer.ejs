@@ -47,8 +47,9 @@
         <div class="info-box">
             <div class="profile-picture"><img src="/assets/img/defaultpfp.png" id="avatar" class="circle-crop" alt="Avatar"></div>
             <div class="streamer-content mb-3">
-                <span id="stream-title" class="lead" title="Title" data-tooltip="{ 'offset': 10, 'class': 'title-tooltip' }"></span>
-				<script type="application/javascript">tooltip.setOptions({tooltipId: "title-tooltip", offsetDefault: 20});</script>
+				<span id="stream-title" class="lead"></span>
+                <!-- <span id="stream-title" class="lead" title="Title" data-tooltip="{ 'offset': 10, 'class': 'title-tooltip' }"></span>
+				<script type="application/javascript">tooltip.setOptions({tooltipId: "title-tooltip", offsetDefault: 20});</script> -->
                 <br>
 				<div class="streamer-name">
                 	<img src="/assets/img/chat/badges/staff.png" id="staffbadge" width="15" height="15" alt="[Throwdown Staff]" visible="false" title="ThrowdownTV Staff">
@@ -111,8 +112,8 @@
                 fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
                     $(`#stream-display-name`).text(data.displayName);
                     $(`#stream-title`).text(data.streamTitle);
-					$(`#stream-title`).attr(`title`, `${data.streamTitle}`);
-					$(`#title-tooltip`).text(`${data.streamTitle}`); //Tooltip
+					//$(`#stream-title`).attr(`title`, `${data.streamTitle}`);
+					//$(`#title-tooltip`).text(`${data.streamTitle}`); //Tooltip
                     $(`#stream-description`).html(data.streamDescription);
                     $(`#donation-btn`).attr(`action`, `${data.donationLink}`);
                     $.get(data.avatarURL).then(successCallback, errorCallback);
