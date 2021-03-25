@@ -175,9 +175,6 @@
 	}
 
 
-
-
-
     .chat-popout,
     .stream-popout {
         position: absolute;
@@ -220,6 +217,20 @@
 	.stream-popout {
 		width: 68%;
 		max-width: 68%;
+	}
+}
+
+/** Small desktops (ie: horizontal width that's less than 1500px, but greater than 991px) */
+@media only screen and (min-width: 992px) and (max-width: 1499px){
+	.streamer-buttons {
+		position: relative;
+		display: block;
+		text-align: center;
+		max-width: 100%;
+	}
+
+	.streamer-content {
+		max-width: calc(95% - var(--pfpDims));
 	}
 }
 
