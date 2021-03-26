@@ -178,26 +178,6 @@
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_source/${streamer}`,
                                         type: `video/x-flv`,
                                         label: `SOURCE`
-                                    },
-                                    {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_1080/${streamer}`,
-                                        type: `video/x-flv`,
-                                        label: `1080P`
-                                    },
-                                    {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_720/${streamer}`,
-                                        type: `video/x-flv`,
-                                        label: `720P`
-                                    },
-                                    {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_480/${streamer}`,
-                                        type: `video/x-flv`,
-                                        label: `480P`
-                                    },
-                                    {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_360/${streamer}`,
-                                        type: `video/x-flv`,
-                                        label: `360P`
                                     }
                                 ])
                                 player.on(`resolutionchange`, function(){
