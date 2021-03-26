@@ -164,8 +164,8 @@
                                     },
                                     {
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_hls/${streamer}`,
-                                        type: `video/x-flv`,
-                                        label: `SOURCE`
+                                        type: `video/x-mpegURL`,
+                                        label: `HLS`
                                     }
                                 ])
                                 player.on(`resolutionchange`, function(){
