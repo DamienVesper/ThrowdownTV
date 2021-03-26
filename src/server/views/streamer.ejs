@@ -160,7 +160,8 @@
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_source/${streamer}`,
                                         type: `video/x-flv`,
                                         label: `SOURCE`
-                                    },
+                                    }
+                                    /**
                                     {
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_1080/${streamer}`,
                                         type: `video/x-flv`,
@@ -181,6 +182,7 @@
                                         type: `video/x-flv`,
                                         label: `360P`
                                     }
+                                    */
                                 ])
                                 player.on(`resolutionchange`, function(){
                                     console.info(`Changed Resolution`)
