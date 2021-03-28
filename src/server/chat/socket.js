@@ -90,7 +90,7 @@ io.on(`connection`, async socket => {
             };
 
             // Check if user account is suspended
-            if (user.isSuspended) return;
+            if (user.isSuspended) return chatter.emit(`commandMessage`, `Your account has been suspended.`);
 
             // Check if user is banned
             if (streamer.channel.bans.includes(chatter.username) || streamer.channel.timeouts.includes(chatter.username)) return chatter.emit(`commandMessage`, `You have been banned from talking in this chat.`);
