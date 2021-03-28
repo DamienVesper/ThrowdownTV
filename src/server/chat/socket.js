@@ -7,31 +7,11 @@ const http = require(`http`);
 const https = require(`https`);
 
 const User = require(`../models/user.model.js`);
-const Sticker = require(`../models/sticker.model.js`);
 
 const xssFilters = require(`xss-filters`);
 const chatUsers = [];
 
 const commandHandler = require(`./commandHandler.js`);
-
-// On new database, add the default sticker.
-async function initializeStickers () {
-    const sticker = await Sticker.findOne({ stickerName: `throwdown` });
-    if (!sticker) {
-        const defaultSticker = new Sticker({
-            stickerName: `throwdown`,
-            ownerUsername: `throwdown`,
-            path: `/assets/img/header-logo.png`
-        });
-        defaultSticker.save(err => {
-            if (err) return log(`red`, err);
-            return log(`green`, `Initialized Default Sticker on new Database.`);
-        });
-    } else {
-        log(`green`, `Stickers already initialized.`);
-    }
-}
-initializeStickers();
 
 // Configure socket.
 const server = config.mode === `prod`
@@ -136,7 +116,7 @@ io.on(`connection`, async socket => {
         socket.on(`disconnect`, async () => {
             const streamer = await User.findOne({ username: streamerUsername });
 
-            delete chatUsers[chatUsers.indexOf(chatter)];
+            chatUsers.splice(chatUsers.indexOf(chatter), 1);
             log(`magenta`, `Chat Disconnection | ${chatter.username ? `Username: ${chatter.username} | ` : ``}IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
 
             if (streamer.viewers.includes(chatter.username)) {
