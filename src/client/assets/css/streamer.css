@@ -27,7 +27,7 @@
 	z-index: 999;
 }
 
-#stream-title {
+.stream-title {
 	font-weight: bold;
     color: white;
     white-space: pre-wrap;
@@ -161,7 +161,7 @@
 /* Desktop Layout */
 @media only screen and (min-width: 992px){
 	/* Temporary */
-	#stream-title {
+	.stream-title {
 		color:burlywood!important;
 	}
 
@@ -188,7 +188,7 @@
 		max-width: calc(94% - var(--streamerButtonsWidth));
 	}
 
-	.streamer-content #stream-title {
+	.streamer-content .stream-title {
 		max-height: 75%;
 	}
 
@@ -269,7 +269,7 @@
 /* Mobile Layout */
 @media only screen and (max-width: 991px){
 	/* Temporary */
-	#stream-title {
+	.stream-title {
 		color:rebeccapurple !important;
 	}
 
@@ -328,8 +328,8 @@
 	}
 
 
-
-	#stream-title {
+	/*
+	.stream-title {
 		display: block;
 		max-height: 75%;
 		padding: 0 2%;
@@ -337,6 +337,7 @@
 		left: 0;
 		display: none;
 	}
+	*/
 
 }
 
