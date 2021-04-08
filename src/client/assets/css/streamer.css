@@ -77,7 +77,33 @@
     color: #ff3b3b
 }
 
+.profile-picture {
+	width: var(--pfpDims);
+	height: var(--pfpDims);
+	margin-right: 10px;
+}
 
+.nav-tabs {
+	border-bottom: 0;
+}
+
+.nav-tabs .nav-item .nav-link, .nav-tabs .nav-link {
+	background-color: unset;
+	color: #AAAAAA;
+	border-width: 0;
+	border-color: unset;
+	transition: all 100ms;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+	color: var(--mobile-tab);
+	border-width: 0 0 3px 0;
+	border-color: unset unset var(--mobile-tab) unset;
+}
+
+.nav-tabs .nav-item.show .nav-link:hover, .nav-tabs .nav-link.active:hover {
+	color: #FFFFFF;
+}
 
 
 .info-box {
@@ -134,6 +160,11 @@
 
 /* Desktop Layout */
 @media only screen and (min-width: 992px){
+	/* Temporary */
+	#stream-title {
+		color:burlywood!important;
+	}
+
 	/* Variables */
 	:root {
 		--streamerButtonsWidth: 420px;
@@ -145,20 +176,12 @@
 		max-height: var(--infoBoxHeight);
 	}
 
-	.profile-picture {
-		width: var(--pfpDims);
-		height: var(--pfpDims);
-		margin-right: 10px;
-	}
-
 	.streamer-content {
 		max-width: calc(92% - var(--streamerButtonsWidth));
 	}
 
 	.streamer-content #stream-title {
 		max-height: 75%;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	.streamer-buttons {
@@ -173,7 +196,6 @@
     	position: absolute;
 		margin-top: 5px;
 	}
-
 
     .chat-popout,
     .stream-popout {
@@ -197,12 +219,8 @@
 		margin-top: 15px;
 	}
 
-
-	
-
-
-	#stream-title {
-		color:burlywood!important;
+	.mobile-tabs {
+		display: none !important;
 	}
 }
 
@@ -222,34 +240,46 @@
 
 /** Small desktops (ie: horizontal width that's less than 1500px, but greater than 991px) */
 @media only screen and (min-width: 992px) and (max-width: 1499px){
+	.streamer-content {
+		max-width: calc(95% - var(--pfpDims));
+	}
+}
+
+/** Mobile devices and small desktops **/
+@media only screen and (max-width: 1499px){
 	.streamer-buttons {
 		position: relative;
 		display: block;
 		text-align: center;
 		max-width: 100%;
 	}
-
-	.streamer-content {
-		max-width: calc(95% - var(--pfpDims));
-	}
 }
 
 
 /* Mobile Layout */
 @media only screen and (max-width: 991px){
+	/* Temporary */
 	#stream-title {
 		color:rebeccapurple!important;
 	}
-
-	.streamer-buttons {
-		position: relative;
-		display: block;
-		text-align: center;
+	/* Variables */
+	:root {
+		--streamerButtonsWidth: 420px;
+		--pfpDims: 70px;
+		--infoBoxHeight: calc(var(--pfpDims) + 10px);
 	}
+
+	.streamer-content {
+		max-width: 92%;
+	}
+
+	
 
 	.stream-overlay {
 		margin: 0 5px;
 	}
+
+
 }
 
 /* Very small devices (eg: iPhone SE, Galaxy Note 3, etc) */
