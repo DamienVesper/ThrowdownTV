@@ -162,9 +162,9 @@
                                         label: `FLV`
                                     },
                                     {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_hls/${streamer}`,
+                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_dash/${streamer}`,
                                         type: `application/x-mpegURL`,
-                                        label: `HLS`
+                                        label: `DASH (BETA)`
                                     }
                                 ])
                                 player.on(`resolutionchange`, function(){
