@@ -160,10 +160,15 @@
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_source/${streamer}`,
                                         type: `video/x-flv`,
                                         label: `SOURCE`
+                                    },
+                                    {
+                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_hls/${streamer}`,
+                                        type: `application/x-mpegURL`,
+                                        label: `HLS`
                                     }
                                 ])
                                 player.on(`resolutionchange`, function(){
-                                    console.info(`Changed Resolution`)
+                                    console.info(`Changed Format`)
                                 })
                             }
                             live = true;
