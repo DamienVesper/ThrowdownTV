@@ -55,6 +55,7 @@
                 <div class="form-group">
                     <input type="password" class="form-control" id="stream-key" readonly>
                     <p><input type="checkbox" id="reveal-stream-key"> Reveal Stream Key</p>
+                    <input type="submit" value="Copy Stream Key to Clipboard" id="copy-streamkey" class="btn btn-success btn-block">
                     <input type="submit" value="Reset Stream Key" id="reset-streamkey" class="btn btn-danger btn-block">
                 </div>
             </form>
@@ -228,12 +229,27 @@
 
     $(`#reset-streamkey`).on(`click`, e => {
         e.preventDefault();
-        $(`#reset-streamkey-info`).attr(`disabled`, true);
+        $(`#reset-streamkey`).attr(`disabled`, true);
 
         $.ajax({
             type: `post`,
             url: `/changestreamkey`,
         }).then(() => window.location.reload());
+    });
+
+    $(`#copy-streamkey`).on(`click`, e => {
+        e.preventDefault();
+        navigator.clipboard.writeText($(`#stream-key`).val()).then(function () {
+            $(`#copy-streamkey`).attr(`disabled`, true);
+            $(`#copy-streamkey`).val(`Copied to Clipboard!`);
+
+            setTimeout(() => {
+                $(`#copy-streamkey`).attr(`disabled`, false);
+                $(`#copy-streamkey`).val(`Copy Stream Key to Clipboard`);
+            }, 3000)
+        }, function () {
+            alert('Failure to copy. Check permissions for clipboard')
+        });
     });
 
     $(`#reveal-stream-key`).change(() => {
