@@ -193,7 +193,6 @@ router.post(`/login`, async (req, res, next) => {
     passport.authenticate(`login`, (err, user, info) => {
         if (err) {
             log(`red`, err);
-            req.body[`h-captcha-response`] = null; // Will this work tho?
             return res.json({
                 errors: err
             });
