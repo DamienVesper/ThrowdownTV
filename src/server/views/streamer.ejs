@@ -159,18 +159,13 @@
                                     {
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_480/${streamer}`,
                                         type: `video/x-flv`,
-                                        label: `VERY FAST`
-                                    },
-                                    {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_720/${streamer}`,
-                                        type: `video/x-flv`,
                                         label: `FAST`
                                     },
                                     {
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_source/${streamer}`,
                                         type: `video/x-flv`,
                                         label: `SOURCE`
-                                    },  
+                                    }
                                 ])
                                 player.on(`resolutionchange`, function(){
                                     console.info(`Changed Resolution`)
