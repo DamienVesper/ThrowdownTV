@@ -157,20 +157,20 @@
                             if (live === false) {
                                 player.updateSrc([
                                     {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_source/${streamer}`,
+                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_480/${streamer}`,
                                         type: `video/x-flv`,
-                                        label: `SOURCE`
+                                        label: `VERY FAST`
                                     },
                                     {
                                         src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_720/${streamer}`,
                                         type: `video/x-flv`,
-                                        label: `720P`
+                                        label: `FAST`
                                     },
                                     {
-                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_480/${streamer}`,
+                                        src: `https://${data.rtmpServer}.throwdown.tv/stream_flv_source/${streamer}`,
                                         type: `video/x-flv`,
-                                        label: `480P`
-                                    }
+                                        label: `SOURCE`
+                                    },  
                                 ])
                                 player.on(`resolutionchange`, function(){
                                     console.info(`Changed Resolution`)
