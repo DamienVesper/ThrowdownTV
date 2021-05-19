@@ -1,8 +1,8 @@
-require(`dotenv`).config();
+const dotenv = require(`dotenv`);
+dotenv.config();
 
 // Configuration.
 const config = require(`../../config/config.js`);
-require(`dotenv`).config();
 
 // Utilities.
 const log = require(`./utils/log.js`);
