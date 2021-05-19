@@ -19,7 +19,7 @@ passport.deserializeUser((id, done) => {
 });
 
 // On new database, add the default user.
-async function initializeDefaultUser () {
+const initializeDefaultUser = () => {
     const defaultUser = await User.findOne({ username: `throwdown` });
     if (!defaultUser) {
         const defaultUser = new User({
@@ -34,14 +34,14 @@ async function initializeDefaultUser () {
                 description: `Free Speech Livestreaming.`
             }
         });
+
         defaultUser.save(err => {
             if (err) return log(`red`, err);
             return log(`green`, `Initialized Default User on new Database.`);
         });
-    } else {
-        log(`green`, `Users already initialized.`);
-    }
-}
+    } else log(`green`, `Users already initialized.`);
+};
+
 initializeDefaultUser();
 
 // Strategy.
