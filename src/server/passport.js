@@ -91,7 +91,7 @@ passport.use(`signup`, new LocalStrategy({
             password
         });
 
-        bcrypt.genSalt(15, (err, salt) => {
+        bcrypt.genSalt(10, (err, salt) => {
             if (err) return done(err);
             bcrypt.hash(signupUser.password, salt, (err, hash) => {
                 if (err) return done(err);
