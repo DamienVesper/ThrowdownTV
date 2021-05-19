@@ -297,14 +297,16 @@ router.get(`/following-streams`, async (req, res) => {
     const streamers = [];
     const streamerData = await User.find({ followers: req.user.username });
 
-    for (const streamer of streamerData) streamers.push({
-        name: streamer.username,
-        displayName: streamer.displayName,
-        title: streamer.settings.title,
-        description: streamer.settings.description,
-        rtmpServer: streamer.settings.rtmpServer,
-        isLive: streamer.live
-    });
+    for (const streamer of streamerData) {
+        streamers.push({
+            name: streamer.username,
+            displayName: streamer.displayName,
+            title: streamer.settings.title,
+            description: streamer.settings.description,
+            rtmpServer: streamer.settings.rtmpServer,
+            isLive: streamer.live
+        });
+    }
 
     return res.json(streamers);
 });

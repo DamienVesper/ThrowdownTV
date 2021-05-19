@@ -170,9 +170,7 @@ router.post(`/report/:streamer`, async (req, res) => {
         verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
-            }).catch(() => {
-                return res.json({ errors: `Captcha Error` });
-            });
+            }).catch(() => res.json({ errors: `Captcha Error` }));
     }
     if (!req.body[`report-comments`]) return res.json({ errors: `Report Description Empty` });
     const streamer = await User.findOne({ username: req.params.streamer.toLowerCase() });
