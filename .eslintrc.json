@@ -11,36 +11,37 @@
     ],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 11,
         "requireConfigFile": false
     },
     "rules": {
-        "func-call-spacing": 1,
-        "no-unexpected-multiline": 1,
-        "eqeqeq": 1,
-        "no-eval": 1,
-        "array-bracket-newline": 1,
+        // Eval should not be allowed ever, regardless of use case.
+        "no-eval": 2,
+
+        // } else {}
         "brace-style": 1,
-        "comma-spacing": 1,
-        "no-var": 1,
-        "indent": ["error", 4, {
+
+        // Indents should be four spaces.
+        "indent": ["warn", 4, {
             "SwitchCase": 1
         }],
+
+        // Semicolons and backticks should always be used.
         "semi": [1, "always"],
-        "quotes": [1, "backtick", "avoid-escape"],
-        "no-undef": 1,
-        "no-unused-vars": 1,
-        "prefer-const": 1,
-        "no-mixed-operators": 0,
-        "no-prototype-builtins": 1,
-        "curly": 0,
-        "prefer-arrow-callback": 1,
+        "quotes": [2, "backtick"],
+
+
+        // Use templating strings with backticks whenever possible.
         "prefer-template": 1,
-        "no-unreachable-loop": 1,
-        "no-unused-expressions": 1,
-        "no-useless-escape": 1,
-        "camelcase": 1,
-        "node/no-callback-literal": 1,
-        "no-return-assign": 1
+
+        // Prefer const myFunction = () => {}; rather than function myFunction () {}.
+        "func-style": 1,
+
+        // Prefer fat arrow functions.
+        "prefer-arrow-callback": 1,
+        "arrow-body-style": ["warn", "as-needed"],
+
+        // Unnecessary.
+        "no-mixed-operators": 0
     }
 }
