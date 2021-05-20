@@ -19,7 +19,7 @@ passport.deserializeUser((id, done) => {
 });
 
 // On new database, add the default user.
-const initializeDefaultUser = () => {
+const initializeDefaultUser = async () => {
     const defaultUser = await User.findOne({ username: `throwdown` });
     if (!defaultUser) {
         const defaultUser = new User({
