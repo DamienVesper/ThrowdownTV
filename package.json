@@ -4,8 +4,9 @@
   "description": "A website built for streaming.",
   "main": "gruntfile.js",
   "scripts": {
-    "dist-test": "grunt build-dist && cross-env NODE_ENV=\"prod\" node ./src/server/server.js",
-    "prod": "grunt build-dist && cross-env NODE_ENV=\"prod\" pm2 start ./src/server/server.js",
+    "build": "grunt build-dist",
+    "dist-test": "cross-env NODE_ENV=\"prod\" node ./src/server/server.js",
+    "prod": "cross-env NODE_ENV=\"prod\" pm2 start ./src/server/server.js",
     "dev": "cross-env NODE_ENV=\"dev\" grunt dev",
     "dev:lint": "eslint . --fix --ext .js"
   },
