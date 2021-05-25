@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/ThrowdownTV/ThrowdownTV#readme",
   "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@types/express-session": "^1.17.3",
     "@types/node": "^15.6.1",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
