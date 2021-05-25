@@ -1,12 +1,13 @@
-const bcrypt = require(`bcryptjs`);
-const User = require(`./models/user.model.js`);
+import bcrypt from 'bcrypt';
 
-const { randomString } = require(`./utils/random.js`);
+import User from './models/user.model';
 
-const passport = require(`passport`);
-const LocalStrategy = require(`passport-local`).Strategy;
+import log from './utils/log';
+import { randomString } from './utils/random';
 
-const log = require(`./utils/log.js`);
+import * as passport from 'passport';
+
+import passportLocal from 'passport-local';
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -37,7 +38,7 @@ const initializeDefaultUser = async () => {
 
         defaultUser.save(err => {
             if (err) return log(`red`, err);
-            return log(`green`, `Initialized Default User on new Database.`);
+            return log(`green`, `Initialized default user on new database.`);
         });
     } else log(`green`, `Users already initialized.`);
 };
@@ -45,7 +46,7 @@ const initializeDefaultUser = async () => {
 initializeDefaultUser();
 
 // Strategy.
-passport.use(`login`, new LocalStrategy({
+passport.use(`login`, new passportLocal.Strategy({
     usernameField: `login-username`,
     passwordField: `login-password`
 }, (username, password, done) => {
@@ -70,7 +71,7 @@ passport.use(`login`, new LocalStrategy({
 }));
 
 // Registration.
-passport.use(`signup`, new LocalStrategy({
+passport.use(`signup`, new passportLocal.Strategy({
     usernameField: `signup-username`,
     passwordField: `signup-password`
 }, (username, password, done) => {
