@@ -7,7 +7,7 @@ const config = require(`../../../config/config.js`);
 const express = require(`express`);
 const router = express.Router();
 const xssFilters = require(`xss-filters`);
-const { randomString } = require(`../utils/random.js`);
+const { randomString } = require(`../utils/randomString.js`);
 
 // Authentication.
 const User = require(`../models/user.model.js`);

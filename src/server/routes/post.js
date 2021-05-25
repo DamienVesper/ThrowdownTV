@@ -1,6 +1,6 @@
 const express = require(`express`);
 const router = express.Router();
-const { randomString } = require(`../utils/random.js`);
+const { randomString } = require(`../utils/randomString.js`);
 const User = require(`../models/user.model.js`);
 const Ban = require(`../models/ban.model.js`);
 const config = require(`../../../config/config.js`);
