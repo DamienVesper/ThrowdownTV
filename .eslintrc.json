@@ -9,39 +9,27 @@
         "standard",
         "eslint:recommended"
     ],
-    "parser": "@babel/eslint-parser",
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint",
+        "import",
+        "node",
+        "promise"
+    ],
     "parserOptions": {
-        "ecmaVersion": 11,
-        "requireConfigFile": false
+        "ecmaVersion": 6
     },
     "rules": {
-        // Eval should not be allowed ever, regardless of use case.
-        "no-eval": 2,
-
-        // } else {}
-        "brace-style": 1,
-
-        // Indents should be four spaces.
-        "indent": ["warn", 4, {
+        "indent": ["error", 4, {
             "SwitchCase": 1
         }],
+        "semi": [2, "always"],
+        "quotes": [2, "backtick", "avoid-escape"],
 
-        // Semicolons and backticks should always be used.
-        "semi": [1, "always"],
-        "quotes": [2, "backtick"],
+        "no-mixed-operators": 0,
+        "curly": 0,
 
-
-        // Use templating strings with backticks whenever possible.
-        "prefer-template": 1,
-
-        // Prefer const myFunction = () => {}; rather than function myFunction () {}.
-        "func-style": 1,
-
-        // Prefer fat arrow functions.
         "prefer-arrow-callback": 1,
-        "arrow-body-style": ["warn", "as-needed"],
-
-        // Unnecessary.
-        "no-mixed-operators": 0
+        "prefer-template": 1
     }
 }

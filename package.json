@@ -8,7 +8,7 @@
     "dist-test": "cross-env NODE_ENV=\"prod\" node ./src/server/server.js",
     "prod": "cross-env NODE_ENV=\"prod\" pm2 start ./src/server/server.js",
     "dev": "cross-env NODE_ENV=\"dev\" grunt dev",
-    "dev:lint": "eslint . --fix --ext .js"
+    "dev:lint": "eslint . --fix --ext .ts"
   },
   "nodemonConfig": {
     "ignore": [
@@ -26,13 +26,15 @@
   },
   "homepage": "https://github.com/ThrowdownTV/ThrowdownTV#readme",
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/eslint-parser": "^7.14.3",
+    "@types/node": "^15.6.1",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0"
+    "eslint-plugin-promise": "^5.1.0",
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "axios": "^0.21.1",
