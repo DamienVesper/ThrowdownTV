@@ -1,9 +1,9 @@
-const { randomString } = require(`./random.js`);
-const User = require(`../models/user.model.js`);
+import User from '../models/user.model';
 
-const log = require(`./log.js`);
+import log from './log';
+import { randomString } from './random';
 
-module.exports = async () => {
+const antiDuplicator = async () => {
     log(`cyan`, `Checking for duplicate stream keys...`);
 
     const dbUsers = await User.find({});
@@ -26,3 +26,5 @@ module.exports = async () => {
         }
     }
 };
+
+export default antiDuplicator;
