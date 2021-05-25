@@ -1,6 +1,6 @@
 import * as Mongoose from 'mongoose';
 
-interface banInterface extends Mongoose.Document {
+interface banType extends Mongoose.Document {
     IP?: string,
     comment?: string
 }
@@ -16,6 +16,6 @@ const banSchema = new Mongoose.Schema({
     }
 });
 
-const Ban = Mongoose.model<banInterface>(`Ban`, banSchema);
+const Ban = Mongoose.model<banType>(`Ban`, banSchema);
 
 export default Ban;
