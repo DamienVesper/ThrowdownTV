@@ -4,16 +4,10 @@
   "description": "A website built for streaming.",
   "main": "gruntfile.js",
   "scripts": {
-    "build": "grunt build-dist",
-    "dist-test": "cross-env NODE_ENV=\"prod\" node ./src/server/server.js",
-    "prod": "cross-env NODE_ENV=\"prod\" pm2 start ./src/server/server.js",
-    "dev": "cross-env NODE_ENV=\"dev\" grunt dev",
+    "build": "grunt build && tsc",
+    "prod": "node ./build/src/server/server.js --mode prod",
+    "dev": "node ./build/src/server/server.js --mode dev",
     "dev:lint": "eslint . --fix --ext .ts"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "config/*"
-    ]
   },
   "repository": {
     "type": "git",
@@ -33,6 +27,7 @@
     "@types/node": "^15.6.1",
     "@types/passport": "^1.0.6",
     "@types/passport-local": "^1.0.33",
+    "@types/yargs": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",
@@ -40,7 +35,8 @@
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "yargs": "^17.0.1"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -48,7 +44,6 @@
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect-mongo": "^4.4.1",
-    "cross-env": "^7.0.3",
     "crypto-js": "^4.0.0",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
