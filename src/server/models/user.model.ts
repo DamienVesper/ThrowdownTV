@@ -1,6 +1,6 @@
 import * as Mongoose from 'mongoose';
 
-import { randomString } from '../utils/randomString';
+import randomString from '../utils/randomString';
 
 interface userType extends Mongoose.Document {
     username: string,
