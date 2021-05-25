@@ -67,7 +67,7 @@ app.set(`view engine`, `ejs`);
 app.set(`trust proxy`, true);
 
 // Serve the static directory.
-app.use(Express.static(path.resolve(__dirname, `../client/views`)));
+app.use(Express.static(path.resolve(__dirname, `views`)));
 
 // Use routes.
 app.use(`/widgets`, widgetRouter);
