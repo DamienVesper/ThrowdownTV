@@ -1,4 +1,4 @@
-module.exports = (color, ...content) => {
+const log = async (color: string, ...content: any[]) => {
     // Set timing variables.
     const time = new Date();
     const second = time.getSeconds().toString().padStart(2, `0`);
@@ -46,3 +46,5 @@ module.exports = (color, ...content) => {
 
     console.log(logColor || `\x1b[37m`, formattedTime, logContent);
 };
+
+export default log;
