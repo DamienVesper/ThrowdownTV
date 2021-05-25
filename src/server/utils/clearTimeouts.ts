@@ -1,8 +1,8 @@
-const User = require(`../models/user.model.js`);
+import User from '../models/user.model';
 
-const log = require(`./log.js`);
+import log from './log';
 
-module.exports = async () => {
+const clearTimeouts = async () => {
     log(`cyan`, `Checking for timed out users...`);
 
     const dbUsers = await User.find();
@@ -16,3 +16,5 @@ module.exports = async () => {
         }
     }
 };
+
+export default clearTimeouts;
