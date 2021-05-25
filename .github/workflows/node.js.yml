@@ -25,12 +25,12 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: borales/actions-yarn@v2.0.0
+    - uses: borales/actions-yarn@v2.3.0
       with:
         cmd: install
-    - uses: borales/actions-yarn@v2.0.0
+    - uses: borales/actions-yarn@v2.3.0
       with:
         cmd: build
-    - uses: borales/actions-yarn@v2.0.0
+    - uses: borales/actions-yarn@v2.3.0
       with:
         cmd: dev:lint
