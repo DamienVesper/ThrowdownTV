@@ -1,8 +1,65 @@
-const { randomString } = require(`../utils/random.js`);
+import * as Mongoose from 'mongoose';
 
-const Mongoose = require(`mongoose`);
+import { randomString } from '../utils/random';
 
-const userSchema = Mongoose.Schema({
+interface userType extends Mongoose.Document {
+    username: string,
+    displayName: string,
+
+    creationDate: any,
+    email: string,
+
+    creationIP?: string,
+    lastIP?: string,
+
+    token?: string,
+    recoverytoken?: string,
+
+    password: string,
+    live?: boolean,
+
+    verified?: boolean,
+    verifyToken?: string,
+
+    isSuspended?: boolean,
+
+    avatarURL?: string,
+
+    channel?: {
+        moderators: string[],
+        bans: string[],
+        timeouts: string[]
+    },
+
+    perms: {
+        staff?: boolean,
+        vip?: boolean
+    },
+
+    settings?: {
+        title: string,
+        description: string,
+        donationLink: string,
+
+        rtmpServer: string,
+        streamKey: string,
+
+        useGlobalStickers: boolean,
+        lockdown: boolean,
+        notifications: boolean
+    },
+
+    subscription?: {
+        paymentId: string,
+        paymentToken: string,
+        payerId: string
+    },
+
+    viewers: string[],
+    followers: string[]
+}
+
+const userSchema = new Mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -13,11 +70,17 @@ const userSchema = Mongoose.Schema({
         required: true,
         unique: true
     },
+
+    creationDate: {
+        type: Date,
+        required: true
+    },
     email: {
         type: String,
         required: false,
         unique: true
     },
+
     creationIP: {
         type: String,
         required: false
@@ -26,10 +89,7 @@ const userSchema = Mongoose.Schema({
         type: String,
         required: false
     },
-    creationDate: {
-        type: Date,
-        required: true
-    },
+
     token: {
         type: String,
         default: randomString(64),
@@ -40,6 +100,7 @@ const userSchema = Mongoose.Schema({
         default: randomString(64),
         required: false
     },
+
     password: {
         type: String,
         required: true
@@ -49,6 +110,7 @@ const userSchema = Mongoose.Schema({
         default: false,
         required: false
     },
+
     verified: {
         type: Boolean,
         required: false
@@ -57,16 +119,19 @@ const userSchema = Mongoose.Schema({
         type: String,
         required: false
     },
+
     isSuspended: {
         type: Boolean,
         default: false,
         required: false
     },
+
     avatarURL: {
         type: String,
         default: `/assets/img/defaultpfp.png`,
         required: false
     },
+
     channel: {
         moderators: {
             type: Array,
@@ -84,6 +149,7 @@ const userSchema = Mongoose.Schema({
             required: false
         }
     },
+
     perms: {
         staff: {
             type: Boolean,
@@ -96,13 +162,8 @@ const userSchema = Mongoose.Schema({
             required: false
         }
     },
+
     settings: {
-        streamKey: {
-            type: String,
-            default: randomString(32),
-            required: false,
-            unique: true
-        },
         title: {
             type: String,
             default: `My Cool Stream!`,
@@ -118,11 +179,19 @@ const userSchema = Mongoose.Schema({
             default: `/streams/donate`,
             required: false
         },
+
         rtmpServer: {
             type: String,
             default: `us01`,
             required: false
         },
+        streamKey: {
+            type: String,
+            default: randomString(32),
+            required: false,
+            unique: true
+        },
+
         useGlobalStickers: {
             type: Boolean,
             default: true,
@@ -139,6 +208,7 @@ const userSchema = Mongoose.Schema({
             required: false
         }
     },
+
     subscription: {
         paymentId: {
             type: String,
@@ -156,6 +226,7 @@ const userSchema = Mongoose.Schema({
             required: false
         }
     },
+
     viewers: {
         type: Array,
         default: [],
@@ -168,4 +239,6 @@ const userSchema = Mongoose.Schema({
     }
 });
 
-module.exports = Mongoose.model(`User`, userSchema);
+const User = Mongoose.model<userType>(`User`, userSchema);
+
+export default User;

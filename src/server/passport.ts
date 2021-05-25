@@ -10,7 +10,7 @@ import * as passport from 'passport';
 import passportLocal from 'passport-local';
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user);
 });
 
 passport.deserializeUser((id, done) => {
@@ -98,11 +98,11 @@ passport.use(`signup`, new passportLocal.Strategy({
                 signupUser.password = hash;
                 signupUser.save(err => {
                     if (err) return done(err);
-                    return done(null, signupUser, `success`);
+                    return done(null, signupUser);
                 });
             });
         });
     });
 }));
 
-module.exports = passport;
+export default passport;
