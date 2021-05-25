@@ -4,20 +4,19 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 interface Args {
-    port: number,
-    socketPort: number
+    mode: string
 }
 
 const argv = (yargs(hideBin(process.argv)).options({
-    port: { type: `number`, default: 8080 },
-    socketPort: { type: `number`, default: 8443 }
+    mode: { type: `string`, default: `dev` }
 }).argv as Args);
 
 const config = {
     name,
+    mode: argv.mode,
 
-    port: argv.port,
-    socketPort: argv.socketPort,
+    port: argv.mode === `prod` ? 8750 : 8080,
+    socketPort: 8443,
 
     version,
     blacklistedUsernames: [`admin`, `panel`, `adminpanel`, `moderation`, `moderation-dashboard`, `api`, `signup`, `login`, `tos`, `browse`, `following`, `dashboard`, `changestreamkey`, `widget`, `follow`, `unfollow`, `throwdown`, `vip`, `staff`, `recoveraccount`, `changepassword`, `report`],
