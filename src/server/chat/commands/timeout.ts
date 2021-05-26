@@ -1,12 +1,13 @@
-const User = require(`../../models/user.model.js`);
+import User from '../../models/user.model';
+import Chatter from '../socket';
 
-module.exports = {
+const config = {
     description: `Time out a user from chat for 5 minutes!`,
     aliases: [`t`, `to`],
     usage: `<user>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     const userToTimeout = args.shift().toLowerCase();
 
     const streamer = await User.findOne({ username: chatter.channel });
@@ -31,5 +32,10 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
             for (const user of users) user.emit(`commandMessage`, `${userToTimeout} was automatically unmuted.`);
             chatter.emit(`commandMessage`, `${userToTimeout} was automatically unmuted.`);
         });
-    }, 300000);
+    }, 3e5);
+};
+
+export {
+    config,
+    run
 };
