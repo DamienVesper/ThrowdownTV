@@ -34,8 +34,8 @@ process.on(`uncaughtException`, err => log(`red`, err.stack));
 const app = express();
 
 // Express extension configurations.
-app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.json({ limit: `5mb` }));
+app.use(express.urlencoded({ limit: `5mb`, extended: true }));
 
 // Set headers.
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
