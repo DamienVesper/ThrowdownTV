@@ -152,7 +152,7 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
 
                         if (config.mode === `prod`) {
                             return res.json({
-                                success: `Please verify your email`
+                                success: `Your account has been created! Please verify your email before logging in.`
                             });
                         } else {
                             req.logIn(user, err => {
@@ -161,7 +161,11 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
                                         errors: err
                                     });
                                 }
+
                                 log(`yellow`, `User "${user.username}" successfully logged in.`);
+                                return res.json({
+                                    success: `Account created, redirecting...`
+                                });
                             });
                         }
                     });
