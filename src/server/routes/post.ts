@@ -6,7 +6,6 @@ import * as Discord from 'discord.js';
 import randomString from '../utils/randomString';
 
 import User from '../models/user.model';
-import Ban from '../models/ban.model';
 
 import config from '../../../config/config';
 import log from '../utils/log';
@@ -19,9 +18,6 @@ client.on(`ready`, async () => log(`green`, `Succesfully connected to Discord.`)
 
 // All POST requests are handled within this router (except authentication).
 postRouter.post(`/dashboard`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`stream-title`] || !req.body[`stream-description`] || !req.body[`donation-link`] ||
@@ -47,9 +43,6 @@ postRouter.post(`/dashboard`, async (req: Express.Request, res: Express.Response
 
 // Update account information.
 postRouter.post(`/accountoptions/updateinfo`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`display-name`] || typeof req.body[`display-name`] !== `string`) return res.json({ errors: `Please fill out all fields` });
@@ -67,9 +60,6 @@ postRouter.post(`/accountoptions/updateinfo`, async (req: Express.Request, res: 
 
 // Update general options.
 postRouter.post(`/accountoptions/generaloptions`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     let notifications = true;
@@ -89,9 +79,6 @@ postRouter.post(`/accountoptions/generaloptions`, async (req: Express.Request, r
 
 // Update Avatar
 postRouter.post(`/accountoptions/updatepfp`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     if (!req.body[`display-avatar`] || typeof req.body[`display-avatar`] !== `string`) return res.json({ errors: `Please fill out all fields` });
@@ -107,9 +94,6 @@ postRouter.post(`/accountoptions/updatepfp`, async (req: Express.Request, res: E
 
 // Change Stream Key
 postRouter.post(`/changestreamkey`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: (<any>req).user.username });
@@ -123,9 +107,6 @@ postRouter.post(`/changestreamkey`, async (req: Express.Request, res: Express.Re
 
 // Follow a streamer
 postRouter.post(`/follow/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamer = await User.findOne({ username: req.params.streamer });
@@ -146,9 +127,6 @@ postRouter.post(`/follow/:streamer`, async (req: Express.Request, res: Express.R
 
 // Unfollow a streamer
 postRouter.post(`/unfollow/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamer = await User.findOne({ username: req.params.streamer });
@@ -167,9 +145,6 @@ postRouter.post(`/unfollow/:streamer`, async (req: Express.Request, res: Express
 });
 
 postRouter.post(`/report/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`403 Forbidden`).status(403);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
