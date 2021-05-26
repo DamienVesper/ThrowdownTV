@@ -141,4 +141,4 @@ io.on(`connection`, async (socket: SocketIO.Socket) => {
     });
 });
 
-module.exports = io;
+export default Chatter;
