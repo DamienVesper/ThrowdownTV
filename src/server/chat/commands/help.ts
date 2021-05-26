@@ -31,8 +31,8 @@ const config = {
 };
 
 const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
-    chatter.emit(`commandMessage`, `Available Commands:`);
-    for (const command of commands) chatter.emit(`commandMessage`, `/${command.name} - ${command.description}`);
+    chatter.socket.emit(`commandMessage`, `Available Commands:`);
+    for (const command of commands) chatter.socket.emit(`commandMessage`, `/${command.name} - ${command.description}`);
 };
 
 export {

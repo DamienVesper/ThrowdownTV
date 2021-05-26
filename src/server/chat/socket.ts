@@ -23,7 +23,7 @@ interface Chatter {
         vip: boolean;
     }
 
-    emit: any;
+    socket: SocketIO.Socket
 }
 
 const chatUsers: Chatter[] = [];
@@ -71,7 +71,7 @@ io.on(`connection`, async (socket: SocketIO.Socket) => {
             token,
             channel: streamerUsername,
 
-            emit: socket.emit
+            socket
         };
 
         chatUsers.push(chatter);
@@ -101,13 +101,13 @@ io.on(`connection`, async (socket: SocketIO.Socket) => {
             };
 
             // Check if user account is suspended
-            if (user.isSuspended) return chatter.emit(`commandMessage`, `Your account has been suspended.`);
+            if (user.isSuspended) return chatter.socket.emit(`commandMessage`, `Your account has been suspended.`);
 
             // Check if user is banned
-            if (streamer.channel.bans.includes(chatter.username) || streamer.channel.timeouts.includes(chatter.username)) return chatter.emit(`commandMessage`, `You have been banned from talking in this chat.`);
+            if (streamer.channel.bans.includes(chatter.username) || streamer.channel.timeouts.includes(chatter.username)) return chatter.socket.emit(`commandMessage`, `You have been banned from talking in this chat.`);
 
             // Check if channel is on lockdown
-            if (streamer.settings.lockdown === true && !streamer.channel.moderators.includes(chatter.username) && chatter.username !== streamerUsername) return chatter.emit(`commandMessage`, `Chat is currently under lockdown.`);
+            if (streamer.settings.lockdown === true && !streamer.channel.moderators.includes(chatter.username) && chatter.username !== streamerUsername) return chatter.socket.emit(`commandMessage`, `Chat is currently under lockdown.`);
 
             // If the message is a command, then forward it to the command handler.
             if (message.slice(0, config.chatPrefix.length) === config.chatPrefix) return commandHandler.run(message, chatter, chatUsers);
@@ -116,7 +116,7 @@ io.on(`connection`, async (socket: SocketIO.Socket) => {
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
 
             for (const user of usersToMessage) {
-                user.emit(`chatMessage`, {
+                user.socket.emit(`chatMessage`, {
                     username: chatter.username,
                     displayName: chatter.displayName,
                     message: xssFilters.inHTMLData(message.substr(0, 500)),
