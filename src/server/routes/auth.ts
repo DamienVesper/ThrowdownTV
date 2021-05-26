@@ -10,7 +10,6 @@ import config from '../../../config/config';
 import crypto from 'crypto';
 
 import User from '../models/user.model';
-import Ban from '../models/ban.model';
 
 import log from '../utils/log';
 import randomString from '../utils/randomString';
@@ -34,12 +33,8 @@ const transport = nodemailer.createTransport({
 });
 
 authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    if (config.mode === `prod` && req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
 
-    if (config.mode === `prod`) {
-        if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
-    }
     if (!req.body[`signup-username`] || !req.body[`signup-email`] || !req.body[`signup-password`] || !req.body[`signup-password-confirm`] ||
         typeof req.body[`signup-username`] !== `string` || typeof req.body[`signup-email`] !== `string` || typeof req.body[`signup-password`] !== `string` || typeof req.body[`signup-password-confirm`] !== `string`) {
         return res.json({
@@ -186,8 +181,6 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
 });
 
 authRouter.post(`/login`, async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         return res.json({
             success: `Logged in`
@@ -243,8 +236,6 @@ authRouter.post(`/login`, async (req: Express.Request, res: Express.Response, ne
 });
 
 authRouter.get(`/logout`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         log(`yellow`, `User "${(<any>req).user.username}" logged out.`);
         req.logOut();
@@ -253,8 +244,6 @@ authRouter.get(`/logout`, async (req: Express.Request, res: Express.Response) =>
 });
 
 authRouter.get(`/authenticated`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         return res.json({
             isLoggedIn: true,
@@ -272,8 +261,6 @@ authRouter.get(`/authenticated`, async (req: Express.Request, res: Express.Respo
 });
 
 authRouter.get(`/changepassword/:token`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     const token = req.params.token;
     const user = await User.findOne({ recoverytoken: token });
 
@@ -286,8 +273,6 @@ authRouter.get(`/changepassword/:token`, async (req: Express.Request, res: Expre
 });
 
 authRouter.post(`/changepassword/:token`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.body[`new-password`] || !req.body[`new-password-confirm`] || typeof req.body[`new-password`] !== `string` || typeof req.body[`new-password-confirm`] !== `string`) return res.json({ errors: `Please fill out all fields` });
 
     if (req.body[`new-password`] !== xssFilters.inHTMLData(req.body[`new-password`])) {
@@ -328,15 +313,7 @@ authRouter.post(`/changepassword/:token`, async (req: Express.Request, res: Expr
     });
 });
 
-authRouter.get(`/recoveraccount`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-    res.render(`accountRecovery.ejs`);
-});
-
 authRouter.post(`/recoveraccount`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.body[`recover-email`] || typeof req.body[`recover-email`] !== `string`) return res.json({ errors: `Please fill out the recovery email` });
 
     const user = await User.findOne({ email: req.body[`recover-email`] });
@@ -366,8 +343,6 @@ authRouter.post(`/recoveraccount`, async (req: Express.Request, res: Express.Res
 });
 
 authRouter.get(`/verify/*`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     const token = req.url.split(`/verify/`)[1];
     if (!token) return res.redirect(`/`);
 
