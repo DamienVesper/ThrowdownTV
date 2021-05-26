@@ -1,12 +1,13 @@
-const User = require(`../../models/user.model.js`);
+import User from '../../models/user.model';
+import Chatter from '../socket';
 
-module.exports = {
+const config = {
     description: `Ban a user from chatting!`,
     aliases: [],
     usage: `<user>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     const userToBan = args.shift().toLowerCase();
 
     const streamer = await User.findOne({ username: chatter.channel });
@@ -18,10 +19,16 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
     else if (streamer.channel.bans.includes(userToBan)) return chatter.emit(`commandMessage`, `That user is already barred from your channel's chat!`);
 
     streamer.channel.bans.push(userToBan);
-    if (streamer.channel.timeouts.includes(userToBan)) streamer.channel.timeouts.splice((userToBan), 1);
+
+    if (streamer.channel.timeouts.includes(userToBan)) streamer.channel.timeouts.splice(streamer.channel.timeouts.indexOf(userToBan), 1);
     if (streamer.channel.moderators.includes(userToBan)) streamer.channel.moderators.splice(streamer.channel.moderators.indexOf(userToBan), 1);
     streamer.save(() => chatter.emit(`commandMessage`, `${userToBan} has been banned.`));
 
     const users = chatUsers.filter(user => user.channel === chatter.channel && user.username !== chatter.username);
     for (const user of users) user.emit(`commandMessage`, `${userToBan} was banned by a moderator.`);
+};
+
+export {
+    config,
+    run
 };
