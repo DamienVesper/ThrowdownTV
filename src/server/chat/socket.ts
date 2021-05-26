@@ -7,7 +7,7 @@ import * as http from 'http';
 import User from '../models/user.model';
 import log from '../utils/log';
 
-import commandHandler from './commandHandler';
+import * as commandHandler from './commandHandler';
 
 interface Chatter {
     username: string;
