@@ -55,17 +55,16 @@
                 $(`#login-button`).attr(`disabled`, false);
                 $(`#login-error`).show();
 
-                $(`#login-error-message`).text(JSON.stringify(res.errors));
-
-                return false;
+                $(`#login-error-message`).text(res.errors);
+                console.error(`[ACCOUNT SERVER]: ${JSON.stringify(res.errors)}`);
             } else if (res.success) {
-                $(`#login-button`).attr(`disabled`, false);
+                $(`#login-button`).val(`Logged in, redirecting...`);
                 $(`#login-success`).show();
 
-                $(`#login-success-message`).text(JSON.stringify(res.success));
+                $(`#login-success-message`).text(res.success);
+                console.log(`[ACCOUNT SERVER]: ${JSON.stringify(res.success)}`);
 
                 window.location.reload();
-                return true;
             }
         });
     });
