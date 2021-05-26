@@ -2,9 +2,7 @@ module.exports = (grunt) => {
     grunt.initConfig({
         pkg: grunt.file.readJSON(`package.json`),
 
-        // Copy files over to the static folder.
         copy: {
-            // Copy libs to build
             client: {
                 files: [
                     {
@@ -14,12 +12,19 @@ module.exports = (grunt) => {
                         src: [`**`],
                         dest: `build/src/client`,
                         filter: `isFile`
+                    },
+                    {
+                        expand: true,
+                        nonull: true,
+                        cwd: `src/server/views`,
+                        src: [`**`],
+                        dest: `build/src/server/views`,
+                        filter: `isFile`
                     }
                 ]
             }
         },
 
-        // Clean up static folder and unminified client source.
         clean: {
             client: [`build/*`]
         }
