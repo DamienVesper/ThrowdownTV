@@ -23,17 +23,16 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 
-import * as ejsLayouts from 'express-ejs-layouts';
 import helmet from 'helmet';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 // Error logging.
 process.on(`uncaughtException`, err => log(`red`, err.stack));
 
 // Express app.
 const app = express();
+
+// EJS Layouts.
+const ejsLayouts = require(`express-ejs-layouts`);
 
 // Database connection.
 mongoose.connect(process.env.MONGO_URI, {
@@ -55,7 +54,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// express middleware.
+// Express middleware.
 app.use(ejsLayouts);
 app.use(helmet({ contentSecurityPolicy: false }));
 

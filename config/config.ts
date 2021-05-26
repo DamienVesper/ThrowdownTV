@@ -3,6 +3,9 @@ import { name, version } from '../package.json';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 interface Args {
     mode: string
 }
