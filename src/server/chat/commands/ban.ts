@@ -3,7 +3,6 @@ import Chatter from '../socket';
 
 const config = {
     description: `Ban a user from chatting!`,
-    aliases: [],
     usage: `<user>`
 };
 
@@ -22,6 +21,7 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 
     if (streamer.channel.timeouts.includes(userToBan)) streamer.channel.timeouts.splice(streamer.channel.timeouts.indexOf(userToBan), 1);
     if (streamer.channel.moderators.includes(userToBan)) streamer.channel.moderators.splice(streamer.channel.moderators.indexOf(userToBan), 1);
+
     streamer.save(() => chatter.emit(`commandMessage`, `${userToBan} has been banned.`));
 
     const users = chatUsers.filter(user => user.channel === chatter.channel && user.username !== chatter.username);

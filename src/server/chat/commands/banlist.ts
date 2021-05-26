@@ -1,9 +1,8 @@
-const User = require(`../../models/user.model.js`);
+import User from '../../models/user.model';
 
-module.exports = {
+const config = {
     description: `Ban a user from chatting!`,
-    aliases: [`bans`],
-    usage: ``
+    aliases: [`bans`]
 };
 
 module.exports.run = async (message, args, chatter, chatUsers) => {
