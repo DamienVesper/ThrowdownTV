@@ -61,6 +61,8 @@
                 $(`#signup-error-message`).text(JSON.stringify(res.success));
                 return true;
             }
+
+            else window.location.reload();
         });
     });
 </script>

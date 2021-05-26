@@ -58,8 +58,6 @@ passport.use(`login`, new passportLocal.Strategy({
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) return log(`red`, err.stack);
             else if (isMatch) {
-                const { randomString } = require(`./utils/random.js`);
-
                 user.token = randomString(64);
                 user.save();
 
