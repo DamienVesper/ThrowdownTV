@@ -1,23 +1,23 @@
+import * as Express from 'express';
+
+import * as xssFilters from 'xss-filters';
+import * as passport from 'passport';
+
+import * as bcrypt from 'bcrypt';
+import * as HCaptcha from 'hcaptcha';
+
+import config from '../../../config/config';
+import crypto from 'crypto';
+
+import User from '../models/user.model';
+import Ban from '../models/ban.model';
+
+import log from '../utils/log';
+import randomString from '../utils/randomString';
+
 require(`dotenv`).config();
 
-// Log utility and config.
-const log = require(`../utils/log.js`);
-const config = require(`../../../config/config.js`);
-
-const express = require(`express`);
-const router = express.Router();
-const xssFilters = require(`xss-filters`);
-const { randomString } = require(`../utils/randomString.js`);
-
-// Authentication.
-const User = require(`../models/user.model.js`);
-const Ban = require(`../models/ban.model.js`);
-const passport = require(`passport`);
-const bcrypt = require(`bcryptjs`);
-const crypto = require(`crypto`);
-
-// Captcha
-const { verify } = require(`hcaptcha`);
+const authRouter: Express.Router = Express.Router();
 
 // Nodemailer.
 const nodemailer = require(`nodemailer`);
@@ -34,9 +34,10 @@ const transport = nodemailer.createTransport({
     }
 });
 
-router.post(`/signup`, async (req, res, next) => {
+authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+
     if (config.mode === `prod`) {
         if (req.body[`h-captcha-response`] === undefined) return res.json({ errors: `Please solve the captcha.` });
     }
@@ -83,21 +84,21 @@ router.post(`/signup`, async (req, res, next) => {
         });
     }
 
-    if (req.body[`signup-password`] < 7 || req.body[`signup-password`] > 48) {
+    if (req.body[`signup-password`].length < 7 || req.body[`signup-password`].length > 48) {
         return res.json({
             errors: `Password must be between 7 and 48 characters`
         });
     }
 
     if (config.mode === `prod`) {
-        verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
+        HCaptcha.verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
             }).catch(() => res.json({ errors: `Captcha Error` }));
     }
     const user = await User.findOne({ email: req.body[`signup-email`] });
     if (user) {
-        if (!user.verified && ((new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
+        if (!user.verified && (<any>(new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
         else {
             return res.json({
                 errors: `That email is already in use`
@@ -185,7 +186,7 @@ router.post(`/signup`, async (req, res, next) => {
     })(req, res, next);
 });
 
-router.post(`/login`, async (req, res, next) => {
+authRouter.post(`/login`, async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
@@ -205,7 +206,7 @@ router.post(`/login`, async (req, res, next) => {
     }
 
     if (config.mode === `prod`) {
-        verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
+        HCaptcha.verify(process.env.HCAPTCHA_KEY, req.body[`h-captcha-response`])
             .then((data) => {
                 if (!data) return res.json({ errors: `Invalid Captcha` });
             }).catch(() => res.json({ errors: `Captcha Error` }));
@@ -242,27 +243,27 @@ router.post(`/login`, async (req, res, next) => {
     })(req, res, next);
 });
 
-router.get(`/logout`, async (req, res) => {
+authRouter.get(`/logout`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
-        log(`yellow`, `User "${req.user.username}" logged out.`);
+        log(`yellow`, `User "${(<any>req).user.username}" logged out.`);
         req.logOut();
     }
     res.redirect(`/`);
 });
 
-router.get(`/authenticated`, async (req, res) => {
+authRouter.get(`/authenticated`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (req.isAuthenticated()) {
         return res.json({
             isLoggedIn: true,
-            username: req.user.username,
-            email: req.user.email,
-            displayName: req.user.displayName,
-            token: req.user.token ? req.user.token : undefined,
-            isSuspended: req.user.isSuspended
+            username: (<any>req).user.username,
+            email: (<any>req).user.email,
+            displayName: (<any>req).user.displayName,
+            token: (<any>req).user.token ? (<any>req).user.token : undefined,
+            isSuspended: (<any>req).user.isSuspended
         });
     } else {
         return res.json({
@@ -271,7 +272,7 @@ router.get(`/authenticated`, async (req, res) => {
     }
 });
 
-router.get(`/changepassword/:token`, async (req, res) => {
+authRouter.get(`/changepassword/:token`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     const token = req.params.token;
@@ -285,7 +286,7 @@ router.get(`/changepassword/:token`, async (req, res) => {
     }
 });
 
-router.post(`/changepassword/:token`, async (req, res) => {
+authRouter.post(`/changepassword/:token`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.body[`new-password`] || !req.body[`new-password-confirm`] || typeof req.body[`new-password`] !== `string` || typeof req.body[`new-password-confirm`] !== `string`) return res.json({ errors: `Please fill out all fields` });
@@ -302,7 +303,7 @@ router.post(`/changepassword/:token`, async (req, res) => {
         });
     }
 
-    if (req.body[`new-password`] < 7 || req.body[`new-password`] > 48) {
+    if (req.body[`new-password`].length < 7 || req.body[`new-password`].length > 48) {
         return res.json({
             errors: `Password must be between 7 and 48 characters`
         });
@@ -328,13 +329,13 @@ router.post(`/changepassword/:token`, async (req, res) => {
     });
 });
 
-router.get(`/recoveraccount`, async (req, res) => {
+authRouter.get(`/recoveraccount`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     res.render(`accountRecovery.ejs`);
 });
 
-router.post(`/recoveraccount`, async (req, res) => {
+authRouter.post(`/recoveraccount`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     if (!req.body[`recover-email`] || typeof req.body[`recover-email`] !== `string`) return res.json({ errors: `Please fill out the recovery email` });
@@ -365,7 +366,7 @@ router.post(`/recoveraccount`, async (req, res) => {
     });
 });
 
-router.get(`/verify/*`, async (req, res) => {
+authRouter.get(`/verify/*`, async (req: Express.Request, res: Express.Response) => {
     const ip = await Ban.findOne({ IP: req.ip });
     if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
     const token = req.url.split(`/verify/`)[1];
@@ -389,4 +390,4 @@ router.get(`/verify/*`, async (req, res) => {
     });
 });
 
-module.exports = router;
+export default authRouter;
