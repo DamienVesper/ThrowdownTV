@@ -1,12 +1,13 @@
-const User = require(`../../models/user.model.js`);
+import User from '../../models/user.model';
+import Chatter from '../socket';
 
-module.exports = {
+const config = {
     description: `Demote a moderator.`,
     aliases: [`demod`],
     usage: `<user>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     const userToUnmod = args.shift().toLowerCase();
 
     const streamer = await User.findOne({ username: chatter.username });
@@ -19,4 +20,9 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     streamer.channel.moderators.splice(streamer.channel.moderators.indexOf(userToUnmod), 1);
     streamer.save(() => chatter.emit(`commandMessage`, `Demoted ${userToUnmod} from a moderator of your channel.`));
+};
+
+export {
+    config,
+    run
 };
