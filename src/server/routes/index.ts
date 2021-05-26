@@ -157,10 +157,8 @@ pageRouter.get(`/:streamer`, async (req: Express.Request, res: Express.Response)
     const streamer = req.params.streamer;
     const user = await User.findOne({ username: streamer.toLowerCase() });
 
-    if (!user) return res.render(`404.ejs`);
-    if (user.isSuspended) return res.render(`banned.ejs`);
-
-    res.render(`streamer.ejs`);
+    if (!user || user.isSuspended) res.render(`404.ejs`);
+    else res.render(`streamer.ejs`);
 });
 
 export default pageRouter;
