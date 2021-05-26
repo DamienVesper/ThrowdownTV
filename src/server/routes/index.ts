@@ -52,16 +52,16 @@ pageRouter.get(`/browse`, async (req: Express.Request, res: Express.Response) =>
 
 // Staff
 pageRouter.get(`/staff`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     res.render(`staff.ejs`);
 });
 
 // Admin Panel
 pageRouter.get(`/admin`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -73,8 +73,8 @@ pageRouter.get(`/admin`, async (req: Express.Request, res: Express.Response) => 
 
 // Following.
 pageRouter.get(`/following`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -83,8 +83,9 @@ pageRouter.get(`/following`, async (req: Express.Request, res: Express.Response)
 
 // Dashboard.
 pageRouter.get(`/dashboard`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
+
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const user = await User.findOne({ username: (<any>req).user.username });
@@ -102,8 +103,8 @@ pageRouter.get(`/dashboard`, async (req: Express.Request, res: Express.Response)
 
 // Chat
 pageRouter.get(`/chat/*`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     const user = await User.findOne({ username: req.url.split(`/`)[2].toLowerCase() });
     if (!user) return res.redirect(`/`);
@@ -112,8 +113,8 @@ pageRouter.get(`/chat/*`, async (req: Express.Request, res: Express.Response) =>
 });
 
 pageRouter.get(`/vip`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const user = await User.findOne({ username: (<any>req).user.username });
@@ -123,24 +124,24 @@ pageRouter.get(`/vip`, async (req: Express.Request, res: Express.Response) => {
 });
 
 pageRouter.get(`/vip/success`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     res.send(`Success`);
 });
 
 pageRouter.get(`/vip/cancel`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     res.send(`Error`);
 });
 
 pageRouter.get(`/report/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -151,8 +152,8 @@ pageRouter.get(`/report/:streamer`, async (req: Express.Request, res: Express.Re
 });
 
 pageRouter.get(`/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 
     const streamer = req.params.streamer;
     const user = await User.findOne({ username: streamer.toLowerCase() });

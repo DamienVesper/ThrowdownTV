@@ -5,6 +5,7 @@ import antiDuplicator from './utils/antiDuplicator';
 import clearTimeouts from './utils/clearTimeouts';
 import resetRTMPServers from './utils/resetRTMPServers';
 
+import Ban from './models/ban.model';
 import passport from './passport';
 
 import apiRouter from './routes/api';
@@ -14,7 +15,6 @@ import postRouter from './routes/post';
 import widgetRouter from './routes/widget';
 
 import * as path from 'path';
-
 import * as http from 'http';
 
 import express from 'express';
@@ -37,16 +37,9 @@ const app = express();
 app.use(express.json({ limit: `5mb` }));
 app.use(express.urlencoded({ limit: `5mb`, extended: true }));
 
-// Set headers.
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.path.includes(`/assets/img/`)) res.header(`Cache-Control`, `public, max-age=86400`);
-
-    res.header(`Access-Control-Allow-Origin`, `*`); // This can be changed to prevent people from embedding the site on their own.
-    res.header(`Access-Control-Allow-Methods`, `POST, GET, OPTIONS, PUT, DELETE, PATCH, HEAD`);
-    res.header(`Access-Control-Allow-Headers`, `Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept`);
-    req.method.toLowerCase() === `options`
-        ? res.sendStatus(200)
-        : next();
+app.use(async (req: express.Request, res: express.Response) => {
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.render(`errors/403.ejs`);
 });
 
 // Database connection.
