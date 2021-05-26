@@ -21,7 +21,7 @@ import express from 'express';
 import session from 'express-session';
 
 import MongoStore from 'connect-mongo';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 import * as ejsLayouts from 'express-ejs-layouts';
 import helmet from 'helmet';
