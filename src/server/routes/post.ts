@@ -20,7 +20,7 @@ client.on(`ready`, async () => log(`green`, `Succesfully connected to Discord.`)
 // All POST requests are handled within this router (except authentication).
 postRouter.post(`/dashboard`, async (req: Express.Request, res: Express.Response) => {
     const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`401.ejs`);
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -47,8 +47,8 @@ postRouter.post(`/dashboard`, async (req: Express.Request, res: Express.Response
 
 // Update account information.
 postRouter.post(`/accountoptions/updateinfo`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -68,7 +68,7 @@ postRouter.post(`/accountoptions/updateinfo`, async (req: Express.Request, res: 
 // Update general options.
 postRouter.post(`/accountoptions/generaloptions`, async (req: Express.Request, res: Express.Response) => {
     const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`401.ejs`);
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -89,8 +89,8 @@ postRouter.post(`/accountoptions/generaloptions`, async (req: Express.Request, r
 
 // Update Avatar
 postRouter.post(`/accountoptions/updatepfp`, async (req: Express.Request, res: Express.Response) => {
-    const ip = await Ban.findOne({ IP: req.ip });
-    if (ip) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
+    const isBanned = await Ban.findOne({ IP: req.ip });
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -108,7 +108,7 @@ postRouter.post(`/accountoptions/updatepfp`, async (req: Express.Request, res: E
 // Change Stream Key
 postRouter.post(`/changestreamkey`, async (req: Express.Request, res: Express.Response) => {
     const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`401.ejs`);
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -124,7 +124,7 @@ postRouter.post(`/changestreamkey`, async (req: Express.Request, res: Express.Re
 // Follow a streamer
 postRouter.post(`/follow/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`401.ejs`);
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -147,7 +147,7 @@ postRouter.post(`/follow/:streamer`, async (req: Express.Request, res: Express.R
 // Unfollow a streamer
 postRouter.post(`/unfollow/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`401.ejs`);
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -168,7 +168,7 @@ postRouter.post(`/unfollow/:streamer`, async (req: Express.Request, res: Express
 
 postRouter.post(`/report/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`401.ejs`);
+    if (isBanned) return res.send(`403 Forbidden`).status(403);
 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     if (config.mode === `prod`) {
