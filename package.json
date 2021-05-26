@@ -6,6 +6,7 @@
   "scripts": {
     "build": "grunt build && tsc",
     "prod": "node ./build/src/server/server.js --mode prod",
+    "dist": "yarn build && yarn dev",
     "dev": "node ./build/src/server/server.js --mode dev",
     "dev:lint": "eslint . --fix --ext .ts"
   },
