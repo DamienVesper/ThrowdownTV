@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import User from '../models/user.model';
-import Ban from '../models/ban.model';
 import Sticker from '../models/sticker.model';
 
 import config from '../../../config/config';
@@ -40,17 +39,9 @@ fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err,
     }
 });
 
-apiRouter.get(`/get-emotes`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
-    return res.json(emotes);
-});
+apiRouter.get(`/get-emotes`, async (req: Express.Request, res: Express.Response) => res.json(emotes));
 
 apiRouter.get(`/rtmp-api/:streamer/:apikey`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamer = req.params.streamer.toLowerCase();
     const apikey = req.params.apikey;
 
@@ -69,9 +60,6 @@ apiRouter.get(`/rtmp-api/:streamer/:apikey`, async (req: Express.Request, res: E
 });
 
 apiRouter.post(`/stream-status/:streamkey/:status/:apikey`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamkey = req.params.streamkey.toLowerCase();
     const status = req.params.status.toLowerCase();
     const apikey = req.params.apikey;
@@ -92,9 +80,6 @@ apiRouter.post(`/stream-status/:streamkey/:status/:apikey`, async (req: Express.
 });
 
 apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamer = req.body.streamer;
     const apiKey = req.body.apiKey;
 
@@ -125,9 +110,6 @@ apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.
 apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const stickerData = await Sticker.find({ ownerUsername: (<any>req).user.username });
     if (!stickerData) return res.json({ errors: `No stickers for this user` });
 
@@ -138,9 +120,6 @@ apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Respons
 });
 
 apiRouter.get(`/stream-key/:streamKey`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamkey = req.params.streamKey;
     if (!streamkey) res.json({ errors: `Stream key not supplied.` });
 
@@ -158,9 +137,6 @@ apiRouter.get(`/stream-key/:streamKey`, async (req: Express.Request, res: Expres
 });
 
 apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamerData = await User.find({ live: true });
     const streams = [];
 
@@ -179,9 +155,6 @@ apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) =>
 });
 
 apiRouter.get(`/fetch-users-no-staff`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
@@ -218,9 +191,6 @@ apiRouter.get(`/fetch-users-no-staff`, async (req: Express.Request, res: Express
 });
 
 apiRouter.get(`/fetch-user/:userToFetch`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
@@ -254,9 +224,6 @@ apiRouter.get(`/fetch-user/:userToFetch`, async (req: Express.Request, res: Expr
 
 // Ban User
 apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
@@ -274,9 +241,6 @@ apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.
 
 // Unban User
 apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
@@ -293,9 +257,6 @@ apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Expres
 });
 
 apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamer = req.body.streamer;
     const apiKey = req.body.apiKey;
 
@@ -314,9 +275,6 @@ apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Expr
 });
 
 apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamers = [];
@@ -337,9 +295,6 @@ apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Re
 });
 
 apiRouter.get(`/stream-data`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamerData = await User.findOne({ username: (<any>req).user.username });
@@ -365,9 +320,6 @@ apiRouter.get(`/stream-data`, async (req: Express.Request, res: Express.Response
 });
 
 apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamerData) res.render(`404.ejs`);
 
@@ -391,9 +343,6 @@ apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res:
 });
 
 apiRouter.get(`/get-followers/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.send(`IP: ${req.ip} is blocked from accessing this page.`);
-
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamerData) res.render(`404.ejs`);
 
