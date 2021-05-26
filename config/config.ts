@@ -15,6 +15,8 @@ const config = {
     name,
     mode: argv.mode,
 
+    domain: `throwdown.tv`,
+
     port: argv.mode === `prod` ? 8750 : 8080,
     socketPort: 8443,
 
