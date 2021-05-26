@@ -123,62 +123,44 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
 
                 user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
 
-                const mailOptions = {
-                    from: `Throwdown TV <no-reply@throwdown.tv>`,
-                    to: user.email,
-                    subject: `Verify your Throwdown.TV Account`,
-                    text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
-                };
+                user.save(() => {
+                    log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
 
-                if (config.mode === `dev`) {
-                    user.verified = true;
-                    user.save(() => {
-                        log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+                    if (config.mode === `dev`) {
                         req.logIn(user, err => {
                             if (err) {
                                 return res.json({
                                     errors: err
                                 });
                             }
+
                             log(`yellow`, `User "${user.username}" successfully logged in.`);
                             return res.json({
-                                success: `Logged in`
+                                success: `Account created, redirecting...`
                             });
                         });
-                    });
-                } else {
-                    user.save(() => {
-                        log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+                    } else {
+                        res.json({
+                            success: `Your account has been created! Please verify your email before logging in.`
+                        });
 
-                        if (config.mode === `prod`) {
-                            return res.json({
-                                success: `Your account has been created! Please verify your email before logging in.`
-                            });
-                        } else {
-                            req.logIn(user, err => {
-                                if (err) {
-                                    return res.json({
-                                        errors: err
-                                    });
-                                }
+                        const mailOptions = {
+                            from: `Throwdown TV <no-reply@throwdown.tv>`,
+                            to: user.email,
+                            subject: `Verify your Throwdown.TV Account`,
+                            text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
+                        };
 
-                                log(`yellow`, `User "${user.username}" successfully logged in.`);
+                        transport.sendMail(mailOptions, err => {
+                            if (err) {
+                                user.delete();
                                 return res.json({
-                                    success: `Account created, redirecting...`
+                                    errors: `Error sending a verification email to the specified email address.`
                                 });
-                            });
-                        }
-                    });
-
-                    if (config.mode === `prod`) transport.sendMail(mailOptions, err => {
-                        if (err) {
-                            user.delete();
-                            return res.json({
-                                errors: `Error sending a verification email to the specified email address.`
-                            });
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
+                });
             });
         }
     })(req, res, next);
