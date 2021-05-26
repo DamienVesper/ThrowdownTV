@@ -1,15 +1,17 @@
-const fs = require(`fs`);
-const path = require(`path`);
-const log = require(`../../utils/log.js`);
+import Chatter from '../socket';
+import log from '../../utils/log';
+
+import * as fs from 'fs';
+import * as path from 'path';
 
 // Load commands.
 const commands = [];
-fs.readdir(path.resolve(__dirname, `../commands`), (err, files) => {
+fs.readdir(path.resolve(__dirname), (err, files) => {
     if (err) return log(`red`, err.stack);
 
     for (const command of files) {
         const commandName = command.split(`.`)[0];
-        if (commandName === `_template`) continue;
+
         const cmd = require(`../commands/${command}`);
         commands.push({
             name: commandName,
@@ -18,17 +20,22 @@ fs.readdir(path.resolve(__dirname, `../commands`), (err, files) => {
             usage: cmd.usage,
             run: cmd.run
         });
+
         log(`yellow`, `Loaded command ${command.split(`.`)[0]}.`);
     }
 });
 
-module.exports = {
+const config = {
     description: `List all commands!`,
-    aliases: [`h`],
-    usage: ``
+    aliases: [`h`]
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     chatter.emit(`commandMessage`, `Available Commands:`);
     for (const command of commands) chatter.emit(`commandMessage`, `/${command.name} - ${command.description}`);
+};
+
+export {
+    config,
+    run
 };
