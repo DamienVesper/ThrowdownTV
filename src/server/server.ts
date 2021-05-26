@@ -25,14 +25,17 @@ import mongoose from 'mongoose';
 
 import helmet from 'helmet';
 
+const ejsLayouts = require(`express-ejs-layouts`);
+
 // Error logging.
 process.on(`uncaughtException`, err => log(`red`, err.stack));
 
 // Express app.
 const app = express();
 
-// EJS Layouts.
-const ejsLayouts = require(`express-ejs-layouts`);
+// Express extension configurations.
+app.use(express.json());
+app.use(express.urlencoded());
 
 // Set headers.
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
