@@ -147,32 +147,32 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
                         });
                     });
                 } else {
-                    transport.sendMail(mailOptions, err => {
+                    user.save(() => {
+                        log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+
+                        if (config.mode === `prod`) {
+                            return res.json({
+                                success: `Please verify your email`
+                            });
+                        } else {
+                            req.logIn(user, err => {
+                                if (err) {
+                                    return res.json({
+                                        errors: err
+                                    });
+                                }
+                                log(`yellow`, `User "${user.username}" successfully logged in.`);
+                            });
+                        }
+                    });
+
+                    if (config.mode === `prod`) transport.sendMail(mailOptions, err => {
                         if (err) {
                             user.delete();
                             return res.json({
                                 errors: `Error sending a verification email to the specified email address.`
                             });
                         }
-
-                        user.save(() => {
-                            log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
-
-                            if (config.mode === `prod`) {
-                                return res.json({
-                                    success: `Please verify your email`
-                                });
-                            } else {
-                                req.logIn(user, err => {
-                                    if (err) {
-                                        return res.json({
-                                            errors: err
-                                        });
-                                    }
-                                    log(`yellow`, `User "${user.username}" successfully logged in.`);
-                                });
-                            }
-                        });
                     });
                 }
             });
