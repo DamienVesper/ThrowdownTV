@@ -1,35 +1,43 @@
-const config = require(`../../../config/config.js`);
-const log = require(`../utils/log.js`);
+import config from '../../../config/config';
+import * as SocketIO from 'socket.io';
 
-const fs = require(`fs`);
+import * as xssFilters from 'xss-filters';
+import * as http from 'http';
 
-const http = require(`http`);
-const https = require(`https`);
+import User from '../models/user.model';
+import log from '../utils/log';
 
-const User = require(`../models/user.model.js`);
+import commandHandler from './commandHandler';
 
-const xssFilters = require(`xss-filters`);
-const chatUsers = [];
+interface Chatter {
+    username: string;
+    displayName: string;
 
-const commandHandler = require(`./commandHandler.js`);
+    token: string;
+    channel: string;
+
+    perms?: {
+        streamer: boolean;
+        staff: boolean;
+        moderator: boolean;
+        vip: boolean;
+    };
+
+    emit: any;
+}
+
+const chatUsers: Chatter[] = [];
 
 // Configure socket.
-const server = config.mode === `prod`
-    ? https.createServer({
-        key: fs.readFileSync(`/etc/letsencrypt/live/${config.domain}/privkey.pem`),
-        cert: fs.readFileSync(`/etc/letsencrypt/live/${config.domain}/fullchain.pem`),
-        requestCert: false,
-        rejectUnauthorized: false
-    })
-    : http.createServer();
-
-const io = require(`socket.io`)(server, {
+const server = http.createServer();
+const io = new SocketIO.Server(server, {
     cors: {
         origin: config.mode === `dev` ? `http://localhost:8080` : `https://${config.domain}`,
         methods: [`GET`, `POST`],
         credentials: true
     }
 });
+
 server.listen(config.socketPort, () => log(`green`, `Socket.IO bound to port ${config.socketPort}.`));
 
 // Reset stats.
@@ -46,22 +54,25 @@ const resetStats = async () => {
 resetStats();
 
 // Handle new connections.
-io.on(`connection`, async socket => {
+io.on(`connection`, async (socket: SocketIO.Socket) => {
     log(`magenta`, `Chat Connection | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
 
-    socket.on(`connectToChat`, async (username, token, streamerUsername) => {
+    socket.on(`connectToChat`, async (username: string, token: string, streamerUsername: string) => {
         const user = await User.findOne({ username });
         const streamer = await User.findOne({ username: streamerUsername });
 
-        // If the user or the token is incorrect, disconnect the socket.
+        // If the user or the token is incorrect, label it as a guest account.
         if (!user || user.token !== token || !streamer) log(`cyan`, `Guest account connected.`);
 
-        const chatter = socket;
-        chatter.username = username;
-        chatter.displayName = user ? user.displayName : undefined;
+        const chatter: Chatter = {
+            username,
+            displayName: user ? user.displayName : undefined,
 
-        chatter.token = token;
-        chatter.channel = streamerUsername;
+            token,
+            channel: streamerUsername,
+
+            emit: socket.emit
+        };
 
         chatUsers.push(chatter);
 
@@ -74,7 +85,7 @@ io.on(`connection`, async socket => {
         socket.emit(`handshake`);
 
         // Receiving messages.
-        socket.on(`chatMessage`, async message => {
+        socket.on(`chatMessage`, async (message: string) => {
             // Whitespace detection.
             if (message.length === 0 || message.split(` `).length === (message.length + 1)) return;
 
@@ -103,6 +114,7 @@ io.on(`connection`, async socket => {
 
             // Message all users in the channel.
             const usersToMessage = chatUsers.filter(user => user.channel === streamerUsername);
+
             for (const user of usersToMessage) {
                 user.emit(`chatMessage`, {
                     username: chatter.username,
@@ -123,6 +135,7 @@ io.on(`connection`, async socket => {
                 streamer.viewers.splice(streamer.viewers.indexOf(chatter.username), 1);
                 streamer.save();
             }
+
             return socket.disconnect();
         });
     });
