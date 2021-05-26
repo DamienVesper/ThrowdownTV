@@ -1,12 +1,13 @@
-const User = require(`../../models/user.model.js`);
+import User from '../../models/user.model';
+import Chatter from '../socket';
 
-module.exports = {
+const config = {
     description: `Unban a user.`,
     aliases: [],
     usage: `<user>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     const userToUnban = args.shift().toLowerCase();
 
     const streamer = await User.findOne({ username: chatter.channel });
@@ -23,4 +24,9 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     const users = chatUsers.filter(user => user.channel === chatter.channel && user.username !== chatter.username);
     for (const user of users) user.emit(`commandMessage`, `${userToUnban} was unbanned by a moderator.`);
+};
+
+export {
+    config,
+    run
 };
