@@ -1,7 +1,7 @@
 import * as Mongoose from 'mongoose';
 
 interface banType extends Mongoose.Document {
-    IP?: string;
+    IP: string;
     comment?: string;
 }
 
