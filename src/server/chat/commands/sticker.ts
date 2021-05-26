@@ -1,13 +1,15 @@
-const User = require(`../../models/user.model.js`);
-const Sticker = require(`../../models/sticker.model.js`);
+import User from '../../models/user.model';
+import Sticker from '../../models/sticker.model';
 
-module.exports = {
+import Chatter from '../socket';
+
+const config = {
     description: `Send a sticker that you have access to!`,
     aliases: [`s`],
     usage: `<stickername>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     const sticker = args.shift().toLowerCase();
 
     const stickerToSend = await Sticker.findOne({ stickerName: sticker });
@@ -15,9 +17,7 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     if (!stickerToSend) return chatter.emit(`commandMessage`, `That sticker does not exist!`);
     else if (stickerToSend.channelsBannedOn.includes(chatter.channel)) return chatter.emit(`commandMessage`, `Usage of the sticker "${sticker}" has been banned on this channel.`);
-    else if ((stickerToSend.ownerUsername !== channel) && (!channel.settings.useGlobalStickers)) return chatter.emit(`commandMessage`, `Sending stickers from other channels has been disabled.`);
-
-    console.log(stickerToSend.path);
+    else if ((stickerToSend.ownerUsername !== channel.username) && (!channel.settings.useGlobalStickers)) return chatter.emit(`commandMessage`, `Sending stickers from other channels has been disabled.`);
 
     // Message all users in the channel.
     const users = chatUsers.filter(user => user.channel === chatter.channel);
@@ -29,4 +29,9 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
             badges: chatter.perms
         });
     }
+};
+
+export {
+    config,
+    run
 };
