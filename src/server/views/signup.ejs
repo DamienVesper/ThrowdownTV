@@ -53,13 +53,15 @@
                 $(`#signup-error`).show();
 
                 $(`#signup-error-message`).text(res.errors);
-                return false;
+                console.error(`[ACCOUNT SERVER]: ${JSON.stringify(res.errors)}`);
             } else if (res.success) {
                 $(`#signup-button`).attr(`disabled`, true);
                 $(`#signup-error`).show();
 
                 $(`#signup-error-message`).text(res.success);
-                return true;
+                console.log(`[ACCOUNT SERVER]: ${JSON.stringify(res.success)}`);
+
+                setTimeout(() => window.location.href = `${window.location.protocol}//${window.location.host}/login`, 1e4);
             }
         });
     });

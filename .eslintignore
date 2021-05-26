@@ -1,2 +1,5 @@
-**/assets/js/*
-*.min.js
+# Ignore build files.
+build/
+
+# Ignore the client.
+src/client
