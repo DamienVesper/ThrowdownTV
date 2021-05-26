@@ -11,8 +11,8 @@ import Ban from '../models/ban.model';
 import config from '../../../config/config';
 
 const postRouter: Express.Router = Express.Router();
-
 const client: Discord.Client = new Discord.Client();
+
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 // All POST requests are handled within this router (except authentication).

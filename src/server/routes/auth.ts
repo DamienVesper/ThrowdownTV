@@ -15,8 +15,6 @@ import Ban from '../models/ban.model';
 import log from '../utils/log';
 import randomString from '../utils/randomString';
 
-require(`dotenv`).config();
-
 const authRouter: Express.Router = Express.Router();
 
 // Nodemailer.
