@@ -17,13 +17,14 @@ import * as path from 'path';
 
 import * as http from 'http';
 
-import * as Express from 'express';
-import * as session from 'express-session';
+import express from 'express';
+import session from 'express-session';
 
+import MongoStore from 'connect-mongo';
 import * as mongoose from 'mongoose';
 
 import * as ejsLayouts from 'express-ejs-layouts';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -32,10 +33,7 @@ dotenv.config();
 process.on(`uncaughtException`, err => log(`red`, err.stack));
 
 // Express app.
-const app = Express();
-
-// MongoStore.
-const MongoStore = require(`connect-mongo`);
+const app = express();
 
 // Database connection.
 mongoose.connect(process.env.MONGO_URI, {
@@ -43,7 +41,7 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true
 }).then(() => log(`green`, `User authentication has connected to database.`));
 
-// Express session.
+// express session.
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -57,7 +55,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Express middleware.
+// express middleware.
 app.use(ejsLayouts);
 app.use(helmet({ contentSecurityPolicy: false }));
 
@@ -69,7 +67,7 @@ app.set(`view engine`, `ejs`);
 app.set(`trust proxy`, true);
 
 // Serve the static directory.
-app.use(Express.static(path.resolve(__dirname, `views`)));
+app.use(express.static(path.resolve(__dirname, `views`)));
 
 // Use routes.
 app.use(`/widgets`, widgetRouter);
