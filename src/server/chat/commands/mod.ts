@@ -1,12 +1,12 @@
-const User = require(`../../models/user.model.js`);
+import User from '../../models/user.model';
+import Chatter from '../socket';
 
-module.exports = {
+const config = {
     description: `Promote a chat user to moderator.`,
-    aliases: [],
     usage: `<user>`
 };
 
-module.exports.run = async (message, args, chatter, chatUsers) => {
+const run = async (message: string, args: string[], chatter: Chatter, chatUsers: Chatter[]) => {
     const userToMod = args.shift().toLowerCase();
 
     const streamer = await User.findOne({ username: chatter.username });
@@ -19,4 +19,9 @@ module.exports.run = async (message, args, chatter, chatUsers) => {
 
     streamer.channel.moderators.push(userToMod);
     streamer.save(() => chatter.emit(`commandMessage`, `Promoted ${userToMod} to a moderator of your channel.`));
+};
+
+export {
+    config,
+    run
 };
