@@ -21,7 +21,6 @@ import * as Express from 'express';
 import * as session from 'express-session';
 
 import * as mongoose from 'mongoose';
-import MongoStore from 'connect-mongo';
 
 import * as ejsLayouts from 'express-ejs-layouts';
 import * as helmet from 'helmet';
@@ -34,6 +33,9 @@ process.on(`uncaughtException`, err => log(`red`, err.stack));
 
 // Express app.
 const app = Express();
+
+// MongoStore.
+const MongoStore = require(`connect-mongo`);
 
 // Database connection.
 mongoose.connect(process.env.MONGO_URI, {
