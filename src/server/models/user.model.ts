@@ -39,14 +39,14 @@ interface userType extends Mongoose.Document {
     settings?: {
         title: string;
         description: string;
-        donationLink: string;
+        donationLink?: string;
 
-        rtmpServer: string;
-        streamKey: string;
+        rtmpServer?: string;
+        streamKey?: string;
 
-        useGlobalStickers: boolean;
-        lockdown: boolean;
-        notifications: boolean;
+        useGlobalStickers?: boolean;
+        lockdown?: boolean;
+        notifications?: boolean;
     }
 
     subscription?: {
