@@ -110,60 +110,60 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
 
         const username = user.username ? user.username : ``;
 
-        if (info) {
-            User.findOne({
-                username
-            }).then(user => {
-                if (!user) return log(`red`, err);
-                const creationIP = req.header(`x-forwarded-for`) || req.socket.remoteAddress;
+        User.findOne({
+            username
+        }).then(user => {
+            if (!user) return log(`red`, err);
+            const creationIP = req.header(`x-forwarded-for`) || req.socket.remoteAddress;
 
-                user.email = req.body[`signup-email`];
-                user.creationIP = creationIP;
-                user.lastIP = user.creationIP;
-                user.verified = config.mode === `dev`;
+            user.email = req.body[`signup-email`];
+            user.creationIP = creationIP;
+            user.lastIP = user.creationIP;
+            user.verified = config.mode === `dev`;
 
-                user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
+            user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
 
-                user.save(() => {
-                    log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
+            user.save(() => {
+                log(`yellow`, `Created account "${user.username}" with email "${user.email}"`);
 
-                    if (config.mode === `dev`) {
-                        req.logIn(user, err => {
-                            if (err) {
-                                return res.json({
-                                    errors: err
-                                });
-                            }
+                console.log(`got here 7`);
 
-                            log(`yellow`, `User "${user.username}" successfully logged in.`);
+                if (config.mode === `dev`) {
+                    req.logIn(user, err => {
+                        if (err) {
                             return res.json({
-                                success: `Account created, redirecting...`
+                                errors: err
                             });
-                        });
-                    } else {
-                        res.json({
-                            success: `Your account has been created! Please verify your email before logging in.`
-                        });
+                        }
 
-                        const mailOptions = {
-                            from: `Throwdown TV <no-reply@throwdown.tv>`,
-                            to: user.email,
-                            subject: `Verify your Throwdown.TV Account`,
-                            text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
-                        };
-
-                        transport.sendMail(mailOptions, err => {
-                            if (err) {
-                                user.delete();
-                                return res.json({
-                                    errors: `Error sending a verification email to the specified email address.`
-                                });
-                            }
+                        log(`yellow`, `User "${user.username}" successfully logged in.`);
+                        return res.json({
+                            success: `Account created, redirecting...`
                         });
-                    }
-                });
+                    });
+                } else {
+                    res.json({
+                        success: `Your account has been created! Please verify your email before logging in.`
+                    });
+
+                    const mailOptions = {
+                        from: `Throwdown TV <no-reply@throwdown.tv>`,
+                        to: user.email,
+                        subject: `Verify your Throwdown.TV Account`,
+                        text: `Hello ${user.username}, \n\nPlease verify your Throwdown.TV email address via this link: https://${config.domain}/verify/${user.verifyToken}`
+                    };
+
+                    transport.sendMail(mailOptions, err => {
+                        if (err) {
+                            user.delete();
+                            return res.json({
+                                errors: `Error sending a verification email to the specified email address.`
+                            });
+                        }
+                    });
+                }
             });
-        }
+        });
     })(req, res, next);
 });
 
