@@ -3,60 +3,60 @@ import * as Mongoose from 'mongoose';
 import randomString from '../utils/randomString';
 
 interface userType extends Mongoose.Document {
-    username: string,
-    displayName: string,
+    username: string;
+    displayName: string;
 
-    creationDate: any,
-    email: string,
+    creationDate: any;
+    email: string;
 
-    creationIP?: string,
-    lastIP?: string,
+    creationIP?: string;
+    lastIP?: string;
 
-    token?: string,
-    recoverytoken?: string,
+    token?: string;
+    recoverytoken?: string;
 
-    password: string,
-    live?: boolean,
+    password: string;
+    live?: boolean;
 
-    verified?: boolean,
-    verifyToken?: string,
+    verified?: boolean;
+    verifyToken?: string;
 
-    isSuspended?: boolean,
+    isSuspended?: boolean;
 
-    avatarURL?: string,
+    avatarURL?: string;
 
     channel?: {
-        moderators: string[],
-        bans: string[],
-        timeouts: string[]
-    },
+        moderators: string[];
+        bans: string[];
+        timeouts: string[];
+    }
 
     perms: {
-        staff?: boolean,
-        vip?: boolean
-    },
+        staff?: boolean;
+        vip?: boolean;
+    }
 
     settings?: {
-        title: string,
-        description: string,
-        donationLink: string,
+        title: string;
+        description: string;
+        donationLink: string;
 
-        rtmpServer: string,
-        streamKey: string,
+        rtmpServer: string;
+        streamKey: string;
 
-        useGlobalStickers: boolean,
-        lockdown: boolean,
-        notifications: boolean
-    },
+        useGlobalStickers: boolean;
+        lockdown: boolean;
+        notifications: boolean;
+    }
 
     subscription?: {
-        paymentId: string,
-        paymentToken: string,
-        payerId: string
+        paymentId: string;
+        paymentToken: string;
+        payerId: string;
     },
 
-    viewers: string[],
-    followers: string[]
+    viewers: string[];
+    followers: string[];
 }
 
 const userSchema = new Mongoose.Schema({
