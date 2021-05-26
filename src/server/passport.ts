@@ -39,7 +39,7 @@ const initializeDefaultUser = async () => {
             if (err) return log(`red`, err);
             return log(`green`, `Initialized default user on new database.`);
         });
-    } else log(`yellow`, `Users already initialized, skipping...`);
+    }
 };
 
 initializeDefaultUser();
