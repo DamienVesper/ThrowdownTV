@@ -36,7 +36,7 @@ const initializeDefaultUser = async () => {
         });
 
         defaultUser.save(err => {
-            if (err) return log(`red`, err);
+            if (err) return log(`red`, err.stack);
             return log(`green`, `Initialized default user on new database.`);
         });
     }
