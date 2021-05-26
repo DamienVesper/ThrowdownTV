@@ -54,12 +54,16 @@
             if (res.errors) {
                 $(`#login-button`).attr(`disabled`, false);
                 $(`#login-error`).show();
-                $(`#login-error-message`).text(res.errors);
+
+                $(`#login-error-message`).text(JSON.stringify(res.errors));
+
                 return false;
             } else if (res.success) {
                 $(`#login-button`).attr(`disabled`, false);
                 $(`#login-success`).show();
-                $(`#login-success-message`).text(res.success);
+
+                $(`#login-success-message`).text(JSON.stringify(res.success));
+
                 window.location.reload();
                 return true;
             }
