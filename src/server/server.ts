@@ -5,9 +5,9 @@ import antiDuplicator from './utils/antiDuplicator';
 import clearTimeouts from './utils/clearTimeouts';
 import resetRTMPServers from './utils/resetRTMPServers';
 
-import Ban from './models/ban.model';
 import passport from './passport';
 
+import banRouter from './routes/ban';
 import apiRouter from './routes/api';
 import authRouter from './routes/auth';
 import indexRouter from './routes/index';
@@ -36,11 +36,6 @@ const app = express();
 // Express extension configurations.
 app.use(express.json({ limit: `5mb` }));
 app.use(express.urlencoded({ limit: `5mb`, extended: true }));
-
-app.use(async (req: express.Request, res: express.Response) => {
-    const isBanned = await Ban.findOne({ IP: req.ip });
-    if (isBanned) return res.render(`errors/403.ejs`);
-});
 
 // Database connection.
 mongoose.connect(process.env.MONGO_URI, {
@@ -76,11 +71,18 @@ app.set(`trust proxy`, true);
 // Serve the static directory.
 app.use(express.static(path.resolve(__dirname, `../client`)));
 
-// Use routes.
-app.use(`/widgets`, widgetRouter);
-app.use(`/api`, apiRouter);
+// First, check if an IP is banned.
+app.use(`/`, banRouter);
+
+// Then, pass to the middleware routers.
 app.use(`/`, authRouter);
 app.use(`/`, postRouter);
+
+// Then, use special routes.
+app.use(`/`, widgetRouter);
+app.use(`/`, apiRouter);
+
+// Finally, the callback route if nothing else applies (it also handles 404).
 app.use(`/`, indexRouter);
 
 // Create the webfront.
