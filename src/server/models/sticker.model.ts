@@ -1,10 +1,10 @@
 import * as Mongoose from 'mongoose';
 
 interface stickerType extends Mongoose.Document {
-    stickerName: string
-    ownerUsername: string,
-    path: string,
-    channelsBannedOn?: string[]
+    stickerName: string;
+    ownerUsername: string;
+    path: string;
+    channelsBannedOn?: string[];
 }
 
 const stickerSchema = new Mongoose.Schema({
