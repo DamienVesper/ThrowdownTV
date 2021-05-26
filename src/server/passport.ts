@@ -5,8 +5,7 @@ import User from './models/user.model';
 import log from './utils/log';
 import randomString from './utils/randomString';
 
-import * as passport from 'passport';
-
+import passport from 'passport';
 import passportLocal from 'passport-local';
 
 passport.serializeUser((user, done) => {
