@@ -21,7 +21,7 @@ interface Chatter {
         staff: boolean;
         moderator: boolean;
         vip: boolean;
-    };
+    }
 
     emit: any;
 }
