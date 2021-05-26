@@ -61,7 +61,7 @@
                 $(`#signup-error-message`).text(res.success);
                 console.log(`[ACCOUNT SERVER]: ${JSON.stringify(res.success)}`);
 
-                setTimeout(() => window.location.href = `${window.location.hostname}/login`, 1e4);
+                setTimeout(() => window.location.href = `${window.location.protocol}//${window.location.host}/login`, 1e4);
             }
         });
     });

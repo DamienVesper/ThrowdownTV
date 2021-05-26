@@ -80,7 +80,7 @@ app.use(`/`, postRouter);
 
 // Then, use special routes.
 app.use(`/`, widgetRouter);
-app.use(`/`, apiRouter);
+app.use(`/api`, apiRouter);
 
 // Finally, the callback route if nothing else applies (it also handles 404).
 app.use(`/`, indexRouter);
