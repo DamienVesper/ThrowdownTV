@@ -90,6 +90,7 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
                 if (!data) return res.json({ errors: `Invalid Captcha` });
             }).catch(() => res.json({ errors: `Captcha Error` }));
     }
+
     const user = await User.findOne({ email: req.body[`signup-email`] });
     if (user) {
         if (!user.verified && (<any>(new Date()) - user.creationDate) > (60 * 60 * 1e3)) user.delete();
@@ -119,7 +120,7 @@ authRouter.post(`/signup`, async (req: Express.Request, res: Express.Response, n
                 user.email = req.body[`signup-email`];
                 user.creationIP = creationIP;
                 user.lastIP = user.creationIP;
-                user.verified = false;
+                user.verified = config.mode === `dev`;
 
                 user.verifyToken = `n${crypto.randomBytes(32).toString(`hex`)}`;
 
