@@ -20,7 +20,7 @@
         fetch(`/api/get-emotes`).then(data => data.json()).then(emojis => {
             const username = data.username;
             const token = data.token;
-            const streamer = window.location.href.split(`/`)[2].toLowerCase();
+            const streamer = window.location.pathname.split(`/`)[2].toLowerCase();
 
             if (!data.username) {
                 $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
