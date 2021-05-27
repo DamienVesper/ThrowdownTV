@@ -55,7 +55,7 @@ resetStats();
 
 // Handle new connections.
 io.on(`connection`, async (socket: SocketIO.Socket) => {
-    log(`magenta`, `Chat Connection | IP: ${socket.handshake.address} | Origin: ${socket.request.headers.origin}.`);
+    log(`magenta`, `Chat Connection | IP: ${socket.handshake.address}.`);
 
     socket.on(`connectToChat`, async (username: string, token: string, streamerUsername: string) => {
         const user = await User.findOne({ username });
