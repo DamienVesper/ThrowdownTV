@@ -26,6 +26,7 @@ import mongoose from 'mongoose';
 import helmet from 'helmet';
 
 const ejsLayouts = require(`express-ejs-layouts`);
+require(`./chat/socket`);
 
 // Error logging.
 process.on(`uncaughtException`, err => log(`red`, err.stack));
