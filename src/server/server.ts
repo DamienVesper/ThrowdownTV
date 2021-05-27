@@ -32,7 +32,7 @@ require(`./chat/socket`);
 process.on(`uncaughtException`, err => log(`red`, err.stack));
 
 // Express app.
-const app = express();
+const app: express.Application = express();
 
 // Express extension configurations.
 app.use(express.json({ limit: `5mb` }));
@@ -44,7 +44,7 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true
 }).then(() => log(`green`, `User authentication has connected to database.`));
 
-// express session.
+// Express session.
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -62,12 +62,12 @@ app.use(passport.session());
 app.use(ejsLayouts);
 app.use(helmet({ contentSecurityPolicy: false }));
 
+// NGINX Proxy.
+app.set(`trust proxy`, true);
+
 // Set view engine.
 app.set(`views`, path.resolve(__dirname, `views`));
 app.set(`view engine`, `ejs`);
-
-// Setup NGINX proxy.
-app.set(`trust proxy`, true);
 
 // Serve the static directory.
 app.use(express.static(path.resolve(__dirname, `../client`)));
