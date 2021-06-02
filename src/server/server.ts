@@ -96,7 +96,7 @@ const startApp = async () => {
                         resetRTMPServers(() => {
                             clearTimeouts(() => {
                                 antiDuplicator(() => {
-                                    setInterval(antiDuplicator, 18e5)
+                                    setInterval(antiDuplicator, 18e5);
                                 });
                             });
                         });

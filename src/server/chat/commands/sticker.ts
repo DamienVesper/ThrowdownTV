@@ -3,7 +3,7 @@ import Sticker from '../../models/sticker.model';
 
 import { Chatter, CommandConfig } from '../../types/chat';
 
-const config: CommandConfig = {
+const cmd: CommandConfig = {
     desc: `Send a sticker that you have access to!`,
     aliases: [`s`],
     usage: `<stickername>`
@@ -32,6 +32,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

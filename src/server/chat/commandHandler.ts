@@ -10,7 +10,7 @@ import log from '../utils/log';
 // Load commands.
 const commands: Command[] = [];
 
-fs.readdir(path.resolve(__dirname, `../commands`), async (err, files) => {
+fs.readdir(path.resolve(__dirname, `./commands`), async (err, files) => {
     for (const file of files) {
         if (err) log(`red`, err);
 

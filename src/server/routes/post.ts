@@ -8,13 +8,9 @@ import randomString from '../utils/randomString';
 import User from '../models/user.model';
 
 import config from '../../../config/config';
-import log from '../utils/log';
+import client from '../utils/discord';
 
 const postRouter: Express.Router = Express.Router();
-const client: Discord.Client = new Discord.Client();
-
-client.login(process.env.DISCORD_BOT_TOKEN);
-client.on(`ready`, async () => log(`green`, `Succesfully connected to Discord.`));
 
 // All POST requests are handled within this router (except authentication).
 postRouter.post(`/dashboard`, async (req: Express.Request, res: Express.Response) => {
