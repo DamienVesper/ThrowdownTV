@@ -5,12 +5,15 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as xssFilters from 'xss-filters';
+
 import log from '../utils/log';
+import { logHeader } from '../utils/logExtra';
 
 // Load commands.
 const commands: Command[] = [];
 
 fs.readdir(path.resolve(__dirname, `./commands`), async (err, files) => {
+    logHeader();
     for (const file of files) {
         if (err) log(`red`, err);
 
@@ -28,6 +31,8 @@ fs.readdir(path.resolve(__dirname, `./commands`), async (err, files) => {
             run: command.run
         });
     }
+
+    logHeader();
 });
 
 const run = async (message: string, chatter: Chatter, chatUsers: Chatter[]) => {

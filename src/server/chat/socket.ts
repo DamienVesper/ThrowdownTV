@@ -1,14 +1,16 @@
 import config from '../../../config/config';
-import * as SocketIO from 'socket.io';
 
 import * as xssFilters from 'xss-filters';
 import * as http from 'http';
 
-import User from '../models/user.model';
-import log from '../utils/log';
-
+import * as SocketIO from 'socket.io';
 import * as commandHandler from './commandHandler';
+
+import User from '../models/user.model';
 import { Chatter } from '../types/chat';
+
+import log from '../utils/log';
+import { logHeader } from '../utils/logExtra';
 
 const chatUsers: Chatter[] = [];
 
@@ -22,7 +24,10 @@ const io = new SocketIO.Server(server, {
     }
 });
 
-server.listen(config.socketPort, () => log(`green`, `Socket.IO bound to port ${config.socketPort}.`));
+server.listen(config.socketPort, () => {
+    logHeader();
+    log(`green`, `Socket.IO bound to port ${config.socketPort}.`);
+});
 
 // Reset stats.
 const resetStats = async () => {
@@ -30,11 +35,13 @@ const resetStats = async () => {
     for (const user of users) {
         user.viewers = [];
         user.live = false;
+
         user.save();
     }
 
     log(`cyan`, `Reset the viewer count and livestream status of all users.`);
 };
+
 resetStats();
 
 // Handle new connections.

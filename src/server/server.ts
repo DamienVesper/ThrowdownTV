@@ -28,7 +28,6 @@ import mongoose from 'mongoose';
 import helmet from 'helmet';
 
 const ejsLayouts = require(`express-ejs-layouts`);
-import(`./chat/socket`);
 
 // Error logging.
 process.on(`uncaughtException`, err => log(`red`, err.stack));
@@ -89,15 +88,16 @@ const startApp = async () => {
     logSplash(() => {
         mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
             log(`green`, `User authentication has connected to database.`);
-            logHeader(() => {
-                server.listen(config.port, () => {
-                    log(`green`, `Webfront bound to port ${config.port}.`);
-                    logHeader(() => {
-                        resetRTMPServers(() => {
-                            clearTimeouts(() => {
-                                antiDuplicator(() => {
-                                    setInterval(antiDuplicator, 18e5);
-                                });
+            logHeader();
+            server.listen(config.port, async () => {
+                log(`green`, `Webfront bound to port ${config.port}.`);
+
+                logHeader();
+                import(`./chat/socket`).then(() => {
+                    resetRTMPServers(() => {
+                        clearTimeouts(() => {
+                            antiDuplicator(() => {
+                                setInterval(antiDuplicator, 18e5);
                             });
                         });
                     });
