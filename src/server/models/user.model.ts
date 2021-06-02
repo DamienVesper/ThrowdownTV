@@ -4,183 +4,60 @@ import { UserDoc } from '../types/models';
 import randomString from '../utils/randomString';
 
 const userSchema = new Mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    displayName: {
-        type: String,
-        required: true,
-        unique: true
-    },
+    username: { type: String, required: true, unique: true },
+    displayName: { type: String, required: true, unique: true },
 
-    creationDate: {
-        type: Date,
-        required: true
-    },
-    email: {
-        type: String,
-        required: false,
-        unique: true
-    },
+    creationDate: { type: Date, required: true },
+    email: { type: String, required: false, unique: true },
 
-    creationIP: {
-        type: String,
-        required: false
-    },
-    lastIP: {
-        type: String,
-        required: false
-    },
+    creationIP: { type: String, required: false },
+    lastIP: { type: String, required: false },
 
-    token: {
-        type: String,
-        default: randomString(64),
-        required: false
-    },
-    recoverytoken: {
-        type: String,
-        default: randomString(64),
-        required: false
-    },
+    token: { type: String, required: false, default: randomString(64) },
+    recoverytoken: { type: String, required: false, default: randomString(64) },
 
-    password: {
-        type: String,
-        required: true
-    },
-    live: {
-        type: Boolean,
-        default: false,
-        required: false
-    },
+    password: { type: String, required: true },
+    live: { type: Boolean, required: false, default: false },
 
-    verified: {
-        type: Boolean,
-        required: false
-    },
-    verifyToken: {
-        type: String,
-        required: false
-    },
+    verified: { type: Boolean, required: false },
+    verifyToken: { type: String, required: false },
 
-    isSuspended: {
-        type: Boolean,
-        default: false,
-        required: false
-    },
+    isSuspended: { type: Boolean, required: false, default: false },
 
-    avatarURL: {
-        type: String,
-        default: `/assets/img/defaultpfp.png`,
-        required: false
-    },
+    avatarURL: { type: String, required: false, default: `/assets/img/defaultpfp.png` },
 
     channel: {
-        moderators: {
-            type: Array,
-            default: [],
-            required: false
-        },
-        bans: {
-            type: Array,
-            default: [],
-            required: false
-        },
-        timeouts: {
-            type: Array,
-            default: [],
-            required: false
-        }
+        moderators: { type: Array, required: false, default: [] },
+        bans: { type: Array, required: false, default: [] },
+        timeouts: { type: Array, required: false, default: [] }
     },
 
     perms: {
-        staff: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        vip: {
-            type: Boolean,
-            default: false,
-            required: false
-        }
+        staff: { type: Boolean, required: false, default: false },
+        vip: { type: Boolean, required: false, default: false }
     },
 
     settings: {
-        title: {
-            type: String,
-            default: `My Cool Stream!`,
-            required: false
-        },
-        description: {
-            type: String,
-            default: `A description about my cool stream!`,
-            required: false
-        },
-        donationLink: {
-            type: String,
-            default: `/streams/donate`,
-            required: false
-        },
+        title: { type: String, required: false, default: `My Cool Stream!` },
+        description: { type: String, required: false, default: `A description about my cool stream!` },
+        donationLink: { type: String, required: false, default: `/streams/donate` },
 
-        rtmpServer: {
-            type: String,
-            default: `us01`,
-            required: false
-        },
-        streamKey: {
-            type: String,
-            default: randomString(32),
-            required: false,
-            unique: true
-        },
+        rtmpServer: { type: String, required: false, default: `eu01` },
+        streamKey: { type: String, required: false, unique: true, default: randomString(32) },
 
-        useGlobalStickers: {
-            type: Boolean,
-            default: true,
-            required: false
-        },
-        lockdown: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        notifications: {
-            type: Boolean,
-            default: true,
-            required: false
-        }
+        useGlobalStickers: { type: Boolean, required: false, default: true },
+        lockdown: { type: Boolean, required: false, default: false },
+        notifications: { type: Boolean, required: false, default: true }
     },
 
     subscription: {
-        paymentId: {
-            type: String,
-            default: ``,
-            required: false
-        },
-        paymentToken: {
-            type: String,
-            default: ``,
-            required: false
-        },
-        payerId: {
-            type: String,
-            default: ``,
-            required: false
-        }
+        paymentId: { type: String, required: false, default: `` },
+        paymentToken: { type: String, required: false, default: `` },
+        payerId: { type: String, required: false, default: `` }
     },
 
-    viewers: {
-        type: Array,
-        default: [],
-        required: false
-    },
-    followers: {
-        type: Array,
-        default: [],
-        required: false
-    }
+    viewers: { type: Array, required: false, default: [] },
+    followers: { type: Array, required: false, default: [] }
 });
 
 const User = Mongoose.model<UserDoc>(`User`, userSchema);
