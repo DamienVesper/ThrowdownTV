@@ -1,7 +1,7 @@
 import User from '../../models/user.model';
 import { Chatter, CommandConfig } from '../../types/chat';
 
-const config: CommandConfig = {
+const cmd: CommandConfig = {
     desc: `Promote a chat user to moderator.`,
     usage: `<user>`
 };
@@ -22,6 +22,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };
