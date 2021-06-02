@@ -2,7 +2,7 @@ import User from '../../models/user.model';
 import { Chatter, CommandConfig } from '../../types/chat';
 
 const cmd: CommandConfig = {
-    description: `Ban a user from chatting!`,
+    desc: `Ban a user from chatting!`,
     usage: `<user>`
 };
 

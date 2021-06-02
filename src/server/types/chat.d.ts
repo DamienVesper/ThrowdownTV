@@ -17,4 +17,19 @@ interface Chatter {
     socket: Socket
 }
 
-export default Chatter;
+interface CommandConfig {
+    desc: string;
+    usage?: string;
+    aliases?: string[];
+}
+interface Command {
+    name: string;
+    config: CommandConfig;
+    run: any;
+}
+
+export {
+    Chatter,
+    Command,
+    CommandConfig
+};

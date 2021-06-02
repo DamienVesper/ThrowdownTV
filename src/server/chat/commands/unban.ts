@@ -1,8 +1,8 @@
 import User from '../../models/user.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
-    description: `Unban a user.`,
+const cmd: CommandConfig = {
+    desc: `Unban a user.`,
     aliases: [],
     usage: `<user>`
 };
@@ -27,6 +27,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

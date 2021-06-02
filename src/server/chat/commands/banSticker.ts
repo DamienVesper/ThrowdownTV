@@ -2,7 +2,7 @@ import Sticker from '../../models/sticker.model';
 import { Chatter, CommandConfig } from '../../types/chat';
 
 const cmd: CommandConfig = {
-    description: `Ban a sticker from the channel!`,
+    desc: `Ban a sticker from the channel!`,
     aliases: [`bs`],
     usage: `<stickerName>`
 };

@@ -23,8 +23,8 @@ fs.readdir(path.resolve(__dirname), async (err, files) => {
     }
 });
 
-const config: CommandConfig = {
-    description: `List all commands!`,
+const cmd: CommandConfig = {
+    desc: `List all commands!`,
     aliases: [`h`]
 };
 
@@ -34,6 +34,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

@@ -1,8 +1,8 @@
 import User from '../../models/user.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
-    description: `Time out a user from chat for 5 minutes!`,
+const cmd: CommandConfig = {
+    desc: `Time out a user from chat for 5 minutes!`,
     aliases: [`t`, `to`],
     usage: `<user>`
 };
@@ -36,6 +36,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

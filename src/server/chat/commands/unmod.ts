@@ -1,8 +1,8 @@
 import User from '../../models/user.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
-    description: `Demote a moderator.`,
+const cmd: CommandConfig = {
+    desc: `Demote a moderator.`,
     aliases: [`demod`],
     usage: `<user>`
 };
@@ -23,6 +23,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

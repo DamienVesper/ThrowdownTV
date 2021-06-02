@@ -1,8 +1,8 @@
 import User from '../../models/user.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
-    description: `Promote a chat user to moderator.`,
+const config: CommandConfig = {
+    desc: `Promote a chat user to moderator.`,
     usage: `<user>`
 };
 

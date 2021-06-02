@@ -1,10 +1,10 @@
 import User from '../../models/user.model';
 import Sticker from '../../models/sticker.model';
 
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
-    description: `Send a sticker that you have access to!`,
+const config: CommandConfig = {
+    desc: `Send a sticker that you have access to!`,
     aliases: [`s`],
     usage: `<stickername>`
 };

@@ -2,7 +2,7 @@ import User from '../../models/user.model';
 import { Chatter, CommandConfig } from '../../types/chat';
 
 const cmd: CommandConfig = {
-    description: `Disable chatting on your channel!`,
+    desc: `Disable chatting on your channel!`,
     usage: `<on/off>`
 };
 
@@ -27,6 +27,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

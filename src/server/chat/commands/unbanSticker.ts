@@ -1,8 +1,8 @@
 import Sticker from '../../models/sticker.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
-    description: `Unban a sticker from the channel!`,
+const cmd: CommandConfig = {
+    desc: `Unban a sticker from the channel!`,
     aliases: [`us`, `ubs`],
     usage: `<stickername>`
 };
@@ -23,6 +23,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };
