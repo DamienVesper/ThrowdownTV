@@ -3,7 +3,7 @@ import User from '../models/user.model';
 import log from './log';
 import randomString from './randomString';
 
-const antiDuplicator = async () => {
+const antiDuplicator = async (callback?: any) => {
     log(`cyan`, `Checking for duplicate stream keys...`);
 
     const dbUsers = await User.find({});
@@ -25,6 +25,8 @@ const antiDuplicator = async () => {
             }
         }
     }
+
+    if (callback !== undefined) callback();
 };
 
 export default antiDuplicator;

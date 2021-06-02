@@ -2,7 +2,7 @@ import User from '../models/user.model';
 
 import log from './log';
 
-const clearTimeouts = async () => {
+const clearTimeouts = async (callback?: any) => {
     log(`cyan`, `Checking for timed out users...`);
 
     const dbUsers = await User.find();
@@ -15,6 +15,8 @@ const clearTimeouts = async () => {
             user.save();
         }
     }
+
+    if (callback !== undefined) callback();
 };
 
 export default clearTimeouts;
