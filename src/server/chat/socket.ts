@@ -8,23 +8,7 @@ import User from '../models/user.model';
 import log from '../utils/log';
 
 import * as commandHandler from './commandHandler';
-
-interface Chatter {
-    username: string;
-    displayName: string;
-
-    token: string;
-    channel: string;
-
-    perms?: {
-        streamer: boolean;
-        staff: boolean;
-        moderator: boolean;
-        vip: boolean;
-    }
-
-    socket: SocketIO.Socket
-}
+import Chatter from '../types/chat';
 
 const chatUsers: Chatter[] = [];
 
@@ -140,5 +124,3 @@ io.on(`connection`, async (socket: SocketIO.Socket) => {
         });
     });
 });
-
-export default Chatter;
