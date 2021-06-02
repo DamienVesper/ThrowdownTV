@@ -1,6 +1,8 @@
 import config from '../../config/config';
 
 import log from './utils/log';
+import { logSplash, logHeader } from './utils/logExtra';
+
 import antiDuplicator from './utils/antiDuplicator';
 import clearTimeouts from './utils/clearTimeouts';
 import resetRTMPServers from './utils/resetRTMPServers';
@@ -26,7 +28,7 @@ import mongoose from 'mongoose';
 import helmet from 'helmet';
 
 const ejsLayouts = require(`express-ejs-layouts`);
-require(`./chat/socket`);
+import(`./chat/socket`);
 
 // Error logging.
 process.on(`uncaughtException`, err => log(`red`, err.stack));
@@ -37,12 +39,6 @@ const app: express.Application = express();
 // Express extension configurations.
 app.use(express.json({ limit: `5mb` }));
 app.use(express.urlencoded({ limit: `5mb`, extended: true }));
-
-// Database connection.
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => log(`green`, `User authentication has connected to database.`));
 
 // Express session.
 app.use(session({
@@ -89,11 +85,27 @@ app.use(`/`, indexRouter);
 // Create the webfront.
 const server = http.createServer(app);
 
-// Run scripts on start.
-antiDuplicator().then(() => clearTimeouts().then(() => resetRTMPServers()));
+const startApp = async () => {
+    logSplash(() => {
+        mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+            log(`green`, `User authentication has connected to database.`);
+            logHeader(() => {
+                server.listen(config.port, () => {
+                    log(`green`, `Webfront bound to port ${config.port}.`);
+                    logHeader(() => {
+                        resetRTMPServers(() => {
+                            clearTimeouts(() => {
+                                antiDuplicator(() => {
+                                    setInterval(antiDuplicator, 18e5)
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+};
 
-// Prevent duplicate stream keys.
-setInterval(antiDuplicator, 18e5);
-
-// Bind the webfront to defined port.
-server.listen(config.port, () => log(`green`, `Webfront bound to port ${config.port}.`));
+// Start the app.
+startApp();
