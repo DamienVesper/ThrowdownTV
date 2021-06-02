@@ -86,7 +86,7 @@ const server = http.createServer(app);
 
 const startApp = async () => {
     logSplash(() => {
-        mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+        mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: true }).then(() => {
             log(`green`, `User authentication has connected to database.`);
             logHeader();
             server.listen(config.port, async () => {
