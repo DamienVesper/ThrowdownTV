@@ -1,7 +1,7 @@
 import Sticker from '../../models/sticker.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
+const cmd: CommandConfig = {
     description: `Ban a sticker from the channel!`,
     aliases: [`bs`],
     usage: `<stickerName>`
@@ -23,6 +23,6 @@ const run = async (message: string, args: string[], chatter: Chatter, chatUsers:
 };
 
 export {
-    config,
+    cmd,
     run
 };

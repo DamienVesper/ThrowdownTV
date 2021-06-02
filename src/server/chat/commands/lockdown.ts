@@ -1,7 +1,7 @@
 import User from '../../models/user.model';
-import Chatter from '../socket';
+import { Chatter, CommandConfig } from '../../types/chat';
 
-const config = {
+const cmd: CommandConfig = {
     description: `Disable chatting on your channel!`,
     usage: `<on/off>`
 };
