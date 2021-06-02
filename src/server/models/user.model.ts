@@ -1,63 +1,7 @@
 import * as Mongoose from 'mongoose';
+import { UserDoc } from '../types/models';
 
 import randomString from '../utils/randomString';
-
-interface userType extends Mongoose.Document {
-    username: string;
-    displayName: string;
-
-    creationDate: any;
-    email: string;
-
-    creationIP?: string;
-    lastIP?: string;
-
-    token?: string;
-    recoverytoken?: string;
-
-    password: string;
-    live?: boolean;
-
-    verified?: boolean;
-    verifyToken?: string;
-
-    isSuspended?: boolean;
-
-    avatarURL?: string;
-
-    channel?: {
-        moderators: string[];
-        bans: string[];
-        timeouts: string[];
-    }
-
-    perms: {
-        staff?: boolean;
-        vip?: boolean;
-    }
-
-    settings?: {
-        title: string;
-        description: string;
-        donationLink?: string;
-
-        rtmpServer?: string;
-        streamKey?: string;
-
-        useGlobalStickers?: boolean;
-        lockdown?: boolean;
-        notifications?: boolean;
-    }
-
-    subscription?: {
-        paymentId: string;
-        paymentToken: string;
-        payerId: string;
-    },
-
-    viewers: string[];
-    followers: string[];
-}
 
 const userSchema = new Mongoose.Schema({
     username: {
@@ -239,6 +183,6 @@ const userSchema = new Mongoose.Schema({
     }
 });
 
-const User = Mongoose.model<userType>(`User`, userSchema);
+const User = Mongoose.model<UserDoc>(`User`, userSchema);
 
 export default User;
