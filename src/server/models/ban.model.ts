@@ -1,9 +1,5 @@
 import * as Mongoose from 'mongoose';
-
-interface banType extends Mongoose.Document {
-    IP: string;
-    comment?: string;
-}
+import { BanDoc } from '../types/models';
 
 const banSchema = new Mongoose.Schema({
     IP: {
@@ -16,6 +12,6 @@ const banSchema = new Mongoose.Schema({
     }
 });
 
-const Ban = Mongoose.model<banType>(`Ban`, banSchema);
+const Ban = Mongoose.model<BanDoc>(`Ban`, banSchema);
 
 export default Ban;

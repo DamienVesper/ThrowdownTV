@@ -1,11 +1,5 @@
 import * as Mongoose from 'mongoose';
-
-interface stickerType extends Mongoose.Document {
-    stickerName: string;
-    ownerUsername: string;
-    path: string;
-    channelsBannedOn?: string[];
-}
+import { StickerDoc } from '../types/models';
 
 const stickerSchema = new Mongoose.Schema({
     stickerName: {
@@ -27,6 +21,6 @@ const stickerSchema = new Mongoose.Schema({
     }
 });
 
-const Sticker = Mongoose.model<stickerType>(`Sticker`, stickerSchema);
+const Sticker = Mongoose.model<StickerDoc>(`Sticker`, stickerSchema);
 
 export default Sticker;
