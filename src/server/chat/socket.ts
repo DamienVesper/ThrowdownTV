@@ -8,7 +8,7 @@ import User from '../models/user.model';
 import log from '../utils/log';
 
 import * as commandHandler from './commandHandler';
-import Chatter from '../types/chat';
+import { Chatter } from '../types/chat';
 
 const chatUsers: Chatter[] = [];
 
