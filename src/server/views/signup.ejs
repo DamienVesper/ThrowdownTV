@@ -51,6 +51,7 @@
             if (res.errors) {
                 $(`#signup-button`).attr(`disabled`, false);
                 $(`#signup-error`).show();
+                hcaptcha.reset();
 
                 $(`#signup-error-message`).text(res.errors);
                 console.error(`[ACCOUNT SERVER]: ${JSON.stringify(res.errors)}`);

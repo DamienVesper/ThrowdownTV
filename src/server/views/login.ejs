@@ -54,7 +54,8 @@
             if (res.errors) {
                 $(`#login-button`).attr(`disabled`, false);
                 $(`#login-error`).show();
-
+                hcaptcha.reset();
+                
                 $(`#login-error-message`).text(res.errors);
                 console.error(`[ACCOUNT SERVER]: ${JSON.stringify(res.errors)}`);
             } else if (res.success) {
