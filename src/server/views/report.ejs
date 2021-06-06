@@ -67,6 +67,7 @@
                 $(`#report-button`).attr(`disabled`, false);
                 $(`#report-error`).show();
                 $(`#report-error-message`).text(res.errors);
+                hcaptcha.reset();
                 return false;
             } else if (res.success) {
                 $(`#report-button`).attr(`disabled`, false);
