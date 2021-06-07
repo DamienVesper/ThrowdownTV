@@ -262,7 +262,7 @@ apiRouter.post(`/stream-key`, async (req: Express.Request, res: Express.Response
 
     if (!apiKey || !streamKey) return res.status(400);
 
-    if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
+    if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
     if (!streamKey) return res.status(400).json({ errors: `Stream key not supplied.` });
 
     const streamerData = await User.findOne({ [`settings.streamKey`]: streamKey });
