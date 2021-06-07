@@ -7,7 +7,7 @@ const resetRTMPServers = async (callback?: any) => {
 
     const dbUsers = await User.find({});
     for (const user of dbUsers) {
-        user.settings.rtmpServer = `us01`;
+        user.settings.rtmpServer = `eu01`;
         user.settings.notifications = true;
         user.save();
     }
