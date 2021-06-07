@@ -256,9 +256,9 @@ apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.
     res.json({ success: `Sent out notification emails for Streamer: ${streamerData.username}` });
 });
 
-apiRouter.post(`/stream-key`, async (req: Express.Request, res: Express.Response) => {
-    const apiKey = req.body.apiKey;
-    const streamKey = req.body.streamKey;
+apiRouter.get(`/stream-key/:apikey/:streamkey`, async (req: Express.Request, res: Express.Response) => {
+    const streamKey = req.params.streamKey;
+    const apiKey = req.params.apikey;
 
     if (!apiKey || !streamKey) return res.status(400);
 
