@@ -41,72 +41,6 @@ fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err,
 
 apiRouter.get(`/get-emotes`, async (req: Express.Request, res: Express.Response) => res.json(emotes));
 
-apiRouter.get(`/rtmp-api/:streamer/:apikey`, async (req: Express.Request, res: Express.Response) => {
-    const streamer = req.params.streamer.toLowerCase();
-    const apikey = req.params.apikey;
-
-    const streamerData = await User.findOne({ username: streamer });
-
-    if (!streamerData) return res.json({ errors: `Invalid User` });
-    if (apikey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
-
-    const data = {
-        username: streamerData.username,
-        streamkey: streamerData.settings.streamKey,
-        isLive: streamerData.live
-    };
-
-    res.json(data);
-});
-
-apiRouter.post(`/stream-status/:streamkey/:status/:apikey`, async (req: Express.Request, res: Express.Response) => {
-    const streamkey = req.params.streamkey.toLowerCase();
-    const status = req.params.status.toLowerCase();
-    const apikey = req.params.apikey;
-
-    const streamerData = await User.findOne({ "settings.streamKey": streamkey });
-    if (!streamerData) return res.json({ errors: `Invalid User` });
-
-    if (apikey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
-
-    if (status === `true`) streamerData.live = true;
-    else if (status === `false`) streamerData.live = false;
-    else return res.json({ errors: `Invalid Status, must be either true or false` });
-
-    streamerData.save(err => {
-        if (err) return res.json({ errors: `Invalid user data` });
-        return res.json({ success: `Succesfully updated stream status.` });
-    });
-});
-
-apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.Response) => {
-    const streamer = req.body.streamer;
-    const apiKey = req.body.apiKey;
-
-    if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.json({ errors: `Invalid API Key` });
-
-    const streamerData = await User.findOne({ username: streamer });
-    if (!streamerData) return res.json({ errors: `Invalid User` });
-
-    for (const follower of streamerData.followers) {
-        const followerAccount = await User.findOne({ username: follower });
-        if (followerAccount.settings.notifications) {
-            const mailOptions = {
-                from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
-                to: followerAccount.email,
-                subject: `${streamerData.displayName} went Live!`,
-                text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
-            };
-
-            transport.sendMail(mailOptions, err => {
-                if (err) log(`red`, err);
-            });
-        }
-    }
-
-    res.json({ success: `Sent out notification emails for Streamer: ${streamerData.username}` });
-});
-
 apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -119,159 +53,27 @@ apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Respons
     res.json(stickers);
 });
 
-apiRouter.get(`/stream-key/:streamKey`, async (req: Express.Request, res: Express.Response) => {
-    const streamkey = req.params.streamKey;
-    if (!streamkey) res.json({ errors: `Stream key not supplied.` });
-
-    const streamerData = await User.findOne({ "settings.streamKey": streamkey });
-    if (!streamerData) res.json({ errors: `Invalid Stream Key` });
+apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res: Express.Response) => {
+    const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
+    if (!streamerData) res.render(`404.ejs`);
 
     const data = {
         username: streamerData.username,
-        verified: streamerData.verified,
+        displayName: streamerData.displayName,
+        streamTitle: streamerData.settings.title,
+        streamDescription: streamerData.settings.description,
+        donationLink: streamerData.settings.donationLink,
         isSuspended: streamerData.isSuspended,
-        isVip: streamerData.perms.vip
+        viewers: streamerData.viewers,
+        followers: streamerData.followers,
+        avatarURL: streamerData.avatarURL,
+        isVip: streamerData.perms.vip,
+        isStaff: streamerData.perms.staff,
+        isLive: streamerData.live,
+        rtmpServer: streamerData.settings.rtmpServer
     };
 
     res.jsonp(data);
-});
-
-apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) => {
-    const streamerData = await User.find({ live: true });
-    const streams = [];
-
-    for (const streamer of streamerData) {
-        streams.push({
-            name: streamer.username,
-            displayName: streamer.displayName,
-            title: streamer.settings.title,
-            description: streamer.settings.description,
-            rtmpServer: streamer.settings.rtmpServer,
-            isLive: streamer.live
-        });
-    }
-
-    return res.json(streams);
-});
-
-apiRouter.get(`/fetch-users-no-staff`, async (req: Express.Request, res: Express.Response) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-
-    const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
-
-    const userData = await User.find({ "perms.staff": false });
-    const users = [];
-
-    for (const streamer of userData) {
-        users.push({
-            name: streamer.username,
-            displayName: streamer.displayName,
-            streamTitle: streamer.settings.title,
-            description: streamer.settings.description,
-            rtmpServer: streamer.settings.rtmpServer,
-            isLive: streamer.live,
-            isBanned: streamer.isSuspended,
-            isVIP: streamer.perms.vip,
-            email: streamer.email,
-            creationIP: streamer.creationIP,
-            lastIP: streamer.lastIP,
-            avatarURL: streamer.avatarURL,
-            channel: {
-                moderators: streamer.channel.moderators,
-                bans: streamer.channel.bans
-            },
-
-            emailVerified: streamer.verified,
-            perms: streamer.perms
-        });
-    }
-
-    return res.json(users);
-});
-
-apiRouter.get(`/fetch-user/:userToFetch`, async (req: Express.Request, res: Express.Response) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-
-    const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
-
-    const streamer = await User.findOne({ username: req.params.userToFetch });
-    const user = {
-        name: streamer.username,
-        displayName: streamer.displayName,
-        streamTitle: streamer.settings.title,
-        description: streamer.settings.description,
-        rtmpServer: streamer.settings.rtmpServer,
-        isLive: streamer.live,
-        isBanned: streamer.isSuspended,
-        isVIP: streamer.perms.vip,
-        email: streamer.email,
-        creationIP: streamer.creationIP,
-        lastIP: streamer.lastIP,
-        avatarURL: streamer.avatarURL,
-        channel: {
-            moderators: streamer.channel.moderators,
-            bans: streamer.channel.bans
-        },
-
-        emailVerified: streamer.verified,
-        perms: streamer.perms
-    };
-
-    return res.json(user);
-});
-
-// Ban User
-apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-
-    const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
-
-    const userToBan = await User.findOne({ username: req.params.ttusername });
-
-    userToBan.isSuspended = true;
-    userToBan.live = false;
-
-    userToBan.save(err => {
-        if (err) return res.json({ errors: `Invalid user data` });
-    });
-});
-
-// Unban User
-apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-
-    const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
-
-    const userToBan = await User.findOne({ username: req.params.ttusername });
-
-    userToBan.isSuspended = false;
-    userToBan.live = false;
-
-    userToBan.save(err => {
-        if (err) return res.json({ errors: `Invalid user data` });
-    });
-});
-
-apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Express.Response) => {
-    const streamer = req.body.streamer;
-    const apiKey = req.body.apiKey;
-
-    const streamerStatus = req.body.streamerStatus;
-    const rtmpServer = req.body.rtmpServer;
-
-    if (apiKey !== process.env.FRONTEND_API_KEY) return res.json({ errors: `Invalid API Key` });
-    else if (streamerStatus === undefined || (streamerStatus !== false && streamerStatus !== true)) return res.json({ errors: `Invalid Streamer Status` });
-
-    const user = await User.findOne({ username: streamer });
-
-    user.live = streamerStatus;
-    user.settings.rtmpServer = rtmpServer;
-
-    user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
 
 apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Response) => {
@@ -319,29 +121,6 @@ apiRouter.get(`/stream-data`, async (req: Express.Request, res: Express.Response
     res.jsonp(data);
 });
 
-apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res: Express.Response) => {
-    const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
-    if (!streamerData) res.render(`404.ejs`);
-
-    const data = {
-        username: streamerData.username,
-        displayName: streamerData.displayName,
-        streamTitle: streamerData.settings.title,
-        streamDescription: streamerData.settings.description,
-        donationLink: streamerData.settings.donationLink,
-        isSuspended: streamerData.isSuspended,
-        viewers: streamerData.viewers,
-        followers: streamerData.followers,
-        avatarURL: streamerData.avatarURL,
-        isVip: streamerData.perms.vip,
-        isStaff: streamerData.perms.staff,
-        isLive: streamerData.live,
-        rtmpServer: streamerData.settings.rtmpServer
-    };
-
-    res.jsonp(data);
-});
-
 apiRouter.get(`/get-followers/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamerData) res.render(`404.ejs`);
@@ -351,6 +130,242 @@ apiRouter.get(`/get-followers/:streamer`, async (req: Express.Request, res: Expr
     };
 
     res.jsonp(data);
+});
+
+apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) => {
+    const streamerData = await User.find({ live: true });
+    const streams = [];
+
+    for (const streamer of streamerData) {
+        streams.push({
+            name: streamer.username,
+            displayName: streamer.displayName,
+            title: streamer.settings.title,
+            description: streamer.settings.description,
+            rtmpServer: streamer.settings.rtmpServer,
+            isLive: streamer.live
+        });
+    }
+
+    return res.json(streams);
+});
+
+apiRouter.get(`/fetch-users-no-staff`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    const userData = await User.find({ [`perms.staff`]: false });
+    const users = [];
+
+    for (const streamer of userData) {
+        users.push({
+            name: streamer.username,
+            displayName: streamer.displayName,
+            streamTitle: streamer.settings.title,
+            description: streamer.settings.description,
+            rtmpServer: streamer.settings.rtmpServer,
+            isLive: streamer.live,
+            isBanned: streamer.isSuspended,
+            isVIP: streamer.perms.vip,
+            email: streamer.email,
+            creationIP: streamer.creationIP,
+            lastIP: streamer.lastIP,
+            avatarURL: streamer.avatarURL,
+            channel: {
+                moderators: streamer.channel.moderators,
+                bans: streamer.channel.bans
+            },
+
+            emailVerified: streamer.verified,
+            perms: streamer.perms
+        });
+    }
+
+    return res.json(users);
+});
+
+apiRouter.post(`/rtmp-api`, async (req: Express.Request, res: Express.Response) => {
+    const streamer = req.body.streamer.toLowerCase();
+    const apiKey = req.body.apiKey;
+
+    if (!streamer || !apiKey) return res.status(400);
+    if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
+
+    const streamerData = await User.findOne({ username: streamer });
+    if (!streamerData) return res.json({ errors: `User Not Found` });
+
+    const data = {
+        username: streamerData.username,
+        streamkey: streamerData.settings.streamKey,
+        isLive: streamerData.live
+    };
+
+    res.json(data);
+});
+
+apiRouter.post(`/stream-status`, async (req: Express.Request, res: Express.Response) => {
+    const streamKey = req.body.streamKey;
+    const status = req.body.status;
+
+    const apiKey = req.body.apiKey;
+
+    if (!streamKey || (status === undefined || status === null) || !apiKey) return res.status(400);
+    if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
+
+    const streamerData = await User.findOne({ [`settings.streamKey`]: streamKey });
+    if (!streamerData) return res.status(400).json({ errors: `User Not Found` });
+
+    if (status === `true`) streamerData.live = true;
+    else if (status === `false`) streamerData.live = false;
+    else return res.status(400).json({ errors: `Invalid Status, must be either true or false` });
+
+    streamerData.save(err => {
+        if (err) return res.status(400).json({ errors: `Invalid user data` });
+        return res.json({ success: `Succesfully updated stream status.` });
+    });
+});
+
+apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.Response) => {
+    const streamer = req.body.streamer;
+    const apiKey = req.body.apiKey;
+
+    if (!apiKey || !streamer) return res.status(400);
+    if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
+
+    const streamerData = await User.findOne({ username: streamer });
+    if (!streamerData) return res.status(404).json({ errors: `User Not Found` });
+
+    for (const follower of streamerData.followers) {
+        const followerAccount = await User.findOne({ username: follower });
+        if (followerAccount.settings.notifications) {
+            const mailOptions = {
+                from: `Throwdown TV Notifications <notifications@throwdown.tv>`,
+                to: followerAccount.email,
+                subject: `${streamerData.displayName} went Live!`,
+                text: `${streamerData.displayName} has started broadcasting.\n\nWatch here: https://${config.domain}/${streamerData.username}`
+            };
+
+            transport.sendMail(mailOptions, err => {
+                if (err) log(`red`, err);
+            });
+        }
+    }
+
+    res.json({ success: `Sent out notification emails for Streamer: ${streamerData.username}` });
+});
+
+apiRouter.post(`/stream-key`, async (req: Express.Request, res: Express.Response) => {
+    const apiKey = req.body.apiKey;
+    const streamKey = req.body.streamKey;
+
+    if (!apiKey || !streamKey) return res.status(400);
+
+    if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
+    if (!streamKey) return res.status(400).json({ errors: `Stream key not supplied.` });
+
+    const streamerData = await User.findOne({ [`settings.streamKey`]: streamKey });
+    if (!streamerData) return res.status(404).json({ errors: `User Not Found` });
+
+    const data = {
+        username: streamerData.username,
+        verified: streamerData.verified,
+        isSuspended: streamerData.isSuspended,
+        isVip: streamerData.perms.vip
+    };
+
+    res.jsonp(data);
+});
+
+apiRouter.post(`/fetch-user`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.status(403).send(`You must be an administrator to access this page!`);
+
+    const streamer = await User.findOne({ username: req.params.userToFetch });
+    if (!streamer) return res.status(404).send(`User Not Found`);
+
+    const user = {
+        name: streamer.username,
+        displayName: streamer.displayName,
+        streamTitle: streamer.settings.title,
+        description: streamer.settings.description,
+        rtmpServer: streamer.settings.rtmpServer,
+        isLive: streamer.live,
+        isBanned: streamer.isSuspended,
+        isVIP: streamer.perms.vip,
+        email: streamer.email,
+        creationIP: streamer.creationIP,
+        lastIP: streamer.lastIP,
+        avatarURL: streamer.avatarURL,
+        channel: {
+            moderators: streamer.channel.moderators,
+            bans: streamer.channel.bans
+        },
+
+        emailVerified: streamer.verified,
+        perms: streamer.perms
+    };
+
+    return res.json(user);
+});
+
+// Ban User
+apiRouter.post(`/banuser`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    const userToBan = await User.findOne({ username: req.params.ttusername });
+
+    userToBan.isSuspended = true;
+    userToBan.live = false;
+
+    userToBan.save(err => {
+        if (err) return res.status(400).json({ errors: `Invalid user data` });
+    });
+});
+
+// Unban User
+apiRouter.post(`/unbanuser`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    const userToUnban = await User.findOne({ username: req.params.ttusername });
+    if (!userToUnban) return res.status(404).json({ errors: `User Not Found` });
+
+    userToUnban.isSuspended = false;
+    userToUnban.live = false;
+
+    userToUnban.save(err => {
+        if (err) return res.status(400).json({ errors: `Invalid user data` });
+    });
+});
+
+apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Express.Response) => {
+    const streamer = req.body.streamer;
+    const apiKey = req.body.apiKey;
+
+    const streamerStatus = req.body.streamerStatus;
+    const rtmpServer = req.body.rtmpServer;
+
+    if (!streamer || !apiKey || (streamerStatus === undefined || streamerStatus === null) || rtmpServer) return res.status(400);
+
+    if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
+    else if (streamerStatus !== false && streamerStatus !== true) return res.status(400).json({ errors: `Invalid Streamer Status` });
+
+    const user = await User.findOne({ username: streamer });
+    if (!user) return res.status(404).json({ errors: `User Not Found` });
+
+    user.live = streamerStatus;
+    user.settings.rtmpServer = rtmpServer;
+
+    user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
 
 export default apiRouter;
