@@ -24,7 +24,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.12",
     "@types/express-session": "^1.17.3",
-    "@types/node": "^15.9.0",
+    "@types/node": "^15.12.2",
     "@types/passport": "^1.0.6",
     "@types/passport-local": "^1.0.33",
     "@types/yargs": "^17.0.0",
