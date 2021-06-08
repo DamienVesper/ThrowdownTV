@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/assets/css/widgets/chat.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
 
 <div class="chat-wrapper">
     <div class="chat-history"></div>
@@ -15,7 +15,7 @@
     fetch(`/authenticated`).then(data => data.json()).then(data => {
         const username = data.username;
         const token = data.token;
-        const streamer = window.location.pathname.split(`/`)[3];
+        const streamer = window.location.pathname.split(`/`)[3].toLowerCase();
 
         if (!data.username) {
             $(`#chat-input`).attr(`placeholder`, `You must be logged in to chat...`);
@@ -25,7 +25,8 @@
             $(`#chat-send`).attr(`hidden`, true);
         }
 
-        const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:8443`, {
+        const proto = window.location.protocol;
+            const socket = io.connect(`${proto}//${window.location.hostname}:${proto === `http:` ? `8443`: `443`}`, {
             secure: true,
             rejectUnauthorized: true,
             withCredentials: true
