@@ -190,7 +190,7 @@ apiRouter.post(`/rtmp-api`, async (req: Express.Request, res: Express.Response) 
     const streamer = req.body.streamer.toLowerCase();
     const apiKey = req.body.apiKey;
 
-    if (!streamer || !apiKey) return res.status(400);
+    if (!streamer || !apiKey) return res.status(400).json({ errors: `Invalid Form Body` });
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
 
     const streamerData = await User.findOne({ username: streamer });
@@ -211,7 +211,7 @@ apiRouter.post(`/stream-status`, async (req: Express.Request, res: Express.Respo
 
     const apiKey = req.body.apiKey;
 
-    if (!streamKey || (status === undefined || status === null) || !apiKey) return res.status(400);
+    if (!streamKey || (status === undefined || status === null) || !apiKey) return res.status(400).json({ errors: `Invalid Form Body` });
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
 
     const streamerData = await User.findOne({ [`settings.streamKey`]: streamKey });
@@ -231,7 +231,7 @@ apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.
     const streamer = req.body.streamer;
     const apiKey = req.body.apiKey;
 
-    if (!apiKey || !streamer) return res.status(400);
+    if (!apiKey || !streamer) return res.status(400).json({ errors: `Invalid Form Body` });
     if (apiKey !== process.env.NOTIFICATION_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
 
     const streamerData = await User.findOne({ username: streamer });
@@ -258,9 +258,9 @@ apiRouter.post(`/send-notifications`, async (req: Express.Request, res: Express.
 
 apiRouter.post(`/stream-key`, async (req: Express.Request, res: Express.Response) => {
     const streamKey = req.body.streamKey;
-    const apiKey = req.body.apikey;
+    const apiKey = req.body.apiKey;
 
-    if (!apiKey || !streamKey) return res.status(400);
+    if (!apiKey || !streamKey) return res.status(400).json({ errors: `Invalid Form Body` });
 
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
     if (!streamKey) return res.status(400).json({ errors: `Stream key not supplied.` });
@@ -275,7 +275,7 @@ apiRouter.post(`/stream-key`, async (req: Express.Request, res: Express.Response
         isVip: streamerData.perms.vip
     };
 
-    res.jsonp(data);
+    res.json(data);
 });
 
 apiRouter.post(`/fetch-user`, async (req: Express.Request, res: Express.Response) => {
@@ -354,7 +354,7 @@ apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Expr
     const streamerStatus = req.body.streamerStatus;
     const rtmpServer = req.body.rtmpServer;
 
-    if (!streamer || !apiKey || (streamerStatus === undefined || streamerStatus === null) || rtmpServer) return res.status(400);
+    if (!streamer || !apiKey || (streamerStatus === undefined || streamerStatus === null) || rtmpServer) return res.status(400).json({ errors: `Invalid Form Body` });
 
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
     else if (streamerStatus !== false && streamerStatus !== true) return res.status(400).json({ errors: `Invalid Streamer Status` });
