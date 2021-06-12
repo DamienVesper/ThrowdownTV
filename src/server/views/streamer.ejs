@@ -146,10 +146,8 @@
 
             const checkCrucialData = () => {
                 fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-                    fetch(`https://${data.rtmpServer}.throwdown.tv/api/status${streamer}`).then(data => data.json()).then(viewerdata => {
-                        $(`#viewer-count`).text(viewerdata.viewers);
-                    })
                     fetch(`https://${data.rtmpServer}.throwdown.tv/api/status/${streamer}`).then(livedata => livedata.json()).then(livedata => {
+                        $(`#viewer-count`).text(livedata.viewers);
                         if (data.isSuspended) return window.location.reload();
                         if (livedata.isLive === true) {
                             $(`#livestatus`).text(`LIVE`);
