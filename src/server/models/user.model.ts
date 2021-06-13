@@ -51,7 +51,6 @@ const userSchema = new Mongoose.Schema({
     },
 
     subscription: {
-        paymentId: { type: String, required: false, default: `` },
         paymentToken: { type: String, required: false, default: `` },
         payerId: { type: String, required: false, default: `` }
     },

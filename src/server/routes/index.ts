@@ -50,25 +50,6 @@ pageRouter.get(`/chat/*`, async (req: Express.Request, res: Express.Response) =>
     res.render(`chat.ejs`);
 });
 
-pageRouter.get(`/vip`, async (req: Express.Request, res: Express.Response) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-    const user = await User.findOne({ username: (<any>req).user.username });
-
-    if (!user.perms.vip) res.render(`subscribeVIP.ejs`);
-    else res.render(`alreadyVIP.ejs`);
-});
-
-pageRouter.get(`/vip/success`, async (req: Express.Request, res: Express.Response) => {
-    if (!req.isAuthenticated()) return res.redirect(`/login`);
-    res.send(`Success`);
-});
-
-pageRouter.get(`/vip/cancel`, async (req: Express.Request, res: Express.Response) => {
-    req.isAuthenticated()
-        ? res.redirect(`/login`)
-        : res.send(`500 Internal Server Error`).status(500);
-});
-
 pageRouter.get(`/report/:streamer`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
