@@ -76,7 +76,7 @@ vipRouter.get(`/success`, async (req: Express.Request, res: Express.Response) =>
             }
             res.render(`success/subscriptionsuccess.ejs`);
         } else {
-            log(`red`, `ERROR: ${err}`);
+            log(`red`, `/success POST ERROR: ${err}`);
         }
     });
 });
@@ -95,7 +95,7 @@ vipRouter.post(`/subscribe`, async (req: Express.Request, res: Express.Response)
         L_BILLINGAGREEMENTDESCRIPTION0: `Throwdown TV VIP Subscription`
     }, (err, data, url) => {
         if (!err) { res.status(302).redirect(url); }
-        log(`red`, `ERROR: ${err}`);
+        log(`red`, `/subscribe POST ERROR: ${err}`);
     });
 });
 
@@ -120,7 +120,7 @@ vipRouter.post(`/cancel`, async (req: Express.Request, res: Express.Response) =>
             }
             res.redirect(`/vip/cancel/success`);
         } else {
-            log(`red`, `ERROR: ${err}`);
+            log(`red`, `/cancel POST ERROR: ${err}`);
         }
     });
 });
