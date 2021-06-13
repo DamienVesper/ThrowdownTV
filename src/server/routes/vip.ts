@@ -93,7 +93,6 @@ vipRouter.post(`/subscribe`, async (req: Express.Request, res: Express.Response)
         L_BILLINGAGREEMENTDESCRIPTION0: `Throwdown TV VIP Subscription`
     }, (err, data, url) => {
         if (!err) { res.status(302).redirect(url); }
-        log(`red`, `/subscribe POST ERROR: ${err}`);
     });
 });
 
