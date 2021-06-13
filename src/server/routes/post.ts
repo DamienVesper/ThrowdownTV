@@ -166,7 +166,7 @@ postRouter.post(`/report/:streamer`, async (req: Express.Request, res: Express.R
             { name: `Stream Description`, value: streamer.settings.description },
             { name: `Donation Link`, value: streamer.settings.donationLink }
         )
-        .setImage(`https://${streamer.settings.rtmpServer}.throwdown.tv/thumbnail/${req.params.streamer.toLowerCase()}`)
+        .setImage(`https://${streamer.settings.rtmpServer}.throwdown.tv/api/thumbnail/${req.params.streamer.toLowerCase()}`)
         .setFooter(`Reported by: ${(<any>req).user.username}`);
 
     await (channel as Discord.TextChannel).send(sEmbed);

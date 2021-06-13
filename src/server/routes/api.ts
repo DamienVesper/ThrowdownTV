@@ -354,7 +354,7 @@ apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Expr
     const streamerStatus = req.body.streamerStatus;
     const rtmpServer = req.body.rtmpServer;
 
-    if (!streamer || !apiKey || (streamerStatus === undefined || streamerStatus === null) || rtmpServer) return res.status(400).json({ errors: `Invalid Form Body` });
+    if (!streamer || !apiKey || (streamerStatus === undefined || streamerStatus === null) || !rtmpServer) return res.status(400).json({ errors: `Invalid Form Body` });
 
     if (apiKey !== process.env.FRONTEND_API_KEY) return res.status(403).json({ errors: `Invalid API Key` });
     else if (streamerStatus !== false && streamerStatus !== true) return res.status(400).json({ errors: `Invalid Streamer Status` });

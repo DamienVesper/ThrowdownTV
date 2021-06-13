@@ -4,7 +4,7 @@ import User from '../models/user.model';
 const pageRouter: Express.Router = Express.Router();
 
 pageRouter.get(`/`, async (req: Express.Request, res: Express.Response) => req.isAuthenticated() ? res.redirect(`/browse`) : res.render(`welcome.ejs`));
-pageRouter.get(`/following`, async (req: Express.Request, res: Express.Response) => req.isAuthenticated() ? res.redirect(`/login`) : res.render(`following.ejs`));
+pageRouter.get(`/following`, async (req: Express.Request, res: Express.Response) => req.isAuthenticated() ? res.render(`following.ejs`) : res.redirect(`/login`));
 pageRouter.get(`/browse`, async (req: Express.Request, res: Express.Response) => res.render(`browse.ejs`));
 pageRouter.get(`/staff`, async (req: Express.Request, res: Express.Response) => res.render(`staff.ejs`));
 pageRouter.get(`/tos`, async (req: Express.Request, res: Express.Response) => res.render(`tos.ejs`));
@@ -28,6 +28,7 @@ pageRouter.get(`/dashboard`, async (req: Express.Request, res: Express.Response)
 
     const user = await User.findOne({ username: (<any>req).user.username });
     if (!user) return res.redirect(`/logout`);
+    if (user.isSuspended) return res.render(`errors/suspended.ejs`);
 
     res.render(`dashboard.ejs`, {
         user: user.username,
@@ -81,7 +82,7 @@ pageRouter.get(`/:streamer`, async (req: Express.Request, res: Express.Response)
     const streamer = req.params.streamer;
     const user = await User.findOne({ username: streamer.toLowerCase() });
 
-    if (!user || user.isSuspended) res.render(`errors/404.ejs`);
+    if (!user || user.isSuspended) res.render(`errors/suspended.ejs`);
     else res.render(`streamer.ejs`);
 });
 
