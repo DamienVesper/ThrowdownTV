@@ -28,6 +28,7 @@ pageRouter.get(`/dashboard`, async (req: Express.Request, res: Express.Response)
 
     const user = await User.findOne({ username: (<any>req).user.username });
     if (!user) return res.redirect(`/logout`);
+    if (user.isSuspended) return res.render(`errors/suspended.ejs`);
 
     res.render(`dashboard.ejs`, {
         user: user.username,
