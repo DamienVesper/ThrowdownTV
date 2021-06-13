@@ -33,8 +33,8 @@ const paypal = new Paypal({
     username: config.paypal.username,
     password: config.paypal.password,
     signature: config.paypal.signature
-}
-//, "production"
+},
+argv.mode === `prod` ? `production` : ``
 );
 
 const vipRouter: Express.Router = Express.Router();
@@ -75,8 +75,6 @@ vipRouter.get(`/success`, async (req: Express.Request, res: Express.Response) =>
                 });
             }
             res.render(`success/subscriptionsuccess.ejs`);
-        } else {
-            log(`red`, `/success POST ERROR: ${err}`);
         }
     });
 });
@@ -119,8 +117,6 @@ vipRouter.post(`/cancel`, async (req: Express.Request, res: Express.Response) =>
                 });
             }
             res.redirect(`/vip/cancel/success`);
-        } else {
-            log(`red`, `/cancel POST ERROR: ${err}`);
         }
     });
 });
