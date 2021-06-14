@@ -27,7 +27,6 @@
 			</p>
 		</video>
 
-
 		<!-- Mobile tabs -->
 		<ul class="mobile-tabs nav nav-tabs" role="tablist">
 			<li class="nav-item">
@@ -37,10 +36,6 @@
 				<a class="nav-link" id="about-tab" data-toggle="tab" role="tab"  href="" aria-selected="false">About</a>
 			</li>
 		</ul>
-
-
-
-
 
 		<!-- Mobile interaction buttons -->
 		<div class="interaction-btns mobile-active">
@@ -86,7 +81,6 @@
 	</div>
 	<iframe class="chat-popout" frameborder="0" height="720px"></iframe>
 </div>
-
 
 <!-- Mobile layout support -->
 <script type="application/javascript">
@@ -219,7 +213,6 @@
 						$(`.report-btn`).attr(`disabled`, true);
 
 						$(`.follow-streamer-btn`).attr(`title`, `You cannot follow yourself.`);
-						$(`.donate-btn`).attr(`title`, `You cannot donate to yourself.`);
 						$(`.report-btn`).attr(`title`, `You cannot report yourself.`);
 					}
 					if(data.followers.includes(userdata.username)) {
