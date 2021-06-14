@@ -42,7 +42,7 @@ const userSchema = new Mongoose.Schema({
         description: { type: String, required: false, default: `A description about my cool stream!` },
         donationLink: { type: String, required: false, default: `/streams/donate` },
 
-        rtmpServer: { type: String, required: false, default: `eu01` },
+        rtmpServer: { type: String, required: false, default: `live` },
         streamKey: { type: String, required: false, unique: true, default: randomString(32) },
 
         useGlobalStickers: { type: Boolean, required: false, default: true },
