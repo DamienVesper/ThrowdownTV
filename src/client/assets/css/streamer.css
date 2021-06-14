@@ -47,11 +47,6 @@
 	line-height: 1;
 }
 
-.profile-picture {
-	background-color: #F00;
-	border-radius: 0% !important;
-}
-
 .chat-popout,
 .stream-popout {
     display: block;
@@ -165,11 +160,6 @@
 
 /* Common desktop layout */
 @media only screen and (min-width: 992px){
-	/* Temporary */
-	.stream-title {
-		color:burlywood!important;
-	}
-
 	/* Variables */
 	:root {
 		--streamerButtonsWidth: 420px;
@@ -280,11 +270,6 @@
 
 /* Common mobile layout styles */
 @media only screen and (max-width: 991px){
-	/* Temporary */
-	.stream-title {
-		color:rebeccapurple !important;
-	}
-
 	/* Variables */
 	:root {
 		--streamerButtonsWidth: 420px;
@@ -371,3 +356,22 @@
 		max-width: 68%;
 	}
 }
+
+
+/* Debug styles */
+/*
+.profile-picture {
+	background-color: #F00;
+	border-radius: 0% !important;
+}
+@media only screen and (min-width: 992px){
+	.stream-title {
+		color:burlywood!important;
+	}
+}
+@media only screen and (max-width: 991px){
+	.stream-title {
+		color:rebeccapurple !important;
+	}
+}
+*/
