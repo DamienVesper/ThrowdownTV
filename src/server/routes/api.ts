@@ -136,7 +136,7 @@ apiRouter.get(`/stream-data`, async (req: Express.Request, res: Express.Response
 
 apiRouter.get(`/get-followers/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
-    if (!streamerData) res.render(`errors/404.ejs`);
+    if (!streamerData) res.status(404).render(`errors/404.ejs`);
 
     const data = {
         followers: streamerData.followers
