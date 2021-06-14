@@ -59,6 +59,10 @@ pageRouter.get(`/report/:streamer`, async (req: Express.Request, res: Express.Re
     res.render(`report.ejs`);
 });
 
+pageRouter.get(`/streams/donate`, async (req: Express.Request, res: Express.Response) => {
+    res.render(`donate.ejs`);
+});
+
 pageRouter.get(`/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const streamer = req.params.streamer;
     const user = await User.findOne({ username: streamer.toLowerCase() });
