@@ -62,8 +62,8 @@ pageRouter.get(`/report/:streamer`, async (req: Express.Request, res: Express.Re
 pageRouter.get(`/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const streamer = req.params.streamer;
     const user = await User.findOne({ username: streamer.toLowerCase() });
-
-    if (!user || user.isSuspended) res.render(`errors/suspended.ejs`);
+    if (!user) res.render(`errors/404.ejs`)
+    else if (user.isSuspended) res.render(`errors/suspended.ejs`);
     else res.render(`streamer.ejs`);
 });
 
