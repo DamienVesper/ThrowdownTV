@@ -1,8 +1,11 @@
+@charset "utf-8";
+@import "palette.css";
+
 html,
 body {
     margin: 0;
     padding: 0;
-    background-color: #0e355e;
+    background-color: var(--ddblue);
     width: 100%;
     height: 100%;
 }
@@ -102,11 +105,11 @@ body {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: var(--lblue);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px var(--lblue);
 }
 
 input:checked + .slider:before {
@@ -140,4 +143,8 @@ input:checked + .slider:before {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.navbar {
+	background-color: var(--dblue);
 }

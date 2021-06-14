@@ -1,0 +1,29 @@
+version: '3'
+services:
+    mongo:
+        image: mongo
+        networks:
+          - throwdown
+        ports:
+          - "27017:27017"
+        restart: unless-stopped
+    app:
+        build: 
+          context: .
+          dockerfile: ./containers/app.Dockerfile
+        links:
+          - mongo
+        networks:
+          - throwdown
+        ports:
+          - "8080:8080"
+          - "8443:8443"
+          - "8750:8750"
+        restart: unless-stopped
+        volumes:
+          - /opt/throwdown-express/node_modules
+          - .:/opt/throwdown-express
+
+networks:
+  throwdown:
+    driver: bridge

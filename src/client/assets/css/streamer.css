@@ -1,0 +1,377 @@
+@charset "utf-8";
+@import "palette.css";
+
+/** Global variables for this stylesheet **/
+:root {
+	--streamerButtonsMaxHeight: 31px;
+}
+
+
+/** Common styles for both the mobile and desktop layout */
+.streamer-buttons {
+	max-height: var(--streamerButtonsMaxHeight);
+	z-index: 1;
+}
+
+#stream-display-name {
+    font-weight: bold;
+    color: lime;
+    font-size: 15px;
+    margin-right: 4px;
+}
+
+.interaction-btns {
+	display: inline-block;
+}
+
+#title-tooltip {
+	position: absolute;
+	background: var(--dblue);
+	color: #ffffff;
+	padding: 8px;
+	border-radius: 5px;
+	z-index: 999;
+}
+
+.stream-title {
+	font-weight: bold;
+    color: white;
+    white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+	line-height: 1;
+}
+
+.chat-popout,
+.stream-popout {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0.5rem 0.25px;
+}
+
+.info-box {
+    display: flex;
+	flex-wrap: wrap;
+    flex-grow: 1;
+    padding-top: 10px;
+}
+
+#avatar {
+	width: 100%;
+	height: 100%;
+}
+
+.circle-crop {
+	border-radius: 50%;
+}
+
+#livestatus.offline {
+    color: #AAAAAA;
+}
+
+#livestatus.online {
+    color: #ff3b3b
+}
+
+.profile-picture {
+	width: var(--pfpDims);
+	height: var(--pfpDims);
+	margin-right: 10px;
+}
+
+.nav-tabs {
+	border-bottom: 0;
+}
+
+.nav-tabs .nav-item .nav-link, .nav-tabs .nav-link {
+	background-color: unset;
+	color: #AAAAAA;
+	border-width: 0;
+	border-color: unset;
+	transition: all 100ms;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+	color: var(--mobile-tab);
+	border-width: 0 0 3px 0;
+	border-color: unset unset var(--mobile-tab) unset;
+}
+
+.nav-tabs .nav-item.show .nav-link:hover, .nav-tabs .nav-link.active:hover {
+	color: #FFFFFF;
+}
+
+.info-box {
+    margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.video-js .vjs-big-play-button {
+    display: none;
+}
+
+.viewers, .followers {
+    font-size: 1rem;
+    margin-right: 20px;
+    color: rgb(209, 209, 209);
+    align-self: center;
+}
+
+#streamer-error,
+#streamer-success {
+    position: block;
+    z-index: 2; 
+}
+
+#live-stream {
+    display: block;
+}
+
+.live-status {
+    margin-right: 20px;
+    font-weight: bold;
+	color: white;
+}
+
+#stream-description {
+    margin-top: 3px;
+    color: white;
+    white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+.follow-streamer-btn, .donate-btn {
+	margin-right: 2px !important;
+}
+
+.streamer-icon {
+	margin-right: 2.5px;
+}
+
+
+/* Common desktop layout */
+@media only screen and (min-width: 992px){
+	/* Variables */
+	:root {
+		--streamerButtonsWidth: 420px;
+		--pfpDims: 90px;
+		--infoBoxHeight: calc(var(--pfpDims) + 10px);
+		--streamerContentBoxHeight: 130px;
+	}
+
+	/** Reflexive mobile and desktop layout */
+	.desktop-active {
+		display: unset;
+	}
+	.mobile-active {
+		display: none !important;
+	}
+
+	.info-box {
+		max-height: var(--streamerContentBoxHeight);
+	}
+
+	.streamer-content .stream-title {
+		max-height: 75%;
+	}
+
+	#stream-description {
+		display: block;
+    	position: absolute;
+		margin-top: 5px;
+	}
+
+    .chat-popout,
+    .stream-popout {
+        position: absolute;
+        bottom: 0rem;
+        height: calc(100% - 75px);
+    }
+
+    .chat-popout {
+        right: 0.5rem;
+        width: 30%;
+    }
+
+    .stream-popout {
+        left: 0.5rem;
+        width: 68.5%;
+        max-width: 68.5%;
+    }
+
+	.chat-popout:before {
+		margin-top: 15px;
+	}
+
+	.mobile-tabs {
+		display: none !important;
+	}
+}
+
+
+/* Larger desktops (ie: horizontal width is greater than or equal to 1500px) */
+@media only screen and (min-width: 1500px){
+	.streamer-buttons {
+		position: absolute;
+		display: block;
+		right: 0;
+		max-width: var(--streamerButtonsWidth);
+	}
+
+	.streamer-content {
+		max-width: calc(92% - var(--streamerButtonsWidth));	
+	}
+	.stream-title {
+		display: flex;
+	}
+}
+
+
+/** Small desktops (ie: horizontal width that's less than 1500px, but greater than 991px) */
+@media only screen and (min-width: 992px) and (max-width: 1499px){
+	/* Variables */
+	:root {
+		--streamerContentBoxHeight: 110px;
+	}
+
+	.streamer-content {
+		max-width: calc(98% - var(--pfpDims));
+		width: calc(98% - var(--pfpDims));
+	}
+
+	.streamer-buttons {
+		position: absolute;
+		display: block;
+		text-align: center;
+		max-width: 100%;
+		width: 100%;
+		transform: translateY(calc((var(--streamerButtonsMaxHeight) * -1) - 10px));
+	}
+	
+	.streamer-buttons .streamer-button-content {
+		position: relative;
+		text-align: center;
+	}
+
+	.info-box {
+		margin-top: calc(var(--streamerButtonsMaxHeight) + 10px);
+	}
+}
+
+
+/* Common mobile layout styles */
+@media only screen and (max-width: 991px){
+	/* Variables */
+	:root {
+		--streamerButtonsWidth: 420px;
+		--pfpDims: 70px;
+		--infoBoxHeight: calc(var(--pfpDims) + 10px);
+	}
+
+	/** Reflexive mobile and desktop layout */
+	.desktop-active {
+		display: none !important;
+	}
+	.mobile-active {
+		display: unset;
+	}
+
+	.streamer-buttons {
+		position: absolute;
+		display: block;
+		left: calc(var(--pfpDims) + 15px);
+		margin-top: 25px;
+	}
+	
+	.live-status {
+		display: block;
+		margin-bottom: -3px;
+	}
+
+	.interaction-btns {
+		margin-top: 15px;
+		position: absolute;
+		right: 10px;
+		display: inline-block;
+	}
+
+	.info-box {
+		max-height: var(--infoBoxHeight);
+	}
+
+	.streamer-content {
+		max-width: 92%;
+	}
+
+	.stream-overlay {
+		margin: 0 5px;
+	}
+
+	#stream-display-name {
+		vertical-align: top;
+	}
+
+	.chat-popout {
+		height: 550px;
+	}
+}
+
+
+/* Very small devices (eg: iPhone SE, Galaxy Note 3, etc) */
+@media only screen and (max-width: 450px){
+	.interaction-btns {
+		display: block;
+		position: relative;
+		margin-top: 15px;
+		max-height: 60px;
+		text-align: center;
+		right: 0;
+	}
+
+	.followers {
+		margin-right: 0;
+	}
+}
+
+
+/** Flexible livestream size (desktop view) */
+@media only screen and (min-width: 992px) and (max-width: 1099px){
+	.stream-popout {
+		width: 67.5%;
+		max-width: 67.5%
+	}
+}
+@media only screen and (min-width: 1100px) and (max-width: 1499px){
+	.stream-popout {
+		width: 68%;
+		max-width: 68%;
+	}
+}
+
+
+/* Debug styles */
+/*
+.profile-picture {
+	background-color: #F00;
+	border-radius: 0% !important;
+}
+@media only screen and (min-width: 992px){
+	.stream-title {
+		color:burlywood!important;
+	}
+}
+@media only screen and (max-width: 991px){
+	.stream-title {
+		color:rebeccapurple !important;
+	}
+}
+*/
