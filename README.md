@@ -15,10 +15,8 @@ This project relies on [Yarn](https://yarnpkg.com/) to resolve dependencies, and
 
 To start a development server, run the following commands in a terminal in the directory of the project. A hot-reloading (ie: any changes you make will be reflected without needing to re-run the server) webfront will be located at `localhost:8080`:
 ```bash
-yarn build
-yarn dev
+yarn dev:server
 ```
-One-shot command: `yarn build && yarn dev`
 
 ## Package Managers
 Please do not mix package managers! This project exclusively uses [Yarn](https://yarnpkg.com/).
