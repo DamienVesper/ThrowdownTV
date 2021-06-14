@@ -205,15 +205,15 @@
 					// Check to see if the user is a VIP or a staff member
 					let streamerVIP = data.isVip;
 					let streamerStaff = data.isStaff;
-					if (streamerVIP) {
+					if(streamerVIP) {
 						$(`#vipbadge`).show();
 					}
-					if (streamerStaff) {
+					if(streamerStaff) {
 						$(`#staffbadge`).show();
 						$(`#vipbadge`).hide();
 					}
 
-					if (streamer === userdata.username) {
+					if(streamer === userdata.username) {
 						$(`.follow-streamer-btn`).attr(`disabled`, true);
 						$(`.donate-btn`).attr(`disabled`, true);
 						$(`.report-btn`).attr(`disabled`, true);
@@ -222,7 +222,7 @@
 						$(`.donate-btn`).attr(`title`, `You cannot donate to yourself.`);
 						$(`.report-btn`).attr(`title`, `You cannot report yourself.`);
 					}
-					if (data.followers.includes(userdata.username)) {
+					if(data.followers.includes(userdata.username)) {
 						$(`.follow-streamer-btn`).html(`Unfollow`);
 						$(`.follow-streamer-btn`).attr(`action`, `/unfollow/${streamer}`);
 						$(`.follow-streamer-btn`).attr(`title`, `Unfollow ${streamer}`);
@@ -239,24 +239,23 @@
 
 			const checkCrucialData = () => {
 				fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-					fetch(`https://${data.rtmpServer}.throwdown.tv/api/${streamer}`).then(
-						data => data.json()).then(viewerdata => {
-						$(`.viewer-count`).text(viewerdata.viewers);
-					})
-					fetch(`https://us01.throwdown.tv/api/${streamer}`).then(livedata =>
-						livedata.json()).then(livedata => {
+					fetch(`https://${data.rtmpServer}.throwdown.tv/api/status/${streamer}`).then(livedata => livedata.json()).then(livedata => {
+						$(`#viewer-count`).text(livedata.viewers);
 						if (data.isSuspended) return window.location.reload();
 						if (livedata.isLive === true) {
 							$(`.live-status`).text(`LIVE`);
 							$(`.live-status`).removeClass(`offline`).addClass(
 							`online`);
 							if (live === false) {
-								player.updateSrc([{
-									src: `https://${data.rtmpServer}.throwdown.tv/stream_source/${streamer}`,
-									type: `video/x-flv`,
-									label: `SOURCE`
-								}])
-								player.on(`resolutionchange`, function () {
+								player.updateSrc([
+									{
+										src: `https://${data.rtmpServer}.throwdown.tv/flv/${streamer}`,
+										type: `video/x-flv`,
+										label: `FLV`
+									}
+								])
+								player.play()
+								player.on(`resolutionchange`, function(){
 									console.info(`Changed Resolution`)
 								})
 							}
@@ -303,8 +302,7 @@
 					} else if (res.success) {
 						$(`#streamer-success`).show();
 						$(`#streamer-success-message`).text(res.success);
-						fetch(`/api/public-stream-data/${streamer}`).then(data => data
-							.json()).then(data => {
+						fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
 							if (data.followers.includes(userdata.username)) {
 								$(`.follow-streamer-btn`).html(`Unfollow`);
 								$(`.follow-streamer-btn`).attr(`action`,
@@ -320,9 +318,7 @@
 							}
 						})
 					}
-					setTimeout(function () {
-						$(`#streamer-success`).hide();
-					}, 2000);
+					setTimeout(function(){ $(`#streamer-success`).hide(); }, 2000);
 				});
 			});
 
