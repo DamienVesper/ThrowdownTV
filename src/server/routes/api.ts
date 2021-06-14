@@ -63,7 +63,7 @@ apiRouter.get(`/status/:streamer`, async (req: Express.Request, res: Express.Res
         viewers: 0
     };
 
-    res.json(data);
+    res.jsonp(data);
 });
 
 apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res: Express.Response) => {
