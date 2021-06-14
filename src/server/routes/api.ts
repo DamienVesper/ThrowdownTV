@@ -53,9 +53,22 @@ apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Respons
     res.json(stickers);
 });
 
+// Dummy Live Status incase RTMP goes down.
+apiRouter.get(`/status/:streamer`, async (req: Express.Request, res: Express.Response) => {
+    const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
+    if (!streamerData) res.status(404).render(`404.ejs`);
+
+    const data = {
+        isLive: false,
+        viewers: 0
+    };
+
+    res.jsonp(data);
+});
+
 apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
-    if (!streamerData) res.render(`404.ejs`);
+    if (!streamerData) res.status(404).render(`404.ejs`);
 
     const data = {
         username: streamerData.username,
