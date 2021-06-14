@@ -31,6 +31,8 @@ interface UserDoc extends Mongoose.Document {
     verified?: boolean;
     verifyToken?: string;
 
+    deleteToken?: string;
+
     isSuspended?: boolean;
 
     avatarURL?: string;

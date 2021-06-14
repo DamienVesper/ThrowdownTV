@@ -22,6 +22,8 @@ const userSchema = new Mongoose.Schema({
     verified: { type: Boolean, required: false },
     verifyToken: { type: String, required: false },
 
+    deleteToken: { type: String, required: false },
+
     isSuspended: { type: Boolean, required: false, default: false },
 
     avatarURL: { type: String, required: false, default: `/assets/img/defaultpfp.png` },

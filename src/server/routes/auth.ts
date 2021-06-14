@@ -351,4 +351,37 @@ authRouter.get(`/verify/*`, async (req: Express.Request, res: Express.Response) 
     });
 });
 
+authRouter.get(`/deleteaccount`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated) return res.redirect(`/login`);
+    const user = await User.findOne({ username: (<any>req).user.username });
+
+    user.deleteToken = `${user.username}delete${randomString(64)}`;
+    user.save();
+
+    const mailOptions = {
+        from: `Throwdown TV <no-reply@throwdown.tv>`,
+        to: user.email,
+        subject: `Confirm Deletion of your Throwdown TV account`,
+        text: `Hello ${user.username}, \n\nA request was recieved to delete your account, if this was not you, please delete and ignore this email. \n\nConfirm Delete your account here: https://${config.domain}/deleteaccount/confirm/${user.deleteToken}`
+    };
+    if (config.mode === `prod`) {
+        transport.sendMail(mailOptions, err => {
+            if (err) return res.json({ errors: `Error sending a recovery email to the specified email address.` });
+            log(`blue`, `Sent a Deletion Confirmation email to ${user.username} at "${user.email}".`);
+        });
+    } else {
+        log(`blue`, `Delete account link: http://localhost:8080/deleteaccount/confirm/${user.deleteToken}`);
+    }
+    res.render(`deleteaccount.ejs`);
+});
+
+authRouter.get(`/deleteaccount/confirm/:token`, async (req: Express.Request, res: Express.Response) => {
+    const token = req.params.token;
+    const user = await User.findOne({ deleteToken: token });
+    if (!user) return res.status(404).render(`errors/404.ejs`);
+    if (user.isSuspended) return res.status(403).render(`errors/403.ejs`);
+    log(`yellow`, `Deleted account ${user.username}`);
+    await User.deleteOne({ username: user.username });
+    res.render(`success/accountdeleted.ejs`);
+});
 export default authRouter;
