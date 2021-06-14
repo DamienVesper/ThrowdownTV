@@ -1,9 +1,15 @@
 @charset "utf-8";
 @import "palette.css";
 
+/** Global variables for this stylesheet **/
+:root {
+	--streamerButtonsMaxHeight: 31px;
+}
+
+
 /** Common styles for both the mobile and desktop layout */
 .streamer-buttons {
-	max-height: 30px;
+	max-height: var(--streamerButtonsMaxHeight);
 	z-index: 1;
 }
 
@@ -38,6 +44,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: inline-block;
+	line-height: 1;
 }
 
 .profile-picture {
@@ -105,9 +112,9 @@
 	color: #FFFFFF;
 }
 
-
 .info-box {
     margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .video-js .vjs-big-play-button {
@@ -137,7 +144,6 @@
 	color: white;
 }
 
-
 #stream-description {
     margin-top: 3px;
     color: white;
@@ -148,7 +154,6 @@
     hyphens: auto;
 }
 
-
 .follow-streamer-btn, .donate-btn {
 	margin-right: 2px !important;
 }
@@ -158,7 +163,7 @@
 }
 
 
-/* Desktop Layout */
+/* Common desktop layout */
 @media only screen and (min-width: 992px){
 	/* Temporary */
 	.stream-title {
@@ -170,6 +175,7 @@
 		--streamerButtonsWidth: 420px;
 		--pfpDims: 90px;
 		--infoBoxHeight: calc(var(--pfpDims) + 10px);
+		--streamerContentBoxHeight: 130px;
 	}
 
 	/** Reflexive mobile and desktop layout */
@@ -181,22 +187,11 @@
 	}
 
 	.info-box {
-		max-height: var(--infoBoxHeight);
-	}
-
-	.streamer-content {
-		max-width: calc(94% - var(--streamerButtonsWidth));
+		max-height: var(--streamerContentBoxHeight);
 	}
 
 	.streamer-content .stream-title {
 		max-height: 75%;
-	}
-
-	.streamer-buttons {
-		position: absolute;
-		display: block;
-		right: 0;
-		max-width: var(--streamerButtonsWidth);
 	}
 
 	#stream-description {
@@ -232,41 +227,58 @@
 	}
 }
 
-/** Flexible livestream size (desktop view) */
-@media only screen and (min-width: 992px) and (max-width: 1099px){
-	.stream-popout {
-		width: 67.5%;
-		max-width: 67.5%
+
+/* Larger desktops (ie: horizontal width is greater than or equal to 1500px) */
+@media only screen and (min-width: 1500px){
+	.streamer-buttons {
+		position: absolute;
+		display: block;
+		right: 0;
+		max-width: var(--streamerButtonsWidth);
+	}
+
+	.streamer-content {
+		max-width: calc(92% - var(--streamerButtonsWidth));	
+	}
+	.stream-title {
+		display: flex;
 	}
 }
-@media only screen and (min-width: 1100px) and (max-width: 1499px){
-	.stream-popout {
-		width: 68%;
-		max-width: 68%;
-	}
-}
+
 
 /** Small desktops (ie: horizontal width that's less than 1500px, but greater than 991px) */
 @media only screen and (min-width: 992px) and (max-width: 1499px){
-	.streamer-content {
-		max-width: calc(95% - var(--pfpDims));
+	/* Variables */
+	:root {
+		--streamerContentBoxHeight: 110px;
 	}
-}
 
-/** Mobile devices and small desktops **/
-@media only screen and (max-width: 1499px){
-	/*
+	.streamer-content {
+		max-width: calc(98% - var(--pfpDims));
+		width: calc(98% - var(--pfpDims));
+	}
+
 	.streamer-buttons {
-		position: relative;
+		position: absolute;
 		display: block;
 		text-align: center;
 		max-width: 100%;
+		width: 100%;
+		transform: translateY(calc((var(--streamerButtonsMaxHeight) * -1) - 10px));
 	}
-	*/
+	
+	.streamer-buttons .streamer-button-content {
+		position: relative;
+		text-align: center;
+	}
+
+	.info-box {
+		margin-top: calc(var(--streamerButtonsMaxHeight) + 10px);
+	}
 }
 
 
-/* Mobile Layout */
+/* Common mobile layout styles */
 @media only screen and (max-width: 991px){
 	/* Temporary */
 	.stream-title {
@@ -326,20 +338,8 @@
 	.chat-popout {
 		height: 550px;
 	}
-
-
-	/*
-	.stream-title {
-		display: block;
-		max-height: 75%;
-		padding: 0 2%;
-		position: absolute;
-		left: 0;
-		display: none;
-	}
-	*/
-
 }
+
 
 /* Very small devices (eg: iPhone SE, Galaxy Note 3, etc) */
 @media only screen and (max-width: 450px){
@@ -354,5 +354,20 @@
 
 	.followers {
 		margin-right: 0;
+	}
+}
+
+
+/** Flexible livestream size (desktop view) */
+@media only screen and (min-width: 992px) and (max-width: 1099px){
+	.stream-popout {
+		width: 67.5%;
+		max-width: 67.5%
+	}
+}
+@media only screen and (min-width: 1100px) and (max-width: 1499px){
+	.stream-popout {
+		width: 68%;
+		max-width: 68%;
 	}
 }
