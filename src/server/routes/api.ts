@@ -89,6 +89,12 @@ apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res:
     res.jsonp(data);
 });
 
+apiRouter.get('/whoAmI', async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    return res.send({accessingUsername: accessingUser.username});
+ })
+
 apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -391,6 +397,25 @@ apiRouter.post(`/banuser`, async (req: Express.Request, res: Express.Response) =
     });
 });
 
+// Ban User via GET 
+apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    const userToBan = await User.findOne({ username: req.params.ttusername });
+
+    userToBan.isSuspended = true;
+    userToBan.live = false;
+
+    userToBan.save(err => {
+        if (err) return res.status(400).json({ errors: `Invalid user data` });
+    });
+
+    return res.json({status: "Done!"});
+});
+
 // Unban User
 apiRouter.post(`/unbanuser`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
@@ -407,6 +432,26 @@ apiRouter.post(`/unbanuser`, async (req: Express.Request, res: Express.Response)
     userToUnban.save(err => {
         if (err) return res.status(400).json({ errors: `Invalid user data` });
     });
+});
+
+
+// Unban User via GET 
+apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    const userToUnban = await User.findOne({ username: req.params.ttusername });
+    if (!userToUnban) return res.status(404).json({ errors: `User Not Found` });
+
+    userToUnban.isSuspended = false;
+    userToUnban.live = false;
+
+    userToUnban.save(err => {
+        if (err) return res.status(400).json({ errors: `Invalid user data` });
+    });
+    return res.json({status: "Done!"});
 });
 
 apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Express.Response) => {

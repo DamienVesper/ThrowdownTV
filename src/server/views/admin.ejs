@@ -17,10 +17,12 @@
 	<p id="selectedusertext" class="text-light">Selected User: </p>
 	<p id="userdatatext" class="text-light"></p>
 	<br>
+	<button type="button" class="btn btn-danger" onclick="banUserAcc()">Ban User Account</button>
 	<button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
 </div>
 
 <script>
+	const webhookURL = "https://discord.com/api/webhooks/854405974097920040/vVfV1GzYnt7M5fUcnQWap3hbuCLNBYioDX4DBU-tfGC9J4OKOOk3hS2K7szgYGexG3Q7";
 	const allUsersArr = [];
 
 	// Fetch all of the users.
@@ -92,6 +94,54 @@
 		else {
 			await fetch(`/api/delete-account/${selectedUser}`)
 			alert("Deleted user account!")
+	
+			let modName = (await fetch('/api/whoAmI').then(resp => {return resp.json()})).accessingUsername;
+			let textContent = `⛔ **Deleted** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**`;
+			var params = {
+				content: textContent
+			};	
+			await fetch(webhookURL, {
+				method: "POST",
+				headers: {
+					'Content-type': 'application/json'
+				},
+				body: JSON.stringify(params)
+			}).then(okay => {window.location.reload(true);})
+
+			window.location.reload(true); 
+		}
+	}
+
+	const banUserAcc = async () => {
+		const userdataDiv = document.querySelector(`#user-data`);
+		const e = document.querySelector(`#user-dropdown`);
+		const selectedUser = e.options[e.selectedIndex].text;
+
+		const trueUserData = await getData(selectedUser)
+		if(trueUserData.isBanned) return alert("User is already banned!");
+		let conformation = confirm(`Are you sure you want to ban the account of ${selectedUser}? You will NOT be able to undo this action!`);
+		if(conformation == false){
+			return;
+		}
+		else {
+			let banReason = window.prompt("What is the ban reason for this user?");
+			let modName = (await fetch('/api/whoAmI').then(resp => {return resp.json()})).accessingUsername;
+
+			let ttData = await fetch(`/api/banuser/${selectedUser}`).then(data => data.json()).then(data => {
+			return data;
+			});
+
+			let textContent = `⛔ **Banned** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\nReason: ${banReason}`;
+			var params = {
+				content: textContent
+			};	
+			await fetch(webhookURL, {
+				method: "POST",
+				headers: {
+					'Content-type': 'application/json'
+				},
+				body: JSON.stringify(params)
+			}).then(okay => {window.location.reload(true);})
 			window.location.reload(true); 
 		}
 	}
