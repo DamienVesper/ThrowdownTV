@@ -134,6 +134,21 @@ apiRouter.get(`/stream-data`, async (req: Express.Request, res: Express.Response
     res.jsonp(data);
 });
 
+apiRouter.get(`/delete-account/:username`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    let user = await User.findOne ({ username: req.params.username });
+    if (!user) return;
+
+    log(`yellow`, `Deleted account ${user.username} - Forced by admin ${accessingUser.username}`);
+    await User.deleteOne({ username: user.username });
+
+    return res.send(true);
+});
+
 apiRouter.get(`/get-followers/:streamer`, async (req: Express.Request, res: Express.Response) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamerData) res.status(404).render(`errors/404.ejs`);
