@@ -72,7 +72,7 @@
 }
 
 #live-status.online {
-    color: var(--streamerLive);
+    color: var(--streamerOnline);
 }
 
 #live-status.offline {
