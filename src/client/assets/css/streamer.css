@@ -71,11 +71,11 @@
 	border-radius: 50%;
 }
 
-#livestatus.offline {
+#live-status.offline {
     color: #AAAAAA;
 }
 
-#livestatus.online {
+#live-status.online {
     color: #ff3b3b
 }
 
@@ -133,7 +133,7 @@
     display: block;
 }
 
-.live-status {
+#live-status {
     margin-right: 20px;
     font-weight: bold;
 	color: white;
@@ -292,7 +292,7 @@
 		margin-top: 25px;
 	}
 	
-	.live-status {
+	#live-status {
 		display: block;
 		margin-bottom: -3px;
 	}
