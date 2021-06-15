@@ -1,7 +1,6 @@
 <%- include('./partials/header'); %>
 
 <link rel="stylesheet" href="https://vjs.zencdn.net/7.10.2/video-js.css">
-<link rel="stylesheet" href="/assets/js/videojs/videojs-resolution-switcher.css">
 <link rel="stylesheet" href="/assets/css/streamer.css">
 
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
@@ -139,19 +138,6 @@
 			autoplay: true,
 			preload: `auto`,
 			errorDisplay: false,
-			flvjs: {
-				mediaDataSource: {
-					isLive: true,
-					cors: true,
-					withCredentials: false
-				}
-			},
-			plugins: {
-				videoJsResolutionSwitcher: {
-					default: `high`,
-					dynamicLabel: true
-				}
-			}
 		});
 
 		let live = false;
