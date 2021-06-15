@@ -141,6 +141,9 @@
             if (trueUserData.isBanned) {
                 banunbantext.style.color = "red";
                 banunbantext.innerHTML = "Banned";
+            } else {
+                banunbantext.style.color = "green";
+                banunbantext.innerHTML = "Unbanned";
             }
 
             // `Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b><br>`
