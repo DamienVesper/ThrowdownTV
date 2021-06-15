@@ -218,13 +218,15 @@
 						$(`.viewer-count`).text(livedata.viewers);
 						if(data.isSuspended) return window.location.reload();
 						if(livedata.isLive === true){
-							$(`#live-status`).text(`LIVE`);
-							$(`#live-status`).removeClass(`offline`).addClass(`online`);
 							if(live === false){
-								player.src({
-									src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
-									type: `video/x-mpegURL`,
-								})
+								setInterval(() => {
+									player.src({
+										src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
+										type: `video/x-mpegURL`,
+									})
+								}, 10000)
+								$(`#live-status`).text(`LIVE`);
+								$(`#live-status`).removeClass(`offline`).addClass(`online`);
 								player.play()
 							}
 							live = true;
