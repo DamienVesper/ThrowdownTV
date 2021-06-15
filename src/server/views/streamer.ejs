@@ -219,7 +219,7 @@
 						if(data.isSuspended) return window.location.reload();
 						if(livedata.isLive === true){
 							if(live === false){
-								setInterval(() => {
+								setTimeout(() => {
 									player.src({
 										src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
 										type: `video/x-mpegURL`,
