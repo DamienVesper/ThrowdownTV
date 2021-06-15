@@ -71,12 +71,12 @@
 	border-radius: 50%;
 }
 
-#live-status.offline {
-    color: #AAAAAA;
+#live-status.online {
+    color: var(--streamerLive);
 }
 
-#live-status.online {
-    color: #ff3b3b
+#live-status.offline {
+    color: var(--streamerOffline);
 }
 
 .profile-picture {
