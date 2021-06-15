@@ -439,6 +439,13 @@
     <br>
     <div class="wrapper">
         <div id="ban-etc-buttons" style="visibility: hidden; background-color: #b1cbe6;" class="one card card-body col-md-6 m-auto">
+            <h2 class="text-center">Actions</h2>
+            <br>
+            <h4>User is currently:</h4>
+            <h4 id="banunbantext" style="color:green">Not Banned</h4>
+            <br>
+            <button type="button" class="btn btn-success" onclick="unbanUserAcc()">Unban User Account</button>
+            <br>
             <button type="button" class="btn btn-danger" onclick="banUserAcc()">Ban User Account</button>
             <br>
             <button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
@@ -482,6 +489,7 @@
             const userdataDiv = document.querySelector(`#user-data`);
             const buttonsDiv = document.querySelector(`#ban-etc-buttons`);
             const e = document.querySelector(`#user-dropdown`);
+            const banunbantext = document.querySelector(`#banunbantext`);
 
             const selectedUser = e.options[e.selectedIndex].text;
 
@@ -516,6 +524,11 @@
 
             userDataDisplayText.innerHTML = textToInsert;
 
+            if (trueUserData.isBanned) {
+                banunbantext.style.color = "red";
+                banunbantext.innerHTML = "Banned";
+            }
+
             // `Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b><br>`
         };
 
@@ -537,7 +550,7 @@
                     return resp.json()
                 })).accessingUsername;
                 let textContent =
-                    `⛔ **Deleted** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**`;
+                    `⛔ **Deleted** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\n -`;
                 var params = {
                     content: textContent
                 };
@@ -563,7 +576,7 @@
             const trueUserData = await getData(selectedUser)
             if (trueUserData.isBanned) return alert("User is already banned!");
             let conformation = confirm(
-                `Are you sure you want to ban the account of ${selectedUser}? You will NOT be able to undo this action!`
+                `Are you sure you want to ban the account of ${selectedUser}?`
             );
             if (conformation == false) {
                 return;
@@ -578,7 +591,46 @@
                 });
 
                 let textContent =
-                    `⛔ **Banned** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\nReason: ${banReason}`;
+                    `⛔ **Banned** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\nReason: ${banReason}\n -`;
+                var params = {
+                    content: textContent
+                };
+                await fetch(webhookURL, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                }).then(okay => {
+                    window.location.reload(true);
+                })
+                window.location.reload(true);
+            }
+        }
+
+        const unbanUserAcc = async() => {
+            const userdataDiv = document.querySelector(`#user-data`);
+            const e = document.querySelector(`#user-dropdown`);
+            const selectedUser = e.options[e.selectedIndex].text;
+
+            const trueUserData = await getData(selectedUser)
+            if (!trueUserData.isBanned) return alert("User is not banned!");
+            let conformation = confirm(
+                `Are you sure you want to unban the account of ${selectedUser}?`
+            );
+            if (conformation == false) {
+                return;
+            } else {
+                let modName = (await fetch('/api/whoAmI').then(resp => {
+                    return resp.json()
+                })).accessingUsername;
+
+                let ttData = await fetch(`/api/unbanuser/${selectedUser}`).then(data => data.json()).then(data => {
+                    return data;
+                });
+
+                let textContent =
+                    `✅ **Unbanned** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\n -`;
                 var params = {
                     content: textContent
                 };
