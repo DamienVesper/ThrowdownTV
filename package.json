@@ -8,7 +8,7 @@
     "prod": "node ./build/src/server/server.js --mode prod",
     "dist": "yarn build && yarn dev",
     "dev": "node ./build/src/server/server.js --mode dev",
-    "dev:server": "ts-node ./src/server/server.ts,
+    "dev:server": "ts-node ./src/server/server.ts",
     "dev:lint": "eslint . --fix --ext .ts"
   },
   "repository": {
