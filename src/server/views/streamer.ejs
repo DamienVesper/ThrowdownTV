@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="/assets/css/streamer.css">
 
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
-<script src="/assets/js/videojs/videojs-resolution-switcher.js"></script>
 <script type="application/javascript" src="/assets/js/tooltipjs/tooltip.js"></script>
 
 <div id="streamer-error" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -236,17 +235,11 @@
 							$(`#live-status`).text(`LIVE`);
 							$(`#live-status`).removeClass(`offline`).addClass(`online`);
 							if(live === false){
-								player.updateSrc([
-									{
-										src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
-										type: `video/x-mpegURL`,
-										label: `HLS`
-									}
-								])
-								player.play()
-								player.on(`resolutionchange`, function(){
-									console.info(`Changed Format`)
+								player.src({
+									src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
+									type: `video/x-mpegURL`,
 								})
+								player.play()
 							}
 							live = true;
 						} 
