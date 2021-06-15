@@ -9,7 +9,6 @@ import Sticker from '../models/sticker.model';
 
 import config from '../../../config/config';
 import log from '../utils/log';
-import cors from 'cors';
 
 const apiRouter: Express.Router = Express.Router();
 
