@@ -224,7 +224,7 @@
 				fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
 					$(`.viewer-count`).text(data.viewers);
 					if(data.isSuspended) return window.location.reload();
-					if(livedata.isLive === true){
+					if(data.isLive === true){
 						if(live === false){
 							setTimeout(() => {
 								player.src({
