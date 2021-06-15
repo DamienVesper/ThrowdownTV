@@ -61,7 +61,7 @@
 
 			<div class="streamer-buttons">
 				<div class="streamer-button-content">
-					<span class="live-status">LOADING...</span>
+					<span id="live-status">LOADING...</span>
 					<span class="viewers text-danger" title="Live Viewers">
 						<i class="streamer-icon icofont icofont-eye-alt"></i><span class="viewer-count">0</span>
 					</span>
@@ -233,12 +233,11 @@
 				fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
 					fetch(`https://${data.rtmpServer}.throwdown.tv/api/status/${streamer}`).then(livedata => livedata.json()).then(livedata => {
 						$(`#viewer-count`).text(livedata.viewers);
-						if (data.isSuspended) return window.location.reload();
-						if (livedata.isLive === true) {
-							$(`.live-status`).text(`LIVE`);
-							$(`.live-status`).removeClass(`offline`).addClass(
-							`online`);
-							if (live === false) {
+						if(data.isSuspended) return window.location.reload();
+						if(livedata.isLive === true){
+							$(`#live-status`).text(`LIVE`);
+							$(`#live-status`).removeClass(`offline`).addClass(`online`);
+							if(live === false){
 								player.updateSrc([
 									{
 										src: `https://${data.rtmpServer}.throwdown.tv/flv/${streamer}`,
@@ -252,11 +251,11 @@
 								})
 							}
 							live = true;
-						} else {
-							$(`.live-status`).text(`OFFLINE`);
-							$(`.live-status`).removeClass(`online`).addClass(
-							`offline`);
-							if (live === true) {
+						} 
+						else {
+							$(`#live-status`).text(`OFFLINE`);
+							$(`#live-status`).removeClass(`online`).addClass(`offline`);
+							if(live === true){
 								player.src({
 									src: `/assets/video/throwdown.mp4`,
 									type: `video/mp4`
