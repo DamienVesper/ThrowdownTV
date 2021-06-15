@@ -8,7 +8,7 @@
 
 <h1 class="text-light text-center">Admin Panel</h1>
 <div class="user-list">
-	<select name="user-dropdown" id="user-dropdown" onchange="selectedUser()">
+	<select name="user-dropdown" id="user-dropdown" onchange="selectUser()">
 		<option value="" selected>Please select a User</option>
 	</select>
 </div>
@@ -26,7 +26,7 @@
 		const allUsers = users;
 		const userDropdown = document.querySelector(`#user-dropdown`);
 
-		console.log(allUsers);
+
 		allUsers.forEach((user, index) => {
 			const optionElement = document.createElement(`option`);
 
@@ -47,6 +47,7 @@
 		const selectedUser = e.options[e.selectedIndex].text;
 
 		if (selectedUser === `Please Select a user`) return userdataDiv.style.visibility = `hidden`;
+		if(!selectedUser) return userdataDiv.style.visibility = `hidden`;
 		userdataDiv.style.visibility = `visible`;
 
 		const DisplayText = document.querySelector(`#selectedusertext`);
@@ -54,8 +55,7 @@
 
 		const userDataDisplayText = document.querySelector(`#userdatatext`);
 
-		const trueUserData = await JSON.parse(await getData(selectedUser));
-		console.log(trueUserData);
+		const trueUserData = await getData(selectedUser)
 
 		let textToInsert = ``;
 		for (const prop in trueUserData) {
@@ -79,7 +79,10 @@
 	};
 
 	const getData = async (username) => {
-		const data = await fetch(`/api/fetch-user/${username}`);
-		return await JSON.stringify(data.json());
+		let userData;
+		let ttData = await fetch(`/api/fetch-user/${username}`).then(data => data.json()).then(data => {
+			return data;
+		})
+		return ttData;
 	};
 </script>

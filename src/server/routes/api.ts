@@ -199,6 +199,40 @@ apiRouter.get(`/fetch-users-no-staff`, async (req: Express.Request, res: Express
     return res.json(users);
 });
 
+apiRouter.get(`/fetch-user/:username`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.status(403).send(`You must be an administrator to access this page!`);
+
+    const streamer = await User.findOne({ username: req.params.username });
+    if (!streamer) return res.status(404).send(`User Not Found`);
+
+    const user = {
+        name: streamer.username,
+        displayName: streamer.displayName,
+        streamTitle: streamer.settings.title,
+        description: streamer.settings.description,
+        rtmpServer: streamer.settings.rtmpServer,
+        isLive: streamer.live,
+        isBanned: streamer.isSuspended,
+        isVIP: streamer.perms.vip,
+        email: streamer.email,
+        creationIP: streamer.creationIP,
+        lastIP: streamer.lastIP,
+        avatarURL: streamer.avatarURL,
+        channel: {
+            moderators: streamer.channel.moderators,
+            bans: streamer.channel.bans
+        },
+
+        emailVerified: streamer.verified,
+        perms: streamer.perms
+    };
+
+    return res.json(user);
+});
+
 apiRouter.post(`/rtmp-api`, async (req: Express.Request, res: Express.Response) => {
     const streamer = req.body.streamer.toLowerCase();
     const apiKey = req.body.apiKey;
