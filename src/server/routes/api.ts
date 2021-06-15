@@ -177,7 +177,14 @@ apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) =>
             title: streamer.settings.title,
             description: streamer.settings.description,
             rtmpServer: streamer.settings.rtmpServer,
-            isLive: streamer.live
+            isLive: streamer.live,
+            viewers: streamer.viewers.length,
+        	followers: streamer.followers.length,
+        	avatarURL: streamer.avatarURL,
+            roles: {
+                vip: streamer.perms.vip,
+        		staff: streamer.perms.staff
+            }
         });
     }
 
