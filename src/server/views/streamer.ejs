@@ -222,7 +222,7 @@
 
 			const checkCrucialData = () => {
 				fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-					$(`.viewer-count`).text(data.viewers);
+					$(`.viewer-count`).text(data.viewers.length);
 					if(data.isSuspended) return window.location.reload();
 					if(data.isLive === true){
 						if(live === false){
