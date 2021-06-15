@@ -9,6 +9,7 @@ import Sticker from '../models/sticker.model';
 
 import config from '../../../config/config';
 import log from '../utils/log';
+import cors from 'cors';
 
 const apiRouter: Express.Router = Express.Router();
 
@@ -54,7 +55,7 @@ apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Respons
 });
 
 // Dummy Live Status incase RTMP goes down.
-apiRouter.get(`/status/:streamer`, async (req: Express.Request, res: Express.Response) => {
+apiRouter.get(`/status/:streamer`, cors(), async (req: Express.Request, res: Express.Response) => {
     const streamerData = await User.findOne({ username: req.params.streamer.toLowerCase() });
     if (!streamerData) res.status(404).render(`errors/404.ejs`);
 
@@ -89,11 +90,11 @@ apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res:
     res.jsonp(data);
 });
 
-apiRouter.get('/whoAmI', async (req: Express.Request, res: Express.Response) => {
+apiRouter.get(`/whoAmI`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    return res.send({accessingUsername: accessingUser.username});
- })
+    return res.send({ accessingUsername: accessingUser.username });
+});
 
 apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
@@ -146,7 +147,7 @@ apiRouter.get(`/delete-account/:username`, async (req: Express.Request, res: Exp
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
     if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
 
-    let user = await User.findOne ({ username: req.params.username });
+    const user = await User.findOne({ username: req.params.username });
     if (!user) return;
 
     log(`yellow`, `Deleted account ${user.username} - Forced by admin ${accessingUser.username}`);
@@ -397,7 +398,7 @@ apiRouter.post(`/banuser`, async (req: Express.Request, res: Express.Response) =
     });
 });
 
-// Ban User via GET 
+// Ban User via GET
 apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -413,7 +414,7 @@ apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.
         if (err) return res.status(400).json({ errors: `Invalid user data` });
     });
 
-    return res.json({status: "Done!"});
+    return res.json({ status: `Done!` });
 });
 
 // Unban User
@@ -434,8 +435,7 @@ apiRouter.post(`/unbanuser`, async (req: Express.Request, res: Express.Response)
     });
 });
 
-
-// Unban User via GET 
+// Unban User via GET
 apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -451,7 +451,7 @@ apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Expres
     userToUnban.save(err => {
         if (err) return res.status(400).json({ errors: `Invalid user data` });
     });
-    return res.json({status: "Done!"});
+    return res.json({ status: `Done!` });
 });
 
 apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Express.Response) => {
