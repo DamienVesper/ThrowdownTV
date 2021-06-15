@@ -384,4 +384,5 @@ authRouter.get(`/deleteaccount/confirm/:token`, async (req: Express.Request, res
     await User.deleteOne({ username: user.username });
     res.render(`success/accountdeleted.ejs`);
 });
+
 export default authRouter;
