@@ -1,156 +1,609 @@
 <%- include('./partials/header'); %>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+    <link rel="stylesheet" href="https://vjs.zencdn.net/7.10.2/video-js.css">
+    <link rel="stylesheet" href="/assets/css/streamer.css">
 
-<style>
-	.selectize-control.plugin-drag_drop.multi>.selectize-input>div.ui-sortable-placeholder{visibility:visible !important;background:#f2f2f2 !important;background:rgba(0,0,0,.06) !important;border:0 none !important;box-shadow:inset 0 0 12px 4px #fff}.selectize-control.plugin-drag_drop .ui-sortable-placeholder::after{content:"!";visibility:hidden}.selectize-control.plugin-drag_drop .ui-sortable-helper{box-shadow:0 2px 5px rgba(0,0,0,.2)}.selectize-control .dropdown-header{position:relative;padding:10px 8px;border-bottom:1px solid #d0d0d0;background:#f8f8f8;border-radius:3px 3px 0 0}.selectize-control .dropdown-header-close{position:absolute;right:8px;top:50%;color:#303030;opacity:.4;margin-top:-12px;line-height:20px;font-size:20px !important}.selectize-control .dropdown-header-close:hover{color:#000}.selectize-dropdown.plugin-optgroup_columns .selectize-dropdown-content{display:flex}.selectize-dropdown.plugin-optgroup_columns .optgroup{border-right:1px solid #f2f2f2;border-top:0 none;flex-grow:1;flex-basis:0;min-width:0}.selectize-dropdown.plugin-optgroup_columns .optgroup:last-child{border-right:0 none}.selectize-dropdown.plugin-optgroup_columns .optgroup:before{display:none}.selectize-dropdown.plugin-optgroup_columns .optgroup-header{border-top:0 none}.selectize-control.plugin-remove_button .item{display:inline-flex;align-items:center;padding-right:0 !important}.selectize-control.plugin-remove_button .item .remove{color:inherit;text-decoration:none;vertical-align:middle;display:inline-block;padding:2px 6px;border-left:1px solid #d0d0d0;border-radius:0 2px 2px 0;box-sizing:border-box;margin-left:6px}.selectize-control.plugin-remove_button .item .remove:hover{background:rgba(0,0,0,.05)}.selectize-control.plugin-remove_button .item.active .remove{border-left-color:#cacaca}.selectize-control.plugin-remove_button .disabled .item .remove:hover{background:none}.selectize-control.plugin-remove_button .disabled .item .remove{border-left-color:#fff}.selectize-control.plugin-remove_button .remove-single{position:absolute;right:0;top:0;font-size:23px}.selectize-control{position:relative}.selectize-dropdown,.selectize-input,.selectize-input input{color:#303030;font-family:inherit;font-size:13px;line-height:18px;font-smoothing:inherit}.selectize-input,.selectize-control.single .selectize-input.input-active{background:#fff;cursor:text;display:inline-block}.selectize-input{border:1px solid #d0d0d0;padding:8px 8px;display:inline-block;width:100%;overflow:hidden;position:relative;z-index:1;box-sizing:border-box;box-shadow:inset 0 1px 1px rgba(0,0,0,.1);border-radius:3px}.selectize-control.multi .selectize-input.has-items{padding:calc( 8px - 2px - 0 ) 8px calc( 8px - 2px - 3px - 0 )}.selectize-input.full{background-color:#fff}.selectize-input.disabled,.selectize-input.disabled *{cursor:default !important}.selectize-input.focus{box-shadow:inset 0 1px 2px rgba(0,0,0,.15)}.selectize-input.dropdown-active{border-radius:3px 3px 0 0}.selectize-input>*{vertical-align:baseline;display:inline-block;zoom:1}.selectize-control.multi .selectize-input>div{cursor:pointer;margin:0 3px 3px 0;padding:2px 6px;background:#f2f2f2;color:#303030;border:0 solid #d0d0d0}.selectize-control.multi .selectize-input>div.active{background:#e8e8e8;color:#303030;border:0 solid #cacaca}.selectize-control.multi .selectize-input.disabled>div,.selectize-control.multi .selectize-input.disabled>div.active{color:#7d7d7d;background:#fff;border:0 solid #fff}.selectize-input>input{display:inline-block !important;padding:0 !important;min-height:0 !important;max-height:none !important;max-width:100% !important;margin:0 !important;text-indent:0 !important;border:0 none !important;background:none !important;line-height:inherit !important;user-select:auto !important;box-shadow:none !important}.selectize-input>input::-ms-clear{display:none}.selectize-input>input:focus{outline:none !important}.selectize-input>input[placeholder]{box-sizing:initial}.selectize-input.has-items>input{margin:0 4px !important}.selectize-input::after{content:" ";display:block;clear:left}.selectize-input.dropdown-active::before{content:" ";display:block;position:absolute;background:#f0f0f0;height:1px;bottom:0;left:0;right:0}.selectize-dropdown{position:absolute;top:100%;left:0;width:100%;z-index:10;border:1px solid #d0d0d0;background:#fff;margin:-1px 0 0 0;border-top:0 none;box-sizing:border-box;box-shadow:0 1px 3px rgba(0,0,0,.1);border-radius:0 0 3px 3px}.selectize-dropdown [data-selectable]{cursor:pointer;overflow:hidden}.selectize-dropdown [data-selectable] .highlight{background:rgba(125,168,208,.2);border-radius:1px}.selectize-dropdown .option,.selectize-dropdown .optgroup-header,.selectize-dropdown .no-results,.selectize-dropdown .create{padding:5px 8px}.selectize-dropdown .option,.selectize-dropdown [data-disabled],.selectize-dropdown [data-disabled] [data-selectable].option{cursor:inherit;opacity:.5}.selectize-dropdown [data-selectable].option{opacity:1;cursor:pointer}.selectize-dropdown .optgroup:first-child .optgroup-header{border-top:0 none}.selectize-dropdown .optgroup-header{color:#303030;background:#fff;cursor:default}.selectize-dropdown .active{background-color:#f5fafd;color:#495c68}.selectize-dropdown .active.create{color:#495c68}.selectize-dropdown .create{color:rgba(48,48,48,.5)}.selectize-dropdown-content{overflow-y:auto;overflow-x:hidden;max-height:200px;overflow-scrolling:touch}.selectize-dropdown .spinner{display:inline-block;width:30px;height:30px;margin:5px 8px}.selectize-dropdown .spinner:after{content:" ";display:block;width:24px;height:24px;margin:3px;border-radius:50%;border:5px solid #d0d0d0;border-color:#d0d0d0 transparent #d0d0d0 transparent;animation:lds-dual-ring 1.2s linear infinite}@keyframes lds-dual-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.selectize-control.single .selectize-input,.selectize-control.single .selectize-input input{cursor:pointer}.selectize-control.single .selectize-input.input-active,.selectize-control.single .selectize-input.input-active input{cursor:text}.selectize-control.single .selectize-input:after{content:" ";display:block;position:absolute;top:50%;right:15px;margin-top:-3px;width:0;height:0;border-style:solid;border-width:5px 5px 0 5px;border-color:gray transparent transparent transparent}.selectize-control.single .selectize-input.dropdown-active:after{margin-top:-4px;border-width:0 5px 5px 5px;border-color:transparent transparent gray transparent}.selectize-control.rtl{text-align:right}.selectize-control.rtl.single .selectize-input:after{left:15px;right:auto}.selectize-control.rtl .selectize-input>input{margin:0 4px 0 -2px !important}.selectize-control .selectize-input.disabled{opacity:.5;background-color:#fafafa}
-</style>
-
-<h1 class="text-light text-center">Admin Panel</h1>
-<div class="user-list">
-	<select name="user-dropdown" id="user-dropdown" onchange="selectUser()">
+    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+    <script type="application/javascript" src="/assets/js/tooltipjs/tooltip.js"></script>
+    <style>
+        .selectize-control.plugin-drag_drop.multi>.selectize-input>div.ui-sortable-placeholder {
+            visibility: visible !important;
+            background: #f2f2f2 !important;
+            background: rgba(0, 0, 0, .06) !important;
+            border: 0 none !important;
+            box-shadow: inset 0 0 12px 4px #fff
+        }
+        
+        .selectize-control.plugin-drag_drop .ui-sortable-placeholder::after {
+            content: "!";
+            visibility: hidden
+        }
+        
+        .selectize-control.plugin-drag_drop .ui-sortable-helper {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .2)
+        }
+        
+        .selectize-control .dropdown-header {
+            position: relative;
+            padding: 10px 8px;
+            border-bottom: 1px solid #d0d0d0;
+            background: #f8f8f8;
+            border-radius: 3px 3px 0 0
+        }
+        
+        .selectize-control .dropdown-header-close {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            color: #303030;
+            opacity: .4;
+            margin-top: -12px;
+            line-height: 20px;
+            font-size: 20px !important
+        }
+        
+        .selectize-control .dropdown-header-close:hover {
+            color: #000
+        }
+        
+        .selectize-dropdown.plugin-optgroup_columns .selectize-dropdown-content {
+            display: flex
+        }
+        
+        .selectize-dropdown.plugin-optgroup_columns .optgroup {
+            border-right: 1px solid #f2f2f2;
+            border-top: 0 none;
+            flex-grow: 1;
+            flex-basis: 0;
+            min-width: 0
+        }
+        
+        .selectize-dropdown.plugin-optgroup_columns .optgroup:last-child {
+            border-right: 0 none
+        }
+        
+        .selectize-dropdown.plugin-optgroup_columns .optgroup:before {
+            display: none
+        }
+        
+        .selectize-dropdown.plugin-optgroup_columns .optgroup-header {
+            border-top: 0 none
+        }
+        
+        .selectize-control.plugin-remove_button .item {
+            display: inline-flex;
+            align-items: center;
+            padding-right: 0 !important
+        }
+        
+        .selectize-control.plugin-remove_button .item .remove {
+            color: inherit;
+            text-decoration: none;
+            vertical-align: middle;
+            display: inline-block;
+            padding: 2px 6px;
+            border-left: 1px solid #d0d0d0;
+            border-radius: 0 2px 2px 0;
+            box-sizing: border-box;
+            margin-left: 6px
+        }
+        
+        .selectize-control.plugin-remove_button .item .remove:hover {
+            background: rgba(0, 0, 0, .05)
+        }
+        
+        .selectize-control.plugin-remove_button .item.active .remove {
+            border-left-color: #cacaca
+        }
+        
+        .selectize-control.plugin-remove_button .disabled .item .remove:hover {
+            background: none
+        }
+        
+        .selectize-control.plugin-remove_button .disabled .item .remove {
+            border-left-color: #fff
+        }
+        
+        .selectize-control.plugin-remove_button .remove-single {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 23px
+        }
+        
+        .selectize-control {
+            position: relative
+        }
+        
+        .selectize-dropdown,
+        .selectize-input,
+        .selectize-input input {
+            color: #303030;
+            font-family: inherit;
+            font-size: 13px;
+            line-height: 18px;
+            font-smoothing: inherit
+        }
+        
+        .selectize-input,
+        .selectize-control.single .selectize-input.input-active {
+            background: #fff;
+            cursor: text;
+            display: inline-block
+        }
+        
+        .selectize-input {
+            border: 1px solid #d0d0d0;
+            padding: 8px 8px;
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            box-sizing: border-box;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+            border-radius: 3px
+        }
+        
+        .selectize-control.multi .selectize-input.has-items {
+            padding: calc(8px - 2px - 0) 8px calc(8px - 2px - 3px - 0)
+        }
+        
+        .selectize-input.full {
+            background-color: #fff
+        }
+        
+        .selectize-input.disabled,
+        .selectize-input.disabled * {
+            cursor: default !important
+        }
+        
+        .selectize-input.focus {
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15)
+        }
+        
+        .selectize-input.dropdown-active {
+            border-radius: 3px 3px 0 0
+        }
+        
+        .selectize-input>* {
+            vertical-align: baseline;
+            display: inline-block;
+            zoom: 1
+        }
+        
+        .selectize-control.multi .selectize-input>div {
+            cursor: pointer;
+            margin: 0 3px 3px 0;
+            padding: 2px 6px;
+            background: #f2f2f2;
+            color: #303030;
+            border: 0 solid #d0d0d0
+        }
+        
+        .selectize-control.multi .selectize-input>div.active {
+            background: #e8e8e8;
+            color: #303030;
+            border: 0 solid #cacaca
+        }
+        
+        .selectize-control.multi .selectize-input.disabled>div,
+        .selectize-control.multi .selectize-input.disabled>div.active {
+            color: #7d7d7d;
+            background: #fff;
+            border: 0 solid #fff
+        }
+        
+        .selectize-input>input {
+            display: inline-block !important;
+            padding: 0 !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            text-indent: 0 !important;
+            border: 0 none !important;
+            background: none !important;
+            line-height: inherit !important;
+            user-select: auto !important;
+            box-shadow: none !important
+        }
+        
+        .selectize-input>input::-ms-clear {
+            display: none
+        }
+        
+        .selectize-input>input:focus {
+            outline: none !important
+        }
+        
+        .selectize-input>input[placeholder] {
+            box-sizing: initial
+        }
+        
+        .selectize-input.has-items>input {
+            margin: 0 4px !important
+        }
+        
+        .selectize-input::after {
+            content: " ";
+            display: block;
+            clear: left
+        }
+        
+        .selectize-input.dropdown-active::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            background: #f0f0f0;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            right: 0
+        }
+        
+        .selectize-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            border: 1px solid #d0d0d0;
+            background: #fff;
+            margin: -1px 0 0 0;
+            border-top: 0 none;
+            box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+            border-radius: 0 0 3px 3px
+        }
+        
+        .selectize-dropdown [data-selectable] {
+            cursor: pointer;
+            overflow: hidden
+        }
+        
+        .selectize-dropdown [data-selectable] .highlight {
+            background: rgba(125, 168, 208, .2);
+            border-radius: 1px
+        }
+        
+        .selectize-dropdown .option,
+        .selectize-dropdown .optgroup-header,
+        .selectize-dropdown .no-results,
+        .selectize-dropdown .create {
+            padding: 5px 8px
+        }
+        
+        .selectize-dropdown .option,
+        .selectize-dropdown [data-disabled],
+        .selectize-dropdown [data-disabled] [data-selectable].option {
+            cursor: inherit;
+            opacity: .5
+        }
+        
+        .selectize-dropdown [data-selectable].option {
+            opacity: 1;
+            cursor: pointer
+        }
+        
+        .selectize-dropdown .optgroup:first-child .optgroup-header {
+            border-top: 0 none
+        }
+        
+        .selectize-dropdown .optgroup-header {
+            color: #303030;
+            background: #fff;
+            cursor: default
+        }
+        
+        .selectize-dropdown .active {
+            background-color: #f5fafd;
+            color: #495c68
+        }
+        
+        .selectize-dropdown .active.create {
+            color: #495c68
+        }
+        
+        .selectize-dropdown .create {
+            color: rgba(48, 48, 48, .5)
+        }
+        
+        .selectize-dropdown-content {
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: 200px;
+            overflow-scrolling: touch
+        }
+        
+        .selectize-dropdown .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin: 5px 8px
+        }
+        
+        .selectize-dropdown .spinner:after {
+            content: " ";
+            display: block;
+            width: 24px;
+            height: 24px;
+            margin: 3px;
+            border-radius: 50%;
+            border: 5px solid #d0d0d0;
+            border-color: #d0d0d0 transparent #d0d0d0 transparent;
+            animation: lds-dual-ring 1.2s linear infinite
+        }
+        
+        @keyframes lds-dual-ring {
+            0% {
+                transform: rotate(0deg)
+            }
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+        
+        .selectize-control.single .selectize-input,
+        .selectize-control.single .selectize-input input {
+            cursor: pointer
+        }
+        
+        .selectize-control.single .selectize-input.input-active,
+        .selectize-control.single .selectize-input.input-active input {
+            cursor: text
+        }
+        
+        .selectize-control.single .selectize-input:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            margin-top: -3px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 5px 5px 0 5px;
+            border-color: gray transparent transparent transparent
+        }
+        
+        .selectize-control.single .selectize-input.dropdown-active:after {
+            margin-top: -4px;
+            border-width: 0 5px 5px 5px;
+            border-color: transparent transparent gray transparent
+        }
+        
+        .selectize-control.rtl {
+            text-align: right
+        }
+        
+        .selectize-control.rtl.single .selectize-input:after {
+            left: 15px;
+            right: auto
+        }
+        
+        .selectize-control.rtl .selectize-input>input {
+            margin: 0 4px 0 -2px !important
+        }
+        
+        .selectize-control .selectize-input.disabled {
+            opacity: .5;
+            background-color: #fafafa
+        }
+        
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            grid-auto-rows: minmax(100px, auto);
+        }
+        
+        .one {
+            grid-column: 1 / 3;
+            grid-row: 1;
+        }
+        
+        .two {
+            grid-column: 2 / 4;
+            grid-row: 1 / 3;
+        }
+        
+        .three {
+            grid-column: 1;
+            grid-row: 2 / 5;
+        }
+        
+        .four {
+            grid-column: 3;
+            grid-row: 3;
+        }
+        
+        .five {
+            grid-column: 2;
+            grid-row: 4;
+        }
+        
+        .six {
+            grid-column: 3;
+            grid-row: 4;
+        }
+    </style>
+    <br>
+    <br>
+    <h1 class="text-light text-center">Admin Panel</h1>
+    <br>
+    <br>
+    <div class="user-list">
+        <select name="user-dropdown" id="user-dropdown" onchange="selectUser()">
 		<option value="" selected>Please select a User</option>
 	</select>
-</div>
+    </div>
+    <br>
+    <div class="wrapper">
+        <div id="ban-etc-buttons" style="visibility: hidden; background-color: #b1cbe6;" class="one card card-body col-md-6 m-auto">
+            <button type="button" class="btn btn-danger" onclick="banUserAcc()">Ban User Account</button>
+            <br>
+            <button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
+        </div>
 
-<div id="user-data" style="visibility: hidden;">
-	<p id="selectedusertext" class="text-light">Selected User: </p>
-	<p id="userdatatext" class="text-light"></p>
-	<br>
-	<button type="button" class="btn btn-danger" onclick="banUserAcc()">Ban User Account</button>
-	<button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
-</div>
+        <div id="user-data" style="visibility: hidden; background-color: #b1cbe6;" class="two card card-body col-md-6 m-auto">
+            <p id="selectedusertext" class="text-light">Selected User: </p>
+            <p id="userdatatext" class="text-light"></p>
+            <br>
+        </div>
 
-<script>
-	const webhookURL = "https://discord.com/api/webhooks/854405974097920040/vVfV1GzYnt7M5fUcnQWap3hbuCLNBYioDX4DBU-tfGC9J4OKOOk3hS2K7szgYGexG3Q7";
-	const allUsersArr = [];
+    </div>
 
-	// Fetch all of the users.
-	fetch(`/api/fetch-users-no-staff`).then(data => data.json()).then(users => {
-		const allUsers = users;
-		const userDropdown = document.querySelector(`#user-dropdown`);
+    <script>
+        const webhookURL =
+            "https://discord.com/api/webhooks/854405974097920040/vVfV1GzYnt7M5fUcnQWap3hbuCLNBYioDX4DBU-tfGC9J4OKOOk3hS2K7szgYGexG3Q7";
+        const allUsersArr = [];
+
+        // Fetch all of the users.
+        fetch(`/api/fetch-users-no-staff`).then(data => data.json()).then(users => {
+            const allUsers = users;
+            const userDropdown = document.querySelector(`#user-dropdown`);
 
 
-		allUsers.forEach((user, index) => {
-			const optionElement = document.createElement(`option`);
+            allUsers.forEach((user, index) => {
+                const optionElement = document.createElement(`option`);
 
-			optionElement.value = index;
-			optionElement.textContent = user.name;
+                optionElement.value = index;
+                optionElement.textContent = user.name;
 
-			userDropdown.appendChild(optionElement);
-			allUsersArr.push(user);
-		});
+                userDropdown.appendChild(optionElement);
+                allUsersArr.push(user);
+            });
 
-		$(`#user-dropdown`).selectize({ sortField: `text` });
-	});
+            $(`#user-dropdown`).selectize({
+                sortField: `text`
+            });
+        });
 
-	const selectUser = async () => {
-		const userdataDiv = document.querySelector(`#user-data`);
-		const e = document.querySelector(`#user-dropdown`);
+        const selectUser = async() => {
+            const userdataDiv = document.querySelector(`#user-data`);
+            const buttonsDiv = document.querySelector(`#ban-etc-buttons`);
+            const e = document.querySelector(`#user-dropdown`);
 
-		const selectedUser = e.options[e.selectedIndex].text;
+            const selectedUser = e.options[e.selectedIndex].text;
 
-		if (selectedUser === `Please Select a user`) return userdataDiv.style.visibility = `hidden`;
-		if(!selectedUser) return userdataDiv.style.visibility = `hidden`;
-		userdataDiv.style.visibility = `visible`;
+            if (selectedUser === `Please Select a user`) return userdataDiv.style.visibility = `hidden`;
+            if (!selectedUser) return userdataDiv.style.visibility = `hidden`;
+            userdataDiv.style.visibility = `visible`;
+            buttonsDiv.style.visibility = `visible`;
 
-		const DisplayText = document.querySelector(`#selectedusertext`);
-		DisplayText.innerHTML = `Selected User: ${selectedUser}`;
+            const DisplayText = document.querySelector(`#selectedusertext`);
+            DisplayText.innerHTML = `Selected User: ${selectedUser}`;
 
-		const userDataDisplayText = document.querySelector(`#userdatatext`);
+            const userDataDisplayText = document.querySelector(`#userdatatext`);
 
-		const trueUserData = await getData(selectedUser)
+            const trueUserData = await getData(selectedUser)
 
-		let textToInsert = ``;
-		for (const prop in trueUserData) {
-			if (typeof trueUserData[prop] === `object`) {
-				let stringText = ``;
-				const nestedObj = trueUserData[prop];
-				for (const property2 in nestedObj) {
-					const extraObjectToAppend = `${prop}.${property2.toString()}: <b>${nestedObj[property2].toString()}</b><br>`;
-					stringText = stringText.concat(extraObjectToAppend);
-				}
-				textToInsert = textToInsert.concat(stringText);
-			} else {
-				const stringText = `${prop.toString()}: <b>${trueUserData[prop].toString()}</b><br>`;
-				textToInsert = textToInsert.concat(stringText);
-			}
-		}
+            let textToInsert = ``;
+            for (const prop in trueUserData) {
+                if (typeof trueUserData[prop] === `object`) {
+                    let stringText = ``;
+                    const nestedObj = trueUserData[prop];
+                    for (const property2 in nestedObj) {
+                        const extraObjectToAppend =
+                            `${prop}.${property2.toString()}: <b>${nestedObj[property2].toString()}</b><br>`;
+                        stringText = stringText.concat(extraObjectToAppend);
+                    }
+                    textToInsert = textToInsert.concat(stringText);
+                } else {
+                    const stringText = `${prop.toString()}: <b>${trueUserData[prop].toString()}</b><br>`;
+                    textToInsert = textToInsert.concat(stringText);
+                }
+            }
 
-		userDataDisplayText.innerHTML = textToInsert;
+            userDataDisplayText.innerHTML = textToInsert;
 
-		// `Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b><br>`
-	};
+            // `Username: <b>${trueUserData.name}</b><br>Email: <b>${trueUserData.email}</b><br> Banned: <b>${trueUserData.isBanned}</b><br>IPs: <b>${trueUserData.creationIP}, ${trueUserData.lastIP}</b><br>`
+        };
 
-	const deleteUserAcc = async () => {
-		const userdataDiv = document.querySelector(`#user-data`);
-		const e = document.querySelector(`#user-dropdown`);
-		const selectedUser = e.options[e.selectedIndex].text;
-		
-		let conformation = confirm(`Are you sure you want to delete the account of ${selectedUser}? You will NOT be able to undo this action!`);
-		if(conformation == false){
-			return;
-		}
-		else {
-			await fetch(`/api/delete-account/${selectedUser}`)
-			alert("Deleted user account!")
-	
-			let modName = (await fetch('/api/whoAmI').then(resp => {return resp.json()})).accessingUsername;
-			let textContent = `⛔ **Deleted** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**`;
-			var params = {
-				content: textContent
-			};	
-			await fetch(webhookURL, {
-				method: "POST",
-				headers: {
-					'Content-type': 'application/json'
-				},
-				body: JSON.stringify(params)
-			}).then(okay => {window.location.reload(true);})
+        const deleteUserAcc = async() => {
+            const userdataDiv = document.querySelector(`#user-data`);
+            const e = document.querySelector(`#user-dropdown`);
+            const selectedUser = e.options[e.selectedIndex].text;
 
-			window.location.reload(true); 
-		}
-	}
+            let conformation = confirm(
+                `Are you sure you want to delete the account of ${selectedUser}? You will NOT be able to undo this action!`
+            );
+            if (conformation == false) {
+                return;
+            } else {
+                await fetch(`/api/delete-account/${selectedUser}`)
+                alert("Deleted user account!")
 
-	const banUserAcc = async () => {
-		const userdataDiv = document.querySelector(`#user-data`);
-		const e = document.querySelector(`#user-dropdown`);
-		const selectedUser = e.options[e.selectedIndex].text;
+                let modName = (await fetch('/api/whoAmI').then(resp => {
+                    return resp.json()
+                })).accessingUsername;
+                let textContent =
+                    `⛔ **Deleted** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**`;
+                var params = {
+                    content: textContent
+                };
+                await fetch(webhookURL, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                }).then(okay => {
+                    window.location.reload(true);
+                })
 
-		const trueUserData = await getData(selectedUser)
-		if(trueUserData.isBanned) return alert("User is already banned!");
-		let conformation = confirm(`Are you sure you want to ban the account of ${selectedUser}? You will NOT be able to undo this action!`);
-		if(conformation == false){
-			return;
-		}
-		else {
-			let banReason = window.prompt("What is the ban reason for this user?");
-			let modName = (await fetch('/api/whoAmI').then(resp => {return resp.json()})).accessingUsername;
+                window.location.reload(true);
+            }
+        }
 
-			let ttData = await fetch(`/api/banuser/${selectedUser}`).then(data => data.json()).then(data => {
-			return data;
-			});
+        const banUserAcc = async() => {
+            const userdataDiv = document.querySelector(`#user-data`);
+            const e = document.querySelector(`#user-dropdown`);
+            const selectedUser = e.options[e.selectedIndex].text;
 
-			let textContent = `⛔ **Banned** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\nReason: ${banReason}`;
-			var params = {
-				content: textContent
-			};	
-			await fetch(webhookURL, {
-				method: "POST",
-				headers: {
-					'Content-type': 'application/json'
-				},
-				body: JSON.stringify(params)
-			}).then(okay => {window.location.reload(true);})
-			window.location.reload(true); 
-		}
-	}
+            const trueUserData = await getData(selectedUser)
+            if (trueUserData.isBanned) return alert("User is already banned!");
+            let conformation = confirm(
+                `Are you sure you want to ban the account of ${selectedUser}? You will NOT be able to undo this action!`
+            );
+            if (conformation == false) {
+                return;
+            } else {
+                let banReason = window.prompt("What is the ban reason for this user?");
+                let modName = (await fetch('/api/whoAmI').then(resp => {
+                    return resp.json()
+                })).accessingUsername;
 
-	const getData = async (username) => {
-		let userData;
-		let ttData = await fetch(`/api/fetch-user/${username}`).then(data => data.json()).then(data => {
-			return data;
-		})
-		return ttData;
-	};
-</script>
+                let ttData = await fetch(`/api/banuser/${selectedUser}`).then(data => data.json()).then(data => {
+                    return data;
+                });
+
+                let textContent =
+                    `⛔ **Banned** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\nReason: ${banReason}`;
+                var params = {
+                    content: textContent
+                };
+                await fetch(webhookURL, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                }).then(okay => {
+                    window.location.reload(true);
+                })
+                window.location.reload(true);
+            }
+        }
+
+        const getData = async(username) => {
+            let userData;
+            let ttData = await fetch(`/api/fetch-user/${username}`).then(data => data.json()).then(data => {
+                return data;
+            })
+            return ttData;
+        };
+    </script>
