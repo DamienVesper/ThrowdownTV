@@ -179,11 +179,11 @@ apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) =>
             rtmpServer: streamer.settings.rtmpServer,
             isLive: streamer.live,
             viewers: streamer.viewers.length,
-        	followers: streamer.followers.length,
-        	avatarURL: streamer.avatarURL,
+            followers: streamer.followers.length,
+            avatarURL: streamer.avatarURL,
             roles: {
                 vip: streamer.perms.vip,
-        		staff: streamer.perms.staff
+                staff: streamer.perms.staff
             }
         });
     }
@@ -491,7 +491,7 @@ apiRouter.get(`/update-email/:username/:newEmail`, async (req: Express.Request, 
     if (!userToUpdate) return res.status(404).json({ errors: `User Not Found` });
 
     userToUpdate.email = req.params.newEmail;
-    userToUpdate.save(() => res.json({ success: `Changed User Email`}));
-})
+    userToUpdate.save(() => res.json({ success: `Changed User Email` }));
+});
 
 export default apiRouter;
