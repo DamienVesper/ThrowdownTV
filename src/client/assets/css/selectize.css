@@ -114,7 +114,6 @@
     font-family: inherit;
     font-size: 13px;
     line-height: 18px;
-    font-smoothing: inherit
 }
 
 .selectize-input,
@@ -305,7 +304,6 @@
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 200px;
-    overflow-scrolling: touch
 }
 
 .selectize-dropdown .spinner {
