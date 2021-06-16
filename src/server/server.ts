@@ -6,6 +6,7 @@ import { logSplash, logHeader } from './utils/logExtra';
 import antiDuplicator from './utils/antiDuplicator';
 import clearTimeouts from './utils/clearTimeouts';
 import resetRTMPServers from './utils/resetRTMPServers';
+import throwdownUser from './utils/throwdownUser';
 
 import passport from './passport';
 
@@ -100,7 +101,9 @@ const startApp = async () => {
                     resetRTMPServers(() => {
                         clearTimeouts(() => {
                             antiDuplicator(() => {
-                                setInterval(antiDuplicator, 18e5);
+                                throwdownUser(() => {
+                                    setInterval(antiDuplicator, 18e5);
+                                });
                             });
                         });
                     });
