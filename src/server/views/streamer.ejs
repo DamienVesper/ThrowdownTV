@@ -249,8 +249,8 @@
 						$(`#live-status`).text(`OFFLINE`);
 						$(`#live-status`).removeClass(`online`).addClass(`offline`);
 						if(live === true){
-							player.pause();
-							player.src('');
+							player.hasStarted(false);
+							player.currentTime(0);
 						}
 						live = false;
 					}
@@ -304,8 +304,8 @@
 			});
 
 			player.on(`error`, event => {
-				player.pause();
-				player.src('');
+				player.hasStarted(false);
+				player.currentTime(0);
 			});
 		});
 	});
