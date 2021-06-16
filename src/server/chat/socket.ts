@@ -56,7 +56,7 @@ io.on(`connection`, async (socket: SocketIO.Socket) => {
         if (!user || user.token !== token || !streamer) log(`cyan`, `Guest account connected.`);
 
         const chatter: Chatter = {
-            username,
+            username: user?.username || `guest_${socket.id}`,
             displayName: user ? user.displayName : undefined,
 
             token,
