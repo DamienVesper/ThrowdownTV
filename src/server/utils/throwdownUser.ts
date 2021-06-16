@@ -4,7 +4,7 @@ import log from './log';
 import randomString from './randomString';
 
 const throwdownUser = async (callback?: any) => {
-    log(`cyan`, `Resetting all RTMP Servers`);
+    log(`cyan`, `Checking Default Throwdown User`);
 
     const throwdownUser = await User.findOne({ username: `throwdown` });
     if (!throwdownUser) {
