@@ -229,8 +229,8 @@
 							setTimeout(() => {
 								if (streamer.toLowerCase() === `throwdown`) {
 									player.src({
-										src: `/assets/video/throwdown.mp4`,
-										type: `video/mp4`
+										src: `/assets/video/throwdown.webm`,
+										type: `video/webm`
 									});
 								} else {
 									player.src({
@@ -307,8 +307,8 @@
 
 			player.on(`error`, event => {
 				player.src({
-					src: `/assets/video/throwdown.mp4`,
-					type: `video/mp4`
+					src: `/assets/video/throwdown.webm`,
+					type: `video/webm`
 				});
 			});
 		});
