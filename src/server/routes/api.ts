@@ -485,7 +485,7 @@ apiRouter.get(`/update-email/:username/:newEmail`, async (req: Express.Request, 
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    if (!accessingUser.perms.staff) return res.status(403).send(`You must be an administrator to access this page!`);
 
     const userToUpdate = await User.findOne({ username: req.params.username });
     if (!userToUpdate) return res.status(404).json({ errors: `User Not Found` });
