@@ -249,10 +249,8 @@
 						$(`#live-status`).text(`OFFLINE`);
 						$(`#live-status`).removeClass(`online`).addClass(`offline`);
 						if(live === true){
-							player.src({
-								src: `/assets/video/throwdown.mp4`,
-								type: `video/mp4`
-							});
+							player.pause();
+							player.src('');
 						}
 						live = false;
 					}
@@ -306,10 +304,8 @@
 			});
 
 			player.on(`error`, event => {
-				player.src({
-					src: `/assets/video/throwdown.webm`,
-					type: `video/webm`
-				});
+				player.pause();
+				player.src('');
 			});
 		});
 	});
