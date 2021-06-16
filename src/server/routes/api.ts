@@ -481,4 +481,17 @@ apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Expr
     user.save(() => res.json({ success: `Changed Streamer Status` }));
 });
 
+apiRouter.get(`/update-email/:username/:newEmail`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+
+    const userToUpdate = await User.findOne({ username: req.params.username });
+    if (!userToUpdate) return res.status(404).json({ errors: `User Not Found` });
+
+    userToUpdate.email = req.params.newEmail;
+    userToUpdate.save(() => res.json({ success: `Changed User Email`}));
+})
+
 export default apiRouter;

@@ -1,45 +1,6 @@
 <%- include('./partials/header'); %>
     <link rel="stylesheet" href="/assets/css/selectize.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
-
-    <style>
-        .wrapper {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            grid-auto-rows: minmax(100px, auto);
-        }
-        
-        .one {
-            grid-column: 1 / 3;
-            grid-row: 1;
-        }
-        
-        .two {
-            grid-column: 2 / 4;
-            grid-row: 1 / 3;
-        }
-        
-        .three {
-            grid-column: 1;
-            grid-row: 2 / 5;
-        }
-        
-        .four {
-            grid-column: 3;
-            grid-row: 3;
-        }
-        
-        .five {
-            grid-column: 2;
-            grid-row: 4;
-        }
-        
-        .six {
-            grid-column: 3;
-            grid-row: 4;
-        }
-    </style>
     <br>
     <br>
     <h1 class="text-light text-center">Admin Panel</h1>
@@ -63,6 +24,9 @@
             <button type="button" class="btn btn-danger" onclick="banUserAcc()">Ban User Account</button>
             <br>
             <button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
+            <br>
+            <button type="button" class="btn btn-success" onclick="updateUserEmail()">Update User Email</button>
+
         </div>
 
         <div id="user-data" style="visibility: hidden; background-color: #b1cbe6;" class="two card card-body col-md-6 m-auto">
@@ -222,6 +186,29 @@
                     window.location.reload(true);
                 })
                 window.location.reload(true);
+            }
+        }
+
+        const updateUserEmail = async() => {
+            const userdataDiv = document.querySelector(`#user-data`);
+            const e = document.querySelector(`#user-dropdown`);
+            const selectedUser = e.options[e.selectedIndex].text;
+
+            let conformation = confirm(
+                `Are you sure you want to update the email of ${selectedUser}?`
+            );
+            if (conformation == false) {
+                return;
+            } else {
+                let newEmail = window.prompt("Enter the new email address for the user");
+                if (!newEmail) return;
+
+                let ttData = await fetch(`/api/update-email/${selectedUser}/${newEmail}`).then(data => data.json()).then(data => {
+                    window.location.reload(true);
+                    return data;
+                });
+
+                return window.location.reload(true);
             }
         }
 
