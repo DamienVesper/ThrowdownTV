@@ -1,6 +1,6 @@
 import User from '../models/user.model';
 
-import log from './log';
+import log from '../utils/log';
 
 const resetRTMPServers = async () => {
     log(`cyan`, `Resetting all RTMP Servers`);

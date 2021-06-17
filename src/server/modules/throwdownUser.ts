@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import User from '../models/user.model';
-import log from './log';
-import randomString from './randomString';
+import log from '../utils/log';
+import randomString from '../utils/randomString';
 
 const throwdownUser = async () => {
     log(`cyan`, `Checking default Throwdown user.`);

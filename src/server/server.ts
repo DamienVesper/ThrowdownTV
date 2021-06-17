@@ -3,10 +3,10 @@ import config from '../../config/config';
 import log from './utils/log';
 import { logSplash, logHeader } from './utils/logExtra';
 
-import antiDuplicator from './utils/antiDuplicator';
-import clearTimeouts from './utils/clearTimeouts';
-import resetRTMPServers from './utils/resetRTMPServers';
-import throwdownUser from './utils/throwdownUser';
+import antiDuplicator from './modules/antiDuplicator';
+import clearTimeouts from './modules/clearTimeouts';
+import resetRTMPServers from './modules/resetRTMPServers';
+import throwdownUser from './modules/throwdownUser';
 
 import passport from './passport';
 

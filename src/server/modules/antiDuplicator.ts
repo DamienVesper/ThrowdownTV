@@ -1,7 +1,7 @@
 import User from '../models/user.model';
 
-import log from './log';
-import randomString from './randomString';
+import log from '../utils/log';
+import randomString from '../utils/randomString';
 
 const antiDuplicator = async () => {
     log(`cyan`, `Checking for duplicate stream keys...`);

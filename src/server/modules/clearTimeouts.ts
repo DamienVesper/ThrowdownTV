@@ -1,6 +1,6 @@
 import User from '../models/user.model';
 
-import log from './log';
+import log from '../utils/log';
 
 const clearTimeouts = async () => {
     log(`cyan`, `Checking for timed out users...`);
