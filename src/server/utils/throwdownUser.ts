@@ -3,8 +3,8 @@ import User from '../models/user.model';
 import log from './log';
 import randomString from './randomString';
 
-const throwdownUser = async (callback?: any) => {
-    log(`cyan`, `Checking Default Throwdown User`);
+const throwdownUser = async () => {
+    log(`cyan`, `Checking default Throwdown user.`);
 
     const throwdownUser = await User.findOne({ username: `throwdown` });
     if (!throwdownUser) {
@@ -36,10 +36,12 @@ const throwdownUser = async (callback?: any) => {
         throwdownUser.email = `throwdowntvofficial@gmail.com`;
         throwdownUser.live = true;
         throwdownUser.perms.vip = true;
+
         throwdownUser.settings.streamKey = `throwdown_${randomString(32)}`;
         throwdownUser.settings.title = `Throwdown TV - Free-Speech Livestreaming`;
         throwdownUser.settings.description = `Contact us on Twitter: @ThrowdownLive`;
-        throwdownUser.save();
+
+        await throwdownUser.save();
     }
 };
 

@@ -97,16 +97,13 @@ const startApp = async () => {
                 log(`green`, `Webfront bound to port ${config.port}.`);
 
                 logHeader();
-                import(`./chat/socket`).then(() => {
-                    resetRTMPServers(() => {
-                        clearTimeouts(() => {
-                            antiDuplicator(() => {
-                                throwdownUser(() => {
-                                    setInterval(antiDuplicator, 18e5);
-                                });
-                            });
-                        });
-                    });
+                import(`./chat/socket`).then(async () => {
+                    await resetRTMPServers();
+                    await clearTimeouts();
+                    await antiDuplicator();
+                    await throwdownUser();
+
+                    setInterval(async () => (await antiDuplicator()), 18e5);
                 });
             });
         });

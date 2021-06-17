@@ -3,7 +3,7 @@ import User from '../models/user.model';
 import log from './log';
 import randomString from './randomString';
 
-const antiDuplicator = async (callback?: any) => {
+const antiDuplicator = async () => {
     log(`cyan`, `Checking for duplicate stream keys...`);
 
     const dbUsers = await User.find({});
@@ -20,13 +20,12 @@ const antiDuplicator = async (callback?: any) => {
 
                 let newStreamKey = `${user.username}${randomString(32)}`;
                 while (streamKeys.includes(newStreamKey)) newStreamKey = `${user.username}${randomString(32)}`;
+
                 user.settings.streamKey = newStreamKey;
-                user.save();
+                await user.save();
             }
         }
     }
-
-    if (callback !== undefined) callback();
 };
 
 export default antiDuplicator;
