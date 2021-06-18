@@ -36,6 +36,7 @@ const throwdownUser = async () => {
         throwdownUser.email = `throwdowntvofficial@gmail.com`;
         throwdownUser.live = true;
         throwdownUser.perms.vip = true;
+        throwdownUser.perms.staff = true;
 
         throwdownUser.settings.streamKey = `throwdown_${randomString(32)}`;
         throwdownUser.settings.title = `Throwdown TV - Free-Speech Livestreaming`;
