@@ -1,13 +1,19 @@
 @charset "utf-8";
 @import "palette.css";
 
+/** Global variables for this stylesheet **/
+:root {
+	--streamerWrapperBackgroundColor: #b1cbe6;
+}
+
+
 /** Common styles for both the mobile and desktop layout */
 #no-active-streams .card-body {
 	background-color: #ffcece;
 }
 
 .streamer-wrapper {
-	background-color: #b1cbe6;
+	background-color: var(--streamerWrapperBackgroundColor);
 	display: flex;
 	/* flex-direction: row; */
 	margin: 10px 0;
@@ -16,19 +22,35 @@
 .streamer-wrapper .card-body {
 	padding: 0.75rem;
 	display: flex;
+	align-items: center;
 }
 
 .stream-thumbnail {
 	display: inline-flex;
 	flex-direction: column;
-	max-width: 40%;
-	width: 40%;
+	height: auto;
 }
 
-.stream-thumbnail img {
+/* https://stackoverflow.com/a/10016640 */
+.stream-thumbnail .thumbnail-inner {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+}
+
+/* Hacker shit lol */
+.stream-thumbnail .thumbnail-inner:after {
+	content: "";
+	background: rgba(0,0,0,0);
+	display: inline-flex;
+	flex-direction: column-reverse;
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
+	outline: 10px solid var(--streamerWrapperBackgroundColor);
 }
 
 .stream-info {
@@ -45,52 +67,79 @@
     text-overflow: ellipsis;
 }
 
-.stream-title, .stream-desc, .streamer-name, .live-status {
+.stream-title, .streamer-name, .live-status {
 	margin-bottom: 0 !important;
+}
+
+.stream-desc {
+	margin-bottom: 5px;
 }
 
 .stream-title a {
 	line-height: 1.5;
 }
 
-.streamer-name {
-	color: green;
-	font-weight: bold;
+.streamer-info-text {
+	display: inline-block;
+	vertical-align: middle;
 }
 
-.live-status {
+.streamer-info-text .staffbadge, .streamer-info-text .vipbadge {
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.profile-picture, .streamer-info-text {
+	display: inline-block;
+}
+
+.streamer-display-name {
+	color: green;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.live-stats .status {
 	-webkit-text-stroke: 0.2px black;
 	-moz-text-stroke: 0.2px black;
 	font-weight: bold;
 }
 
-.live-status.online {
+.live-stats .status.online {
     color: var(--streamerOnline);
 }
 
-.live-status.offline {
+.live-stats .status.offline {
     color: var(--streamerOffline);
 }
 
+.avatar {
+	width: 100%;
+	height: 100%;
+}
 
+.circle-crop {
+	border-radius: 50%;
+}
 
+.profile-picture {
+	width: var(--pfpDims);
+	height: var(--pfpDims);
+	margin-right: 10px;
+}
 
+.viewers, .followers {
+    font-size: 1rem;
+    margin-left: 10px;
+    color: rgb(209, 209, 209);
+    align-self: center;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.viewers i, .followers i {
+	margin-right: 5px;
+}
 
 
 /* Common desktop layout */
@@ -98,6 +147,7 @@
 	/* Variables */
 	:root {
 		--activeStreamsWidth: 908.47px;
+		--pfpDims: 60px;
 	}
 
 	#active-streams {
@@ -108,35 +158,172 @@
 	.condensed {
 		max-width: 450px;
 	}
+
+	.stream-thumbnail {
+		width: 270px;
+		height: 152px;
+	}
 	
 }
-
-
-/* Larger desktops (ie: horizontal width is greater than or equal to 1500px) */
-@media only screen and (min-width: 1500px){
-
-}
-
-
-/** Small desktops (ie: horizontal width that's less than 1500px, but greater than 991px) */
-@media only screen and (min-width: 992px) and (max-width: 1499px){
-	/* Variables */
-	:root {
-		--streamerContentBoxHeight: 110px;
-	}
-}
-
 
 /* Common mobile layout styles */
 @media only screen and (max-width: 991px){
 	/* Variables */
 	:root {
-		
+		--pfpDims: 50px;
 	}
 }
 
+/* Larger mobile devices */
+@media only screen and (min-width: 800px) and (max-width: 991px){
+	.stream-thumbnail {
+		width: 250px;
+		height: 141px;
+	}
+}
+
+/* Medium-sized devices */
+@media only screen and (min-width: 451px) and (max-width: 699px){
+	/* Variables */
+	:root {
+		--pfpDims: 50px;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+	}
+
+	.stream-desc, .streamer-display-name, .live-stats, .live-stats span, .live-stats i {
+		font-size: 14px;
+	}
+
+	.streamer-info-text .staffbadge, .streamer-info-text .vipbadge {
+		width: 14px;
+		height: 14px;
+	}
+
+	.condensed {
+		max-width: 300px;
+	}
+
+	.stream-thumbnail {
+		width: 200px;
+		height: 113px;
+	}
+}
+
+/* Medium-small devices */ 
+@media only screen and (max-width: 599px){
+	.streamer-wrapper, .card-body {
+		display: block !important;
+	}
+
+	.stream-info, .stream-thumbnail {
+		display: block;
+		margin: 0 auto;
+	}
+
+	.stream-thumbnail {
+		width: 220px;
+		height: 124px;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+	}
+
+	.stream-desc, .streamer-display-name, .live-stats, .live-stats span, .live-stats i {
+		font-size: 14px;
+	}
+
+	.streamer-info-text .staffbadge, .streamer-info-text .vipbadge {
+		width: 14px;
+		height: 14px;
+	}
+}
 
 /* Very small devices (eg: iPhone SE, Galaxy Note 3, etc) */
 @media only screen and (max-width: 450px){
 
 }
+
+/* Flexible stream text and image sizes */
+@media only screen and (min-width: 901px) and (max-width: 991px){
+	.condensed {
+		max-width: 450px;
+	}
+}
+
+@media only screen and (min-width: 800px) and (max-width: 900px){
+	.condensed {
+		max-width: 400px;
+	}
+}
+
+@media only screen and (min-width: 700px) and (max-width: 799px){
+	.condensed {
+		max-width: 350px;
+	}
+
+	.stream-thumbnail {
+		width: 250px;
+		height: 141px;
+	}
+}
+
+@media only screen and (min-width: 600px) and (max-width: 699px){
+	/* Variables */
+	:root {
+		--pfpDims: 50px;
+	}
+
+	.condensed {
+		max-width: 300px;
+	}
+
+	.stream-thumbnail {
+		width: 200px;
+		height: 113px;
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: 599px){
+	/* Variables */
+	:root {
+		--pfpDims: 50px;
+	}
+
+	.condensed {
+		max-width: 450px;
+	}
+}
+
+@media only screen and (min-width: 400px) and (max-width: 499px){
+	/* Variables */
+	:root {
+		--pfpDims: 50px;
+	}
+
+	.condensed {
+		max-width: 350px;
+	}
+}
+
+@media only screen and (min-width: 300px) and (max-width: 399px){
+	/* Variables */
+	:root {
+		--pfpDims: 50px;
+	}
+
+	.condensed {
+		max-width: 250px;
+	}
+}
+
+
+/* Debug style
+.profile-picture {
+	background-color: #F00;
+	border-radius: 0% !important;
+}
+*/
