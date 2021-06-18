@@ -234,19 +234,19 @@
 										type: `video/webm`
 									});
 								} else {
-									if (player.canPlayType('application/vnd.apple.mpegurl')) {
-										player.src({
-											src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
-											type: `application/vnd.apple.mpegurl`,
-										})
-										player.play();
-									} else if (Hls.isSupported()) {
-										let hls = new Hls();
+									if (Hls.isSupported()) {
+										const hls = new Hls();
 										hls.loadSource(`https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`);
 										hls.attachMedia(player);
 										hls.on(Hls.Events.MANIFEST_PARSED, function() {
 											player.play();
 										});
+									} else {
+										player.src({
+											src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
+											type: `application/vnd.apple.mpegurl`,
+										})
+										player.play();
 									}
 								}
 								$(`#live-status`).text(`LIVE`);
