@@ -1,50 +1,77 @@
 <%- include('./partials/header'); %>
-<br>
+
+<link rel="stylesheet" href="/assets/css/browse.css">
+
 <h1 class="text-light text-center">Currently Following</h1>
 
-<div class="row mt-5">
-    <div class="col-md-6 m-auto">
-        <div class="no-active-following card card-body text-center" style="background-color: #ffcece;">
+<div class="row mt-auto" id="no-following">
+	<!-- No followers popup -->
+    <div class="col-md-11 m-auto">
+        <div class="card card-body text-center">
             <span>You are not following anyone...</span>
         </div>
     </div>
 </div>
-<div class="row mt-5">
-    <div class="col-md-6 m-auto" style="max-width: 650px;">
-        <div class="active-following"></div>
-    </div>
+
+<div class="row mt-auto">
+    <div class="col-md-11 m-auto" id="following"></div>
 </div>
-<script>
-    $(document).ready(() => $(`.no-active-following`).hide());
-    fetch(`/api/following-streams`).then(data => data.json()).then(data => {
-        if (data.length === 0) return $(`.no-active-following`).show();
 
-        for (const streamer of data) {
-            let streamerWrapper = $(`<div>`);
-            let statusColor = `red`
-            let status = `OFFLINE`
-            
-            if (streamer.isLive) {
-                statusColor = `lime`
-                status = `LIVE`
-            }
+<script type="application/javascript">
+	$(document).ready(() => $(`#no-following`).hide());
+	fetch(`/api/following`).then(data => data.json()).then(data => {
+		//Check if there are streamers that are live
+		if(data.length === 0){
+			//Show the "nobody is live" header and return
+			$(`#following`).hide();
+			$(`#no-following`).show();
+			return;
+		}
+		
+		//Loop over the streamers
+		for(const streamer of data){
+			//Constants for the streamer data display
+			const status = streamer.isLive ? "LIVE" : "OFFLINE";
+			const statusClass = streamer.isLive ? "online" : "offline";
 
-            streamerWrapper.addClass(`card card-body`);
-            streamerWrapper.attr(`style`, `background-color: #b1cbe6; display: flex; flex-direction: row;`);
-            streamerWrapper.html(`
-                <img src="https://${streamer.rtmpServer}.throwdown.tv/api/thumbnail/${streamer.name}" alt="Throwdown thumbnail" style="max-width: 40%; max-height: 40%;" alt="${streamer.displayName} Thumbnail" onerror=this.src="/assets/img/thumbnail.png">
-                <div style="margin-left: 25px;">
-                    <h2><a href="/${streamer.name}" class="stream-data-condensed">${streamer.title}</a></h2>
-                    <p class="stream-data-condensed">${streamer.description}
-                    <br>
-                    <b style="color: green;">${streamer.displayName}</b></p>
-                    <br>
-                    <b style="-webkit-text-stroke: 0.2px black; color: ${statusColor};">${status}</b></p>
-                </div>
-            `);
+			//Get more info about the streamer
+			const streamerAvatar = ""; //string
+			const streamerRoles = {}; //{isVip: boolean, isStaff: boolean}
 
-            $(`.active-following`).append(streamerWrapper);
-            $(`.active-following`).append(`<br>`);
-        }
-    });
+			//Create the basic skeleton of the streamer card
+			let streamerDisplay = $(`<div class="card streamer-wrapper">`).html(`
+				<div class="card-body">
+					<div class="stream-thumbnail"><div class="thumbnail-inner" style="background-image: url('https://${streamer.rtmpServer}.throwdown.tv/api/thumbnail/${streamer.name}'), url('/assets/img/thumbnail.png')" alt="${streamer.displayName} Thumbnail" onclick="window.location.href = '/${streamer.name}'"></div></div>
+					<div class="stream-info">
+						<h2 class="stream-title"><a href="/${streamer.name}" class="condensed">${streamer.title}</a></h2>
+						<p class="stream-desc condensed">${streamer.description}</p>
+
+						<div class="streamer-info">
+							<div class="profile-picture"><img src="${streamer.avatarURL}" onerror=this.src="/assets/img/defaultpfp.png" class="avatar circle-crop" alt="Avatar"></div>
+							<div class="streamer-info-text">
+								<div class="streamer-name">
+									${streamer.roles.staff ? `<img src="/assets/img/chat/badges/staff.png" class="staffbadge" alt="[Throwdown Staff]" title="ThrowdownTV Staff">` : ``}
+									${streamer.roles.vip ? `<img src="/assets/img/chat/badges/vip.png" class="vipbadge" alt="[VIP]" title="ThrowdownTV VIP Member">` : ``}
+									<span class="streamer-display-name lead">${streamer.displayName}</span>
+								</div>
+								<div class="live-stats">
+									<span class="status ${statusClass}">${status}</span>
+									<span class="viewers text-danger" title="Live Viewers">
+										<i class="streamer-icon icofont icofont-eye-alt"></i><span class="viewer-count">${streamer.viewers}</span>
+									</span>
+									<span class="followers text-primary" title="Followers">
+										<i class="streamer-icon icofont icofont-people"></i><span class="follow-count">${streamer.followers}</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+  				</div>
+			`).append(`</div>`);
+
+			//Add the streamer to the list of those that are streaming
+			$(`#following`).append(streamerDisplay);
+		}
+	});
 </script>

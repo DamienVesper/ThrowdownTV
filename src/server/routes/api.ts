@@ -95,7 +95,7 @@ apiRouter.get(`/whoAmI`, async (req: Express.Request, res: Express.Response) => 
     return res.send({ accessingUsername: accessingUser.username });
 });
 
-apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Response) => {
+apiRouter.get(`/following`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const streamers = [];
@@ -108,7 +108,14 @@ apiRouter.get(`/following-streams`, async (req: Express.Request, res: Express.Re
             title: streamer.settings.title,
             description: streamer.settings.description,
             rtmpServer: streamer.settings.rtmpServer,
-            isLive: streamer.live
+            isLive: streamer.live,
+            viewers: streamer.viewers.length,
+            followers: streamer.followers.length,
+            avatarURL: streamer.avatarURL,
+            roles: {
+                vip: streamer.perms.vip,
+                staff: streamer.perms.staff
+            }
         });
     }
 
