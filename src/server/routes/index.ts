@@ -6,7 +6,6 @@ const pageRouter: Express.Router = Express.Router();
 pageRouter.get(`/`, async (req: Express.Request, res: Express.Response) => req.isAuthenticated() ? res.redirect(`/browse`) : res.render(`welcome.ejs`));
 pageRouter.get(`/following`, async (req: Express.Request, res: Express.Response) => req.isAuthenticated() ? res.render(`following.ejs`) : res.redirect(`/login`));
 pageRouter.get(`/browse`, async (req: Express.Request, res: Express.Response) => res.render(`browse.ejs`));
-pageRouter.get(`/staff`, async (req: Express.Request, res: Express.Response) => res.render(`staff.ejs`));
 pageRouter.get(`/tos`, async (req: Express.Request, res: Express.Response) => res.render(`tos.ejs`));
 
 pageRouter.get(`/signup`, async (req: Express.Request, res: Express.Response) => req.isAuthenticated() ? res.redirect(`/`) : res.render(`signup.ejs`));
