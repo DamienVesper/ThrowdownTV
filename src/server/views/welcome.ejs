@@ -27,6 +27,8 @@
 	<div class="col-md-11 m-auto" id="active-streams"></div>
 </div>
 
+<%- include('./partials/footer'); %>
+
 <script type="application/javascript">
 	$(document).ready(() => $(`#no-active-streams`).hide());
 	fetch(`/api/streams`).then(data => data.json()).then(data => {

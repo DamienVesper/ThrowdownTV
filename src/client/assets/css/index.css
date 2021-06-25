@@ -152,3 +152,7 @@ input:checked + .slider:before {
 .navbar {
 	background-color: var(--dblue);
 }
+
+.footer {
+    color: #ccc;
+}

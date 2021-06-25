@@ -252,7 +252,7 @@ authRouter.get(`/changepassword/:token`, async (req: Express.Request, res: Expre
     const user = await User.findOne({ recoverytoken: token });
 
     if (!user) {
-        res.render(`error.ejs`);
+        res.render(`errors/error.ejs`);
         res.json({ errors: `Invalid/Expired Recovery Token` });
     } else {
         res.render(`changePassword.ejs`);
