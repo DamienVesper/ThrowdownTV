@@ -251,6 +251,10 @@
 						if(live === true){
 							player.hasStarted(false);
 							player.currentTime(0);
+							player.src({
+								src: `/offline`,
+								type: `application/x-mpegURL`,
+							})
 						}
 						live = false;
 					}
@@ -306,6 +310,10 @@
 			player.on(`error`, event => {
 				player.hasStarted(false);
 				player.currentTime(0);
+				player.src({
+					src: `/offline`,
+					type: `application/x-mpegURL`,
+				})
 			});
 		});
 	});
