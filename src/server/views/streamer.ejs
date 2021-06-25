@@ -249,12 +249,10 @@
 						$(`#live-status`).text(`OFFLINE`);
 						$(`#live-status`).removeClass(`online`).addClass(`offline`);
 						if(live === true){
-							player.src({
-								src: `/offline`,
-								type: `application/x-mpegURL`,
-							})
+							player.hasStarted(false);
+							player.currentTime(0);
+							player.removeAttribute(`src`);
 						}
-						player.pause();
 						live = false;
 					}
 				});
@@ -309,6 +307,7 @@
 			player.on(`error`, event => {
 				player.hasStarted(false);
 				player.currentTime(0);
+				player.removeAttribute(`src`);
 			});
 		});
 	});
