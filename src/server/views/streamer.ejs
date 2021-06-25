@@ -347,6 +347,8 @@
 
 			player.on(`error`, event => {
 				setTimeout(() => {
+					$(`#live-status`).text(`LOADING...`);
+					$(`#live-status`).removeClass(`offline`).removeClass(`online`);
 					checkLive();
 				}, 5000)
 			});
