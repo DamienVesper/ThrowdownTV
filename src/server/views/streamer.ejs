@@ -261,6 +261,44 @@
 				});
 			}
 
+			const checkLive = () => {
+				fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
+					if(data.isSuspended) return window.location.reload();
+					if(data.isLive === true){
+						if(live === false){
+							if (streamer.toLowerCase() === `throwdown`) {
+								player.src({
+									src: `/assets/video/throwdown.webm`,
+									type: `video/webm`
+								});
+							} else {
+								player.src({
+									src: `https://${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
+									type: `application/x-mpegURL`,
+								})
+							}
+							$(`#live-status`).text(`LIVE`);
+							$(`#live-status`).removeClass(`offline`).addClass(`online`);
+							player.play();
+						}
+						live = true;
+					} 
+					else {
+						$(`#live-status`).text(`OFFLINE`);
+						$(`#live-status`).removeClass(`online`).addClass(`offline`);
+						if(live === true){
+							player.src({
+								src: `/offline`,
+								type: `application/x-mpegURL`,
+							})
+							player.hasStarted(false);
+							player.currentTime(0);
+						}
+						live = false;
+					}
+				});
+			}
+
 			player.controlBar.progressControl.seekBar.hide();
 
 			setInterval(getStreamData, 5e3);
@@ -308,12 +346,7 @@
 			});
 
 			player.on(`error`, event => {
-				player.src({
-					src: `/offline`,
-					type: `application/x-mpegURL`,
-				})
-				player.hasStarted(false);
-				player.currentTime(0);
+				checkLive();
 			});
 		});
 	});
