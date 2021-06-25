@@ -346,7 +346,9 @@
 			});
 
 			player.on(`error`, event => {
-				checkLive();
+				setTimeout(() => {
+					checkLive();
+				}, 5000)
 			});
 		});
 	});
