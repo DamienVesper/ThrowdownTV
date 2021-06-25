@@ -255,7 +255,6 @@
 							})
 							player.hasStarted(false);
 							player.currentTime(0);
-							player.stop();
 							live = false;
 						}
 					}
@@ -294,7 +293,6 @@
 							})
 							player.hasStarted(false);
 							player.currentTime(0);
-							player.stop();
 							live = false;
 						}
 					}
@@ -348,9 +346,9 @@
 			});
 
 			player.on(`error`, event => {
+				$(`#live-status`).text(`LOADING...`);
+				$(`#live-status`).removeClass(`offline`).removeClass(`online`);
 				setTimeout(() => {
-					$(`#live-status`).text(`LOADING...`);
-					$(`#live-status`).removeClass(`offline`).removeClass(`online`);
 					checkLive();
 				}, 5000)
 			});
