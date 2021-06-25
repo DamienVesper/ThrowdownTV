@@ -1,10 +1,12 @@
 <%- include('./partials/header'); %>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <br>
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
         <div class="card card-body" style="background-color: #b1cbe6;">
             <p class="vip-page-p">You are already a VIP Member</p>
+            <br>
+            <p class="text-center">For support, email us at <strong>support@throwdownmedia.net</strong></p>
+            <br>
             <form action="/vip/cancel" method="POST">
                 <input type="submit" id="subscribe-button" value="Cancel Subscription" class="btn btn-primary btn-block">
             </form>
