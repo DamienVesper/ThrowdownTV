@@ -235,7 +235,7 @@
 								$(`#live-status`).removeClass(`offline`).addClass(`online`);
 								player.play();
 								live = true;
-							}, 5000)
+							}, 10000)
 						}
 					} 
 					else {
@@ -343,7 +343,7 @@
 				$(`#live-status`).removeClass(`offline`).removeClass(`online`);
 				setTimeout(() => {
 					checkLive();
-				}, 5000)
+				}, 10000)
 			});
 		});
 	});
