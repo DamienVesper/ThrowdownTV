@@ -32,16 +32,6 @@ const throwdownUser = async () => {
                 });
             });
         });
-    } else {
-        throwdownUser.email = `throwdowntvofficial@gmail.com`;
-        throwdownUser.perms.vip = true;
-        throwdownUser.perms.staff = true;
-
-        throwdownUser.settings.streamKey = `throwdown_${randomString(32)}`;
-        throwdownUser.settings.title = `Throwdown TV - Free-Speech Livestreaming`;
-        throwdownUser.settings.description = `Contact us on Twitter: @ThrowdownLive or by email at contact@throwdownmedia.net`;
-
-        await throwdownUser.save();
     }
 };
 
