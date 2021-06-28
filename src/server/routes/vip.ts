@@ -43,8 +43,8 @@ vipRouter.get(`/`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const user = await User.findOne({ username: (<any>req).user.username });
 
-    if (!user.perms.vip) res.render(`subscribeVIP.ejs`);
-    else res.render(`alreadyVIP.ejs`);
+    if (!user.perms.vip) res.render(`vip/subscribeVIP.ejs`);
+    else res.render(`vip/alreadyVIP.ejs`);
 });
 
 vipRouter.get(`/success`, async (req: Express.Request, res: Express.Response) => {

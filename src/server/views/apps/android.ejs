@@ -1,0 +1,28 @@
+<%- include('../partials/header'); %>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<style>
+    .center{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+</style>
+<br>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;">
+            <p class="vip-page-p" style="font-size: 40px;">Throwdown Android App</p>
+            <p class="vip-page-p" style="font-size: 20px;">Currently available as an APK.</p>
+            <p class="vip-page-p" style="font-size: 20px;"><strong>Coming soon to Google Play...</strong></p>
+            <img class="mobile-screenshot col-md-6 m-auto" src="/assets/img/apps/android/android1.png">
+            <br>
+            <p class="text-center">For support, email us at <strong>support@throwdownmedia.net</strong></p>
+            <br>
+            <a href="https://dl.throwdown.tv/public/android/throwdown.apk" class="btn btn-primary btn-block">Download APK</a>
+            <a href="#" class="btn btn-primary btn-block disabled">Google Play (Coming Soon)</a>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer'); %>

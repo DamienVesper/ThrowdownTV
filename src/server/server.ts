@@ -17,6 +17,7 @@ import indexRouter from './routes/index';
 import postRouter from './routes/post';
 import widgetRouter from './routes/widget';
 import vipRouter from './routes/vip';
+import appsRouter from './routes/apps';
 
 import * as path from 'path';
 import * as http from 'http';
@@ -80,6 +81,7 @@ app.use(`/`, postRouter);
 app.use(`/widgets`, widgetRouter);
 app.use(`/api`, apiRouter);
 app.use(`/vip`, vipRouter);
+app.use(`/apps`, appsRouter);
 
 // Finally, the callback route if nothing else applies (it also handles 404).
 app.use(`/`, indexRouter);
