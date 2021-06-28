@@ -245,36 +245,6 @@
 				});
 			}
 
-			const checkLive = () => {
-				fetch(`/api/public-stream-data/${streamer}`).then(data => data.json()).then(data => {
-					if(data.isSuspended) return window.location.reload();
-					if(data.isLive === true){
-						if(live === false){
-							player.src({
-								src: `https://video-${data.rtmpServer}.throwdown.tv/${streamer}/index.m3u8`,
-								type: `application/x-mpegURL`,
-							})
-							$(`#live-status`).text(`LIVE`);
-							$(`#live-status`).removeClass(`offline`).addClass(`online`);
-							live = true;
-						}
-					} 
-					else {
-						$(`#live-status`).text(`OFFLINE`);
-						$(`#live-status`).removeClass(`online`).addClass(`offline`);
-						if(live === true){
-							player.src({
-								src: `/offline`,
-								type: `application/x-mpegURL`,
-							})
-							player.hasStarted(false);
-							player.currentTime(0);
-							live = false;
-						}
-					}
-				});
-			}
-
 			player.controlBar.progressControl.seekBar.hide();
 
 			setInterval(getStreamData, 5e3);
@@ -326,7 +296,11 @@
 				$(`#live-status`).removeClass(`offline`).removeClass(`online`);
                 live = false;
 				setTimeout(() => {
-					checkLive();
+					player.src({
+                        src: `https://video-${data.rtmpServer}.throwdown.tv/${streamer}/index.m3u8`,
+                        type: `application/x-mpegURL`,
+                    })
+                    player.load();
 				}, 8000)
 			});
 		});
