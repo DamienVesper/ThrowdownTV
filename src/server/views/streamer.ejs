@@ -326,6 +326,7 @@
 			player.on(`error`, event => {
 				$(`#live-status`).text(`LOADING...`);
 				$(`#live-status`).removeClass(`offline`).removeClass(`online`);
+                live = false;
 				setTimeout(() => {
 					checkLive();
 				}, 8000)
