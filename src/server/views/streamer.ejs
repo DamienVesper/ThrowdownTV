@@ -218,6 +218,7 @@
 					if(data.isSuspended) return window.location.reload();
 					if(data.isLive === true){
 						if(live === false){
+                            live = true;
 							setTimeout(() => {
 								player.src({
 									src: `https://video-${data.rtmpServer}.throwdown.tv/${streamer}/index.m3u8`,
@@ -225,7 +226,6 @@
 								})
 								$(`#live-status`).text(`LIVE`);
 								$(`#live-status`).removeClass(`offline`).addClass(`online`);
-								live = true;
 							}, 8000)
 						}
 					} 
@@ -236,9 +236,7 @@
 							player.src({
 								src: `/offline`,
 								type: `application/x-mpegURL`,
-							})
-							player.hasStarted(false);
-							player.currentTime(0);
+							});
 							live = false;
 						}
 					}
@@ -249,7 +247,7 @@
 
 			setInterval(getStreamData, 5e3);
 			setInterval(checkCrucialData, 5000);
-			// checkCrucialData();
+            checkCrucialData();
 			getStreamData();
 
 			$(`.follow-streamer-btn`).on(`click`, e => {
@@ -300,7 +298,7 @@
                         src: `https://video-${data.rtmpServer}.throwdown.tv/${streamer}/index.m3u8`,
                         type: `application/x-mpegURL`,
                     })
-                    player.load();
+                    live = true;
 				}, 8000)
 			});
 		});
