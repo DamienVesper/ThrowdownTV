@@ -6,6 +6,14 @@
 	--streamerButtonsMaxHeight: 31px;
 }
 
+body {
+	-ms-overflow-style: none;  /* IE and Edge */
+  	scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
 
 /** Common styles for both the mobile and desktop layout */
 .streamer-buttons {
