@@ -34,8 +34,8 @@
         <br class="ban-account">
         <button type="button" class="btn btn-success" onclick="updateUserEmail()">Update User Email</button>
         <br>
-        <button type="button" class="btn btn-warning" onclick="cancelUserVIP()">Cancel VIP Subscription</button>
-        <br><br>
+        <button type="button" class="btn btn-warning cancel-vip" onclick="cancelUserVIP()">Cancel VIP Subscription</button>
+        <br class="cancel-vip"><br>
         <button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
     </div>
     <br>
@@ -125,12 +125,18 @@
             $(`.verify-account`).hide();
         }
 
+        if (!trueUserData.perms.vip) {
+            $(`.cancel-vip`).show();
+        }
+
         if (trueUserData.isBanned) {
             $(`.ban-account`).hide();
+            $(`.unban-account`).show();
             banunbantext.style.color = "red";
             banunbantext.innerHTML = "Banned";
         } else {
             $(`.unban-account`).hide();
+            $(`.ban-account`).show();
             banunbantext.style.color = "green";
             banunbantext.innerHTML = "Unbanned";
         }
