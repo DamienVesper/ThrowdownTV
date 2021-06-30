@@ -13,7 +13,7 @@
 <h1 class="text-light text-center">Admin Panel</h1>
 <br>
 <br>
-<div class="user-list">
+<div class="one card card-body col-md-6 m-auto user-list">
     <select name="user-dropdown" id="user-dropdown" onchange="selectUser()">
     <option value="" selected>Please select a User</option>
 </select>
@@ -26,14 +26,17 @@
         <h4>User is currently:</h4>
         <h4 id="banunbantext" style="color:green">Not Banned</h4>
         <br>
-        <button type="button" class="btn btn-success" onclick="unbanUserAcc()">Unban User Account</button>
-        <br>
-        <button type="button" class="btn btn-danger" onclick="banUserAcc()">Ban User Account</button>
-        <br>
-        <button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
-        <br>
+        <button type="button" class="btn btn-success verify-account" onclick="verifyUser()">Manually Verify User Email</button>
+        <br class="verify-account">
+        <button type="button" class="btn btn-success unban-account" onclick="unbanUserAcc()">Unban User Account</button>
+        <br class="unban-account">
+        <button type="button" class="btn btn-danger ban-account" onclick="banUserAcc()">Ban User Account</button>
+        <br class="ban-account">
         <button type="button" class="btn btn-success" onclick="updateUserEmail()">Update User Email</button>
-
+        <br>
+        <button type="button" class="btn btn-warning" onclick="cancelUserVIP()">Cancel VIP Subscription</button>
+        <br><br>
+        <button type="button" class="btn btn-danger" onclick="deleteUserAcc()">Delete User Account</button>
     </div>
     <br>
     <div id="user-data" style="visibility: hidden; background-color: #b1cbe6;" class="two card card-body col-md-6 m-auto">
@@ -118,10 +121,16 @@
 
         userDataDisplayText.innerHTML = textToInsert;
 
+        if (trueUserData.emailVerified) {
+            $(`.verify-account`).hide();
+        }
+
         if (trueUserData.isBanned) {
+            $(`.ban-account`).hide();
             banunbantext.style.color = "red";
             banunbantext.innerHTML = "Banned";
         } else {
+            $(`.unban-account`).hide();
             banunbantext.style.color = "green";
             banunbantext.innerHTML = "Unbanned";
         }
@@ -143,9 +152,9 @@
             await fetch(`/api/delete-account/${selectedUser}`)
             alert("Deleted user account!")
 
-            let modName = (await fetch('/api/whoAmI').then(resp => {
+            let modName = (await fetch('/authenticated').then(resp => {
                 return resp.json()
-            })).accessingUsername;
+            })).username;
             let textContent =
                 `⛔ **Deleted** ThrowdownTV User via Admin Panel\nUsername: **${selectedUser}**\nModerator: **${modName}**\n -`;
             var params = {
@@ -179,9 +188,9 @@
             return;
         } else {
             let banReason = window.prompt("What is the ban reason for this user?");
-            let modName = (await fetch('/api/whoAmI').then(resp => {
+            let modName = (await fetch('/authenticated').then(resp => {
                 return resp.json()
-            })).accessingUsername;
+            })).username;
 
             let ttData = await fetch(`/api/banuser/${selectedUser}`).then(data => data.json()).then(data => {
                 return data;
@@ -228,6 +237,84 @@
         }
     }
 
+    const verifyUser = async() => {
+        const userdataDiv = document.querySelector(`#user-data`);
+        const e = document.querySelector(`#user-dropdown`);
+        const selectedUser = e.options[e.selectedIndex].text;
+
+        const trueUserData = await getData(selectedUser)
+        if (trueUserData.emailVerified) return alert("User is already verified!");
+        let conformation = confirm(
+            `Are you sure you want to manually verify the email of ${selectedUser}?`
+        );
+        if (conformation == false) {
+            return;
+        } else {
+            let modName = (await fetch('/authenticated').then(resp => {
+                return resp.json()
+            })).username;
+
+            let ttData = await fetch(`/api/verify-user-email/${selectedUser}`).then(data => data.json()).then(data => {
+                return data;
+            });
+
+            let textContent =
+                `✅ **Cancelled** VIP Subscription\nUsername: **${selectedUser}**\nModerator: **${modName}**\n -`;
+            var params = {
+                content: textContent
+            };
+            await fetch(webhookURL, {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then(okay => {
+                window.location.reload(true);
+            })
+            window.location.reload(true);
+        }
+    }
+
+    const cancelUserVIP = async() => {
+        const userdataDiv = document.querySelector(`#user-data`);
+        const e = document.querySelector(`#user-dropdown`);
+        const selectedUser = e.options[e.selectedIndex].text;
+
+        const trueUserData = await getData(selectedUser)
+        if (!trueUserData.perms.vip) return alert("User isn't a VIP!");
+        let conformation = confirm(
+            `Are you sure you want to cancel the VIP subscription of ${selectedUser}?`
+        );
+        if (conformation == false) {
+            return;
+        } else {
+            let modName = (await fetch('/authenticated').then(resp => {
+                return resp.json()
+            })).username;
+
+            let ttData = await fetch(`/api/cancel-subscription/${selectedUser}`).then(data => data.json()).then(data => {
+                return data;
+            });
+
+            let textContent =
+                `✅ **Cancelled** VIP Subscription\nUsername: **${selectedUser}**\nModerator: **${modName}**\n -`;
+            var params = {
+                content: textContent
+            };
+            await fetch(webhookURL, {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then(okay => {
+                window.location.reload(true);
+            })
+            window.location.reload(true);
+        }
+    }
+
     const unbanUserAcc = async() => {
         const userdataDiv = document.querySelector(`#user-data`);
         const e = document.querySelector(`#user-dropdown`);
@@ -241,9 +328,9 @@
         if (conformation == false) {
             return;
         } else {
-            let modName = (await fetch('/api/whoAmI').then(resp => {
+            let modName = (await fetch('/authenticated').then(resp => {
                 return resp.json()
-            })).accessingUsername;
+            })).username;
 
             let ttData = await fetch(`/api/unbanuser/${selectedUser}`).then(data => data.json()).then(data => {
                 return data;

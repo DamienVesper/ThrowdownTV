@@ -9,6 +9,25 @@ import Sticker from '../models/sticker.model';
 
 import config from '../../../config/config';
 import log from '../utils/log';
+import yargs from 'yargs';
+import Paypal from 'paypal-recurring-se';
+import { hideBin } from 'yargs/helpers';
+
+interface Args {
+    mode: string
+}
+
+const argv = (yargs(hideBin(process.argv)).options({
+    mode: { type: `string`, default: `dev` }
+}).argv as Args);
+
+const paypal = new Paypal({
+    username: config.paypal.username,
+    password: config.paypal.password,
+    signature: config.paypal.signature
+},
+argv.mode === `prod` ? `production` : ``
+);
 
 const apiRouter: Express.Router = Express.Router();
 
@@ -39,8 +58,10 @@ fs.readdir(path.resolve(__dirname, `../../client/assets/img/chat/emotes`), (err,
     }
 });
 
+// Get emotes
 apiRouter.get(`/get-emotes`, async (req: Express.Request, res: Express.Response) => res.json(emotes));
 
+// Get stickers
 apiRouter.get(`/get-stickers`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
@@ -89,7 +110,7 @@ apiRouter.get(`/public-stream-data/:streamer`, async (req: Express.Request, res:
     res.jsonp(data);
 });
 
-apiRouter.get(`/whoAmI`, async (req: Express.Request, res: Express.Response) => {
+apiRouter.get(`/get-vip`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
     return res.send({ accessingUsername: accessingUser.username });
@@ -399,7 +420,7 @@ apiRouter.post(`/banuser`, async (req: Express.Request, res: Express.Response) =
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    if (!accessingUser.perms.staff) return res.status(403).json({ errors: `You must be an administrator to access this page!` });
 
     const userToBan = await User.findOne({ username: req.params.ttusername });
 
@@ -412,13 +433,13 @@ apiRouter.post(`/banuser`, async (req: Express.Request, res: Express.Response) =
 });
 
 // Ban User via GET
-apiRouter.get(`/banuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
+apiRouter.get(`/banuser/:username`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    if (!accessingUser.perms.staff) return res.status(403).send(`You must be an administrator to access this page!`);
 
-    const userToBan = await User.findOne({ username: req.params.ttusername });
+    const userToBan = await User.findOne({ username: req.params.username });
 
     userToBan.isSuspended = true;
     userToBan.live = false;
@@ -435,7 +456,7 @@ apiRouter.post(`/unbanuser`, async (req: Express.Request, res: Express.Response)
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    if (!accessingUser.perms.staff) return res.status(403).json({ errors: `You must be an administrator to access this page!` });
 
     const userToUnban = await User.findOne({ username: req.params.ttusername });
     if (!userToUnban) return res.status(404).json({ errors: `User Not Found` });
@@ -449,13 +470,13 @@ apiRouter.post(`/unbanuser`, async (req: Express.Request, res: Express.Response)
 });
 
 // Unban User via GET
-apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Express.Response) => {
+apiRouter.get(`/unbanuser/:username`, async (req: Express.Request, res: Express.Response) => {
     if (!req.isAuthenticated()) return res.redirect(`/login`);
 
     const accessingUser = await User.findOne({ username: (<any>req).user.username });
-    if (!accessingUser.perms.staff) return res.send(`You must be an administrator to access this page!`);
+    if (!accessingUser.perms.staff) return res.status(403).send(`You must be an administrator to access this page!`);
 
-    const userToUnban = await User.findOne({ username: req.params.ttusername });
+    const userToUnban = await User.findOne({ username: req.params.username });
     if (!userToUnban) return res.status(404).json({ errors: `User Not Found` });
 
     userToUnban.isSuspended = false;
@@ -465,6 +486,24 @@ apiRouter.get(`/unbanuser/:ttusername`, async (req: Express.Request, res: Expres
         if (err) return res.status(400).json({ errors: `Invalid user data` });
     });
     return res.json({ status: `Done!` });
+});
+
+// Verify User
+apiRouter.get(`/verify-user-email/:username`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const accessingUser = await User.findOne({ username: (<any>req).user.username });
+    if (!accessingUser.perms.staff) return res.status(403).json({ errors: `You must be an administrator to access this page!` });
+
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) return res.status(404).json({ errors: `User Not Found` });
+    if (user.verified) return res.status(200).json({ errors: `User already verified.` });
+
+    user.verified = true;
+    user.save(err => {
+        if (err) return res.status(400).json({ errors: `Invalid user data` });
+    });
+    return res.json({ status: `Verified.` });
 });
 
 apiRouter.post(`/change-streamer-status`, async (req: Express.Request, res: Express.Response) => {
@@ -499,6 +538,36 @@ apiRouter.get(`/update-email/:username/:newEmail`, async (req: Express.Request, 
 
     userToUpdate.email = req.params.newEmail;
     userToUpdate.save(() => res.json({ success: `Changed User Email` }));
+});
+
+// Cancel Subscription
+apiRouter.get(`/cancel-subscription/:username`, async (req: Express.Request, res: Express.Response) => {
+    if (!req.isAuthenticated()) return res.redirect(`/login`);
+
+    const username = await User.findOne({ username: req.params.username });
+    const staffmember = await User.findOne({ username: (<any>req).user.username });
+    if (staffmember.perms.staff === false) return res.status(403).json({ errors: `Unauthorized.` });
+    if (!username) return res.status(404).json({ errors: `Not Found.` });
+
+    paypal.modifySubscription(username.subscription.payerId, `Cancel`, async (err, data) => {
+        if (!err) {
+            log(`yellow`, `Deleted Subscription: ${data.PROFILEID}`);
+            username.perms.vip = false;
+            username.save();
+            const mailOptions = {
+                from: `Throwdown TV <no-reply@throwdown.tv>`,
+                to: username.email,
+                subject: `Subscription Cancelled`,
+                text: `Hello ${username.username}, \n\nThis is to inform you that your Throwdown.TV VIP Subscription has been cancelled`
+            };
+            if (argv.mode === `prod`) {
+                transport.sendMail(mailOptions, err => {
+                    if (err) { log(`red`, err); }
+                });
+            }
+            res.redirect(`/vip/cancel/success`);
+        }
+    });
 });
 
 export default apiRouter;
