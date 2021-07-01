@@ -1,6 +1,12 @@
 html,
 body {
     background-color: transparent;
+    -ms-overflow-style: none;  /* IE and Edge */
+  	scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+	display: none;
 }
 .chat-wrapper {
     display: block;
@@ -55,4 +61,10 @@ body {
 
 .chat-emote {
     vertical-align: middle;
+}
+
+.chat-emoji {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 0.25rem;
 }
