@@ -1,13 +1,8 @@
 html,
 body {
     background-color: transparent;
-    -ms-overflow-style: none;  /* IE and Edge */
-  	scrollbar-width: none;
 }
 
-body::-webkit-scrollbar {
-	display: none;
-}
 .chat-wrapper {
     display: block;
     background-color: transparent;
@@ -67,4 +62,12 @@ body::-webkit-scrollbar {
     width: 2rem;
     height: 2rem;
     margin-left: 0.25rem;
+}
+
+.text-orange {
+    color: #ff7c46;
+}
+
+.text-mod {
+    color: #00ff00;
 }
