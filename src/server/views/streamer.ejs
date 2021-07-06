@@ -221,7 +221,7 @@
                             live = true;
 							setTimeout(() => {
 								player.src({
-									src: `https://video-${data.rtmpServer}.throwdown.tv/${streamer}/index.m3u8`,
+									src: `https://video-${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
 									type: `application/x-mpegURL`,
 								})
 								$(`#live-status`).text(`LIVE`);
@@ -295,7 +295,7 @@
                 live = false;
 				setTimeout(() => {
 					player.src({
-                        src: `https://video-${data.rtmpServer}.throwdown.tv/${streamer}/index.m3u8`,
+                        src: `https://video-${data.rtmpServer}.throwdown.tv/live/${streamer}/index.m3u8`,
                         type: `application/x-mpegURL`,
                     })
                     live = true;

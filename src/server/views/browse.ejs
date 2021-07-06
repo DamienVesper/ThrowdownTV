@@ -43,7 +43,7 @@
 			//Create the basic skeleton of the streamer card
 			let streamerDisplay = $(`<div class="card streamer-wrapper">`).html(`
 				<div class="card-body">
-					<div class="stream-thumbnail"><div class="thumbnail-inner" style="background-image: url('https://${streamer.rtmpServer}.throwdown.tv/api/thumbnail/${streamer.name}'), url('/assets/img/thumbnail.png')" alt="${streamer.displayName} Thumbnail" onclick="window.location.href = '/${streamer.name}'"></div></div>
+					<div class="stream-thumbnail"><div class="thumbnail-inner" style="background-image: url('https://video-${streamer.rtmpServer}.throwdown.tv/api/thumbnail/${streamer.name}'), url('/assets/img/thumbnail.png')" alt="${streamer.displayName} Thumbnail" onclick="window.location.href = '/${streamer.name}'"></div></div>
 					<div class="stream-info">
 						<h2 class="stream-title"><a href="/${streamer.name}" class="condensed">${streamer.title}</a></h2>
 						<p class="stream-desc condensed">${streamer.description}</p>
