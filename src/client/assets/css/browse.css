@@ -8,7 +8,7 @@
 
 
 /** Common styles for both the mobile and desktop layout */
-#no-active-streams .card-body, #no-following .card-body {
+#no-active-streams .card-body, #no-following .card-body, #no-stickers .card-body {
 	background-color: #ffcece;
 }
 
@@ -150,7 +150,7 @@
 		--pfpDims: 60px;
 	}
 
-	#active-streams, #following {
+	#active-streams, #active-stickers, #following {
 		max-width: var(--activeStreamsWidth);
 		width: var(--activeStreamsWidth);
 	}

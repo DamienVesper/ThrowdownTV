@@ -42,6 +42,11 @@ pageRouter.get(`/dashboard`, async (req: Express.Request, res: Express.Response)
 pageRouter.get(`/recoveraccount`, async (req: Express.Request, res: Express.Response) => res.render(`accountRecovery.ejs`));
 
 // Chat
+
+pageRouter.get(`/chat/stickers`, async (req: Express.Request, res: Express.Response) => {
+    res.render(`stickers.ejs`);
+});
+
 pageRouter.get(`/chat/*`, async (req: Express.Request, res: Express.Response) => {
     const user = await User.findOne({ username: req.url.split(`/`)[2].toLowerCase() });
     if (!user) return res.redirect(`/`);
