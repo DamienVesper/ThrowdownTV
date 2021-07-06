@@ -43,7 +43,7 @@ pageRouter.get(`/recoveraccount`, async (req: Express.Request, res: Express.Resp
 
 // Chat
 
-pageRouter.get(`/chat/stickers`, async (req: Express.Request, res: Express.Response) => {
+pageRouter.get(`/global-stickers`, async (req: Express.Request, res: Express.Response) => {
     res.render(`stickers.ejs`);
 });
 
