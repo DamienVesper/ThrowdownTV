@@ -36,20 +36,13 @@
 		}
 		
 		//Loop over the streamers
-		for(const streamer of data){
-			//Constants for the streamer data display
-			const status = streamer.isLive ? "LIVE" : "OFFLINE";
-			const statusClass = streamer.isLive ? "online" : "offline";
-
-			//Get more info about the streamer
-			const streamerAvatar = ""; //string
-			const streamerRoles = {}; //{isVip: boolean, isStaff: boolean}
+		for(const sticker of data){
 
 			//Create the basic skeleton of the streamer card
-			let streamerDisplay = $(`<div class="card p-8" style="padding: 16px;">`).html(`
-                <span>/sticker <b>${data.name}</b></span>
-                <img class="text-center global-sticker" src="${data.path}">
-				<span>Channel: <b>${data.owner}</b></span>
+			let stickerDisplay = $(`<div class="card p-8" style="padding: 16px;">`).html(`
+                <span>/sticker <b>${sticker.name}</b></span>
+                <img class="text-center global-sticker" src="${sticker.path}">
+				<span>Channel: <b>${sticker.owner}</b></span>
 			`).append(`</div>`);
 
 			//Add the streamer to the list of those that are streaming
