@@ -6,6 +6,7 @@ import { logSplash, logHeader } from './utils/logExtra';
 import antiDuplicator from './modules/antiDuplicator';
 import clearTimeouts from './modules/clearTimeouts';
 import resetRTMPServers from './modules/resetRTMPServers';
+import resetStats from './modules/resetStats';
 import throwdownUser from './modules/throwdownUser';
 
 import passport from './passport';
@@ -101,6 +102,7 @@ const startApp = async () => {
                 logHeader();
                 import(`./chat/socket`).then(async () => {
                     await resetRTMPServers();
+                    await resetStats();
                     await clearTimeouts();
                     await antiDuplicator();
                     await throwdownUser();

@@ -29,21 +29,6 @@ server.listen(config.socketPort, () => {
     log(`green`, `Socket.IO bound to port ${config.socketPort}.`);
 });
 
-// Reset stats.
-const resetStats = async () => {
-    const users = await User.find({});
-    for (const user of users) {
-        user.viewers = [];
-        user.live = false;
-
-        user.save();
-    }
-
-    log(`cyan`, `Reset the viewer count and livestream status of all users.`);
-};
-
-resetStats();
-
 // Handle new connections.
 io.on(`connection`, async (socket: SocketIO.Socket) => {
     log(`magenta`, `Chat Connection | IP: ${socket.handshake.address}.`);
