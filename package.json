@@ -28,7 +28,7 @@
     "@types/node": "^15.12.5",
     "@types/passport": "^1.0.7",
     "@types/passport-local": "^1.0.34",
-    "@types/yargs": "^17.0.1",
+    "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "dotenv": "^10.0.0",
