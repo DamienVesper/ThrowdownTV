@@ -194,6 +194,21 @@ apiRouter.get(`/get-followers/:streamer`, async (req: Express.Request, res: Expr
     res.jsonp(data);
 });
 
+apiRouter.get(`/global-stickers`, async (req: Express.Request, res: Express.Response) => {
+    const Stickers = await Sticker.find();
+    const stickers = [];
+
+    for (const sticker of Stickers) {
+        stickers.push({
+            name: sticker.stickerName,
+            path: sticker.path,
+            owner: sticker.ownerUsername
+        });
+    }
+
+    return res.json(stickers);
+});
+
 apiRouter.get(`/streams`, async (req: Express.Request, res: Express.Response) => {
     const streamerData = await User.find({ live: true });
     const streams = [];

@@ -1,0 +1,52 @@
+<%- include('./partials/header'); %>
+
+<link rel="stylesheet" href="/assets/css/browse.css">
+<br>
+<h1 class="text-light text-center">Global Chat Stickers</h1>
+<br>
+
+<div class="row mt-auto" id="no-stickers">
+	<!-- No active streamers popup -->
+	<div class="col-md-11 m-auto">
+		<div class="card card-body text-center">
+			<span>No stickers are available as of now.</span>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body" style="background-color: #b1cbe6;" id="active-stickers">
+            <div class="stickers text-center" style="display: flex; justify-content: space-around;"></div>
+        </div>
+    </div>
+</div>
+
+<%- include('./partials/footer'); %>
+
+<script type="application/javascript">
+	$(document).ready(() => $(`#no-stickers`).hide());
+	fetch(`/api/global-stickers`).then(data => data.json()).then(data => {
+		//Check if there are streamers that are live
+		if(data.length === 0){
+			//Show the "nobody is live" header and return
+			$(`#active-stickers`).hide();
+			$(`#no-stickers`).show();
+			return;
+		}
+		
+		//Loop over the streamers
+		for(const sticker of data){
+
+			//Create the basic skeleton of the streamer card
+			let stickerDisplay = $(`<div class="card p-8" style="padding: 16px;">`).html(`
+                <span>/sticker <b>${sticker.name}</b></span>
+                <img class="text-center global-sticker" src="${sticker.path}">
+				<span>Channel: <b>${sticker.owner}</b></span>
+			`).append(`</div>`);
+
+			//Add the streamer to the list of those that are streaming
+			$(`#stickers`).append(stickerDisplay);
+		}
+	});
+</script>
