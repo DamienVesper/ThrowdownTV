@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.12",
-    "@types/express-session": "^1.17.3",
+    "@types/express-session": "^1.17.4",
     "@types/node": "^15.12.5",
     "@types/passport": "^1.0.6",
     "@types/passport-local": "^1.0.33",
